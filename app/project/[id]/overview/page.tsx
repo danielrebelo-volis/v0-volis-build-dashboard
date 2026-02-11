@@ -489,7 +489,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
               <div className="glass-card rounded-lg p-4 border border-border/50">
                 <p className="text-xs text-muted-foreground mb-3 uppercase tracking-wide">Planned Progress</p>
-                <p className="font-mono text-5xl font-bold text-foreground">75%</p>
+                <p className="font-mono text-5xl font-bold text-foreground">53%</p>
               </div>
 
               <div className="glass-card rounded-lg p-4 border border-border/50">
@@ -503,7 +503,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
               <div className="glass-card rounded-lg p-4 border border-border/50">
                 <p className="text-xs text-muted-foreground mb-3 uppercase tracking-wide">Avg. Weekly Progress (Last 4 weeks)</p>
                 <div className="space-y-3">
-                  <p className="font-mono text-3xl font-bold text-foreground">8.5%</p>
+                  <p className="font-mono text-3xl font-bold text-foreground">1.9%</p>
                   <p className="text-xs text-muted-foreground">Trend: <span className="text-success">+1.3% vs prior week</span></p>
                 </div>
               </div>
@@ -511,7 +511,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
               <div className="glass-card rounded-lg p-4 border border-border/50">
                 <p className="text-xs text-muted-foreground mb-3 uppercase tracking-wide">Required Weekly Progress</p>
                 <div className="space-y-3">
-                  <p className="font-mono text-3xl font-bold text-foreground">7.8%</p>
+                  <p className="font-mono text-3xl font-bold text-foreground">2.1%</p>
                   <p className="text-xs text-muted-foreground">Target to meet deadline</p>
                 </div>
               </div>
@@ -616,11 +616,11 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-5">
               <div className="glass-card rounded-lg p-3 border border-border/50">
                 <p className="text-xs text-muted-foreground mb-2">Planned Accum. Progress</p>
-                <p className="text-2xl font-bold text-foreground">75%</p>
+                <p className="text-2xl font-bold text-foreground">53%</p>
               </div>
               <div className="glass-card rounded-lg p-3 border border-border/50">
                 <p className="text-xs text-muted-foreground mb-2">Avg. Weekly Advance</p>
-                <p className="text-2xl font-bold text-foreground">8.5%</p>
+                <p className="text-2xl font-bold text-foreground">1.9%</p>
               </div>
               <div className="glass-card rounded-lg p-3 border border-border/50">
                 <p className="text-xs text-muted-foreground mb-2">Current Delay</p>
@@ -632,7 +632,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
               </div>
               <div className="glass-card rounded-lg p-3 border border-border/50">
                 <p className="text-xs text-muted-foreground mb-2">Required Weekly Advance</p>
-                <p className="text-2xl font-bold text-foreground">7.8%</p>
+                <p className="text-2xl font-bold text-foreground">2.1%</p>
               </div>
               <div className="glass-card rounded-lg p-3 border border-border/50">
                 <p className="text-xs text-muted-foreground mb-2">AI Forecast Deadline</p>
@@ -988,32 +988,16 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                 <p className="text-xs text-muted-foreground uppercase tracking-wide mb-4">Industrial Cost (CI)</p>
                 <div className="space-y-4">
                   <div>
-                    <p className="text-sm text-muted-foreground mb-1">Current Spend</p>
-                    <p className="text-4xl font-bold text-foreground">€38.0M</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground mb-1">Total Budget</p>
-                    <p className="text-3xl font-bold text-accent">€68.5M</p>
-                  </div>
-                  <div className="pt-2 border-t border-border/30">
-                    <p className="text-xs text-muted-foreground">Budget Utilization: 55.4%</p>
+                    <p className="text-4xl font-bold text-failure">3.2%</p>
                   </div>
                 </div>
               </div>
 
               <div className="glass-card rounded-lg p-6 border border-border/50">
-                <p className="text-xs text-muted-foreground uppercase tracking-wide mb-4">Earned Value (EV)</p>
+                <p className="text-xs text-muted-foreground uppercase tracking-wide mb-4">Current Earned Value (EV)</p>
                 <div className="space-y-4">
                   <div>
-                    <p className="text-sm text-muted-foreground mb-1">Current EV</p>
                     <p className="text-4xl font-bold text-success">€35.2M</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground mb-1">Cost Performance Index (CPI)</p>
-                    <p className="text-3xl font-bold text-destructive">0.93</p>
-                  </div>
-                  <div className="pt-2 border-t border-border/30">
-                    <p className="text-xs text-muted-foreground">Actual vs EV: -€2.8M (Under-performing)</p>
                   </div>
                 </div>
               </div>
@@ -1088,7 +1072,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                   <Tooltip contentStyle={{ backgroundColor: 'rgba(0,0,0,0.8)', border: '1px solid rgba(0,200,255,0.3)' }} formatter={(value) => `€${value.toFixed(1)}M`} />
                   <Legend />
                   <Bar dataKey="planned" fill="#999999" name="Planned" />
-                  <Bar dataKey="estimated" fill="#00c8ff" name="Estimated Cost" />
+                  <Bar dataKey="estimated" fill="#00c8ff" name="Forecasted Cost" />
                   <Bar dataKey="actual" fill="#ff6b6b" name="Actual" />
                 </BarChart>
               </ResponsiveContainer>

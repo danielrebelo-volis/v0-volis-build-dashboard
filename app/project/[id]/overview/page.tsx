@@ -22,6 +22,8 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
   const [selectedCostMonth, setSelectedCostMonth] = useState('last-month')
   const [sortBy, setSortBy] = useState<'value' | 'plannedProgress' | 'actualProgress' | 'earnedValue' | null>(null)
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc')
+  const [economicSortBy, setEconomicSortBy] = useState<'baselineCost' | 'actualCost' | 'totalBaseline' | 'totalEstimated' | null>(null)
+  const [economicSortDirection, setEconomicSortDirection] = useState<'asc' | 'desc'>('desc')
 
   // Data Quality Tab State
   const [dailyReportViewBy, setDailyReportViewBy] = useState('7days')
@@ -166,6 +168,47 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
       }
 
       return sortDirection === 'asc' ? aValue - bValue : bValue - aValue
+    })
+
+    return sorted
+  }
+
+  const handleEconomicSort = (column: 'baselineCost' | 'actualCost' | 'totalBaseline' | 'totalEstimated') => {
+    if (economicSortBy === column) {
+      setEconomicSortDirection(economicSortDirection === 'asc' ? 'desc' : 'asc')
+    } else {
+      setEconomicSortBy(column)
+      setEconomicSortDirection('desc')
+    }
+  }
+
+  const getSortedEconomicTable = () => {
+    if (!economicSortBy) return economicTable
+
+    const sorted = [...economicTable].sort((a, b) => {
+      let aValue: number = 0
+      let bValue: number = 0
+
+      switch (economicSortBy) {
+        case 'baselineCost':
+          aValue = a.baseline
+          bValue = b.baseline
+          break
+        case 'actualCost':
+          aValue = a.actual
+          bValue = b.actual
+          break
+        case 'totalBaseline':
+          aValue = a.baseline / (a.completeness / 100)
+          bValue = b.baseline / (b.completeness / 100)
+          break
+        case 'totalEstimated':
+          aValue = (a.actual / (a.completeness / 100)) * 1.05
+          bValue = (b.actual / (b.completeness / 100)) * 1.05
+          break
+      }
+
+      return economicSortDirection === 'asc' ? aValue - bValue : bValue - aValue
     })
 
     return sorted
@@ -489,7 +532,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
               <div className="glass-card rounded-lg p-4 border border-border/50">
                 <p className="text-xs text-muted-foreground mb-3 uppercase tracking-wide">Planned Progress</p>
-                <p className="font-mono text-5xl font-bold text-foreground">75%</p>
+                <p className="font-mono text-5xl font-bold text-foreground">53%</p>
               </div>
 
               <div className="glass-card rounded-lg p-4 border border-border/50">
@@ -503,7 +546,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
               <div className="glass-card rounded-lg p-4 border border-border/50">
                 <p className="text-xs text-muted-foreground mb-3 uppercase tracking-wide">Avg. Weekly Progress (Last 4 weeks)</p>
                 <div className="space-y-3">
-                  <p className="font-mono text-3xl font-bold text-foreground">8.5%</p>
+                  <p className="font-mono text-3xl font-bold text-foreground">1.9%</p>
                   <p className="text-xs text-muted-foreground">Trend: <span className="text-success">+1.3% vs prior week</span></p>
                 </div>
               </div>
@@ -511,7 +554,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
               <div className="glass-card rounded-lg p-4 border border-border/50">
                 <p className="text-xs text-muted-foreground mb-3 uppercase tracking-wide">Required Weekly Progress</p>
                 <div className="space-y-3">
-                  <p className="font-mono text-3xl font-bold text-foreground">7.8%</p>
+                  <p className="font-mono text-3xl font-bold text-foreground">2.1%</p>
                   <p className="text-xs text-muted-foreground">Target to meet deadline</p>
                 </div>
               </div>
@@ -616,11 +659,11 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-5">
               <div className="glass-card rounded-lg p-3 border border-border/50">
                 <p className="text-xs text-muted-foreground mb-2">Planned Accum. Progress</p>
-                <p className="text-2xl font-bold text-foreground">75%</p>
+                <p className="text-2xl font-bold text-foreground">53%</p>
               </div>
               <div className="glass-card rounded-lg p-3 border border-border/50">
                 <p className="text-xs text-muted-foreground mb-2">Avg. Weekly Advance</p>
-                <p className="text-2xl font-bold text-foreground">8.5%</p>
+                <p className="text-2xl font-bold text-foreground">1.9%</p>
               </div>
               <div className="glass-card rounded-lg p-3 border border-border/50">
                 <p className="text-xs text-muted-foreground mb-2">Current Delay</p>
@@ -632,7 +675,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
               </div>
               <div className="glass-card rounded-lg p-3 border border-border/50">
                 <p className="text-xs text-muted-foreground mb-2">Required Weekly Advance</p>
-                <p className="text-2xl font-bold text-foreground">7.8%</p>
+                <p className="text-2xl font-bold text-foreground">2.1%</p>
               </div>
               <div className="glass-card rounded-lg p-3 border border-border/50">
                 <p className="text-xs text-muted-foreground mb-2">AI Forecast Deadline</p>
@@ -745,15 +788,35 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                   <thead>
                     <tr className="border-b border-border/50">
                       <th className="text-left text-xs text-muted-foreground font-semibold py-2">Activity</th>
-                      <th className="text-center text-xs text-muted-foreground font-semibold py-2">Baseline Cost<br />(for progress %)</th>
-                      <th className="text-center text-xs text-muted-foreground font-semibold py-2">Actual Cost<br />(for progress %)</th>
-                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Total Baseline</th>
-                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Total Estimated</th>
+                      <th 
+                        className="text-center text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors"
+                        onClick={() => handleEconomicSort('baselineCost')}
+                      >
+                        Baseline Cost<br />(for progress %) {economicSortBy === 'baselineCost' && (economicSortDirection === 'asc' ? '↑' : '↓')}
+                      </th>
+                      <th 
+                        className="text-center text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors"
+                        onClick={() => handleEconomicSort('actualCost')}
+                      >
+                        Actual Cost<br />(for progress %) {economicSortBy === 'actualCost' && (economicSortDirection === 'asc' ? '↑' : '↓')}
+                      </th>
+                      <th 
+                        className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors"
+                        onClick={() => handleEconomicSort('totalBaseline')}
+                      >
+                        Total Baseline {economicSortBy === 'totalBaseline' && (economicSortDirection === 'asc' ? '↑' : '↓')}
+                      </th>
+                      <th 
+                        className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors"
+                        onClick={() => handleEconomicSort('totalEstimated')}
+                      >
+                        Total Estimated {economicSortBy === 'totalEstimated' && (economicSortDirection === 'asc' ? '↑' : '↓')}
+                      </th>
                       <th className="text-right text-xs text-muted-foreground font-semibold py-2">Float</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {economicTable.map((row, idx) => {
+                    {getSortedEconomicTable().map((row, idx) => {
                       const totalBaseline = row.baseline / (row.completeness / 100);
                       const totalEstimated = row.actual / (row.completeness / 100) * 1.05;
                       const floatWeeks = 2 - Math.floor(idx / 2);
@@ -1101,15 +1164,35 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                   <thead>
                     <tr className="border-b border-border/50">
                       <th className="text-left text-xs text-muted-foreground font-semibold py-2">Activity</th>
-                      <th className="text-center text-xs text-muted-foreground font-semibold py-2">Baseline Cost<br />(for progress %)</th>
-                      <th className="text-center text-xs text-muted-foreground font-semibold py-2">Actual Cost<br />(for progress %)</th>
-                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Total Baseline</th>
-                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Total Estimated</th>
+                      <th 
+                        className="text-center text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors"
+                        onClick={() => handleEconomicSort('baselineCost')}
+                      >
+                        Baseline Cost<br />(for progress %) {economicSortBy === 'baselineCost' && (economicSortDirection === 'asc' ? '↑' : '↓')}
+                      </th>
+                      <th 
+                        className="text-center text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors"
+                        onClick={() => handleEconomicSort('actualCost')}
+                      >
+                        Actual Cost<br />(for progress %) {economicSortBy === 'actualCost' && (economicSortDirection === 'asc' ? '↑' : '↓')}
+                      </th>
+                      <th 
+                        className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors"
+                        onClick={() => handleEconomicSort('totalBaseline')}
+                      >
+                        Total Baseline {economicSortBy === 'totalBaseline' && (economicSortDirection === 'asc' ? '↑' : '↓')}
+                      </th>
+                      <th 
+                        className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors"
+                        onClick={() => handleEconomicSort('totalEstimated')}
+                      >
+                        Total Estimated {economicSortBy === 'totalEstimated' && (economicSortDirection === 'asc' ? '↑' : '↓')}
+                      </th>
                       <th className="text-right text-xs text-muted-foreground font-semibold py-2">Float</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {economicTable.map((row, idx) => {
+                    {getSortedEconomicTable().map((row, idx) => {
                       const totalBaseline = row.baseline / (row.completeness / 100);
                       const totalEstimated = row.actual / (row.completeness / 100) * 1.05;
                       const floatWeeks = 2 - Math.floor(idx / 2);

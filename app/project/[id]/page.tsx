@@ -133,10 +133,10 @@ export default function ProjectDeepDive({ params }: { params: { id: string } }) 
 
         {/* Other Indicators Section */}
         <OtherIndicators
-          weeklyProgress={8.5}
-          priorWeekProgress={7.2}
-          requiredWeeklyProgress={7.8}
-          earnedValue={5600000}
+          weeklyProgress={1.9}
+          priorWeekProgress={1.8}
+          requiredWeeklyProgress={2.1}
+          earnedValue={32000000}
         />
 
         {/* Details & Status */}

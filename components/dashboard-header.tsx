@@ -10,9 +10,9 @@ export function DashboardHeader() {
       <div className="flex items-center gap-6">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-lg bg-foreground flex items-center justify-center">
-            <span className="text-background font-bold text-sm">V</span>
+            <span className="text-background font-bold text-sm">O</span>
           </div>
-          <span className="font-semibold text-lg text-foreground tracking-tight">Volis Build</span>
+          <span className="font-semibold text-lg text-foreground tracking-tight">One Method</span>
         </div>
         
         <nav className="hidden md:flex items-center gap-1">

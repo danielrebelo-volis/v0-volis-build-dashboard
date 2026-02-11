@@ -560,13 +560,6 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
               </div>
             </div>
 
-            {/* Row 4: Earned Value */}
-            <div className="glass-card rounded-lg p-4 border border-border/50 gap-4 mb-6">
-              <p className="text-xs text-muted-foreground mb-3 uppercase tracking-wide">Earned Value (EV) - Economic Value of Work Performed</p>
-              <p className="font-mono text-4xl font-bold text-foreground">€15.46M</p>
-              <p className="text-xs text-muted-foreground mt-2">Total value of completed activities based on 50% cumulative progress</p>
-            </div>
-
             <div className="glass-card rounded-lg p-4 border border-border/50 gap-4 mb-6">
               <h3 className="text-sm font-semibold text-foreground mb-4">Activity Table</h3>
               <div className="overflow-x-auto">
@@ -1049,22 +1042,13 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
               <div className="glass-card rounded-lg p-6 border border-border/50">
                 <p className="text-xs text-muted-foreground uppercase tracking-wide mb-4">Industrial Cost (CI)</p>
-                <div className="space-y-4">
-                  <div>
-                    <p className="text-4xl font-bold text-success">5.0%</p>
-                  </div>
-                </div>
+                <p className="text-4xl font-bold text-foreground">5.0%</p>
               </div>
 
               <div className="glass-card rounded-lg p-6 border border-border/50">
                 <p className="text-xs text-muted-foreground uppercase tracking-wide mb-4">Earned Value (EV)</p>
-                <div className="space-y-4">
-                  <div>
-                    <p className="text-4xl font-bold text-success">€32M</p>
-                  </div>
-                  <div className="pt-2 border-t border-border/30">
-                    <p className="text-xs text-muted-foreground">Actual vs EV: -€2.8M (Under-performing)</p>
-                  </div>
+                <div>
+                  <p className="text-4xl font-bold text-success">€32M</p>
                 </div>
               </div>
             </div>

@@ -309,7 +309,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
         {/* Header */}
         <div className="flex items-center justify-between gap-4 mb-8">
           <div>
-            <Link href={`/project/${params.id}`}>
+            <Link href={`/project/PRJ-007`}>
               <Button 
                 variant="ghost" 
                 size="sm" 

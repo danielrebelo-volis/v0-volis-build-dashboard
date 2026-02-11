@@ -16,7 +16,7 @@ export default function ProjectDeepDive({ params }: { params: { id: string } }) 
 
   // Mock project data - in a real app, this would come from a database
   const projectData = {
-    id: params.id,
+    id: 'PRJ-007',
     name: 'Porto Coastal Infrastructure',
     location: 'Porto, Portugal',
     portfolio: '€2.5B',
@@ -59,7 +59,7 @@ export default function ProjectDeepDive({ params }: { params: { id: string } }) 
             </div>
           </div>
 
-          <Link href={`/project/${params.id}/overview`}>
+          <Link href={`/project/PRJ-007/overview`}>
             <Button 
               className="gap-2 bg-cyan text-background hover:bg-cyan/90 self-start sm:self-auto"
             >

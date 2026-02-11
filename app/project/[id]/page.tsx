@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { DashboardHeader } from '@/components/dashboard-header'
 import { ProjectDetailsSection } from '@/components/project-details-section'
-import { ProjectKpiSection } from '@/components/project-kpi-section'
+import { ProjectKPISection } from '@/components/project-kpi-section'
 import { ArrowRight, ArrowLeft } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
@@ -63,7 +63,7 @@ export default function ProjectPage({ params }: { params: { id: string } }) {
 
         {/* KPI Section */}
         <div className="mb-8">
-          <ProjectKpiSection />
+          <ProjectKPISection />
         </div>
 
         {/* Call to Action */}

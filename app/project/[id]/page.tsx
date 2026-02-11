@@ -17,8 +17,8 @@ export default function ProjectDeepDive({ params }: { params: { id: string } }) 
   // Mock project data - in a real app, this would come from a database
   const projectData = {
     id: 'PRJ-007',
-    name: 'Porto Coastal Infrastructure',
-    location: 'Porto, Portugal',
+    name: 'Metro Tower Development',
+    location: 'Lisbon, Portugal',
     portfolio: '€2.5B',
     spi: 1.08,
     cpi: 0.95,
@@ -40,9 +40,9 @@ export default function ProjectDeepDive({ params }: { params: { id: string } }) 
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
           <div className="flex items-center gap-3">
             <Link href="/">
-              <Button 
-                variant="ghost" 
-                size="sm" 
+              <Button
+                variant="ghost"
+                size="sm"
                 className="gap-2 text-muted-foreground hover:text-foreground"
               >
                 <ArrowLeft className="w-4 h-4" />
@@ -60,13 +60,24 @@ export default function ProjectDeepDive({ params }: { params: { id: string } }) 
           </div>
 
           <Link href={`/project/PRJ-007/overview`}>
-            <Button 
+            <Button
               className="gap-2 bg-cyan text-background hover:bg-cyan/90 self-start sm:self-auto"
             >
               <span className="hidden sm:inline">Go to Project Overview</span>
               <span className="sm:hidden">Overview</span>
             </Button>
           </Link>
+        </div>
+
+        {/* KPI Section */}
+        <div className="mb-8">
+          <ProjectKPISection
+            projectName={projectData.name}
+            location={projectData.location}
+            spi={projectData.spi}
+            cpi={projectData.cpi}
+            forecastedEndDate={projectData.forecastedEndDate}
+          />
         </div>
 
         {/* Project Info Card */}
@@ -101,17 +112,6 @@ export default function ProjectDeepDive({ params }: { params: { id: string } }) 
           </div>
         </div>
 
-        {/* KPI Section */}
-        <div className="mb-8">
-          <ProjectKPISection
-            projectName={projectData.name}
-            location={projectData.location}
-            spi={projectData.spi}
-            cpi={projectData.cpi}
-            forecastedEndDate={projectData.forecastedEndDate}
-          />
-        </div>
-
         {/* S-Curves Section */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
@@ -133,10 +133,10 @@ export default function ProjectDeepDive({ params }: { params: { id: string } }) 
 
         {/* Other Indicators Section */}
         <OtherIndicators
-          weeklyProgress={8.5}
-          priorWeekProgress={7.2}
-          requiredWeeklyProgress={7.8}
-          earnedValue={5600000}
+          weeklyProgress={1.9}
+          priorWeekProgress={1.8}
+          requiredWeeklyProgress={2.1}
+          earnedValue={32000000}
         />
 
         {/* Details & Status */}
@@ -169,9 +169,9 @@ export default function ProjectDeepDive({ params }: { params: { id: string } }) 
         </div>
 
         {/* Activity Drill-Down Modal */}
-        <ActivityDrillDown 
-          isOpen={drillDownOpen} 
-          onClose={() => setDrillDownOpen(false)} 
+        <ActivityDrillDown
+          isOpen={drillDownOpen}
+          onClose={() => setDrillDownOpen(false)}
         />
       </main>
     </div>

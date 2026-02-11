@@ -19,7 +19,12 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
   const [selectedActivity, setSelectedActivity] = useState('all')
   const [selectedWorkfront, setSelectedWorkfront] = useState('all')
   const [selectedOwner, setSelectedOwner] = useState('all')
-  
+  const [selectedCostMonth, setSelectedCostMonth] = useState('last-month')
+  const [sortBy, setSortBy] = useState<'value' | 'plannedProgress' | 'actualProgress' | 'earnedValue' | null>(null)
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc')
+  const [economicSortBy, setEconomicSortBy] = useState<'baselineCost' | 'actualCost' | 'totalBaseline' | 'totalEstimated' | null>(null)
+  const [economicSortDirection, setEconomicSortDirection] = useState<'asc' | 'desc'>('desc')
+
   // Data Quality Tab State
   const [dailyReportViewBy, setDailyReportViewBy] = useState('7days')
   const [dailyReportDateRange, setDailyReportDateRange] = useState({ start: '', end: '' })
@@ -51,15 +56,15 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
   ]
 
   const costData = [
-    { week: '1', baseline: 3.2, estimated: 3.2, actual: 3.3 },
-    { week: '2', baseline: 6.1, estimated: 6.8, actual: 7.0 },
-    { week: '3', baseline: 9.2, estimated: 10.1, actual: 10.3 },
-    { week: '4', baseline: 12.4, estimated: 13.6, actual: 14.1 },
-    { week: '5', baseline: 15.1, estimated: 17.5, actual: 18.0 },
-    { week: '6', baseline: 19.1, estimated: 21.8, actual: 22.5 },
-    { week: '7', baseline: 24.6, estimated: 26.5, actual: 27.5 },
-    { week: '8', baseline: 28.4, estimated: 31.6, actual: 33.3 },
-    { week: '9', baseline: 33.5, estimated: 37.1, actual: 40.0 },
+    { week: '1', baseline: 3.2, actual: 3.3 },
+    { week: '2', baseline: 6.1, actual: 7.0 },
+    { week: '3', baseline: 9.2, actual: 10.3 },
+    { week: '4', baseline: 12.4, actual: 14.1 },
+    { week: '5', baseline: 15.1, actual: 18.0 },
+    { week: '6', baseline: 19.1, actual: 22.5 },
+    { week: '7', baseline: 24.6, actual: 27.5 },
+    { week: '8', baseline: 28.4, actual: 33.3 },
+    { week: '9', baseline: 33.5, actual: 40.0 },
   ]
 
   const getFilteredProgressData = () => {
@@ -85,26 +90,34 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
   }
 
   const activities = [
-    { name: 'Site Preparation', value: 2.1, planned: '1000 m³', executed: '850 m³', completeness: 85, earnedValue: 1.785, status: 'Ongoing' },
-    { name: 'Foundation Work', value: 5.2, planned: '2000 m³', executed: '1200 m³', completeness: 60, earnedValue: 3.12, status: 'Ongoing' },
-    { name: 'Structure Assembly', value: 8.5, planned: '150 units', executed: '90 units', completeness: 60, earnedValue: 5.1, status: 'Ongoing' },
-    { name: 'Mechanical Systems', value: 4.3, planned: '45 systems', executed: '0 units', completeness: 0, earnedValue: 0, status: 'Not Started' },
-    { name: 'Finishing Works', value: 4.4, planned: '50 areas', executed: '5 areas', completeness: 10, earnedValue: 0.44, status: 'Not Started' },
+    { name: 'Site Preparation', value: 2.1, total_planned: '1000 m³', planned: '900 m³', executed: '850 m³', expected_completeness: (900 / 1000).toFixed(2), actual_completeness: 85, earnedValue: 1.785, status: 'Ongoing', estimated_execution: '750 m³', actual_execution: '650 m³', forecast_deadline: '15/03/2024' },
+    { name: 'Foundation Work', value: 5.2, total_planned: '2000 m³', planned: '1400 m³', executed: '1200 m³', expected_completeness: (1400 / 2000).toFixed(2), actual_completeness: 60, earnedValue: 3.12, status: 'Ongoing', estimated_execution: '1100 m³', actual_execution: '900 m³', forecast_deadline: '20/04/2024' },
+    { name: 'Structure Assembly', value: 8.5, total_planned: '150 units', planned: '110 units', executed: '90 units', expected_completeness: (110 / 150).toFixed(2), actual_completeness: 60, earnedValue: 5.1, status: 'Ongoing', estimated_execution: '80 units', actual_execution: '65 units', forecast_deadline: '10/05/2024' },
+    { name: 'Mechanical Systems', value: 4.3, total_planned: '45 systems', planned: '10 units', executed: '0 units', expected_completeness: (10 / 45).toFixed(2), actual_completeness: 0, earnedValue: 0, status: 'Not Started', estimated_execution: '5 units', actual_execution: '0 units', forecast_deadline: '15/06/2024' },
+    { name: 'Finishing Works', value: 4.4, total_planned: '50 areas', planned: '10 areas', executed: '5 areas', expected_completeness: (10 / 50).toFixed(2), actual_completeness: 10, earnedValue: 0.44, status: 'Not Started', estimated_execution: '8 areas', actual_execution: '3 areas', forecast_deadline: '20/06/2024' },
+    { name: 'Electrical Installation', value: 3.8, total_planned: '120 circuits', planned: '80 circuits', executed: '65 circuits', expected_completeness: (80 / 120).toFixed(2), actual_completeness: 54, earnedValue: 2.052, status: 'Ongoing', estimated_execution: '70 circuits', actual_execution: '55 circuits', forecast_deadline: '25/05/2024' },
+    { name: 'Plumbing Systems', value: 2.9, total_planned: '85 connections', planned: '60 connections', executed: '55 connections', expected_completeness: (60 / 85).toFixed(2), actual_completeness: 65, earnedValue: 1.885, status: 'Ongoing', estimated_execution: '58 connections', actual_execution: '48 connections', forecast_deadline: '22/05/2024' },
+    { name: 'HVAC Installation', value: 6.7, total_planned: '35 units', planned: '25 units', executed: '18 units', expected_completeness: (25 / 35).toFixed(2), actual_completeness: 51, earnedValue: 3.417, status: 'Ongoing', estimated_execution: '20 units', actual_execution: '15 units', forecast_deadline: '30/05/2024' },
+    { name: 'Exterior Cladding', value: 3.2, total_planned: '800 m²', planned: '500 m²', executed: '420 m²', expected_completeness: (500 / 800).toFixed(2), actual_completeness: 53, earnedValue: 1.696, status: 'Ongoing', estimated_execution: '450 m²', actual_execution: '380 m²', forecast_deadline: '28/05/2024' },
+    { name: 'Interior Partitions', value: 2.6, total_planned: '650 m²', planned: '400 m²', executed: '350 m²', expected_completeness: (400 / 650).toFixed(2), actual_completeness: 54, earnedValue: 1.404, status: 'Ongoing', estimated_execution: '375 m²', actual_execution: '320 m²', forecast_deadline: '26/05/2024' },
+    { name: 'Roofing Works', value: 4.1, total_planned: '1200 m²', planned: '1000 m²', executed: '950 m²', expected_completeness: (1000 / 1200).toFixed(2), actual_completeness: 79, earnedValue: 3.239, status: 'Ongoing', estimated_execution: '980 m²', actual_execution: '870 m²', forecast_deadline: '18/05/2024' },
+    { name: 'Flooring Installation', value: 1.9, total_planned: '900 m²', planned: '300 m²', executed: '180 m²', expected_completeness: (300 / 900).toFixed(2), actual_completeness: 20, earnedValue: 0.38, status: 'Not Started', estimated_execution: '250 m²', actual_execution: '150 m²', forecast_deadline: '10/07/2024' },
+    { name: 'Painting & Decoration', value: 1.5, total_planned: '1100 m²', planned: '200 m²', executed: '50 m²', expected_completeness: (200 / 1100).toFixed(2), actual_completeness: 5, earnedValue: 0.075, status: 'Not Started', estimated_execution: '150 m²', actual_execution: '40 m²', forecast_deadline: '15/07/2024' },
   ]
 
   const economicTable = activities.map(activity => ({
     activity: activity.name,
-    completeness: activity.completeness,
-    baseline: activity.value * (activity.completeness / 100),
-    actual: activity.value * (activity.completeness / 100) * 1.08,
+    completeness: activity.actual_completeness,
+    baseline: activity.value * (activity.actual_completeness / 100),
+    actual: activity.value * (activity.actual_completeness / 100) * 1.08,
   }))
 
   const costBreakdownData = [
-    { category: 'Labour (MDO)', planned: 12.5, actual: 13.2 },
-    { category: 'Materials', planned: 8.3, actual: 9.1 },
-    { category: 'Equipment', planned: 5.2, actual: 5.8 },
-    { category: 'Indirect Costs', planned: 6.1, actual: 6.7 },
-    { category: 'Subcontracted', planned: 7.4, actual: 8.2 },
+    { category: 'Labour (MDO)', planned: 12.5, estimated: 12.8, actual: 13.2 },
+    { category: 'Materials', planned: 8.3, estimated: 8.6, actual: 9.1 },
+    { category: 'Equipment', planned: 5.2, estimated: 5.4, actual: 5.8 },
+    { category: 'Indirect Costs', planned: 6.1, estimated: 6.3, actual: 6.7 },
+    { category: 'Subcontracted', planned: 7.4, estimated: 7.7, actual: 8.2 },
   ]
 
   const getFilteredCostBreakdownData = () => {
@@ -115,7 +128,90 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
       ...d,
       actual: d.actual * 0.95,
       planned: d.planned * 0.92,
+      estimated: d.estimated * 0.93,
     }))
+  }
+
+  const handleSort = (column: 'value' | 'plannedProgress' | 'actualProgress' | 'earnedValue') => {
+    if (sortBy === column) {
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc')
+    } else {
+      setSortBy(column)
+      setSortDirection('desc')
+    }
+  }
+
+  const getSortedActivities = () => {
+    if (!sortBy) return activities
+
+    const sorted = [...activities].sort((a, b) => {
+      let aValue: number = 0
+      let bValue: number = 0
+
+      switch (sortBy) {
+        case 'value':
+          aValue = a.value
+          bValue = b.value
+          break
+        case 'plannedProgress':
+          aValue = parseFloat(a.expected_completeness)
+          bValue = parseFloat(b.expected_completeness)
+          break
+        case 'actualProgress':
+          aValue = a.actual_completeness
+          bValue = b.actual_completeness
+          break
+        case 'earnedValue':
+          aValue = a.earnedValue
+          bValue = b.earnedValue
+          break
+      }
+
+      return sortDirection === 'asc' ? aValue - bValue : bValue - aValue
+    })
+
+    return sorted
+  }
+
+  const handleEconomicSort = (column: 'baselineCost' | 'actualCost' | 'totalBaseline' | 'totalEstimated') => {
+    if (economicSortBy === column) {
+      setEconomicSortDirection(economicSortDirection === 'asc' ? 'desc' : 'asc')
+    } else {
+      setEconomicSortBy(column)
+      setEconomicSortDirection('desc')
+    }
+  }
+
+  const getSortedEconomicTable = () => {
+    if (!economicSortBy) return economicTable
+
+    const sorted = [...economicTable].sort((a, b) => {
+      let aValue: number = 0
+      let bValue: number = 0
+
+      switch (economicSortBy) {
+        case 'baselineCost':
+          aValue = a.baseline
+          bValue = b.baseline
+          break
+        case 'actualCost':
+          aValue = a.actual
+          bValue = b.actual
+          break
+        case 'totalBaseline':
+          aValue = a.baseline / (a.completeness / 100)
+          bValue = b.baseline / (b.completeness / 100)
+          break
+        case 'totalEstimated':
+          aValue = (a.actual / (a.completeness / 100)) * 1.05
+          bValue = (b.actual / (b.completeness / 100)) * 1.05
+          break
+      }
+
+      return economicSortDirection === 'asc' ? aValue - bValue : bValue - aValue
+    })
+
+    return sorted
   }
 
   // Data Quality Tab Data
@@ -213,20 +309,20 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
 
   // Filter logic for daily report files
   const getFilteredDailyReportData = () => {
-  if (dailyReportViewBy === '7days') {
+    if (dailyReportViewBy === '7days') {
+      return dailyReportFilesData7Days
+    } else if (dailyReportViewBy === '30days') {
+      return dailyReportFilesData30Days
+    } else if (dailyReportViewBy === '6months') {
+      return dailyReportFilesData6Months
+    }
     return dailyReportFilesData7Days
-  } else if (dailyReportViewBy === '30days') {
-    return dailyReportFilesData30Days
-  } else if (dailyReportViewBy === '6months') {
-    return dailyReportFilesData6Months
   }
-  return dailyReportFilesData7Days
-}
 
   // Filter logic for shift graph
   const getFilteredShiftData = () => {
     let data
-    
+
     if (shiftViewBy === '7days') {
       data = reportsByShiftData7Days
     } else if (shiftViewBy === '30days') {
@@ -242,21 +338,21 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
         { date: 'Feb', 'Morning': 70, 'Afternoon': 63, 'Night': 30 },
       ]
     }
-    
+
     if (shiftDateRange.start && shiftDateRange.end) {
       data = data.filter(d => {
         const dateStr = d.date.replace(' ', '-')
         return dateStr >= shiftDateRange.start && dateStr <= shiftDateRange.end
       })
     }
-    
+
     return data || reportsByShiftData7Days
   }
 
   // Filter logic for activity graph
   const getFilteredActivityData = () => {
     let data
-    
+
     if (activityViewBy === '7days') {
       data = reportsByActivityData.slice(-7)
     } else if (activityViewBy === '30days') {
@@ -280,14 +376,14 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
         { date: 'Feb', 'Sleepers-Production': 135, 'Ballast': 96, 'Flashbutt-Welding': 54, 'Inspection': 15, total: 300 },
       ]
     }
-    
+
     if (activityDateRange.start && activityDateRange.end) {
       data = data.filter(d => {
         const dateStr = d.date.replace(' ', '-')
         return dateStr >= activityDateRange.start && dateStr <= activityDateRange.end
       })
     }
-    
+
     return data || reportsByActivityData.slice(-7)
   }
 
@@ -304,15 +400,15 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
   return (
     <div className="min-h-screen bg-background grid-background">
       <DashboardHeader />
-      
+
       <main className="p-6">
         {/* Header */}
         <div className="flex items-center justify-between gap-4 mb-8">
           <div>
             <Link href={`/project/PRJ-007`}>
-              <Button 
-                variant="ghost" 
-                size="sm" 
+              <Button
+                variant="ghost"
+                size="sm"
                 className="gap-2 text-muted-foreground hover:text-foreground mb-4"
               >
                 <ArrowLeft className="w-4 h-4" />
@@ -334,11 +430,10 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`pb-4 px-2 font-semibold text-sm transition-all ${
-                activeTab === tab
-                  ? 'text-foreground border-b-2 border-foreground'
-                  : 'text-muted-foreground hover:text-foreground'
-              }`}
+              className={`pb-4 px-2 font-semibold text-sm transition-all ${activeTab === tab
+                ? 'text-foreground border-b-2 border-foreground'
+                : 'text-muted-foreground hover:text-foreground'
+                }`}
             >
               {tab.charAt(0).toUpperCase() + tab.slice(1)}
             </button>
@@ -437,7 +532,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
               <div className="glass-card rounded-lg p-4 border border-border/50">
                 <p className="text-xs text-muted-foreground mb-3 uppercase tracking-wide">Planned Progress</p>
-                <p className="font-mono text-5xl font-bold text-foreground">75%</p>
+                <p className="font-mono text-5xl font-bold text-foreground">53%</p>
               </div>
 
               <div className="glass-card rounded-lg p-4 border border-border/50">
@@ -451,7 +546,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
               <div className="glass-card rounded-lg p-4 border border-border/50">
                 <p className="text-xs text-muted-foreground mb-3 uppercase tracking-wide">Avg. Weekly Progress (Last 4 weeks)</p>
                 <div className="space-y-3">
-                  <p className="font-mono text-3xl font-bold text-foreground">8.5%</p>
+                  <p className="font-mono text-3xl font-bold text-foreground">1.9%</p>
                   <p className="text-xs text-muted-foreground">Trend: <span className="text-success">+1.3% vs prior week</span></p>
                 </div>
               </div>
@@ -459,17 +554,68 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
               <div className="glass-card rounded-lg p-4 border border-border/50">
                 <p className="text-xs text-muted-foreground mb-3 uppercase tracking-wide">Required Weekly Progress</p>
                 <div className="space-y-3">
-                  <p className="font-mono text-3xl font-bold text-foreground">7.8%</p>
+                  <p className="font-mono text-3xl font-bold text-foreground">2.1%</p>
                   <p className="text-xs text-muted-foreground">Target to meet deadline</p>
                 </div>
               </div>
             </div>
 
             {/* Row 4: Earned Value */}
-            <div className="glass-card rounded-lg p-4 border border-border/50">
+            <div className="glass-card rounded-lg p-4 border border-border/50 gap-4 mb-6">
               <p className="text-xs text-muted-foreground mb-3 uppercase tracking-wide">Earned Value (EV) - Economic Value of Work Performed</p>
               <p className="font-mono text-4xl font-bold text-foreground">€15.46M</p>
               <p className="text-xs text-muted-foreground mt-2">Total value of completed activities based on 50% cumulative progress</p>
+            </div>
+
+            <div className="glass-card rounded-lg p-4 border border-border/50 gap-4 mb-6">
+              <h3 className="text-sm font-semibold text-foreground mb-4">Activity Table</h3>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-border/50">
+                      <th className="text-left text-xs text-muted-foreground font-semibold py-2">Activity</th>
+                      <th
+                        className="text-left text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors"
+                        onClick={() => handleSort('value')}
+                      >
+                        Value (€M) {sortBy === 'value' && (sortDirection === 'asc' ? '↑' : '↓')}
+                      </th>
+                      <th className="text-left text-xs text-muted-foreground font-semibold py-2">Total execution planned</th>
+                      <th className="text-left text-xs text-muted-foreground font-semibold py-2">Estimated execution</th>
+                      <th className="text-left text-xs text-muted-foreground font-semibold py-2">Actual execution</th>
+                      <th
+                        className="text-left text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors"
+                        onClick={() => handleSort('earnedValue')}
+                      >
+                        Earned Value (€M) {sortBy === 'earnedValue' && (sortDirection === 'asc' ? '↑' : '↓')}
+                      </th>
+                      <th className="text-left text-xs text-muted-foreground font-semibold py-2">Forecast Deadline</th>
+                      <th className="text-left text-xs text-muted-foreground font-semibold py-2">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {getSortedActivities().map((activity, idx) => (
+                      <tr key={idx} className="border-b border-border/30 hover:bg-secondary/20">
+                        <td className="py-3 text-foreground">{activity.name}</td>
+                        <td className="py-3 text-foreground">€{activity.value.toFixed(1)}M</td>
+                        <td className="py-3 text-muted-foreground">{activity.total_planned}</td>
+                        <td className="py-3 text-foreground">{activity.expected_completeness * 100}%</td>
+                        <td className="py-3 text-foreground">{activity.actual_completeness}%</td>
+                        <td className="py-3 text-foreground">€{activity.earnedValue.toFixed(2)}M</td>
+                        <td className="py-3 text-foreground">{activity.forecast_deadline}</td>
+                        <td className="py-3">
+                          <span className={`text-xs px-2 py-1 rounded ${activity.status === 'Finished' ? 'bg-success/20 text-success' :
+                            activity.status === 'Ongoing' ? 'bg-accent/20 text-accent' :
+                              'bg-muted/30 text-muted-foreground'
+                            }`}>
+                            {activity.status}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </>
         )}
@@ -478,14 +624,11 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
         {activeTab === 'overview' && (
           <>
             {/* Project Info */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+            <h2 className="text-lg font-semibold text-foreground mb-4 mt-8">Project Information</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
               <div className="glass-card rounded-lg p-4 border border-border/50">
                 <p className="text-xs text-muted-foreground uppercase tracking-wide mb-2">Client</p>
                 <p className="text-lg font-semibold text-foreground">{project.client}</p>
-              </div>
-              <div className="glass-card rounded-lg p-4 border border-border/50">
-                <p className="text-xs text-muted-foreground uppercase tracking-wide mb-2">Contract Value</p>
-                <p className="text-lg font-semibold text-foreground">{project.contractValue}</p>
               </div>
               <div className="glass-card rounded-lg p-4 border border-border/50">
                 <p className="text-xs text-muted-foreground uppercase tracking-wide mb-2">Project Manager</p>
@@ -493,34 +636,50 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
               </div>
             </div>
 
+            <h2 className="text-lg font-semibold text-foreground mb-4 mt-8">Contract Information</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+              <div className="glass-card rounded-lg p-4 border border-border/50">
+                <p className="text-xs text-muted-foreground uppercase tracking-wide mb-2">Contract Value</p>
+                <p className="text-lg font-semibold text-foreground">€25.0 M</p>
+              </div>
+              <div className="glass-card rounded-lg p-4 border border-border/50">
+                <p className="text-xs text-muted-foreground uppercase tracking-wide mb-2">Construction Cost</p>
+                <p className="text-lg font-semibold text-foreground">€23.0 M</p>
+              </div>
+              <div className="glass-card rounded-lg p-4 border border-border/50">
+                <p className="text-xs text-muted-foreground uppercase tracking-wide mb-2">Contract Deadline</p>
+                <p className="text-lg font-semibold text-foreground">March 1, 2026</p>
+              </div>
+            </div>
+
             {/* Production Progress Control Section */}
             <h2 className="text-lg font-semibold text-foreground mb-4 mt-8">Production Progress Control</h2>
 
             {/* Production Control KPIs - 6 cards */}
-            <div className="grid grid-cols-1 md:grid-cols-6 gap-3 mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-5">
               <div className="glass-card rounded-lg p-3 border border-border/50">
                 <p className="text-xs text-muted-foreground mb-2">Planned Accum. Progress</p>
-                <p className="text-2xl font-bold text-foreground">75%</p>
-              </div>
-              <div className="glass-card rounded-lg p-3 border border-border/50">
-                <p className="text-xs text-muted-foreground mb-2">Actual Accum. Progress</p>
-                <p className="text-2xl font-bold text-destructive">50%</p>
+                <p className="text-2xl font-bold text-foreground">53%</p>
               </div>
               <div className="glass-card rounded-lg p-3 border border-border/50">
                 <p className="text-xs text-muted-foreground mb-2">Avg. Weekly Advance</p>
-                <p className="text-2xl font-bold text-foreground">8.5%</p>
-              </div>
-              <div className="glass-card rounded-lg p-3 border border-border/50">
-                <p className="text-xs text-muted-foreground mb-2">Required Weekly Advance</p>
-                <p className="text-2xl font-bold text-foreground">7.8%</p>
+                <p className="text-2xl font-bold text-foreground">1.9%</p>
               </div>
               <div className="glass-card rounded-lg p-3 border border-border/50">
                 <p className="text-xs text-muted-foreground mb-2">Current Delay</p>
                 <p className="text-2xl font-bold text-chart-4">2 weeks</p>
               </div>
               <div className="glass-card rounded-lg p-3 border border-border/50">
-                <p className="text-xs text-muted-foreground mb-2">Weekly Trend</p>
-                <p className="text-sm font-semibold text-success">+1.3%</p>
+                <p className="text-xs text-muted-foreground mb-2">Actual Accum. Progress</p>
+                <p className="text-2xl font-bold text-destructive">50%</p>
+              </div>
+              <div className="glass-card rounded-lg p-3 border border-border/50">
+                <p className="text-xs text-muted-foreground mb-2">Required Weekly Advance</p>
+                <p className="text-2xl font-bold text-foreground">2.1%</p>
+              </div>
+              <div className="glass-card rounded-lg p-3 border border-border/50">
+                <p className="text-xs text-muted-foreground mb-2">AI Forecast Deadline</p>
+                <p className="text-2xl font-bold text-foreground">March 15, 2026</p>
               </div>
             </div>
 
@@ -549,27 +708,40 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                   <thead>
                     <tr className="border-b border-border/50">
                       <th className="text-left text-xs text-muted-foreground font-semibold py-2">Activity</th>
-                      <th className="text-left text-xs text-muted-foreground font-semibold py-2">Value (€M)</th>
-                      <th className="text-left text-xs text-muted-foreground font-semibold py-2">Planned</th>
-                      <th className="text-left text-xs text-muted-foreground font-semibold py-2">Executed</th>
-                      <th className="text-left text-xs text-muted-foreground font-semibold py-2">Earned Value (€M)</th>
+                      <th
+                        className="text-left text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors"
+                        onClick={() => handleSort('value')}
+                      >
+                        Value (€M) {sortBy === 'value' && (sortDirection === 'asc' ? '↑' : '↓')}
+                      </th>
+                      <th className="text-left text-xs text-muted-foreground font-semibold py-2">Total execution planned</th>
+                      <th className="text-left text-xs text-muted-foreground font-semibold py-2">Estimated execution</th>
+                      <th className="text-left text-xs text-muted-foreground font-semibold py-2">Actual execution</th>
+                      <th
+                        className="text-left text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors"
+                        onClick={() => handleSort('earnedValue')}
+                      >
+                        Earned Value (€M) {sortBy === 'earnedValue' && (sortDirection === 'asc' ? '↑' : '↓')}
+                      </th>
+                      <th className="text-left text-xs text-muted-foreground font-semibold py-2">Forecast Deadline</th>
                       <th className="text-left text-xs text-muted-foreground font-semibold py-2">Status</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {activities.map((activity, idx) => (
+                    {getSortedActivities().map((activity, idx) => (
                       <tr key={idx} className="border-b border-border/30 hover:bg-secondary/20">
                         <td className="py-3 text-foreground">{activity.name}</td>
                         <td className="py-3 text-foreground">€{activity.value.toFixed(1)}M</td>
-                        <td className="py-3 text-muted-foreground">{activity.planned}</td>
-                        <td className="py-3 text-foreground">{activity.executed} ({activity.completeness}%)</td>
+                        <td className="py-3 text-muted-foreground">{activity.total_planned}</td>
+                        <td className="py-3 text-foreground">{activity.expected_completeness * 100}%</td>
+                        <td className="py-3 text-foreground">{activity.actual_completeness}%</td>
                         <td className="py-3 text-foreground">€{activity.earnedValue.toFixed(2)}M</td>
+                        <td className="py-3 text-foreground">{activity.forecast_deadline}</td>
                         <td className="py-3">
-                          <span className={`text-xs px-2 py-1 rounded ${
-                            activity.status === 'Finished' ? 'bg-success/20 text-success' :
+                          <span className={`text-xs px-2 py-1 rounded ${activity.status === 'Finished' ? 'bg-success/20 text-success' :
                             activity.status === 'Ongoing' ? 'bg-accent/20 text-accent' :
-                            'bg-muted/30 text-muted-foreground'
-                          }`}>
+                              'bg-muted/30 text-muted-foreground'
+                            }`}>
                             {activity.status}
                           </span>
                         </td>
@@ -584,24 +756,11 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
             <h2 className="text-lg font-semibold text-foreground mb-4 mt-8">Economic Control</h2>
 
             {/* Economic Control KPIs */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            <div className="grid grid-cols-1 gap-4 mb-6">
               <div className="glass-card rounded-lg p-4 border border-border/50">
-                <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">Implicit Industrial Cost (CI)</p>
-                <div className="space-y-2">
-                  <div className="flex justify-between">
-                    <span className="text-sm text-muted-foreground">Current</span>
-                    <span className="text-lg font-bold text-foreground">€38.0M</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-sm text-muted-foreground">Total</span>
-                    <span className="text-lg font-bold text-foreground">€68.5M</span>
-                  </div>
-                </div>
-              </div>
-              <div className="glass-card rounded-lg p-4 border border-border/50">
-                <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">Operating Margin </p>
-                <p className="text-3xl font-bold text-foreground">8.2%</p>
-                <p className="text-xs text-muted-foreground mt-2">Baseline OM: 12.0%</p>
+                <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">Industrial Cost</p>
+                <p className="text-3xl font-bold text-foreground">5.0%</p>
+                <p className="text-xs text-muted-foreground mt-2">Planned CI: 3.2%</p>
               </div>
             </div>
 
@@ -616,7 +775,6 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                   <Tooltip contentStyle={{ backgroundColor: 'rgba(0,0,0,0.8)', border: '1px solid rgba(0,200,255,0.3)' }} />
                   <Legend />
                   <Line type="monotone" dataKey="baseline" stroke="#999999" name="Baseline" strokeWidth={2} dot={false} />
-                  <Line type="monotone" dataKey="estimated" stroke="#00c8ff" name="Estimated" strokeWidth={2} dot={false} />
                   <Line type="monotone" dataKey="actual" stroke="#ff6b6b" name="Actual" strokeWidth={2} dot={false} />
                 </LineChart>
               </ResponsiveContainer>
@@ -630,15 +788,35 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                   <thead>
                     <tr className="border-b border-border/50">
                       <th className="text-left text-xs text-muted-foreground font-semibold py-2">Activity</th>
-                      <th className="text-center text-xs text-muted-foreground font-semibold py-2">Baseline Cost<br/>(for progress %)</th>
-                      <th className="text-center text-xs text-muted-foreground font-semibold py-2">Actual Cost<br/>(for progress %)</th>
-                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Total Baseline</th>
-                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Total Estimated</th>
+                      <th
+                        className="text-center text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors"
+                        onClick={() => handleEconomicSort('baselineCost')}
+                      >
+                        Baseline Cost<br />(for progress %) {economicSortBy === 'baselineCost' && (economicSortDirection === 'asc' ? '↑' : '↓')}
+                      </th>
+                      <th
+                        className="text-center text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors"
+                        onClick={() => handleEconomicSort('actualCost')}
+                      >
+                        Actual Cost<br />(for progress %) {economicSortBy === 'actualCost' && (economicSortDirection === 'asc' ? '↑' : '↓')}
+                      </th>
+                      <th
+                        className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors"
+                        onClick={() => handleEconomicSort('totalBaseline')}
+                      >
+                        Total Baseline {economicSortBy === 'totalBaseline' && (economicSortDirection === 'asc' ? '↑' : '↓')}
+                      </th>
+                      <th
+                        className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors"
+                        onClick={() => handleEconomicSort('totalEstimated')}
+                      >
+                        Total Estimated {economicSortBy === 'totalEstimated' && (economicSortDirection === 'asc' ? '↑' : '↓')}
+                      </th>
                       <th className="text-right text-xs text-muted-foreground font-semibold py-2">Float</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {economicTable.map((row, idx) => {
+                    {getSortedEconomicTable().map((row, idx) => {
                       const totalBaseline = row.baseline / (row.completeness / 100);
                       const totalEstimated = row.actual / (row.completeness / 100) * 1.05;
                       const floatWeeks = 2 - Math.floor(idx / 2);
@@ -756,7 +934,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                   </Select>
 
                   {/* Filter Button */}
-                  
+
                 </div>
               </div>
 
@@ -765,7 +943,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                   <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
                   <XAxis dataKey="date" stroke="rgba(255,255,255,0.5)" />
                   <YAxis stroke="rgba(255,255,255,0.5)" />
-                  <Tooltip 
+                  <Tooltip
                     contentStyle={{ backgroundColor: 'rgba(0,0,0,0.8)', border: '1px solid rgba(0,200,255,0.3)' }}
                   />
                   <Legend />
@@ -793,7 +971,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                   </Select>
 
                   {/* Filter Button */}
-                  
+
                 </div>
               </div>
 
@@ -836,7 +1014,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                   </Select>
 
                   {/* Filter Button */}
-                  
+
                 </div>
               </div>
 
@@ -873,15 +1051,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                 <p className="text-xs text-muted-foreground uppercase tracking-wide mb-4">Industrial Cost (CI)</p>
                 <div className="space-y-4">
                   <div>
-                    <p className="text-sm text-muted-foreground mb-1">Current Spend</p>
-                    <p className="text-4xl font-bold text-foreground">€38.0M</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground mb-1">Total Budget</p>
-                    <p className="text-3xl font-bold text-accent">€68.5M</p>
-                  </div>
-                  <div className="pt-2 border-t border-border/30">
-                    <p className="text-xs text-muted-foreground">Budget Utilization: 55.4%</p>
+                    <p className="text-4xl font-bold text-success">5.0%</p>
                   </div>
                 </div>
               </div>
@@ -890,12 +1060,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                 <p className="text-xs text-muted-foreground uppercase tracking-wide mb-4">Earned Value (EV)</p>
                 <div className="space-y-4">
                   <div>
-                    <p className="text-sm text-muted-foreground mb-1">Current EV</p>
-                    <p className="text-4xl font-bold text-success">€35.2M</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground mb-1">Cost Performance Index (CPI)</p>
-                    <p className="text-3xl font-bold text-destructive">0.93</p>
+                    <p className="text-4xl font-bold text-success">€32M</p>
                   </div>
                   <div className="pt-2 border-t border-border/30">
                     <p className="text-xs text-muted-foreground">Actual vs EV: -€2.8M (Under-performing)</p>
@@ -941,7 +1106,6 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                     <Tooltip contentStyle={{ backgroundColor: 'rgba(0,0,0,0.8)', border: '1px solid rgba(0,200,255,0.3)' }} />
                     <Legend />
                     <Line type="monotone" dataKey="baseline" stroke="#999999" name="Baseline" strokeWidth={2} dot={false} />
-                    <Line type="monotone" dataKey="estimated" stroke="#00c8ff" name="Estimated" strokeWidth={2} dot={false} />
                     <Line type="monotone" dataKey="actual" stroke="#ff6b6b" name="Actual" strokeWidth={2} dot={false} />
                   </LineChart>
                 </ResponsiveContainer>
@@ -950,7 +1114,22 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
 
             {/* Cost Breakdown by Nature */}
             <div className="glass-card rounded-lg p-4 border border-border/50 mb-8">
-              <h3 className="text-sm font-semibold text-foreground mb-4">Cost Breakdown by Nature</h3>
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
+                <h3 className="text-sm font-semibold text-foreground">Cost Breakdown by Nature</h3>
+                <Select value={selectedCostMonth} onValueChange={setSelectedCostMonth}>
+                  <SelectTrigger className="w-52 bg-secondary border-border/50">
+                    <SelectValue placeholder="Select month" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="last-month">Last Month (March)</SelectItem>
+                    <SelectItem value="february">February</SelectItem>
+                    <SelectItem value="january">January</SelectItem>
+                    <SelectItem value="december-2025">December 2025</SelectItem>
+                    <SelectItem value="november-2025">November 2025</SelectItem>
+                    <SelectItem value="october-2025">October 2025</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={getFilteredCostBreakdownData()}>
                   <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
@@ -958,56 +1137,68 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                   <YAxis stroke="rgba(255,255,255,0.5)" />
                   <Tooltip contentStyle={{ backgroundColor: 'rgba(0,0,0,0.8)', border: '1px solid rgba(0,200,255,0.3)' }} formatter={(value) => `€${value.toFixed(1)}M`} />
                   <Legend />
-                  <Bar dataKey="planned" fill="#999999" name="Planned Costs" />
-                  <Bar dataKey="actual" fill="#00c8ff" name="Actual Costs" />
+                  <Bar dataKey="planned" fill="#999999" name="Planned" />
+                  <Bar dataKey="estimated" fill="#00c8ff" name="Estimated Cost" />
+                  <Bar dataKey="actual" fill="#ff6b6b" name="Actual" />
                 </BarChart>
               </ResponsiveContainer>
             </div>
 
-            {/* Additional Economic Insights */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="glass-card rounded-lg p-4 border border-border/50">
-                <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">Expected Progress vs Total</p>
-                <div className="space-y-3">
-                  <div>
-                    <p className="text-sm text-muted-foreground mb-1">Expected Completion %</p>
-                    <p className="text-2xl font-bold text-foreground">58.2%</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground mb-1">Total Progress %</p>
-                    <p className="text-2xl font-bold text-accent">50.0%</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="glass-card rounded-lg p-4 border border-border/50">
-                <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">Operating Margin</p>
-                <div className="space-y-3">
-                  <div>
-                    <p className="text-sm text-muted-foreground mb-1">Current Margin</p>
-                    <p className="text-2xl font-bold text-success">7.4%</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground mb-1">Trend</p>
-                    <p className="text-sm font-semibold text-destructive">-0.8% vs week 8</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="glass-card rounded-lg p-4 border border-border/50">
-                <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">Cost Variance</p>
-                <div className="space-y-3">
-                  <div>
-                    <p className="text-sm text-muted-foreground mb-1">Variance Amount</p>
-                    <p className="text-2xl font-bold text-destructive">+€2.8M</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground mb-1">Variance %</p>
-                    <p className="text-sm font-semibold text-destructive">+7.4% over budget</p>
-                  </div>
-                </div>
+            <div className="glass-card rounded-lg p-4 border border-border/50 gap-6 mb-8">
+              <h3 className="text-sm font-semibold text-foreground mb-4">Economic Summary Table</h3>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-border/50">
+                      <th className="text-left text-xs text-muted-foreground font-semibold py-2">Activity</th>
+                      <th
+                        className="text-center text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors"
+                        onClick={() => handleEconomicSort('baselineCost')}
+                      >
+                        Baseline Cost<br />(for progress %) {economicSortBy === 'baselineCost' && (economicSortDirection === 'asc' ? '↑' : '↓')}
+                      </th>
+                      <th
+                        className="text-center text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors"
+                        onClick={() => handleEconomicSort('actualCost')}
+                      >
+                        Actual Cost<br />(for progress %) {economicSortBy === 'actualCost' && (economicSortDirection === 'asc' ? '↑' : '↓')}
+                      </th>
+                      <th
+                        className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors"
+                        onClick={() => handleEconomicSort('totalBaseline')}
+                      >
+                        Total Baseline {economicSortBy === 'totalBaseline' && (economicSortDirection === 'asc' ? '↑' : '↓')}
+                      </th>
+                      <th
+                        className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors"
+                        onClick={() => handleEconomicSort('totalEstimated')}
+                      >
+                        Total Estimated {economicSortBy === 'totalEstimated' && (economicSortDirection === 'asc' ? '↑' : '↓')}
+                      </th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Float</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {getSortedEconomicTable().map((row, idx) => {
+                      const totalBaseline = row.baseline / (row.completeness / 100);
+                      const totalEstimated = row.actual / (row.completeness / 100) * 1.05;
+                      const floatWeeks = 2 - Math.floor(idx / 2);
+                      return (
+                        <tr key={idx} className="border-b border-border/30 hover:bg-secondary/20">
+                          <td className="py-3 text-foreground">{row.activity}</td>
+                          <td className="py-3 text-center text-foreground">€{row.baseline.toFixed(2)}M ({row.completeness}%)</td>
+                          <td className="py-3 text-center text-foreground">€{row.actual.toFixed(2)}M ({row.completeness}%)</td>
+                          <td className="py-3 text-right text-foreground">€{totalBaseline.toFixed(1)}M</td>
+                          <td className="py-3 text-right text-foreground">€{totalEstimated.toFixed(1)}M</td>
+                          <td className={`py-3 text-right font-semibold ${floatWeeks === 0 ? 'text-destructive' : 'text-foreground'}`}>{floatWeeks}w</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
               </div>
             </div>
+
           </>
         )}
       </main>

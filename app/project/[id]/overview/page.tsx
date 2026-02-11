@@ -19,7 +19,8 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
   const [selectedActivity, setSelectedActivity] = useState('all')
   const [selectedWorkfront, setSelectedWorkfront] = useState('all')
   const [selectedOwner, setSelectedOwner] = useState('all')
-  
+  const [selectedCostMonth, setSelectedCostMonth] = useState('last-month')
+
   // Data Quality Tab State
   const [dailyReportViewBy, setDailyReportViewBy] = useState('7days')
   const [dailyReportDateRange, setDailyReportDateRange] = useState({ start: '', end: '' })
@@ -100,11 +101,11 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
   }))
 
   const costBreakdownData = [
-    { category: 'Labour (MDO)', planned: 12.5, actual: 13.2 },
-    { category: 'Materials', planned: 8.3, actual: 9.1 },
-    { category: 'Equipment', planned: 5.2, actual: 5.8 },
-    { category: 'Indirect Costs', planned: 6.1, actual: 6.7 },
-    { category: 'Subcontracted', planned: 7.4, actual: 8.2 },
+    { category: 'Labour (MDO)', planned: 12.5, estimated: 12.8, actual: 13.2 },
+    { category: 'Materials', planned: 8.3, estimated: 8.6, actual: 9.1 },
+    { category: 'Equipment', planned: 5.2, estimated: 5.4, actual: 5.8 },
+    { category: 'Indirect Costs', planned: 6.1, estimated: 6.3, actual: 6.7 },
+    { category: 'Subcontracted', planned: 7.4, estimated: 7.7, actual: 8.2 },
   ]
 
   const getFilteredCostBreakdownData = () => {
@@ -115,6 +116,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
       ...d,
       actual: d.actual * 0.95,
       planned: d.planned * 0.92,
+      estimated: d.estimated * 0.93,
     }))
   }
 
@@ -213,20 +215,20 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
 
   // Filter logic for daily report files
   const getFilteredDailyReportData = () => {
-  if (dailyReportViewBy === '7days') {
+    if (dailyReportViewBy === '7days') {
+      return dailyReportFilesData7Days
+    } else if (dailyReportViewBy === '30days') {
+      return dailyReportFilesData30Days
+    } else if (dailyReportViewBy === '6months') {
+      return dailyReportFilesData6Months
+    }
     return dailyReportFilesData7Days
-  } else if (dailyReportViewBy === '30days') {
-    return dailyReportFilesData30Days
-  } else if (dailyReportViewBy === '6months') {
-    return dailyReportFilesData6Months
   }
-  return dailyReportFilesData7Days
-}
 
   // Filter logic for shift graph
   const getFilteredShiftData = () => {
     let data
-    
+
     if (shiftViewBy === '7days') {
       data = reportsByShiftData7Days
     } else if (shiftViewBy === '30days') {
@@ -242,21 +244,21 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
         { date: 'Feb', 'Morning': 70, 'Afternoon': 63, 'Night': 30 },
       ]
     }
-    
+
     if (shiftDateRange.start && shiftDateRange.end) {
       data = data.filter(d => {
         const dateStr = d.date.replace(' ', '-')
         return dateStr >= shiftDateRange.start && dateStr <= shiftDateRange.end
       })
     }
-    
+
     return data || reportsByShiftData7Days
   }
 
   // Filter logic for activity graph
   const getFilteredActivityData = () => {
     let data
-    
+
     if (activityViewBy === '7days') {
       data = reportsByActivityData.slice(-7)
     } else if (activityViewBy === '30days') {
@@ -280,14 +282,14 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
         { date: 'Feb', 'Sleepers-Production': 135, 'Ballast': 96, 'Flashbutt-Welding': 54, 'Inspection': 15, total: 300 },
       ]
     }
-    
+
     if (activityDateRange.start && activityDateRange.end) {
       data = data.filter(d => {
         const dateStr = d.date.replace(' ', '-')
         return dateStr >= activityDateRange.start && dateStr <= activityDateRange.end
       })
     }
-    
+
     return data || reportsByActivityData.slice(-7)
   }
 
@@ -304,15 +306,15 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
   return (
     <div className="min-h-screen bg-background grid-background">
       <DashboardHeader />
-      
+
       <main className="p-6">
         {/* Header */}
         <div className="flex items-center justify-between gap-4 mb-8">
           <div>
             <Link href={`/project/PRJ-007`}>
-              <Button 
-                variant="ghost" 
-                size="sm" 
+              <Button
+                variant="ghost"
+                size="sm"
                 className="gap-2 text-muted-foreground hover:text-foreground mb-4"
               >
                 <ArrowLeft className="w-4 h-4" />
@@ -334,11 +336,10 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`pb-4 px-2 font-semibold text-sm transition-all ${
-                activeTab === tab
-                  ? 'text-foreground border-b-2 border-foreground'
-                  : 'text-muted-foreground hover:text-foreground'
-              }`}
+              className={`pb-4 px-2 font-semibold text-sm transition-all ${activeTab === tab
+                ? 'text-foreground border-b-2 border-foreground'
+                : 'text-muted-foreground hover:text-foreground'
+                }`}
             >
               {tab.charAt(0).toUpperCase() + tab.slice(1)}
             </button>
@@ -478,6 +479,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
         {activeTab === 'overview' && (
           <>
             {/* Project Info */}
+            <h2 className="text-lg font-semibold text-foreground mb-4 mt-8">Project Information</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
               <div className="glass-card rounded-lg p-4 border border-border/50">
                 <p className="text-xs text-muted-foreground uppercase tracking-wide mb-2">Client</p>
@@ -497,7 +499,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
             <h2 className="text-lg font-semibold text-foreground mb-4 mt-8">Production Progress Control</h2>
 
             {/* Production Control KPIs - 6 cards */}
-            <div className="grid grid-cols-1 md:grid-cols-6 gap-3 mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-3 mb-5">
               <div className="glass-card rounded-lg p-3 border border-border/50">
                 <p className="text-xs text-muted-foreground mb-2">Planned Accum. Progress</p>
                 <p className="text-2xl font-bold text-foreground">75%</p>
@@ -517,10 +519,6 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
               <div className="glass-card rounded-lg p-3 border border-border/50">
                 <p className="text-xs text-muted-foreground mb-2">Current Delay</p>
                 <p className="text-2xl font-bold text-chart-4">2 weeks</p>
-              </div>
-              <div className="glass-card rounded-lg p-3 border border-border/50">
-                <p className="text-xs text-muted-foreground mb-2">Weekly Trend</p>
-                <p className="text-sm font-semibold text-success">+1.3%</p>
               </div>
             </div>
 
@@ -565,11 +563,10 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                         <td className="py-3 text-foreground">{activity.executed} ({activity.completeness}%)</td>
                         <td className="py-3 text-foreground">€{activity.earnedValue.toFixed(2)}M</td>
                         <td className="py-3">
-                          <span className={`text-xs px-2 py-1 rounded ${
-                            activity.status === 'Finished' ? 'bg-success/20 text-success' :
+                          <span className={`text-xs px-2 py-1 rounded ${activity.status === 'Finished' ? 'bg-success/20 text-success' :
                             activity.status === 'Ongoing' ? 'bg-accent/20 text-accent' :
-                            'bg-muted/30 text-muted-foreground'
-                          }`}>
+                              'bg-muted/30 text-muted-foreground'
+                            }`}>
                             {activity.status}
                           </span>
                         </td>
@@ -630,8 +627,8 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                   <thead>
                     <tr className="border-b border-border/50">
                       <th className="text-left text-xs text-muted-foreground font-semibold py-2">Activity</th>
-                      <th className="text-center text-xs text-muted-foreground font-semibold py-2">Baseline Cost<br/>(for progress %)</th>
-                      <th className="text-center text-xs text-muted-foreground font-semibold py-2">Actual Cost<br/>(for progress %)</th>
+                      <th className="text-center text-xs text-muted-foreground font-semibold py-2">Baseline Cost<br />(for progress %)</th>
+                      <th className="text-center text-xs text-muted-foreground font-semibold py-2">Actual Cost<br />(for progress %)</th>
                       <th className="text-right text-xs text-muted-foreground font-semibold py-2">Total Baseline</th>
                       <th className="text-right text-xs text-muted-foreground font-semibold py-2">Total Estimated</th>
                       <th className="text-right text-xs text-muted-foreground font-semibold py-2">Float</th>
@@ -756,7 +753,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                   </Select>
 
                   {/* Filter Button */}
-                  
+
                 </div>
               </div>
 
@@ -765,7 +762,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                   <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
                   <XAxis dataKey="date" stroke="rgba(255,255,255,0.5)" />
                   <YAxis stroke="rgba(255,255,255,0.5)" />
-                  <Tooltip 
+                  <Tooltip
                     contentStyle={{ backgroundColor: 'rgba(0,0,0,0.8)', border: '1px solid rgba(0,200,255,0.3)' }}
                   />
                   <Legend />
@@ -793,7 +790,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                   </Select>
 
                   {/* Filter Button */}
-                  
+
                 </div>
               </div>
 
@@ -836,7 +833,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                   </Select>
 
                   {/* Filter Button */}
-                  
+
                 </div>
               </div>
 
@@ -950,7 +947,22 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
 
             {/* Cost Breakdown by Nature */}
             <div className="glass-card rounded-lg p-4 border border-border/50 mb-8">
-              <h3 className="text-sm font-semibold text-foreground mb-4">Cost Breakdown by Nature</h3>
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
+                <h3 className="text-sm font-semibold text-foreground">Cost Breakdown by Nature</h3>
+                <Select value={selectedCostMonth} onValueChange={setSelectedCostMonth}>
+                  <SelectTrigger className="w-52 bg-secondary border-border/50">
+                    <SelectValue placeholder="Select month" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="last-month">Last Month (March)</SelectItem>
+                    <SelectItem value="february">February</SelectItem>
+                    <SelectItem value="january">January</SelectItem>
+                    <SelectItem value="december-2025">December 2025</SelectItem>
+                    <SelectItem value="november-2025">November 2025</SelectItem>
+                    <SelectItem value="october-2025">October 2025</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={getFilteredCostBreakdownData()}>
                   <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
@@ -958,8 +970,9 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                   <YAxis stroke="rgba(255,255,255,0.5)" />
                   <Tooltip contentStyle={{ backgroundColor: 'rgba(0,0,0,0.8)', border: '1px solid rgba(0,200,255,0.3)' }} formatter={(value) => `€${value.toFixed(1)}M`} />
                   <Legend />
-                  <Bar dataKey="planned" fill="#999999" name="Planned Costs" />
-                  <Bar dataKey="actual" fill="#00c8ff" name="Actual Costs" />
+                  <Bar dataKey="planned" fill="#999999" name="Planned" />
+                  <Bar dataKey="estimated" fill="#0066ff" name="Estimated Cost" />
+                  <Bar dataKey="actual" fill="#ff3333" name="Actual" />
                 </BarChart>
               </ResponsiveContainer>
             </div>

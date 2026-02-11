@@ -88,19 +88,19 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
   }
 
   const activities = [
-    { name: 'Site Preparation', value: 2.1, total_planned: '1000 m³', planned: '900 m³', executed: '850 m³', expected_completeness: (900 / 1000).toFixed(2), actual_completeness: 85, earnedValue: 1.785, status: 'Ongoing' },
-    { name: 'Foundation Work', value: 5.2, total_planned: '2000 m³', planned: '1400 m³', executed: '1200 m³', expected_completeness: (1400 / 2000).toFixed(2), actual_completeness: 60, earnedValue: 3.12, status: 'Ongoing' },
-    { name: 'Structure Assembly', value: 8.5, total_planned: '150 units', planned: '110 units', executed: '90 units', expected_completeness: (110 / 150).toFixed(2), actual_completeness: 60, earnedValue: 5.1, status: 'Ongoing' },
-    { name: 'Mechanical Systems', value: 4.3, total_planned: '45 systems', planned: '10 units', executed: '0 units', expected_completeness: (10 / 45).toFixed(2), actual_completeness: 0, earnedValue: 0, status: 'Not Started' },
-    { name: 'Finishing Works', value: 4.4, total_planned: '50 areas', planned: '10 areas', executed: '5 areas', expected_completeness: (10 / 50).toFixed(2), actual_completeness: 10, earnedValue: 0.44, status: 'Not Started' },
-    { name: 'Electrical Installation', value: 3.8, total_planned: '120 circuits', planned: '80 circuits', executed: '65 circuits', expected_completeness: (80 / 120).toFixed(2), actual_completeness: 54, earnedValue: 2.052, status: 'Ongoing' },
-    { name: 'Plumbing Systems', value: 2.9, total_planned: '85 connections', planned: '60 connections', executed: '55 connections', expected_completeness: (60 / 85).toFixed(2), actual_completeness: 65, earnedValue: 1.885, status: 'Ongoing' },
-    { name: 'HVAC Installation', value: 6.7, total_planned: '35 units', planned: '25 units', executed: '18 units', expected_completeness: (25 / 35).toFixed(2), actual_completeness: 51, earnedValue: 3.417, status: 'Ongoing' },
-    { name: 'Exterior Cladding', value: 3.2, total_planned: '800 m²', planned: '500 m²', executed: '420 m²', expected_completeness: (500 / 800).toFixed(2), actual_completeness: 53, earnedValue: 1.696, status: 'Ongoing' },
-    { name: 'Interior Partitions', value: 2.6, total_planned: '650 m²', planned: '400 m²', executed: '350 m²', expected_completeness: (400 / 650).toFixed(2), actual_completeness: 54, earnedValue: 1.404, status: 'Ongoing' },
-    { name: 'Roofing Works', value: 4.1, total_planned: '1200 m²', planned: '1000 m²', executed: '950 m²', expected_completeness: (1000 / 1200).toFixed(2), actual_completeness: 79, earnedValue: 3.239, status: 'Ongoing' },
-    { name: 'Flooring Installation', value: 1.9, total_planned: '900 m²', planned: '300 m²', executed: '180 m²', expected_completeness: (300 / 900).toFixed(2), actual_completeness: 20, earnedValue: 0.38, status: 'Not Started' },
-    { name: 'Painting & Decoration', value: 1.5, total_planned: '1100 m²', planned: '200 m²', executed: '50 m²', expected_completeness: (200 / 1100).toFixed(2), actual_completeness: 5, earnedValue: 0.075, status: 'Not Started' },
+    { name: 'Site Preparation', value: 2.1, total_planned: '1000 m³', planned: '900 m³', executed: '850 m³', expected_completeness: (900 / 1000).toFixed(2), actual_completeness: 85, earnedValue: 1.785, status: 'Ongoing', estimated_execution: '750 m³', actual_execution: '650 m³', forecast_deadline: '15/03/2024' },
+    { name: 'Foundation Work', value: 5.2, total_planned: '2000 m³', planned: '1400 m³', executed: '1200 m³', expected_completeness: (1400 / 2000).toFixed(2), actual_completeness: 60, earnedValue: 3.12, status: 'Ongoing', estimated_execution: '1100 m³', actual_execution: '900 m³', forecast_deadline: '20/04/2024' },
+    { name: 'Structure Assembly', value: 8.5, total_planned: '150 units', planned: '110 units', executed: '90 units', expected_completeness: (110 / 150).toFixed(2), actual_completeness: 60, earnedValue: 5.1, status: 'Ongoing', estimated_execution: '80 units', actual_execution: '65 units', forecast_deadline: '10/05/2024' },
+    { name: 'Mechanical Systems', value: 4.3, total_planned: '45 systems', planned: '10 units', executed: '0 units', expected_completeness: (10 / 45).toFixed(2), actual_completeness: 0, earnedValue: 0, status: 'Not Started', estimated_execution: '5 units', actual_execution: '0 units', forecast_deadline: '15/06/2024' },
+    { name: 'Finishing Works', value: 4.4, total_planned: '50 areas', planned: '10 areas', executed: '5 areas', expected_completeness: (10 / 50).toFixed(2), actual_completeness: 10, earnedValue: 0.44, status: 'Not Started', estimated_execution: '8 areas', actual_execution: '3 areas', forecast_deadline: '20/06/2024' },
+    { name: 'Electrical Installation', value: 3.8, total_planned: '120 circuits', planned: '80 circuits', executed: '65 circuits', expected_completeness: (80 / 120).toFixed(2), actual_completeness: 54, earnedValue: 2.052, status: 'Ongoing', estimated_execution: '70 circuits', actual_execution: '55 circuits', forecast_deadline: '25/05/2024' },
+    { name: 'Plumbing Systems', value: 2.9, total_planned: '85 connections', planned: '60 connections', executed: '55 connections', expected_completeness: (60 / 85).toFixed(2), actual_completeness: 65, earnedValue: 1.885, status: 'Ongoing', estimated_execution: '58 connections', actual_execution: '48 connections', forecast_deadline: '22/05/2024' },
+    { name: 'HVAC Installation', value: 6.7, total_planned: '35 units', planned: '25 units', executed: '18 units', expected_completeness: (25 / 35).toFixed(2), actual_completeness: 51, earnedValue: 3.417, status: 'Ongoing', estimated_execution: '20 units', actual_execution: '15 units', forecast_deadline: '30/05/2024' },
+    { name: 'Exterior Cladding', value: 3.2, total_planned: '800 m²', planned: '500 m²', executed: '420 m²', expected_completeness: (500 / 800).toFixed(2), actual_completeness: 53, earnedValue: 1.696, status: 'Ongoing', estimated_execution: '450 m²', actual_execution: '380 m²', forecast_deadline: '28/05/2024' },
+    { name: 'Interior Partitions', value: 2.6, total_planned: '650 m²', planned: '400 m²', executed: '350 m²', expected_completeness: (400 / 650).toFixed(2), actual_completeness: 54, earnedValue: 1.404, status: 'Ongoing', estimated_execution: '375 m²', actual_execution: '320 m²', forecast_deadline: '26/05/2024' },
+    { name: 'Roofing Works', value: 4.1, total_planned: '1200 m²', planned: '1000 m²', executed: '950 m²', expected_completeness: (1000 / 1200).toFixed(2), actual_completeness: 79, earnedValue: 3.239, status: 'Ongoing', estimated_execution: '980 m²', actual_execution: '870 m²', forecast_deadline: '18/05/2024' },
+    { name: 'Flooring Installation', value: 1.9, total_planned: '900 m²', planned: '300 m²', executed: '180 m²', expected_completeness: (300 / 900).toFixed(2), actual_completeness: 20, earnedValue: 0.38, status: 'Not Started', estimated_execution: '250 m²', actual_execution: '150 m²', forecast_deadline: '10/07/2024' },
+    { name: 'Painting & Decoration', value: 1.5, total_planned: '1100 m²', planned: '200 m²', executed: '50 m²', expected_completeness: (200 / 1100).toFixed(2), actual_completeness: 5, earnedValue: 0.075, status: 'Not Started', estimated_execution: '150 m²', actual_execution: '40 m²', forecast_deadline: '15/07/2024' },
   ]
 
   const economicTable = activities.map(activity => ({
@@ -531,31 +531,22 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                   <thead>
                     <tr className="border-b border-border/50">
                       <th className="text-left text-xs text-muted-foreground font-semibold py-2">Activity</th>
-                      <th 
+                      <th
                         className="text-left text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors"
                         onClick={() => handleSort('value')}
                       >
                         Value (€M) {sortBy === 'value' && (sortDirection === 'asc' ? '↑' : '↓')}
                       </th>
                       <th className="text-left text-xs text-muted-foreground font-semibold py-2">Total execution planned</th>
-                      <th 
-                        className="text-left text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors"
-                        onClick={() => handleSort('plannedProgress')}
-                      >
-                        Planned Progress {sortBy === 'plannedProgress' && (sortDirection === 'asc' ? '↑' : '↓')}
-                      </th>
-                      <th 
-                        className="text-left text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors"
-                        onClick={() => handleSort('actualProgress')}
-                      >
-                        Actual Progress {sortBy === 'actualProgress' && (sortDirection === 'asc' ? '↑' : '↓')}
-                      </th>
-                      <th 
+                      <th className="text-left text-xs text-muted-foreground font-semibold py-2">Estimated execution</th>
+                      <th className="text-left text-xs text-muted-foreground font-semibold py-2">Actual execution</th>
+                      <th
                         className="text-left text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors"
                         onClick={() => handleSort('earnedValue')}
                       >
                         Earned Value (€M) {sortBy === 'earnedValue' && (sortDirection === 'asc' ? '↑' : '↓')}
                       </th>
+                      <th className="text-left text-xs text-muted-foreground font-semibold py-2">Forecast Deadline</th>
                       <th className="text-left text-xs text-muted-foreground font-semibold py-2">Status</th>
                     </tr>
                   </thead>
@@ -565,9 +556,10 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                         <td className="py-3 text-foreground">{activity.name}</td>
                         <td className="py-3 text-foreground">€{activity.value.toFixed(1)}M</td>
                         <td className="py-3 text-muted-foreground">{activity.total_planned}</td>
-                        <td className="py-3 text-muted-foreground">{activity.planned} ({activity.expected_completeness * 100}%)</td>
-                        <td className="py-3 text-foreground">{activity.executed} ({activity.actual_completeness}%)</td>
+                        <td className="py-3 text-muted-foreground">{activity.estimated_execution}</td>
+                        <td className="py-3 text-muted-foreground">{activity.actual_execution}</td>
                         <td className="py-3 text-foreground">€{activity.earnedValue.toFixed(2)}M</td>
+                        <td className="py-3 text-muted-foreground">{activity.forecast_deadline}</td>
                         <td className="py-3">
                           <span className={`text-xs px-2 py-1 rounded ${activity.status === 'Finished' ? 'bg-success/20 text-success' :
                             activity.status === 'Ongoing' ? 'bg-accent/20 text-accent' :
@@ -590,14 +582,10 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
           <>
             {/* Project Info */}
             <h2 className="text-lg font-semibold text-foreground mb-4 mt-8">Project Information</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
               <div className="glass-card rounded-lg p-4 border border-border/50">
                 <p className="text-xs text-muted-foreground uppercase tracking-wide mb-2">Client</p>
                 <p className="text-lg font-semibold text-foreground">{project.client}</p>
-              </div>
-              <div className="glass-card rounded-lg p-4 border border-border/50">
-                <p className="text-xs text-muted-foreground uppercase tracking-wide mb-2">Contract Value</p>
-                <p className="text-lg font-semibold text-foreground">{project.contractValue}</p>
               </div>
               <div className="glass-card rounded-lg p-4 border border-border/50">
                 <p className="text-xs text-muted-foreground uppercase tracking-wide mb-2">Project Manager</p>
@@ -606,7 +594,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
             </div>
 
             <h2 className="text-lg font-semibold text-foreground mb-4 mt-8">Contract Information</h2>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
               <div className="glass-card rounded-lg p-4 border border-border/50">
                 <p className="text-xs text-muted-foreground uppercase tracking-wide mb-2">Contract Value</p>
                 <p className="text-lg font-semibold text-foreground">€25.0 M</p>
@@ -614,10 +602,6 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
               <div className="glass-card rounded-lg p-4 border border-border/50">
                 <p className="text-xs text-muted-foreground uppercase tracking-wide mb-2">Construction Cost</p>
                 <p className="text-lg font-semibold text-foreground">€23.0 M</p>
-              </div>
-              <div className="glass-card rounded-lg p-4 border border-border/50">
-                <p className="text-xs text-muted-foreground uppercase tracking-wide mb-2">Commercial Value</p>
-                <p className="text-lg font-semibold text-foreground">€27.0 M</p>
               </div>
               <div className="glass-card rounded-lg p-4 border border-border/50">
                 <p className="text-xs text-muted-foreground uppercase tracking-wide mb-2">Contract Deadline</p>
@@ -681,21 +665,35 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                   <thead>
                     <tr className="border-b border-border/50">
                       <th className="text-left text-xs text-muted-foreground font-semibold py-2">Activity</th>
-                      <th className="text-left text-xs text-muted-foreground font-semibold py-2">Value (€M)</th>
-                      <th className="text-left text-xs text-muted-foreground font-semibold py-2">Planned</th>
-                      <th className="text-left text-xs text-muted-foreground font-semibold py-2">Executed</th>
-                      <th className="text-left text-xs text-muted-foreground font-semibold py-2">Earned Value (€M)</th>
+                      <th
+                        className="text-left text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors"
+                        onClick={() => handleSort('value')}
+                      >
+                        Value (€M) {sortBy === 'value' && (sortDirection === 'asc' ? '↑' : '↓')}
+                      </th>
+                      <th className="text-left text-xs text-muted-foreground font-semibold py-2">Total execution planned</th>
+                      <th className="text-left text-xs text-muted-foreground font-semibold py-2">Estimated execution</th>
+                      <th className="text-left text-xs text-muted-foreground font-semibold py-2">Actual execution</th>
+                      <th
+                        className="text-left text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors"
+                        onClick={() => handleSort('earnedValue')}
+                      >
+                        Earned Value (€M) {sortBy === 'earnedValue' && (sortDirection === 'asc' ? '↑' : '↓')}
+                      </th>
+                      <th className="text-left text-xs text-muted-foreground font-semibold py-2">Forecast Deadline</th>
                       <th className="text-left text-xs text-muted-foreground font-semibold py-2">Status</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {activities.map((activity, idx) => (
+                    {getSortedActivities().map((activity, idx) => (
                       <tr key={idx} className="border-b border-border/30 hover:bg-secondary/20">
                         <td className="py-3 text-foreground">{activity.name}</td>
                         <td className="py-3 text-foreground">€{activity.value.toFixed(1)}M</td>
-                        <td className="py-3 text-muted-foreground">{activity.planned}</td>
-                        <td className="py-3 text-foreground">{activity.executed} ({activity.completeness}%)</td>
+                        <td className="py-3 text-muted-foreground">{activity.total_planned}</td>
+                        <td className="py-3 text-muted-foreground">{activity.estimated_execution}</td>
+                        <td className="py-3 text-muted-foreground">{activity.actual_execution}</td>
                         <td className="py-3 text-foreground">€{activity.earnedValue.toFixed(2)}M</td>
+                        <td className="py-3 text-muted-foreground">{activity.forecast_deadline}</td>
                         <td className="py-3">
                           <span className={`text-xs px-2 py-1 rounded ${activity.status === 'Finished' ? 'bg-success/20 text-success' :
                             activity.status === 'Ongoing' ? 'bg-accent/20 text-accent' :

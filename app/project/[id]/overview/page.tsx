@@ -1070,7 +1070,6 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                     <Tooltip contentStyle={{ backgroundColor: 'rgba(0,0,0,0.8)', border: '1px solid rgba(0,200,255,0.3)' }} />
                     <Legend />
                     <Line type="monotone" dataKey="baseline" stroke="#999999" name="Baseline" strokeWidth={2} dot={false} />
-                    <Line type="monotone" dataKey="estimated" stroke="#00c8ff" name="Estimated" strokeWidth={2} dot={false} />
                     <Line type="monotone" dataKey="actual" stroke="#ff6b6b" name="Actual" strokeWidth={2} dot={false} />
                   </LineChart>
                 </ResponsiveContainer>
@@ -1144,50 +1143,6 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
               </div>
             </div>
 
-            {/* Additional Economic Insights */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="glass-card rounded-lg p-4 border border-border/50">
-                <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">Expected Progress vs Total</p>
-                <div className="space-y-3">
-                  <div>
-                    <p className="text-sm text-muted-foreground mb-1">Expected Completion %</p>
-                    <p className="text-2xl font-bold text-foreground">58.2%</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground mb-1">Total Progress %</p>
-                    <p className="text-2xl font-bold text-accent">50.0%</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="glass-card rounded-lg p-4 border border-border/50">
-                <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">Operating Margin</p>
-                <div className="space-y-3">
-                  <div>
-                    <p className="text-sm text-muted-foreground mb-1">Current Margin</p>
-                    <p className="text-2xl font-bold text-success">7.4%</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground mb-1">Trend</p>
-                    <p className="text-sm font-semibold text-destructive">-0.8% vs week 8</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="glass-card rounded-lg p-4 border border-border/50">
-                <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">Cost Variance</p>
-                <div className="space-y-3">
-                  <div>
-                    <p className="text-sm text-muted-foreground mb-1">Variance Amount</p>
-                    <p className="text-2xl font-bold text-destructive">+€2.8M</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground mb-1">Variance %</p>
-                    <p className="text-sm font-semibold text-destructive">+7.4% over budget</p>
-                  </div>
-                </div>
-              </div>
-            </div>
           </>
         )}
       </main>

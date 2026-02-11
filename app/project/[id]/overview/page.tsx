@@ -1051,8 +1051,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                 <p className="text-xs text-muted-foreground uppercase tracking-wide mb-4">Industrial Cost (CI)</p>
                 <div className="space-y-4">
                   <div>
-                    <p className="text-sm text-muted-foreground mb-1">Current EV</p>
-                    <p className="text-4xl font-bold text-success">€32M</p>
+                    <p className="text-4xl font-bold text-success">5.0%</p>
                   </div>
                 </div>
               </div>
@@ -1061,7 +1060,10 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                 <p className="text-xs text-muted-foreground uppercase tracking-wide mb-4">Earned Value (EV)</p>
                 <div className="space-y-4">
                   <div>
-                    <p className="text-4xl font-bold text-success">€35.2M</p>
+                    <p className="text-4xl font-bold text-success">€32M</p>
+                  </div>
+                  <div className="pt-2 border-t border-border/30">
+                    <p className="text-xs text-muted-foreground">Actual vs EV: -€2.8M (Under-performing)</p>
                   </div>
                 </div>
               </div>

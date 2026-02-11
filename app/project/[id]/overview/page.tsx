@@ -788,25 +788,25 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                   <thead>
                     <tr className="border-b border-border/50">
                       <th className="text-left text-xs text-muted-foreground font-semibold py-2">Activity</th>
-                      <th 
+                      <th
                         className="text-center text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors"
                         onClick={() => handleEconomicSort('baselineCost')}
                       >
                         Baseline Cost<br />(for progress %) {economicSortBy === 'baselineCost' && (economicSortDirection === 'asc' ? '↑' : '↓')}
                       </th>
-                      <th 
+                      <th
                         className="text-center text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors"
                         onClick={() => handleEconomicSort('actualCost')}
                       >
                         Actual Cost<br />(for progress %) {economicSortBy === 'actualCost' && (economicSortDirection === 'asc' ? '↑' : '↓')}
                       </th>
-                      <th 
+                      <th
                         className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors"
                         onClick={() => handleEconomicSort('totalBaseline')}
                       >
                         Total Baseline {economicSortBy === 'totalBaseline' && (economicSortDirection === 'asc' ? '↑' : '↓')}
                       </th>
-                      <th 
+                      <th
                         className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors"
                         onClick={() => handleEconomicSort('totalEstimated')}
                       >
@@ -1051,15 +1051,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                 <p className="text-xs text-muted-foreground uppercase tracking-wide mb-4">Industrial Cost (CI)</p>
                 <div className="space-y-4">
                   <div>
-                    <p className="text-sm text-muted-foreground mb-1">Current Spend</p>
-                    <p className="text-4xl font-bold text-foreground">€38.0M</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground mb-1">Total Budget</p>
-                    <p className="text-3xl font-bold text-accent">€68.5M</p>
-                  </div>
-                  <div className="pt-2 border-t border-border/30">
-                    <p className="text-xs text-muted-foreground">Budget Utilization: 55.4%</p>
+                    <p className="text-4xl font-bold text-foreground">3.2%</p>
                   </div>
                 </div>
               </div>
@@ -1070,10 +1062,6 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                   <div>
                     <p className="text-sm text-muted-foreground mb-1">Current EV</p>
                     <p className="text-4xl font-bold text-success">€35.2M</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground mb-1">Cost Performance Index (CPI)</p>
-                    <p className="text-3xl font-bold text-destructive">0.93</p>
                   </div>
                   <div className="pt-2 border-t border-border/30">
                     <p className="text-xs text-muted-foreground">Actual vs EV: -€2.8M (Under-performing)</p>
@@ -1164,25 +1152,25 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                   <thead>
                     <tr className="border-b border-border/50">
                       <th className="text-left text-xs text-muted-foreground font-semibold py-2">Activity</th>
-                      <th 
+                      <th
                         className="text-center text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors"
                         onClick={() => handleEconomicSort('baselineCost')}
                       >
                         Baseline Cost<br />(for progress %) {economicSortBy === 'baselineCost' && (economicSortDirection === 'asc' ? '↑' : '↓')}
                       </th>
-                      <th 
+                      <th
                         className="text-center text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors"
                         onClick={() => handleEconomicSort('actualCost')}
                       >
                         Actual Cost<br />(for progress %) {economicSortBy === 'actualCost' && (economicSortDirection === 'asc' ? '↑' : '↓')}
                       </th>
-                      <th 
+                      <th
                         className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors"
                         onClick={() => handleEconomicSort('totalBaseline')}
                       >
                         Total Baseline {economicSortBy === 'totalBaseline' && (economicSortDirection === 'asc' ? '↑' : '↓')}
                       </th>
-                      <th 
+                      <th
                         className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors"
                         onClick={() => handleEconomicSort('totalEstimated')}
                       >

@@ -20,6 +20,8 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
   const [selectedWorkfront, setSelectedWorkfront] = useState('all')
   const [selectedOwner, setSelectedOwner] = useState('all')
   const [selectedCostMonth, setSelectedCostMonth] = useState('last-month')
+  const [sortBy, setSortBy] = useState<'value' | 'plannedProgress' | 'actualProgress' | 'earnedValue' | null>(null)
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc')
 
   // Data Quality Tab State
   const [dailyReportViewBy, setDailyReportViewBy] = useState('7days')
@@ -86,11 +88,19 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
   }
 
   const activities = [
-    { name: 'Site Preparation', value: 2.1, planned: '1000 m³', executed: '850 m³', completeness: 85, earnedValue: 1.785, status: 'Ongoing' },
-    { name: 'Foundation Work', value: 5.2, planned: '2000 m³', executed: '1200 m³', completeness: 60, earnedValue: 3.12, status: 'Ongoing' },
-    { name: 'Structure Assembly', value: 8.5, planned: '150 units', executed: '90 units', completeness: 60, earnedValue: 5.1, status: 'Ongoing' },
-    { name: 'Mechanical Systems', value: 4.3, planned: '45 systems', executed: '0 units', completeness: 0, earnedValue: 0, status: 'Not Started' },
-    { name: 'Finishing Works', value: 4.4, planned: '50 areas', executed: '5 areas', completeness: 10, earnedValue: 0.44, status: 'Not Started' },
+    { name: 'Site Preparation', value: 2.1, total_planned: '1000 m³', planned: '900 m³', executed: '850 m³', expected_completeness: (900 / 1000).toFixed(2), actual_completeness: 85, earnedValue: 1.785, status: 'Ongoing' },
+    { name: 'Foundation Work', value: 5.2, total_planned: '2000 m³', planned: '1400 m³', executed: '1200 m³', expected_completeness: (1400 / 2000).toFixed(2), actual_completeness: 60, earnedValue: 3.12, status: 'Ongoing' },
+    { name: 'Structure Assembly', value: 8.5, total_planned: '150 units', planned: '110 units', executed: '90 units', expected_completeness: (110 / 150).toFixed(2), actual_completeness: 60, earnedValue: 5.1, status: 'Ongoing' },
+    { name: 'Mechanical Systems', value: 4.3, total_planned: '45 systems', planned: '10 units', executed: '0 units', expected_completeness: (10 / 45).toFixed(2), actual_completeness: 0, earnedValue: 0, status: 'Not Started' },
+    { name: 'Finishing Works', value: 4.4, total_planned: '50 areas', planned: '10 areas', executed: '5 areas', expected_completeness: (10 / 50).toFixed(2), actual_completeness: 10, earnedValue: 0.44, status: 'Not Started' },
+    { name: 'Electrical Installation', value: 3.8, total_planned: '120 circuits', planned: '80 circuits', executed: '65 circuits', expected_completeness: (80 / 120).toFixed(2), actual_completeness: 54, earnedValue: 2.052, status: 'Ongoing' },
+    { name: 'Plumbing Systems', value: 2.9, total_planned: '85 connections', planned: '60 connections', executed: '55 connections', expected_completeness: (60 / 85).toFixed(2), actual_completeness: 65, earnedValue: 1.885, status: 'Ongoing' },
+    { name: 'HVAC Installation', value: 6.7, total_planned: '35 units', planned: '25 units', executed: '18 units', expected_completeness: (25 / 35).toFixed(2), actual_completeness: 51, earnedValue: 3.417, status: 'Ongoing' },
+    { name: 'Exterior Cladding', value: 3.2, total_planned: '800 m²', planned: '500 m²', executed: '420 m²', expected_completeness: (500 / 800).toFixed(2), actual_completeness: 53, earnedValue: 1.696, status: 'Ongoing' },
+    { name: 'Interior Partitions', value: 2.6, total_planned: '650 m²', planned: '400 m²', executed: '350 m²', expected_completeness: (400 / 650).toFixed(2), actual_completeness: 54, earnedValue: 1.404, status: 'Ongoing' },
+    { name: 'Roofing Works', value: 4.1, total_planned: '1200 m²', planned: '1000 m²', executed: '950 m²', expected_completeness: (1000 / 1200).toFixed(2), actual_completeness: 79, earnedValue: 3.239, status: 'Ongoing' },
+    { name: 'Flooring Installation', value: 1.9, total_planned: '900 m²', planned: '300 m²', executed: '180 m²', expected_completeness: (300 / 900).toFixed(2), actual_completeness: 20, earnedValue: 0.38, status: 'Not Started' },
+    { name: 'Painting & Decoration', value: 1.5, total_planned: '1100 m²', planned: '200 m²', executed: '50 m²', expected_completeness: (200 / 1100).toFixed(2), actual_completeness: 5, earnedValue: 0.075, status: 'Not Started' },
   ]
 
   const economicTable = activities.map(activity => ({
@@ -118,6 +128,47 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
       planned: d.planned * 0.92,
       estimated: d.estimated * 0.93,
     }))
+  }
+
+  const handleSort = (column: 'value' | 'plannedProgress' | 'actualProgress' | 'earnedValue') => {
+    if (sortBy === column) {
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc')
+    } else {
+      setSortBy(column)
+      setSortDirection('desc')
+    }
+  }
+
+  const getSortedActivities = () => {
+    if (!sortBy) return activities
+
+    const sorted = [...activities].sort((a, b) => {
+      let aValue: number = 0
+      let bValue: number = 0
+
+      switch (sortBy) {
+        case 'value':
+          aValue = a.value
+          bValue = b.value
+          break
+        case 'plannedProgress':
+          aValue = parseFloat(a.expected_completeness)
+          bValue = parseFloat(b.expected_completeness)
+          break
+        case 'actualProgress':
+          aValue = a.actual_completeness
+          bValue = b.actual_completeness
+          break
+        case 'earnedValue':
+          aValue = a.earnedValue
+          bValue = b.earnedValue
+          break
+      }
+
+      return sortDirection === 'asc' ? aValue - bValue : bValue - aValue
+    })
+
+    return sorted
   }
 
   // Data Quality Tab Data
@@ -480,22 +531,42 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                   <thead>
                     <tr className="border-b border-border/50">
                       <th className="text-left text-xs text-muted-foreground font-semibold py-2">Activity</th>
-                      <th className="text-left text-xs text-muted-foreground font-semibold py-2">Value (€M)</th>
+                      <th 
+                        className="text-left text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors"
+                        onClick={() => handleSort('value')}
+                      >
+                        Value (€M) {sortBy === 'value' && (sortDirection === 'asc' ? '↑' : '↓')}
+                      </th>
                       <th className="text-left text-xs text-muted-foreground font-semibold py-2">Total execution planned</th>
-                      <th className="text-left text-xs text-muted-foreground font-semibold py-2">Planned Progress</th>
-                      <th className="text-left text-xs text-muted-foreground font-semibold py-2">Actual Progress</th>
-                      <th className="text-left text-xs text-muted-foreground font-semibold py-2">Earned Value (€M)</th>
+                      <th 
+                        className="text-left text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors"
+                        onClick={() => handleSort('plannedProgress')}
+                      >
+                        Planned Progress {sortBy === 'plannedProgress' && (sortDirection === 'asc' ? '↑' : '↓')}
+                      </th>
+                      <th 
+                        className="text-left text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors"
+                        onClick={() => handleSort('actualProgress')}
+                      >
+                        Actual Progress {sortBy === 'actualProgress' && (sortDirection === 'asc' ? '↑' : '↓')}
+                      </th>
+                      <th 
+                        className="text-left text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors"
+                        onClick={() => handleSort('earnedValue')}
+                      >
+                        Earned Value (€M) {sortBy === 'earnedValue' && (sortDirection === 'asc' ? '↑' : '↓')}
+                      </th>
                       <th className="text-left text-xs text-muted-foreground font-semibold py-2">Status</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {activities.map((activity, idx) => (
+                    {getSortedActivities().map((activity, idx) => (
                       <tr key={idx} className="border-b border-border/30 hover:bg-secondary/20">
                         <td className="py-3 text-foreground">{activity.name}</td>
                         <td className="py-3 text-foreground">€{activity.value.toFixed(1)}M</td>
-                        <td className="py-3 text-muted-foreground">{activity.planned}</td>
-                        <td className="py-3 text-muted-foreground">{activity.executed} ({activity.completeness}%)</td>
-                        <td className="py-3 text-foreground">{activity.executed} ({activity.completeness}%)</td>
+                        <td className="py-3 text-muted-foreground">{activity.total_planned}</td>
+                        <td className="py-3 text-muted-foreground">{activity.planned} ({activity.expected_completeness * 100}%)</td>
+                        <td className="py-3 text-foreground">{activity.executed} ({activity.actual_completeness}%)</td>
                         <td className="py-3 text-foreground">€{activity.earnedValue.toFixed(2)}M</td>
                         <td className="py-3">
                           <span className={`text-xs px-2 py-1 rounded ${activity.status === 'Finished' ? 'bg-success/20 text-success' :

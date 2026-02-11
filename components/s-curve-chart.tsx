@@ -9,23 +9,15 @@ interface SCurveData {
 }
 
 const data: SCurveData[] = [
-  { week: 1, planned: 2, actual: 1.5 },
-  { week: 2, planned: 5, actual: 4.8 },
-  { week: 3, planned: 8, actual: 9.2 },
-  { week: 4, planned: 12, actual: 13.5 },
-  { week: 5, planned: 16, actual: 15.8 },
-  { week: 6, planned: 21, actual: 22.3 },
-  { week: 7, planned: 28, actual: 31.2 },
-  { week: 8, planned: 35, actual: 38.5 },
-  { week: 9, planned: 43, actual: 45.2 },
-  { week: 10, planned: 52, actual: 51.8 },
-  { week: 11, planned: 62, actual: 64.3 },
-  { week: 12, planned: 72, actual: 75.6 },
-  { week: 13, planned: 81, actual: 79.2 },
-  { week: 14, planned: 88, actual: 85.8 },
-  { week: 15, planned: 94, actual: 92.5 },
-  { week: 16, planned: 98, actual: 97.8 },
-  { week: 17, planned: 100, actual: 100 },
+  { week: 1, planned: 5, actual: 3 },
+  { week: 2, planned: 10, actual: 5 },
+  { week: 3, planned: 15, actual: 8 },
+  { week: 4, planned: 20, actual: 12 },
+  { week: 5, planned: 28, actual: 18 },
+  { week: 6, planned: 36, actual: 25 },
+  { week: 7, planned: 45, actual: 34 },
+  { week: 8, planned: 55, actual: 45 },
+  { week: 9, planned: 65, actual: 50 },
 ]
 
 interface CustomTooltipProps {
@@ -100,27 +92,19 @@ export function SProgressCurve() {
 
 export function SCostCurve() {
   const costData = [
-    { week: 1, budgeted: 150000, actual: 120000 },
-    { week: 2, budgeted: 350000, actual: 340000 },
-    { week: 3, budgeted: 580000, actual: 620000 },
-    { week: 4, budgeted: 850000, actual: 920000 },
-    { week: 5, budgeted: 1100000, actual: 1080000 },
-    { week: 6, budgeted: 1450000, actual: 1520000 },
-    { week: 7, budgeted: 1920000, actual: 2100000 },
-    { week: 8, budgeted: 2400000, actual: 2650000 },
-    { week: 9, budgeted: 2950000, actual: 3080000 },
-    { week: 10, budgeted: 3580000, actual: 3520000 },
-    { week: 11, budgeted: 4250000, actual: 4380000 },
-    { week: 12, budgeted: 4950000, actual: 5150000 },
-    { week: 13, budgeted: 5550000, actual: 5420000 },
-    { week: 14, budgeted: 6050000, actual: 5900000 },
-    { week: 15, budgeted: 6450000, actual: 6350000 },
-    { week: 16, budgeted: 6700000, actual: 6700000 },
-    { week: 17, budgeted: 6850000, actual: 6850000 },
+    { week: 1, budgeted: 3.2, actual: 3.3 },
+    { week: 2, budgeted: 6.1, actual: 7.0 },
+    { week: 3, budgeted: 9.2, actual: 10.3 },
+    { week: 4, budgeted: 12.4, actual: 14.1 },
+    { week: 5, budgeted: 15.1, actual: 18.0 },
+    { week: 6, budgeted: 19.1, actual: 22.5 },
+    { week: 7, budgeted: 24.6, actual: 27.5 },
+    { week: 8, budgeted: 28.4, actual: 33.3 },
+    { week: 9, budgeted: 33.5, actual: 40.0 },
   ]
 
   const formatCurrency = (value: number) => {
-    return `€${(value / 1000000).toFixed(1)}M`
+    return `€${value.toFixed(1)}M`
   }
 
   interface CostTooltipProps {
@@ -136,7 +120,7 @@ export function SCostCurve() {
           <p className="text-xs text-muted-foreground">Week {label}</p>
           {payload.map((entry, index) => (
             <p key={index} className="text-sm font-medium" style={{ color: entry.color }}>
-              {entry.name}: {formatCurrency(entry.value)}
+              {entry.name}: €{entry.value.toFixed(1)}M
             </p>
           ))}
         </div>
@@ -148,8 +132,8 @@ export function SCostCurve() {
   return (
     <div className="glass-card rounded-lg p-4 border border-border/50">
       <div className="mb-4">
-        <h3 className="text-sm font-semibold text-foreground">Cost S-Curve</h3>
-        <p className="text-xs text-muted-foreground mt-1">Budgeted vs. Actual expenditure</p>
+        <h3 className="text-sm font-semibold text-foreground">Economic S-Curve</h3>
+        <p className="text-xs text-muted-foreground mt-1">Baseline vs. Actual expenditure</p>
       </div>
       <ResponsiveContainer width="100%" height={250}>
         <LineChart data={costData} margin={{ top: 5, right: 30, left: 0, bottom: 5 }}>
@@ -174,7 +158,7 @@ export function SCostCurve() {
             strokeDasharray="5 5"
             strokeWidth={1.5}
             dot={false}
-            name="Budgeted Cost"
+            name="Baseline"
             isAnimationActive={false}
           />
           <Line 
@@ -183,7 +167,7 @@ export function SCostCurve() {
             stroke="rgba(0,200,255,1)" 
             strokeWidth={2.5}
             dot={false}
-            name="Actual Cost"
+            name="Actual"
             isAnimationActive={false}
             filter="drop-shadow(0 0 6px rgba(0,200,255,0.8))"
           />

@@ -15,7 +15,7 @@ export function ProjectKPISection({
   location = 'Porto, Portugal',
   spi = 1.08,
   cpi = 0.95,
-  forecastedEndDate = 'March 15, 2025'
+  forecastedEndDate = 'March 15, 2026'
 }: ProjectKPISectionProps) {
   const isSPIHealthy = spi >= 1.0
   const isCPIHealthy = cpi >= 1.0

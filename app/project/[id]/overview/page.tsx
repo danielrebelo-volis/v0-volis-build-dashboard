@@ -467,10 +467,49 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
             </div>
 
             {/* Row 4: Earned Value */}
-            <div className="glass-card rounded-lg p-4 border border-border/50">
+            <div className="glass-card rounded-lg p-4 border border-border/50 gap-4 mb-6">
               <p className="text-xs text-muted-foreground mb-3 uppercase tracking-wide">Earned Value (EV) - Economic Value of Work Performed</p>
               <p className="font-mono text-4xl font-bold text-foreground">€15.46M</p>
               <p className="text-xs text-muted-foreground mt-2">Total value of completed activities based on 50% cumulative progress</p>
+            </div>
+
+            <div className="glass-card rounded-lg p-4 border border-border/50 gap-4 mb-6">
+              <h3 className="text-sm font-semibold text-foreground mb-4">Activity Table</h3>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-border/50">
+                      <th className="text-left text-xs text-muted-foreground font-semibold py-2">Activity</th>
+                      <th className="text-left text-xs text-muted-foreground font-semibold py-2">Value (€M)</th>
+                      <th className="text-left text-xs text-muted-foreground font-semibold py-2">Total execution planned</th>
+                      <th className="text-left text-xs text-muted-foreground font-semibold py-2">Planned Progress</th>
+                      <th className="text-left text-xs text-muted-foreground font-semibold py-2">Actual Progress</th>
+                      <th className="text-left text-xs text-muted-foreground font-semibold py-2">Earned Value (€M)</th>
+                      <th className="text-left text-xs text-muted-foreground font-semibold py-2">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {activities.map((activity, idx) => (
+                      <tr key={idx} className="border-b border-border/30 hover:bg-secondary/20">
+                        <td className="py-3 text-foreground">{activity.name}</td>
+                        <td className="py-3 text-foreground">€{activity.value.toFixed(1)}M</td>
+                        <td className="py-3 text-muted-foreground">{activity.planned}</td>
+                        <td className="py-3 text-muted-foreground">{activity.executed} ({activity.completeness}%)</td>
+                        <td className="py-3 text-foreground">{activity.executed} ({activity.completeness}%)</td>
+                        <td className="py-3 text-foreground">€{activity.earnedValue.toFixed(2)}M</td>
+                        <td className="py-3">
+                          <span className={`text-xs px-2 py-1 rounded ${activity.status === 'Finished' ? 'bg-success/20 text-success' :
+                            activity.status === 'Ongoing' ? 'bg-accent/20 text-accent' :
+                              'bg-muted/30 text-muted-foreground'
+                            }`}>
+                            {activity.status}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </>
         )}
@@ -495,30 +534,54 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
               </div>
             </div>
 
+            <h2 className="text-lg font-semibold text-foreground mb-4 mt-8">Contract Information</h2>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+              <div className="glass-card rounded-lg p-4 border border-border/50">
+                <p className="text-xs text-muted-foreground uppercase tracking-wide mb-2">Contract Value</p>
+                <p className="text-lg font-semibold text-foreground">€25.0 M</p>
+              </div>
+              <div className="glass-card rounded-lg p-4 border border-border/50">
+                <p className="text-xs text-muted-foreground uppercase tracking-wide mb-2">Construction Cost</p>
+                <p className="text-lg font-semibold text-foreground">€23.0 M</p>
+              </div>
+              <div className="glass-card rounded-lg p-4 border border-border/50">
+                <p className="text-xs text-muted-foreground uppercase tracking-wide mb-2">Commercial Value</p>
+                <p className="text-lg font-semibold text-foreground">€27.0 M</p>
+              </div>
+              <div className="glass-card rounded-lg p-4 border border-border/50">
+                <p className="text-xs text-muted-foreground uppercase tracking-wide mb-2">Contract Deadline</p>
+                <p className="text-lg font-semibold text-foreground">March 1, 2026</p>
+              </div>
+            </div>
+
             {/* Production Progress Control Section */}
             <h2 className="text-lg font-semibold text-foreground mb-4 mt-8">Production Progress Control</h2>
 
             {/* Production Control KPIs - 6 cards */}
-            <div className="grid grid-cols-1 md:grid-cols-5 gap-3 mb-5">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-5">
               <div className="glass-card rounded-lg p-3 border border-border/50">
                 <p className="text-xs text-muted-foreground mb-2">Planned Accum. Progress</p>
                 <p className="text-2xl font-bold text-foreground">75%</p>
-              </div>
-              <div className="glass-card rounded-lg p-3 border border-border/50">
-                <p className="text-xs text-muted-foreground mb-2">Actual Accum. Progress</p>
-                <p className="text-2xl font-bold text-destructive">50%</p>
               </div>
               <div className="glass-card rounded-lg p-3 border border-border/50">
                 <p className="text-xs text-muted-foreground mb-2">Avg. Weekly Advance</p>
                 <p className="text-2xl font-bold text-foreground">8.5%</p>
               </div>
               <div className="glass-card rounded-lg p-3 border border-border/50">
+                <p className="text-xs text-muted-foreground mb-2">Current Delay</p>
+                <p className="text-2xl font-bold text-chart-4">2 weeks</p>
+              </div>
+              <div className="glass-card rounded-lg p-3 border border-border/50">
+                <p className="text-xs text-muted-foreground mb-2">Actual Accum. Progress</p>
+                <p className="text-2xl font-bold text-destructive">50%</p>
+              </div>
+              <div className="glass-card rounded-lg p-3 border border-border/50">
                 <p className="text-xs text-muted-foreground mb-2">Required Weekly Advance</p>
                 <p className="text-2xl font-bold text-foreground">7.8%</p>
               </div>
               <div className="glass-card rounded-lg p-3 border border-border/50">
-                <p className="text-xs text-muted-foreground mb-2">Current Delay</p>
-                <p className="text-2xl font-bold text-chart-4">2 weeks</p>
+                <p className="text-xs text-muted-foreground mb-2">AI Forecast Deadline</p>
+                <p className="text-2xl font-bold text-foreground">March 15, 2026</p>
               </div>
             </div>
 
@@ -971,10 +1034,45 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                   <Tooltip contentStyle={{ backgroundColor: 'rgba(0,0,0,0.8)', border: '1px solid rgba(0,200,255,0.3)' }} formatter={(value) => `€${value.toFixed(1)}M`} />
                   <Legend />
                   <Bar dataKey="planned" fill="#999999" name="Planned" />
-                  <Bar dataKey="estimated" fill="#0066ff" name="Estimated Cost" />
-                  <Bar dataKey="actual" fill="#ff3333" name="Actual" />
+                  <Bar dataKey="estimated" fill="#00c8ff" name="Estimated Cost" />
+                  <Bar dataKey="actual" fill="#ff6b6b" name="Actual" />
                 </BarChart>
               </ResponsiveContainer>
+            </div>
+
+            <div className="glass-card rounded-lg p-4 border border-border/50 gap-6 mb-8">
+              <h3 className="text-sm font-semibold text-foreground mb-4">Economic Summary Table</h3>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-border/50">
+                      <th className="text-left text-xs text-muted-foreground font-semibold py-2">Activity</th>
+                      <th className="text-center text-xs text-muted-foreground font-semibold py-2">Baseline Cost<br />(for progress %)</th>
+                      <th className="text-center text-xs text-muted-foreground font-semibold py-2">Actual Cost<br />(for progress %)</th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Total Baseline</th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Total Estimated</th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Float</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {economicTable.map((row, idx) => {
+                      const totalBaseline = row.baseline / (row.completeness / 100);
+                      const totalEstimated = row.actual / (row.completeness / 100) * 1.05;
+                      const floatWeeks = 2 - Math.floor(idx / 2);
+                      return (
+                        <tr key={idx} className="border-b border-border/30 hover:bg-secondary/20">
+                          <td className="py-3 text-foreground">{row.activity}</td>
+                          <td className="py-3 text-center text-foreground">€{row.baseline.toFixed(2)}M ({row.completeness}%)</td>
+                          <td className="py-3 text-center text-foreground">€{row.actual.toFixed(2)}M ({row.completeness}%)</td>
+                          <td className="py-3 text-right text-foreground">€{totalBaseline.toFixed(1)}M</td>
+                          <td className="py-3 text-right text-foreground">€{totalEstimated.toFixed(1)}M</td>
+                          <td className={`py-3 text-right font-semibold ${floatWeeks === 0 ? 'text-destructive' : 'text-foreground'}`}>{floatWeeks}w</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
             </div>
 
             {/* Additional Economic Insights */}

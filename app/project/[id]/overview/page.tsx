@@ -54,15 +54,15 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
   ]
 
   const costData = [
-    { week: '1', baseline: 3.2, estimated: 3.2, actual: 3.3 },
-    { week: '2', baseline: 6.1, estimated: 6.8, actual: 7.0 },
-    { week: '3', baseline: 9.2, estimated: 10.1, actual: 10.3 },
-    { week: '4', baseline: 12.4, estimated: 13.6, actual: 14.1 },
-    { week: '5', baseline: 15.1, estimated: 17.5, actual: 18.0 },
-    { week: '6', baseline: 19.1, estimated: 21.8, actual: 22.5 },
-    { week: '7', baseline: 24.6, estimated: 26.5, actual: 27.5 },
-    { week: '8', baseline: 28.4, estimated: 31.6, actual: 33.3 },
-    { week: '9', baseline: 33.5, estimated: 37.1, actual: 40.0 },
+    { week: '1', baseline: 3.2, actual: 3.3 },
+    { week: '2', baseline: 6.1, actual: 7.0 },
+    { week: '3', baseline: 9.2, actual: 10.3 },
+    { week: '4', baseline: 12.4, actual: 14.1 },
+    { week: '5', baseline: 15.1, actual: 18.0 },
+    { week: '6', baseline: 19.1, actual: 22.5 },
+    { week: '7', baseline: 24.6, actual: 27.5 },
+    { week: '8', baseline: 28.4, actual: 33.3 },
+    { week: '9', baseline: 33.5, actual: 40.0 },
   ]
 
   const getFilteredProgressData = () => {
@@ -105,9 +105,9 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
 
   const economicTable = activities.map(activity => ({
     activity: activity.name,
-    completeness: activity.completeness,
-    baseline: activity.value * (activity.completeness / 100),
-    actual: activity.value * (activity.completeness / 100) * 1.08,
+    completeness: activity.actual_completeness,
+    baseline: activity.value * (activity.actual_completeness / 100),
+    actual: activity.value * (activity.actual_completeness / 100) * 1.08,
   }))
 
   const costBreakdownData = [
@@ -556,10 +556,10 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                         <td className="py-3 text-foreground">{activity.name}</td>
                         <td className="py-3 text-foreground">€{activity.value.toFixed(1)}M</td>
                         <td className="py-3 text-muted-foreground">{activity.total_planned}</td>
-                        <td className="py-3 text-muted-foreground">{activity.estimated_execution}</td>
-                        <td className="py-3 text-muted-foreground">{activity.actual_execution}</td>
+                        <td className="py-3 text-foreground">{activity.expected_completeness * 100}%</td>
+                        <td className="py-3 text-foreground">{activity.actual_completeness}%</td>
                         <td className="py-3 text-foreground">€{activity.earnedValue.toFixed(2)}M</td>
-                        <td className="py-3 text-muted-foreground">{activity.forecast_deadline}</td>
+                        <td className="py-3 text-foreground">{activity.forecast_deadline}</td>
                         <td className="py-3">
                           <span className={`text-xs px-2 py-1 rounded ${activity.status === 'Finished' ? 'bg-success/20 text-success' :
                             activity.status === 'Ongoing' ? 'bg-accent/20 text-accent' :
@@ -690,10 +690,10 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                         <td className="py-3 text-foreground">{activity.name}</td>
                         <td className="py-3 text-foreground">€{activity.value.toFixed(1)}M</td>
                         <td className="py-3 text-muted-foreground">{activity.total_planned}</td>
-                        <td className="py-3 text-muted-foreground">{activity.estimated_execution}</td>
-                        <td className="py-3 text-muted-foreground">{activity.actual_execution}</td>
+                        <td className="py-3 text-foreground">{activity.expected_completeness * 100}%</td>
+                        <td className="py-3 text-foreground">{activity.actual_completeness}%</td>
                         <td className="py-3 text-foreground">€{activity.earnedValue.toFixed(2)}M</td>
-                        <td className="py-3 text-muted-foreground">{activity.forecast_deadline}</td>
+                        <td className="py-3 text-foreground">{activity.forecast_deadline}</td>
                         <td className="py-3">
                           <span className={`text-xs px-2 py-1 rounded ${activity.status === 'Finished' ? 'bg-success/20 text-success' :
                             activity.status === 'Ongoing' ? 'bg-accent/20 text-accent' :
@@ -713,24 +713,11 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
             <h2 className="text-lg font-semibold text-foreground mb-4 mt-8">Economic Control</h2>
 
             {/* Economic Control KPIs */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            <div className="grid grid-cols-1 gap-4 mb-6">
               <div className="glass-card rounded-lg p-4 border border-border/50">
-                <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">Implicit Industrial Cost (CI)</p>
-                <div className="space-y-2">
-                  <div className="flex justify-between">
-                    <span className="text-sm text-muted-foreground">Current</span>
-                    <span className="text-lg font-bold text-foreground">€38.0M</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-sm text-muted-foreground">Total</span>
-                    <span className="text-lg font-bold text-foreground">€68.5M</span>
-                  </div>
-                </div>
-              </div>
-              <div className="glass-card rounded-lg p-4 border border-border/50">
-                <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">Operating Margin </p>
-                <p className="text-3xl font-bold text-foreground">8.2%</p>
-                <p className="text-xs text-muted-foreground mt-2">Baseline OM: 12.0%</p>
+                <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">Industrial Cost</p>
+                <p className="text-3xl font-bold text-foreground">5.0%</p>
+                <p className="text-xs text-muted-foreground mt-2">Planned CI: 3.2%</p>
               </div>
             </div>
 
@@ -745,7 +732,6 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                   <Tooltip contentStyle={{ backgroundColor: 'rgba(0,0,0,0.8)', border: '1px solid rgba(0,200,255,0.3)' }} />
                   <Legend />
                   <Line type="monotone" dataKey="baseline" stroke="#999999" name="Baseline" strokeWidth={2} dot={false} />
-                  <Line type="monotone" dataKey="estimated" stroke="#00c8ff" name="Estimated" strokeWidth={2} dot={false} />
                   <Line type="monotone" dataKey="actual" stroke="#ff6b6b" name="Actual" strokeWidth={2} dot={false} />
                 </LineChart>
               </ResponsiveContainer>

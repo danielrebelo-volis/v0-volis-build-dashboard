@@ -115,47 +115,47 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
             </defs>
             <rect width="100" height="100" fill="url(#grid)" />
 
-            {/* Reference line at 50% industrial cost (y = 50) */}
-            <line x1="0" y1="50" x2="100" y2="50" stroke="rgba(255,170,0,0.6)" strokeWidth="0.6" strokeDasharray="5,5" />
-
+            {/* Reference line at 85% industrial cost (y = 15, since y is inverted) */}
+            <line x1="0" y1="15" x2="100" y2="15" stroke="rgba(255,170,0,0.6)" strokeWidth="0.6" strokeDasharray="5,5" />
+            
             {/* Center line at 0% delay (x = 50) */}
             <line x1="50" y1="0" x2="50" y2="100" stroke="rgba(255,255,255,0.15)" strokeWidth="0.4" strokeDasharray="3,3" />
 
-            {/* Quadrant shading - based on 50% reference line and center line */}
-            <rect x="0" y="0" width="50" height="50" fill="rgba(0,255,136,0.02)" />
-            <rect x="50" y="0" width="50" height="50" fill="rgba(255,100,100,0.03)" />
-            <rect x="0" y="50" width="50" height="50" fill="rgba(0,255,136,0.03)" />
-            <rect x="50" y="50" width="50" height="50" fill="rgba(255,170,0,0.02)" />
+            {/* Quadrant shading - based on 85% reference line and center line */}
+            <rect x="0" y="0" width="50" height="15" fill="rgba(255,100,100,0.03)" />
+            <rect x="50" y="0" width="50" height="15" fill="rgba(255,100,100,0.04)" />
+            <rect x="0" y="15" width="50" height="85" fill="rgba(0,255,136,0.03)" />
+            <rect x="50" y="15" width="50" height="85" fill="rgba(255,170,0,0.02)" />
           </svg>
         </div>
 
         {/* Quadrant Labels */}
         <div className="absolute inset-0 pointer-events-none px-6 py-6">
-          {/* Top-Left: Ahead & High Cost */}
+          {/* Top-Left: Ahead & High Cost (>85%) */}
           <div className="absolute top-6 left-6 text-[11px] text-muted-foreground/40 font-medium">
-            <div className="text-destructive/80">High Cost</div>
-            <div className="text-success/80">Ahead</div>
+            <div className="text-destructive/60">Cost {'>'} 85%</div>
+            <div className="text-success/60">Ahead</div>
           </div>
-          {/* Top-Right: Delayed & High Cost */}
+          {/* Top-Right: Delayed & High Cost (>85%) */}
           <div className="absolute top-6 right-6 text-[11px] text-muted-foreground/40 font-medium text-right">
-            <div className="text-destructive/80">High Cost</div>
-            <div className="text-destructive/80">Delayed</div>
+            <div className="text-destructive/60">Cost {'>'} 85%</div>
+            <div className="text-destructive/60">Delayed</div>
           </div>
-          {/* Bottom-Left: Ahead & Low Cost */}
+          {/* Bottom-Left: Ahead & Good Cost (<85%) */}
           <div className="absolute bottom-6 left-6 text-[11px] text-muted-foreground/40 font-medium">
-            <div className="text-success/80">Low Cost</div>
-            <div className="text-success/80">Ahead</div>
+            <div className="text-success/60">Cost {'<'} 85%</div>
+            <div className="text-success/60">Ahead</div>
           </div>
-          {/* Bottom-Right: Delayed & Low Cost */}
+          {/* Bottom-Right: Delayed & Good Cost (<85%) */}
           <div className="absolute bottom-6 right-6 text-[11px] text-muted-foreground/40 font-medium text-right">
-            <div className="text-success/80">Low Cost</div>
-            <div className="text-destructive/80">Delayed</div>
+            <div className="text-success/60">Cost {'<'} 85%</div>
+            <div className="text-warning/60">Delayed</div>
           </div>
         </div>
 
         {/* Reference line labels */}
-        <div className="absolute -left-6 top-1/2 -translate-y-1/2 text-xs font-semibold text-warning flex items-center gap-1.5">
-          <div className="text-warning/60">50%</div>
+        <div className="absolute -left-8 top-[15%] -translate-y-1/2 text-xs font-semibold text-warning flex items-center gap-1.5">
+          <div className="text-warning/70">85%</div>
         </div>
 
         {/* Center line label (on-time) */}
@@ -252,10 +252,10 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
           <span className="text-[10px] text-muted-foreground font-mono">100%</span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-[10px] text-muted-foreground font-mono">75%</span>
+          <span className="text-[10px] text-warning font-mono font-semibold">85%</span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-[10px] text-warning font-mono font-semibold"></span>
+          <span className="text-[10px] text-muted-foreground font-mono">50%</span>
         </div>
         <div className="flex items-center gap-2">
           <span className="text-[10px] text-muted-foreground font-mono">25%</span>

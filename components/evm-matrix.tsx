@@ -148,7 +148,7 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
         </div>
 
         {/* Reference line label */}
-        <div className="absolute -left-9 top-1/2 -translate-y-1/2 text-xs font-semibold text-warning flex items-center gap-1.5">
+        <div className="absolute -left-7 top-1/2 -translate-y-1/2 text-xs font-semibold text-warning flex items-center gap-1.5">
           <span>50%</span>
           <div className="w-8 h-px bg-warning/40 relative">
             <div className="absolute inset-0 bg-warning/20 blur-sm"></div>

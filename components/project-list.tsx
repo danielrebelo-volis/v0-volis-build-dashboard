@@ -49,7 +49,7 @@ function ProjectRow({ name, id, status, delay, industrialCost, completion }: Pro
           
           <div className="text-right w-16">
             <span className="text-xs text-muted-foreground block">CI</span>
-            <span className={`text-sm font-mono ${industrialCost <= 50 ? 'text-success' : 'text-warning'}`}>
+            <span className={`text-sm font-mono ${industrialCost <= 85 ? 'text-success' : 'text-warning'}`}>
               {industrialCost.toFixed(0)}%
             </span>
           </div>
@@ -91,11 +91,11 @@ function ProjectRow({ name, id, status, delay, industrialCost, completion }: Pro
 
 export function ProjectList() {
   const projects: ProjectRowProps[] = [
-    { name: "Metro Tower", id: "PRJ-001", status: "at-risk", delay: 15, industrialCost: 62, completion: 68 },
-    { name: "Harbor Bridge", id: "PRJ-002", status: "on-track", delay: -8, industrialCost: 42, completion: 42 },
-    { name: "Skyline Plaza", id: "PRJ-003", status: "delayed", delay: 22, industrialCost: 68, completion: 85 },
-    { name: "Industrial Park", id: "PRJ-004", status: "on-track", delay: -15, industrialCost: 45, completion: 31 },
-    { name: "Riverside Homes", id: "PRJ-005", status: "delayed", delay: 28, industrialCost: 75, completion: 56 },
+    { name: "Metro Tower", id: "PRJ-001", status: "at-risk", delay: 15, industrialCost: 78, completion: 68 },
+    { name: "Harbor Bridge", id: "PRJ-002", status: "on-track", delay: -8, industrialCost: 68, completion: 42 },
+    { name: "Skyline Plaza", id: "PRJ-003", status: "delayed", delay: 22, industrialCost: 95, completion: 85 },
+    { name: "Industrial Park", id: "PRJ-004", status: "on-track", delay: -15, industrialCost: 70, completion: 31 },
+    { name: "Riverside Homes", id: "PRJ-005", status: "delayed", delay: 28, industrialCost: 105, completion: 56 },
   ]
 
   return (

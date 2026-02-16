@@ -150,7 +150,7 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
         {/* Reference line label */}
 
         <div className="absolute -left-6 top-1/2 -translate-y-1/2 text-xs font-semibold text-warning flex items-center gap-1.5">
-          <div className="bg-warning/20">50% </div>
+          <div className="text-warning/20">50% </div>
         </div>
 
         {/* Data Points */}

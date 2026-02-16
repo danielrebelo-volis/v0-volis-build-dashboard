@@ -277,7 +277,7 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
       </div>
 
       {/* Category Legend */}
-      <div className="absolute top-4 right-4 glass-card rounded-lg p-4 border border-border/40 backdrop-blur-md">
+      <div className="absolute bottom-0 right-4 glass-card rounded-lg p-4 border border-border/40 backdrop-blur-md">
         <div className="text-[10px] font-semibold text-muted-foreground tracking-wider uppercase mb-3">Typology</div>
         <div className="flex flex-col gap-2.5">
           {(["all", "commercial", "residential", "infrastructure", "industrial"] as const).map((cat) => (

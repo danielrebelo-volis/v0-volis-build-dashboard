@@ -133,23 +133,23 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
         <div className="absolute inset-0 pointer-events-none px-6 py-6">
           {/* Top-Left: Ahead & High Cost (>85%) */}
           <div className="absolute top-6 left-6 text-[11px] text-muted-foreground/40 font-medium">
-            <div className="text-destructive/60">Cost {'>'} 85%</div>
-            <div className="text-success/60">Ahead</div>
+            <div className="text-foreground/60">Cost {'>'} 85%</div>
+            <div className="text-foreground/60">Ahead</div>
           </div>
           {/* Top-Right: Delayed & High Cost (>85%) */}
           <div className="absolute top-6 right-6 text-[11px] text-muted-foreground/40 font-medium text-right">
-            <div className="text-destructive/60">Cost {'>'} 85%</div>
-            <div className="text-destructive/60">Delayed</div>
+            <div className="text-foreground/60">Cost {'>'} 85%</div>
+            <div className="text-foreground/60">Delayed</div>
           </div>
           {/* Bottom-Left: Ahead & Good Cost (<85%) */}
           <div className="absolute bottom-6 left-6 text-[11px] text-muted-foreground/40 font-medium">
-            <div className="text-success/60">Cost {'<'} 85%</div>
-            <div className="text-success/60">Ahead</div>
+            <div className="text-foreground/60">Cost {'<'} 85%</div>
+            <div className="text-foreground/60">Ahead</div>
           </div>
           {/* Bottom-Right: Delayed & Good Cost (<85%) */}
           <div className="absolute bottom-6 right-6 text-[11px] text-muted-foreground/40 font-medium text-right">
-            <div className="text-success/60">Cost {'<'} 85%</div>
-            <div className="text-warning/60">Delayed</div>
+            <div className="text-foreground/60">Cost {'<'} 85%</div>
+            <div className="text-foreground/60">Delayed</div>
           </div>
         </div>
 

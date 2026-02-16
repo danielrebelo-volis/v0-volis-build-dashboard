@@ -271,44 +271,44 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
         <span className="text-[10px] text-muted-foreground font-mono">100%</span>
       </div>
 
-      {/* X-Axis Label */}
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2">
+      {/* X-Axis Label and Category Legend */}
+      <div className="absolute bottom-0 left-10 right-10 flex items-center justify-between">
         <span className="text-xs font-semibold text-muted-foreground tracking-wider">DELAY</span>
-      </div>
-
-      {/* Category Legend */}
-      <div className="absolute bottom-0 right-4 glass-card rounded-lg px-4 py-3 border border-border/40 backdrop-blur-md">
-        <div className="flex items-center gap-4">
-          <span className="text-[10px] font-semibold text-muted-foreground tracking-wider uppercase">Typology</span>
-          <div className="flex items-center gap-3">
-            {(["all", "commercial", "residential", "infrastructure", "industrial"] as const).map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setSelectedCategory(cat)}
-                className={`flex items-center gap-1.5 text-xs transition-all ${selectedCategory === cat
-                  ? "text-foreground font-medium"
-                  : "text-muted-foreground/70 hover:text-foreground/80"
-                  }`}
-              >
-                {cat !== "all" ? (
-                  <>
-                    <div
-                      className="w-2.5 h-2.5 rounded-full ring-1 ring-white/20"
-                      style={{
-                        backgroundColor: categoryColors[cat],
-                        boxShadow: selectedCategory === cat ? `0 0 8px ${categoryColors[cat]}80` : 'none'
-                      }}
-                    />
-                    <span className="capitalize">{cat}</span>
-                  </>
-                ) : (
-                  <>
-                    <div className="w-2.5 h-2.5 rounded-full border-2 border-muted-foreground/50" />
-                    <span className="capitalize">{cat}</span>
-                  </>
-                )}
-              </button>
-            ))}
+        
+        {/* Category Legend - Compact */}
+        <div className="glass-card rounded-md px-2.5 py-1.5 border border-border/30 backdrop-blur-sm">
+          <div className="flex items-center gap-2">
+            <span className="text-[9px] font-semibold text-muted-foreground tracking-wide uppercase">Typology</span>
+            <div className="flex items-center gap-2">
+              {(["all", "commercial", "residential", "infrastructure", "industrial"] as const).map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => setSelectedCategory(cat)}
+                  className={`flex items-center gap-1 text-[10px] transition-all ${selectedCategory === cat
+                    ? "text-foreground font-medium"
+                    : "text-muted-foreground/60 hover:text-foreground/80"
+                    }`}
+                >
+                  {cat !== "all" ? (
+                    <>
+                      <div
+                        className="w-1.5 h-1.5 rounded-full"
+                        style={{
+                          backgroundColor: categoryColors[cat],
+                          boxShadow: selectedCategory === cat ? `0 0 6px ${categoryColors[cat]}80` : 'none'
+                        }}
+                      />
+                      <span className="capitalize">{cat}</span>
+                    </>
+                  ) : (
+                    <>
+                      <div className="w-1.5 h-1.5 rounded-full border border-muted-foreground/50" />
+                      <span className="capitalize">{cat}</span>
+                    </>
+                  )}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </div>

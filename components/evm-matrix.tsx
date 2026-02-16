@@ -50,8 +50,8 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
   const [hoveredProject, setHoveredProject] = useState<Project | null>(null)
   const [selectedCategory, setSelectedCategory] = useState<Project["category"] | "all">("all")
 
-  const filteredByCategory = selectedCategory === "all" 
-    ? projects 
+  const filteredByCategory = selectedCategory === "all"
+    ? projects
     : projects.filter(p => p.category === selectedCategory)
 
   // For week filtering, keep all projects but update their positions based on week data
@@ -70,11 +70,11 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
 
   const filteredProjects = filterType && filterValue
     ? filteredByCategory.filter(p => {
-        if (filterType === 'typology') return p.category === filterValue
-        if (filterType === 'region') return p.region === filterValue
-        if (filterType === 'week') return true // Always show all projects for week filtering
-        return true
-      }).map(getProjectData)
+      if (filterType === 'typology') return p.category === filterValue
+      if (filterType === 'region') return p.region === filterValue
+      if (filterType === 'week') return true // Always show all projects for week filtering
+      return true
+    }).map(getProjectData)
     : filteredByCategory
 
   const mapToPosition = (spi: number, cpi: number) => {
@@ -122,14 +122,14 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
         {/* Background grid */}
         <defs>
           <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
-            <path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.03)" strokeWidth="0.2"/>
+            <path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.03)" strokeWidth="0.2" />
           </pattern>
         </defs>
         <rect width="100" height="100" fill="url(#grid)" />
-        
+
         {/* Center crosshair - SPI = 1.0 and CPI = 1.0 */}
-        <line x1="50" y1="0" x2="50" y2="100" stroke="rgba(255,255,255,0.1)" strokeWidth="0.3" strokeDasharray="2,2"/>
-        <line x1="0" y1="50" x2="100" y2="50" stroke="rgba(255,255,255,0.1)" strokeWidth="0.3" strokeDasharray="2,2"/>
+        <line x1="50" y1="0" x2="50" y2="100" stroke="rgba(255,255,255,0.1)" strokeWidth="0.3" strokeDasharray="2,2" />
+        <line x1="0" y1="50" x2="100" y2="50" stroke="rgba(255,255,255,0.1)" strokeWidth="0.3" strokeDasharray="2,2" />
 
         {/* Quadrant shading */}
         <rect x="0" y="0" width="50" height="50" fill="rgba(255,170,0,0.02)" />
@@ -140,7 +140,7 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
 
       {/* Axis Labels */}
       <div className="absolute left-1/2 -translate-x-1/2 top-2 text-[10px] font-medium text-muted-foreground tracking-widest uppercase">
-        Cost Performance Index (CPI)
+        Industrial Cost (CI)
       </div>
       <div className="absolute top-1/2 -translate-y-1/2 -left-2 text-[10px] font-medium text-muted-foreground tracking-widest uppercase origin-center -rotate-90">
         Schedule Performance Index (SPI)
@@ -152,7 +152,7 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
         const isHovered = hoveredProject?.id === project.id
         const color = categoryColors[project.category]
         const baseSize = getBudgetSize(project.budget)
-        
+
         return (
           <Link
             key={project.id}
@@ -178,7 +178,7 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
                 filter: isHovered ? `blur(8px)` : "blur(4px)",
               }}
             />
-            
+
             {/* Node */}
             <div
               className="relative rounded-full border transition-all duration-300"
@@ -193,7 +193,7 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
 
             {/* Trend indicator */}
             {project.trend !== "stable" && (
-              <div 
+              <div
                 className="absolute -top-3 left-1/2 -translate-x-1/2 text-[8px]"
                 style={{ color }}
               >
@@ -234,13 +234,12 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
           <button
             key={cat}
             onClick={() => setSelectedCategory(cat)}
-            className={`flex items-center gap-1.5 text-xs transition-all ${
-              selectedCategory === cat ? "text-foreground" : "text-muted-foreground hover:text-foreground/80"
-            }`}
+            className={`flex items-center gap-1.5 text-xs transition-all ${selectedCategory === cat ? "text-foreground" : "text-muted-foreground hover:text-foreground/80"
+              }`}
           >
             {cat !== "all" && (
-              <div 
-                className="w-2 h-2 rounded-full" 
+              <div
+                className="w-2 h-2 rounded-full"
                 style={{ backgroundColor: categoryColors[cat] }}
               />
             )}

@@ -134,22 +134,22 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
           {/* Top-Left: Ahead & High Cost (>85%) */}
           <div className="absolute top-6 left-6 text-[11px] text-muted-foreground/40 font-medium">
             <div className="text-foreground/100">Cost {'>'} 85%</div>
-            <div className="text-foreground/60">Ahead</div>
+            <div className="text-foreground/100">Ahead</div>
           </div>
           {/* Top-Right: Delayed & High Cost (>85%) */}
           <div className="absolute top-6 right-6 text-[11px] text-muted-foreground/40 font-medium text-right">
-            <div className="text-foreground/60">Cost {'>'} 85%</div>
-            <div className="text-foreground/60">Delayed</div>
+            <div className="text-foreground/100">Cost {'>'} 85%</div>
+            <div className="text-foreground/100">Delayed</div>
           </div>
           {/* Bottom-Left: Ahead & Good Cost (<85%) */}
           <div className="absolute bottom-6 left-6 text-[11px] text-muted-foreground/40 font-medium">
-            <div className="text-foreground/60">Cost {'<'} 85%</div>
-            <div className="text-foreground/60">Ahead</div>
+            <div className="text-foreground/100">Cost {'<'} 85%</div>
+            <div className="text-foreground/100">Ahead</div>
           </div>
           {/* Bottom-Right: Delayed & Good Cost (<85%) */}
           <div className="absolute bottom-6 right-6 text-[11px] text-muted-foreground/40 font-medium text-right">
-            <div className="text-foreground/60">Cost {'<'} 85%</div>
-            <div className="text-foreground/60">Delayed</div>
+            <div className="text-foreground/100">Cost {'<'} 85%</div>
+            <div className="text-foreground/100">Delayed</div>
           </div>
         </div>
 

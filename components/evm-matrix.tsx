@@ -148,11 +148,9 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
         </div>
 
         {/* Reference line label */}
+
         <div className="absolute -left-6 top-1/2 -translate-y-1/2 text-xs font-semibold text-warning flex items-center gap-1.5">
-          <span>50%</span>
-          <div className="w-8 h-px bg-warning/40 relative">
-            <div className="absolute inset-0 bg-warning/20 blur-sm"></div>
-          </div>
+          <div className="bg-warning/20">50% </div>
         </div>
 
         {/* Data Points */}
@@ -274,7 +272,7 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
       {/* X-Axis Label and Category Legend */}
       <div className="absolute bottom-0 left-10 right-10 flex items-center justify-between">
         <span className="text-xs font-semibold text-muted-foreground tracking-wider">DELAY</span>
-        
+
         {/* Category Legend - Compact */}
         <div className="glass-card rounded-md px-2.5 py-1.5 border border-border/30 backdrop-blur-sm">
           <div className="flex items-center gap-2">

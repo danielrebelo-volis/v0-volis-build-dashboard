@@ -106,11 +106,11 @@ export function MetricsSidebar() {
           </div>
 
           <div className="flex items-center justify-between">
-            <span className="text-xs text-muted-foreground">Resource Util.</span>
-            <span className="text-sm font-mono text-foreground">87%</span>
+            <span className="text-xs text-muted-foreground">Project Resource Utilization</span>
+            <span className="text-sm font-mono text-foreground">78%</span>
           </div>
           <div className="w-full h-1.5 bg-secondary rounded-full overflow-hidden">
-            <div className="h-full bg-warning rounded-full" style={{ width: "87%" }} />
+            <div className="h-full bg-warning rounded-full" style={{ width: "78%" }} />
           </div>
         </div>
       </div>

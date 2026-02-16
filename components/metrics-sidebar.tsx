@@ -90,7 +90,7 @@ export function MetricsSidebar() {
 
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-xs text-muted-foreground">Avg. CI</span>
+            <span className="text-xs text-muted-foreground">Average Industrial Cost</span>
             <span className="text-sm font-mono text-foreground">63%</span>
           </div>
           <div className="w-full h-1.5 bg-secondary rounded-full overflow-hidden">
@@ -98,11 +98,11 @@ export function MetricsSidebar() {
           </div>
 
           <div className="flex items-center justify-between">
-            <span className="text-xs text-muted-foreground">Avg. CPI</span>
-            <span className="text-sm font-mono text-foreground">0.98</span>
+            <span className="text-xs text-muted-foreground">Average Project Delay</span>
+            <span className="text-sm font-mono text-foreground">21%</span>
           </div>
           <div className="w-full h-1.5 bg-secondary rounded-full overflow-hidden">
-            <div className="h-full bg-success rounded-full" style={{ width: "98%" }} />
+            <div className="h-full bg-success rounded-full" style={{ width: "21%" }} />
           </div>
 
           <div className="flex items-center justify-between">

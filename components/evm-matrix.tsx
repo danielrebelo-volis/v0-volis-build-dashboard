@@ -6,32 +6,32 @@ import Link from "next/link"
 interface Project {
   id: string
   name: string
-  spi: number
-  cpi: number
+  delayed: number // % delayed (0-100)
+  industrialCost: number // % of contract value (0-100)
   budget: string
   trend: "up" | "down" | "stable"
   category: "commercial" | "residential" | "infrastructure" | "industrial"
   region: "north" | "south" | "east" | "west"
   week: "week-1" | "week-2" | "week-3" | "week-4"
   weekData: {
-    "week-1": { spi: number; cpi: number }
-    "week-2": { spi: number; cpi: number }
-    "week-3": { spi: number; cpi: number }
-    "week-4": { spi: number; cpi: number }
+    "week-1": { delayed: number; industrialCost: number }
+    "week-2": { delayed: number; industrialCost: number }
+    "week-3": { delayed: number; industrialCost: number }
+    "week-4": { delayed: number; industrialCost: number }
   }
 }
 
 const projects: Project[] = [
-  { id: "PRJ-001", name: "Metro Tower", spi: 0.85, cpi: 1.12, budget: "$24.5M", trend: "up", category: "commercial", region: "north", week: "week-1", weekData: { "week-1": { spi: 0.85, cpi: 1.12 }, "week-2": { spi: 0.88, cpi: 1.08 }, "week-3": { spi: 0.92, cpi: 1.04 }, "week-4": { spi: 0.95, cpi: 1.00 } } },
-  { id: "PRJ-002", name: "Harbor Bridge", spi: 1.15, cpi: 0.92, budget: "$89.2M", trend: "down", category: "infrastructure", region: "south", week: "week-2", weekData: { "week-1": { spi: 1.22, cpi: 0.88 }, "week-2": { spi: 1.15, cpi: 0.92 }, "week-3": { spi: 1.08, cpi: 0.98 }, "week-4": { spi: 0.98, cpi: 1.05 } } },
-  { id: "PRJ-003", name: "Skyline Plaza", spi: 0.95, cpi: 0.88, budget: "$156M", trend: "stable", category: "commercial", region: "east", week: "week-1", weekData: { "week-1": { spi: 0.95, cpi: 0.88 }, "week-2": { spi: 0.94, cpi: 0.89 }, "week-3": { spi: 0.95, cpi: 0.87 }, "week-4": { spi: 0.96, cpi: 0.86 } } },
-  { id: "PRJ-004", name: "Industrial Park", spi: 1.08, cpi: 1.05, budget: "$42.8M", trend: "up", category: "industrial", region: "west", week: "week-3", weekData: { "week-1": { spi: 0.98, cpi: 1.18 }, "week-2": { spi: 1.02, cpi: 1.12 }, "week-3": { spi: 1.08, cpi: 1.05 }, "week-4": { spi: 1.15, cpi: 0.98 } } },
-  { id: "PRJ-005", name: "Riverside Homes", spi: 0.78, cpi: 1.25, budget: "$18.3M", trend: "down", category: "residential", region: "north", week: "week-2", weekData: { "week-1": { spi: 0.75, cpi: 1.20 }, "week-2": { spi: 0.78, cpi: 1.25 }, "week-3": { spi: 0.82, cpi: 1.18 }, "week-4": { spi: 0.88, cpi: 1.10 } } },
-  { id: "PRJ-006", name: "Tech Campus", spi: 0.92, cpi: 0.95, budget: "$210M", trend: "stable", category: "commercial", region: "south", week: "week-4", weekData: { "week-1": { spi: 0.90, cpi: 0.98 }, "week-2": { spi: 0.91, cpi: 0.96 }, "week-3": { spi: 0.92, cpi: 0.95 }, "week-4": { spi: 0.92, cpi: 0.95 } } },
-  { id: "PRJ-007", name: "Highway 12 Ext", spi: 1.22, cpi: 1.18, budget: "$340M", trend: "down", category: "infrastructure", region: "east", week: "week-1", weekData: { "week-1": { spi: 1.22, cpi: 1.18 }, "week-2": { spi: 1.18, cpi: 1.22 }, "week-3": { spi: 1.12, cpi: 1.28 }, "week-4": { spi: 1.05, cpi: 1.35 } } },
-  { id: "PRJ-008", name: "Green Valley", spi: 0.88, cpi: 0.82, budget: "$32.1M", trend: "up", category: "residential", region: "west", week: "week-3", weekData: { "week-1": { spi: 0.80, cpi: 0.92 }, "week-2": { spi: 0.84, cpi: 0.88 }, "week-3": { spi: 0.88, cpi: 0.82 }, "week-4": { spi: 0.92, cpi: 0.78 } } },
-  { id: "PRJ-009", name: "Data Center", spi: 1.02, cpi: 0.98, budget: "$78.5M", trend: "stable", category: "industrial", region: "north", week: "week-4", weekData: { "week-1": { spi: 1.00, cpi: 1.02 }, "week-2": { spi: 1.01, cpi: 1.00 }, "week-3": { spi: 1.02, cpi: 0.99 }, "week-4": { spi: 1.02, cpi: 0.98 } } },
-  { id: "PRJ-010", name: "Civic Center", spi: 0.72, cpi: 0.75, budget: "$125M", trend: "up", category: "commercial", region: "south", week: "week-2", weekData: { "week-1": { spi: 0.65, cpi: 0.88 }, "week-2": { spi: 0.72, cpi: 0.75 }, "week-3": { spi: 0.80, cpi: 0.68 }, "week-4": { spi: 0.88, cpi: 0.62 } } },
+  { id: "PRJ-001", name: "Metro Tower", delayed: 15, industrialCost: 62, budget: "$24.5M", trend: "up", category: "commercial", region: "north", week: "week-1", weekData: { "week-1": { delayed: 15, industrialCost: 62 }, "week-2": { delayed: 12, industrialCost: 58 }, "week-3": { delayed: 8, industrialCost: 54 }, "week-4": { delayed: 5, industrialCost: 50 } } },
+  { id: "PRJ-002", name: "Harbor Bridge", delayed: 8, industrialCost: 42, budget: "$89.2M", trend: "down", category: "infrastructure", region: "south", week: "week-2", weekData: { "week-1": { delayed: 5, industrialCost: 38 }, "week-2": { delayed: 8, industrialCost: 42 }, "week-3": { delayed: 12, industrialCost: 48 }, "week-4": { delayed: 18, industrialCost: 55 } } },
+  { id: "PRJ-003", name: "Skyline Plaza", delayed: 22, industrialCost: 68, budget: "$156M", trend: "stable", category: "commercial", region: "east", week: "week-1", weekData: { "week-1": { delayed: 22, industrialCost: 68 }, "week-2": { delayed: 23, industrialCost: 67 }, "week-3": { delayed: 22, industrialCost: 69 }, "week-4": { delayed: 21, industrialCost: 70 } } },
+  { id: "PRJ-004", name: "Industrial Park", delayed: 5, industrialCost: 45, budget: "$42.8M", trend: "up", category: "industrial", region: "west", week: "week-3", weekData: { "week-1": { delayed: 12, industrialCost: 58 }, "week-2": { delayed: 8, industrialCost: 52 }, "week-3": { delayed: 5, industrialCost: 45 }, "week-4": { delayed: 2, industrialCost: 38 } } },
+  { id: "PRJ-005", name: "Riverside Homes", delayed: 28, industrialCost: 75, budget: "$18.3M", trend: "down", category: "residential", region: "north", week: "week-2", weekData: { "week-1": { delayed: 30, industrialCost: 70 }, "week-2": { delayed: 28, industrialCost: 75 }, "week-3": { delayed: 25, industrialCost: 68 }, "week-4": { delayed: 20, industrialCost: 60 } } },
+  { id: "PRJ-006", name: "Tech Campus", delayed: 18, industrialCost: 55, budget: "$210M", trend: "stable", category: "commercial", region: "south", week: "week-4", weekData: { "week-1": { delayed: 20, industrialCost: 58 }, "week-2": { delayed: 19, industrialCost: 56 }, "week-3": { delayed: 18, industrialCost: 55 }, "week-4": { delayed: 18, industrialCost: 55 } } },
+  { id: "PRJ-007", name: "Highway 12 Ext", delayed: 3, industrialCost: 35, budget: "$340M", trend: "down", category: "infrastructure", region: "east", week: "week-1", weekData: { "week-1": { delayed: 3, industrialCost: 35 }, "week-2": { delayed: 5, industrialCost: 38 }, "week-3": { delayed: 8, industrialCost: 45 }, "week-4": { delayed: 12, industrialCost: 52 } } },
+  { id: "PRJ-008", name: "Green Valley", delayed: 25, industrialCost: 72, budget: "$32.1M", trend: "up", category: "residential", region: "west", week: "week-3", weekData: { "week-1": { delayed: 32, industrialCost: 82 }, "week-2": { delayed: 28, industrialCost: 78 }, "week-3": { delayed: 25, industrialCost: 72 }, "week-4": { delayed: 20, industrialCost: 68 } } },
+  { id: "PRJ-009", name: "Data Center", delayed: 10, industrialCost: 48, budget: "$78.5M", trend: "stable", category: "industrial", region: "north", week: "week-4", weekData: { "week-1": { delayed: 12, industrialCost: 52 }, "week-2": { delayed: 11, industrialCost: 50 }, "week-3": { delayed: 10, industrialCost: 49 }, "week-4": { delayed: 10, industrialCost: 48 } } },
+  { id: "PRJ-010", name: "Civic Center", delayed: 35, industrialCost: 80, budget: "$125M", trend: "up", category: "commercial", region: "south", week: "week-2", weekData: { "week-1": { delayed: 40, industrialCost: 88 }, "week-2": { delayed: 35, industrialCost: 80 }, "week-3": { delayed: 28, industrialCost: 72 }, "week-4": { delayed: 20, industrialCost: 65 } } },
 ]
 
 const categoryColors: Record<Project["category"], string> = {
@@ -61,14 +61,14 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
       const weekKey = filterValue as keyof typeof project.weekData
       return {
         ...project,
-        spi: project.weekData[weekKey].spi,
-        cpi: project.weekData[weekKey].cpi,
+        delayed: project.weekData[weekKey].delayed,
+        industrialCost: project.weekData[weekKey].industrialCost,
       }
     }
     return project
   }
 
-  const filteredProjects = filterType && filterValue
+  const filteredProjects = (filterType && filterValue
     ? filteredByCategory.filter(p => {
       if (filterType === 'typology') return p.category === filterValue
       if (filterType === 'region') return p.region === filterValue
@@ -76,11 +76,14 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
       return true
     }).map(getProjectData)
     : filteredByCategory
+  ).filter(p => p.delayed > 0 && p.industrialCost > 0) // Only show projects with positive values
 
-  const mapToPosition = (spi: number, cpi: number) => {
-    const x = ((spi - 0.5) / 1) * 100
-    const y = ((cpi - 0.5) / 1) * 100
-    return { x: Math.max(5, Math.min(95, x)), y: Math.max(5, Math.min(95, y)) }
+  const mapToPosition = (delayed: number, industrialCost: number) => {
+    // Map delayed (0-100%) to x position (0-100)
+    const x = (delayed / 100) * 100
+    // Map industrial cost (0-100%) to y position (0-100)
+    const y = (industrialCost / 100) * 100
+    return { x: Math.max(2, Math.min(98, x)), y: Math.max(2, Math.min(98, y)) }
   }
 
   const getBudgetSize = (budget: string) => {
@@ -99,21 +102,21 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
     <div className="relative w-full h-full">
       {/* Quadrant Labels */}
       <div className="absolute inset-0 pointer-events-none">
-        {/* Top-Left: Ahead & Over Budget */}
+        {/* Top-Left: Low Delay & High Cost */}
         <div className="absolute top-4 left-4 text-xs text-muted-foreground/50">
-          <span className="text-success">Ahead</span> & <span className="text-destructive">Over Budget</span>
+          <span className="text-warning">Low Delay</span> & <span className="text-destructive">High Cost</span>
         </div>
-        {/* Top-Right: Delayed & Over Budget */}
+        {/* Top-Right: High Delay & High Cost */}
         <div className="absolute top-4 right-4 text-xs text-muted-foreground/50 text-right">
-          <span className="text-destructive">Delayed</span> & <span className="text-destructive">Over Budget</span>
+          <span className="text-destructive">High Delay</span> & <span className="text-destructive">High Cost</span>
         </div>
-        {/* Bottom-Left: Ahead & Under Budget */}
+        {/* Bottom-Left: Low Delay & Low Cost */}
         <div className="absolute bottom-4 left-4 text-xs text-muted-foreground/50">
-          <span className="text-success">Ahead</span> & <span className="text-success">Under Budget</span>
+          <span className="text-success">Low Delay</span> & <span className="text-success">Low Cost</span>
         </div>
-        {/* Bottom-Right: Delayed & Under Budget */}
+        {/* Bottom-Right: High Delay & Low Cost */}
         <div className="absolute bottom-4 right-4 text-xs text-muted-foreground/50 text-right">
-          <span className="text-destructive">Delayed</span> & <span className="text-success">Under Budget</span>
+          <span className="text-warning">High Delay</span> & <span className="text-success">Low Cost</span>
         </div>
       </div>
 
@@ -127,28 +130,30 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
         </defs>
         <rect width="100" height="100" fill="url(#grid)" />
 
-        {/* Center crosshair - SPI = 1.0 and CPI = 1.0 */}
-        <line x1="50" y1="0" x2="50" y2="100" stroke="rgba(255,255,255,0.1)" strokeWidth="0.3" strokeDasharray="2,2" />
-        <line x1="0" y1="50" x2="100" y2="50" stroke="rgba(255,255,255,0.1)" strokeWidth="0.3" strokeDasharray="2,2" />
-
-        {/* Quadrant shading */}
-        <rect x="0" y="0" width="50" height="50" fill="rgba(255,170,0,0.02)" />
-        <rect x="50" y="0" width="50" height="50" fill="rgba(255,100,100,0.03)" />
-        <rect x="0" y="50" width="50" height="50" fill="rgba(0,255,136,0.02)" />
-        <rect x="50" y="50" width="50" height="50" fill="rgba(0,212,255,0.02)" />
+        {/* Reference line at 50% industrial cost (y = 50) */}
+        <line x1="0" y1="50" x2="100" y2="50" stroke="rgba(255,170,0,0.4)" strokeWidth="0.5" strokeDasharray="4,4" />
+        
+        {/* Quadrant shading - based on 50% reference line */}
+        <rect x="0" y="0" width="100" height="50" fill="rgba(255,100,100,0.02)" />
+        <rect x="0" y="50" width="100" height="50" fill="rgba(0,255,136,0.02)" />
       </svg>
 
       {/* Axis Labels */}
-      <div className="absolute left-1/2 -translate-x-1/2 top-2 text-[10px] font-medium text-muted-foreground tracking-widest uppercase">
-        Industrial Cost (CI)
+      <div className="absolute left-1/2 -translate-x-1/2 bottom-2 text-[10px] font-medium text-muted-foreground tracking-widest uppercase">
+        % Delayed
       </div>
       <div className="absolute top-1/2 -translate-y-1/2 -left-2 text-[10px] font-medium text-muted-foreground tracking-widest uppercase origin-center -rotate-90">
-        Schedule Performance Index (SPI)
+        % Industrial Cost
+      </div>
+      
+      {/* Reference line label */}
+      <div className="absolute left-2 top-1/2 -translate-y-1/2 text-[9px] font-medium text-warning/70 tracking-wider">
+        50%
       </div>
 
       {/* Data Points */}
       {filteredProjects.map((project) => {
-        const pos = mapToPosition(project.spi, project.cpi)
+        const pos = mapToPosition(project.delayed, project.industrialCost)
         const isHovered = hoveredProject?.id === project.id
         const color = categoryColors[project.category]
         const baseSize = getBudgetSize(project.budget)
@@ -210,12 +215,12 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
                 </div>
                 <div className="space-y-1 text-xs text-muted-foreground">
                   <div className="flex justify-between">
-                    <span>SPI</span>
-                    <span className="text-foreground font-mono">{project.spi.toFixed(2)}</span>
+                    <span>% Delayed</span>
+                    <span className="text-foreground font-mono">{project.delayed.toFixed(1)}%</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>CPI</span>
-                    <span className="text-foreground font-mono">{project.cpi.toFixed(2)}</span>
+                    <span>% Industrial Cost</span>
+                    <span className="text-foreground font-mono">{project.industrialCost.toFixed(1)}%</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Budget</span>

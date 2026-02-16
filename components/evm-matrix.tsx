@@ -117,7 +117,7 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
 
             {/* Reference line at 85% industrial cost (85-60)/(110-60) = 50% of range, inverted = 50 */}
             <line x1="0" y1="50" x2="100" y2="50" stroke="rgba(255,170,0,0.6)" strokeWidth="0.6" strokeDasharray="5,5" />
-            
+
             {/* Center line at 0% delay (x = 50) */}
             <line x1="50" y1="0" x2="50" y2="100" stroke="rgba(255,255,255,0.15)" strokeWidth="0.4" strokeDasharray="3,3" />
 
@@ -155,7 +155,7 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
 
         {/* Reference line labels */}
         <div className="absolute -left-8 top-1/2 -translate-y-1/2 text-xs font-semibold text-warning flex items-center gap-1.5">
-          <div className="text-warning/70">85%</div>
+          <div className="text-foreground/70">85%</div>
         </div>
 
         {/* Center line label (on-time) */}

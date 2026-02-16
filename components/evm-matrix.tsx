@@ -6,7 +6,7 @@ import Link from "next/link"
 interface Project {
   id: string
   name: string
-  delayed: number // % delayed (0-100)
+  delay: number // % delay (0-100)
   industrialCost: number // % of contract value (0-100)
   budget: string
   trend: "up" | "down" | "stable"
@@ -14,24 +14,24 @@ interface Project {
   region: "north" | "south" | "east" | "west"
   week: "week-1" | "week-2" | "week-3" | "week-4"
   weekData: {
-    "week-1": { delayed: number; industrialCost: number }
-    "week-2": { delayed: number; industrialCost: number }
-    "week-3": { delayed: number; industrialCost: number }
-    "week-4": { delayed: number; industrialCost: number }
+    "week-1": { delay: number; industrialCost: number }
+    "week-2": { delay: number; industrialCost: number }
+    "week-3": { delay: number; industrialCost: number }
+    "week-4": { delay: number; industrialCost: number }
   }
 }
 
 const projects: Project[] = [
-  { id: "PRJ-001", name: "Metro Tower", delayed: 15, industrialCost: 62, budget: "$24.5M", trend: "up", category: "commercial", region: "north", week: "week-1", weekData: { "week-1": { delayed: 15, industrialCost: 62 }, "week-2": { delayed: 12, industrialCost: 58 }, "week-3": { delayed: 8, industrialCost: 54 }, "week-4": { delayed: 5, industrialCost: 50 } } },
-  { id: "PRJ-002", name: "Harbor Bridge", delayed: 8, industrialCost: 42, budget: "$89.2M", trend: "down", category: "infrastructure", region: "south", week: "week-2", weekData: { "week-1": { delayed: 5, industrialCost: 38 }, "week-2": { delayed: 8, industrialCost: 42 }, "week-3": { delayed: 12, industrialCost: 48 }, "week-4": { delayed: 18, industrialCost: 55 } } },
-  { id: "PRJ-003", name: "Skyline Plaza", delayed: 22, industrialCost: 68, budget: "$156M", trend: "stable", category: "commercial", region: "east", week: "week-1", weekData: { "week-1": { delayed: 22, industrialCost: 68 }, "week-2": { delayed: 23, industrialCost: 67 }, "week-3": { delayed: 22, industrialCost: 69 }, "week-4": { delayed: 21, industrialCost: 70 } } },
-  { id: "PRJ-004", name: "Industrial Park", delayed: 5, industrialCost: 45, budget: "$42.8M", trend: "up", category: "industrial", region: "west", week: "week-3", weekData: { "week-1": { delayed: 12, industrialCost: 58 }, "week-2": { delayed: 8, industrialCost: 52 }, "week-3": { delayed: 5, industrialCost: 45 }, "week-4": { delayed: 2, industrialCost: 38 } } },
-  { id: "PRJ-005", name: "Riverside Homes", delayed: 28, industrialCost: 75, budget: "$18.3M", trend: "down", category: "residential", region: "north", week: "week-2", weekData: { "week-1": { delayed: 30, industrialCost: 70 }, "week-2": { delayed: 28, industrialCost: 75 }, "week-3": { delayed: 25, industrialCost: 68 }, "week-4": { delayed: 20, industrialCost: 60 } } },
-  { id: "PRJ-006", name: "Tech Campus", delayed: 18, industrialCost: 55, budget: "$210M", trend: "stable", category: "commercial", region: "south", week: "week-4", weekData: { "week-1": { delayed: 20, industrialCost: 58 }, "week-2": { delayed: 19, industrialCost: 56 }, "week-3": { delayed: 18, industrialCost: 55 }, "week-4": { delayed: 18, industrialCost: 55 } } },
-  { id: "PRJ-007", name: "Highway 12 Ext", delayed: 3, industrialCost: 35, budget: "$340M", trend: "down", category: "infrastructure", region: "east", week: "week-1", weekData: { "week-1": { delayed: 3, industrialCost: 35 }, "week-2": { delayed: 5, industrialCost: 38 }, "week-3": { delayed: 8, industrialCost: 45 }, "week-4": { delayed: 12, industrialCost: 52 } } },
-  { id: "PRJ-008", name: "Green Valley", delayed: 25, industrialCost: 72, budget: "$32.1M", trend: "up", category: "residential", region: "west", week: "week-3", weekData: { "week-1": { delayed: 32, industrialCost: 82 }, "week-2": { delayed: 28, industrialCost: 78 }, "week-3": { delayed: 25, industrialCost: 72 }, "week-4": { delayed: 20, industrialCost: 68 } } },
-  { id: "PRJ-009", name: "Data Center", delayed: 10, industrialCost: 48, budget: "$78.5M", trend: "stable", category: "industrial", region: "north", week: "week-4", weekData: { "week-1": { delayed: 12, industrialCost: 52 }, "week-2": { delayed: 11, industrialCost: 50 }, "week-3": { delayed: 10, industrialCost: 49 }, "week-4": { delayed: 10, industrialCost: 48 } } },
-  { id: "PRJ-010", name: "Civic Center", delayed: 35, industrialCost: 80, budget: "$125M", trend: "up", category: "commercial", region: "south", week: "week-2", weekData: { "week-1": { delayed: 40, industrialCost: 88 }, "week-2": { delayed: 35, industrialCost: 80 }, "week-3": { delayed: 28, industrialCost: 72 }, "week-4": { delayed: 20, industrialCost: 65 } } },
+  { id: "PRJ-001", name: "Metro Tower", delay: 15, industrialCost: 62, budget: "$24.5M", trend: "up", category: "commercial", region: "north", week: "week-1", weekData: { "week-1": { delay: 15, industrialCost: 62 }, "week-2": { delay: 12, industrialCost: 58 }, "week-3": { delay: 8, industrialCost: 54 }, "week-4": { delay: 5, industrialCost: 50 } } },
+  { id: "PRJ-002", name: "Harbor Bridge", delay: 8, industrialCost: 42, budget: "$89.2M", trend: "down", category: "infrastructure", region: "south", week: "week-2", weekData: { "week-1": { delay: 5, industrialCost: 38 }, "week-2": { delay: 8, industrialCost: 42 }, "week-3": { delay: 12, industrialCost: 48 }, "week-4": { delay: 18, industrialCost: 55 } } },
+  { id: "PRJ-003", name: "Skyline Plaza", delay: 22, industrialCost: 68, budget: "$156M", trend: "stable", category: "commercial", region: "east", week: "week-1", weekData: { "week-1": { delay: 22, industrialCost: 68 }, "week-2": { delay: 23, industrialCost: 67 }, "week-3": { delay: 22, industrialCost: 69 }, "week-4": { delay: 21, industrialCost: 70 } } },
+  { id: "PRJ-004", name: "Industrial Park", delay: 5, industrialCost: 45, budget: "$42.8M", trend: "up", category: "industrial", region: "west", week: "week-3", weekData: { "week-1": { delay: 12, industrialCost: 58 }, "week-2": { delay: 8, industrialCost: 52 }, "week-3": { delay: 5, industrialCost: 45 }, "week-4": { delay: 2, industrialCost: 38 } } },
+  { id: "PRJ-005", name: "Riverside Homes", delay: 28, industrialCost: 75, budget: "$18.3M", trend: "down", category: "residential", region: "north", week: "week-2", weekData: { "week-1": { delay: 30, industrialCost: 70 }, "week-2": { delay: 28, industrialCost: 75 }, "week-3": { delay: 25, industrialCost: 68 }, "week-4": { delay: 20, industrialCost: 60 } } },
+  { id: "PRJ-006", name: "Tech Campus", delay: 18, industrialCost: 55, budget: "$210M", trend: "stable", category: "commercial", region: "south", week: "week-4", weekData: { "week-1": { delay: 20, industrialCost: 58 }, "week-2": { delay: 19, industrialCost: 56 }, "week-3": { delay: 18, industrialCost: 55 }, "week-4": { delay: 18, industrialCost: 55 } } },
+  { id: "PRJ-007", name: "Highway 12 Ext", delay: 3, industrialCost: 35, budget: "$340M", trend: "down", category: "infrastructure", region: "east", week: "week-1", weekData: { "week-1": { delay: 3, industrialCost: 35 }, "week-2": { delay: 5, industrialCost: 38 }, "week-3": { delay: 8, industrialCost: 45 }, "week-4": { delay: 12, industrialCost: 52 } } },
+  { id: "PRJ-008", name: "Green Valley", delay: 25, industrialCost: 72, budget: "$32.1M", trend: "up", category: "residential", region: "west", week: "week-3", weekData: { "week-1": { delay: 32, industrialCost: 82 }, "week-2": { delay: 28, industrialCost: 78 }, "week-3": { delay: 25, industrialCost: 72 }, "week-4": { delay: 20, industrialCost: 68 } } },
+  { id: "PRJ-009", name: "Data Center", delay: 10, industrialCost: 48, budget: "$78.5M", trend: "stable", category: "industrial", region: "north", week: "week-4", weekData: { "week-1": { delay: 12, industrialCost: 52 }, "week-2": { delay: 11, industrialCost: 50 }, "week-3": { delay: 10, industrialCost: 49 }, "week-4": { delay: 10, industrialCost: 48 } } },
+  { id: "PRJ-010", name: "Civic Center", delay: 35, industrialCost: 80, budget: "$125M", trend: "up", category: "commercial", region: "south", week: "week-2", weekData: { "week-1": { delay: 40, industrialCost: 88 }, "week-2": { delay: 35, industrialCost: 80 }, "week-3": { delay: 28, industrialCost: 72 }, "week-4": { delay: 20, industrialCost: 65 } } },
 ]
 
 const categoryColors: Record<Project["category"], string> = {
@@ -61,7 +61,7 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
       const weekKey = filterValue as keyof typeof project.weekData
       return {
         ...project,
-        delayed: project.weekData[weekKey].delayed,
+        delay: project.weekData[weekKey].delay,
         industrialCost: project.weekData[weekKey].industrialCost,
       }
     }
@@ -76,11 +76,11 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
       return true
     }).map(getProjectData)
     : filteredByCategory
-  ).filter(p => p.delayed > 0 && p.industrialCost > 0) // Only show projects with positive values
+  ).filter(p => p.delay > 0 && p.industrialCost > 0) // Only show projects with positive values
 
-  const mapToPosition = (delayed: number, industrialCost: number) => {
-    // Map delayed (0-100%) to x position (0-100)
-    const x = (delayed / 100) * 100
+  const mapToPosition = (delay: number, industrialCost: number) => {
+    // Map delay (0-100%) to x position (0-100)
+    const x = (delay / 100) * 100
     // Map industrial cost (0-100%) to y position (0-100)
     const y = (industrialCost / 100) * 100
     return { x: Math.max(2, Math.min(98, x)), y: Math.max(2, Math.min(98, y)) }
@@ -116,7 +116,7 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
 
             {/* Reference line at 50% industrial cost (y = 50) */}
             <line x1="0" y1="50" x2="100" y2="50" stroke="rgba(255,170,0,0.6)" strokeWidth="0.6" strokeDasharray="5,5" />
-            
+
             {/* Quadrant shading - based on 50% reference line */}
             <rect x="0" y="0" width="100" height="50" fill="rgba(255,100,100,0.03)" />
             <rect x="0" y="50" width="100" height="50" fill="rgba(0,255,136,0.03)" />
@@ -157,7 +157,7 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
 
         {/* Data Points */}
         {filteredProjects.map((project) => {
-          const pos = mapToPosition(project.delayed, project.industrialCost)
+          const pos = mapToPosition(project.delay, project.industrialCost)
           const isHovered = hoveredProject?.id === project.id
           const color = categoryColors[project.category]
           const baseSize = getBudgetSize(project.budget)
@@ -175,64 +175,64 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
               onMouseEnter={() => setHoveredProject(project)}
               onMouseLeave={() => setHoveredProject(null)}
             >
-            {/* Glow effect */}
-            <div
-              className="absolute inset-0 rounded-full transition-all duration-300"
-              style={{
-                width: isHovered ? baseSize + 20 : baseSize + 12,
-                height: isHovered ? baseSize + 20 : baseSize + 12,
-                marginLeft: isHovered ? -(baseSize + 20) / 2 : -(baseSize + 12) / 2,
-                marginTop: isHovered ? -(baseSize + 20) / 2 : -(baseSize + 12) / 2,
-                background: `radial-gradient(circle, ${color}40 0%, transparent 70%)`,
-                filter: isHovered ? `blur(8px)` : "blur(4px)",
-              }}
-            />
-
-            {/* Node */}
-            <div
-              className="relative rounded-full border transition-all duration-300"
-              style={{
-                width: isHovered ? baseSize + 8 : baseSize,
-                height: isHovered ? baseSize + 8 : baseSize,
-                backgroundColor: color,
-                borderColor: color,
-                boxShadow: `0 0 ${isHovered ? 20 : 10}px ${color}80`,
-              }}
-            />
-
-            {/* Trend indicator */}
-            {project.trend !== "stable" && (
+              {/* Glow effect */}
               <div
-                className="absolute -top-3 left-1/2 -translate-x-1/2 text-[8px]"
-                style={{ color }}
-              >
-                {project.trend === "up" ? "↑" : "↓"}
-              </div>
-            )}
+                className="absolute inset-0 rounded-full transition-all duration-300"
+                style={{
+                  width: isHovered ? baseSize + 20 : baseSize + 12,
+                  height: isHovered ? baseSize + 20 : baseSize + 12,
+                  marginLeft: isHovered ? -(baseSize + 20) / 2 : -(baseSize + 12) / 2,
+                  marginTop: isHovered ? -(baseSize + 20) / 2 : -(baseSize + 12) / 2,
+                  background: `radial-gradient(circle, ${color}40 0%, transparent 70%)`,
+                  filter: isHovered ? `blur(8px)` : "blur(4px)",
+                }}
+              />
 
-            {/* Tooltip */}
-            {isHovered && (
-              <div className="absolute z-50 bottom-full left-1/2 -translate-x-1/2 mb-3 w-48 glass-card rounded-lg p-3 pointer-events-none">
-                <div className="flex items-center gap-2 mb-2">
-                  <div className="w-2 h-2 rounded-full" style={{ backgroundColor: color }} />
-                  <span className="font-medium text-sm text-foreground">{project.name}</span>
+              {/* Node */}
+              <div
+                className="relative rounded-full border transition-all duration-300"
+                style={{
+                  width: isHovered ? baseSize + 8 : baseSize,
+                  height: isHovered ? baseSize + 8 : baseSize,
+                  backgroundColor: color,
+                  borderColor: color,
+                  boxShadow: `0 0 ${isHovered ? 20 : 10}px ${color}80`,
+                }}
+              />
+
+              {/* Trend indicator */}
+              {project.trend !== "stable" && (
+                <div
+                  className="absolute -top-3 left-1/2 -translate-x-1/2 text-[8px]"
+                  style={{ color }}
+                >
+                  {project.trend === "up" ? "↑" : "↓"}
                 </div>
-                <div className="space-y-1 text-xs text-muted-foreground">
-                  <div className="flex justify-between">
-                    <span>% Delayed</span>
-                    <span className="text-foreground font-mono">{project.delayed.toFixed(1)}%</span>
+              )}
+
+              {/* Tooltip */}
+              {isHovered && (
+                <div className="absolute z-50 bottom-full left-1/2 -translate-x-1/2 mb-3 w-48 glass-card rounded-lg p-3 pointer-events-none">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="w-2 h-2 rounded-full" style={{ backgroundColor: color }} />
+                    <span className="font-medium text-sm text-foreground">{project.name}</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span>% Industrial Cost</span>
-                    <span className="text-foreground font-mono">{project.industrialCost.toFixed(1)}%</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Budget</span>
-                    <span className="text-foreground font-mono">{project.budget}</span>
+                  <div className="space-y-1 text-xs text-muted-foreground">
+                    <div className="flex justify-between">
+                      <span>% delay</span>
+                      <span className="text-foreground font-mono">{project.delay.toFixed(1)}%</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>% Industrial Cost</span>
+                      <span className="text-foreground font-mono">{project.industrialCost.toFixed(1)}%</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Budget</span>
+                      <span className="text-foreground font-mono">{project.budget}</span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            )}
+              )}
             </Link>
           )
         })}
@@ -262,7 +262,7 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
         <span className="text-xs font-semibold text-muted-foreground tracking-wider">INDUSTRIAL COST</span>
       </div>
 
-      {/* X-Axis (bottom) - Delayed % */}
+      {/* X-Axis (bottom) - delay % */}
       <div className="absolute bottom-8 left-10 right-10 flex justify-between">
         <span className="text-[10px] text-muted-foreground font-mono">0%</span>
         <span className="text-[10px] text-muted-foreground font-mono">25%</span>
@@ -273,7 +273,7 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
 
       {/* X-Axis Label */}
       <div className="absolute bottom-0 left-1/2 -translate-x-1/2">
-        <span className="text-xs font-semibold text-muted-foreground tracking-wider">DELAYED</span>
+        <span className="text-xs font-semibold text-muted-foreground tracking-wider">delay</span>
       </div>
 
       {/* Category Legend */}
@@ -284,17 +284,16 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
-              className={`flex items-center gap-2 text-xs transition-all ${
-                selectedCategory === cat 
-                  ? "text-foreground font-medium" 
+              className={`flex items-center gap-2 text-xs transition-all ${selectedCategory === cat
+                  ? "text-foreground font-medium"
                   : "text-muted-foreground/70 hover:text-foreground/80"
-              }`}
+                }`}
             >
               {cat !== "all" ? (
                 <>
                   <div
                     className="w-2.5 h-2.5 rounded-full ring-1 ring-white/20"
-                    style={{ 
+                    style={{
                       backgroundColor: categoryColors[cat],
                       boxShadow: selectedCategory === cat ? `0 0 8px ${categoryColors[cat]}80` : 'none'
                     }}

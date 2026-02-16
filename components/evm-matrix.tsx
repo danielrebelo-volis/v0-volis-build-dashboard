@@ -273,7 +273,7 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
 
       {/* X-Axis Label */}
       <div className="absolute bottom-0 left-1/2 -translate-x-1/2">
-        <span className="text-xs font-semibold text-muted-foreground tracking-wider">delay</span>
+        <span className="text-xs font-semibold text-muted-foreground tracking-wider">DELAY</span>
       </div>
 
       {/* Category Legend */}
@@ -285,8 +285,8 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
               key={cat}
               onClick={() => setSelectedCategory(cat)}
               className={`flex items-center gap-2 text-xs transition-all ${selectedCategory === cat
-                  ? "text-foreground font-medium"
-                  : "text-muted-foreground/70 hover:text-foreground/80"
+                ? "text-foreground font-medium"
+                : "text-muted-foreground/70 hover:text-foreground/80"
                 }`}
             >
               {cat !== "all" ? (

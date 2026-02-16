@@ -133,23 +133,23 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
         <div className="absolute inset-0 pointer-events-none px-6 py-6">
           {/* Top-Left: Ahead & High Cost */}
           <div className="absolute top-6 left-6 text-[11px] text-muted-foreground/40 font-medium">
-            <div className="text-destructive/60">High Cost</div>
-            <div className="text-success/60">Ahead</div>
+            <div className="text-destructive/80">High Cost</div>
+            <div className="text-success/80">Ahead</div>
           </div>
           {/* Top-Right: Delayed & High Cost */}
           <div className="absolute top-6 right-6 text-[11px] text-muted-foreground/40 font-medium text-right">
-            <div className="text-destructive/60">High Cost</div>
-            <div className="text-destructive/60">Delayed</div>
+            <div className="text-destructive/80">High Cost</div>
+            <div className="text-destructive/80">Delayed</div>
           </div>
           {/* Bottom-Left: Ahead & Low Cost */}
           <div className="absolute bottom-6 left-6 text-[11px] text-muted-foreground/40 font-medium">
-            <div className="text-success/60">Low Cost</div>
-            <div className="text-success/60">Ahead</div>
+            <div className="text-success/80">Low Cost</div>
+            <div className="text-success/80">Ahead</div>
           </div>
           {/* Bottom-Right: Delayed & Low Cost */}
           <div className="absolute bottom-6 right-6 text-[11px] text-muted-foreground/40 font-medium text-right">
-            <div className="text-success/60">Low Cost</div>
-            <div className="text-warning/60">Delayed</div>
+            <div className="text-success/80">Low Cost</div>
+            <div className="text-destructive/80">Delayed</div>
           </div>
         </div>
 

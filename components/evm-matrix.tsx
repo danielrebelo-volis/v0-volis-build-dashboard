@@ -154,7 +154,7 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
         </div>
 
         {/* Reference line labels */}
-        <div className="absolute -left-7 top-1/2 -translate-y-1/2 text-xs font-semibold text-warning flex items-center gap-1.5">
+        <div className="absolute -left-6 top-1/2 -translate-y-1/2 text-xs font-semibold text-warning flex items-center gap-1.5">
           <div className="text-foreground/60">85%</div>
         </div>
 

@@ -258,7 +258,7 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
       </div>
 
       {/* Y-Axis Label */}
-      <div className="absolute left-4 top-1/2 -translate-y-1/2 -translate-x-12 origin-center -rotate-90">
+      <div className="absolute left-2 top-1/2 -translate-y-1/2 -translate-x-12 origin-center -rotate-90">
         <span className="text-xs font-semibold text-muted-foreground tracking-wider">INDUSTRIAL COST</span>
       </div>
 

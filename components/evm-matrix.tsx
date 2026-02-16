@@ -117,7 +117,7 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
 
             {/* Reference line at 50% industrial cost (y = 50) */}
             <line x1="0" y1="50" x2="100" y2="50" stroke="rgba(255,170,0,0.6)" strokeWidth="0.6" strokeDasharray="5,5" />
-            
+
             {/* Center line at 0% delay (x = 50) */}
             <line x1="50" y1="0" x2="50" y2="100" stroke="rgba(255,255,255,0.15)" strokeWidth="0.4" strokeDasharray="3,3" />
 
@@ -133,7 +133,7 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
         <div className="absolute inset-0 pointer-events-none px-6 py-6">
           {/* Top-Left: Ahead & High Cost */}
           <div className="absolute top-6 left-6 text-[11px] text-muted-foreground/40 font-medium">
-            <div className="text-muted-foreground/40">High Cost</div>
+            <div className="text-destructive/60">High Cost</div>
             <div className="text-success/60">Ahead</div>
           </div>
           {/* Top-Right: Delayed & High Cost */}
@@ -157,7 +157,7 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
         <div className="absolute -left-6 top-1/2 -translate-y-1/2 text-xs font-semibold text-warning flex items-center gap-1.5">
           <div className="text-warning/60">50%</div>
         </div>
-        
+
         {/* Center line label (on-time) */}
         <div className="absolute top-2 left-1/2 -translate-x-1/2 text-[9px] font-semibold text-success/70 tracking-wider">
           ON TIME

@@ -247,7 +247,7 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
           <span className="text-[10px] text-muted-foreground font-mono">75%</span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-[10px] text-warning font-mono font-semibold">50%</span>
+          <span className="text-[10px] text-warning font-mono font-semibold"></span>
         </div>
         <div className="flex items-center gap-2">
           <span className="text-[10px] text-muted-foreground font-mono">25%</span>

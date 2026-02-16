@@ -8,8 +8,8 @@ interface ProjectRowProps {
   name: string
   id: string
   status: "on-track" | "at-risk" | "delayed"
-  spi: number
-  cpi: number
+  delay: number // % delay (-50 to +50)
+  industrialCost: number // % of contract value (0-100)
   completion: number
 }
 
@@ -19,7 +19,7 @@ const statusConfig = {
   "delayed": { label: "Delayed", color: "#ff6b6b" },
 }
 
-function ProjectRow({ name, id, status, spi, cpi, completion }: ProjectRowProps) {
+function ProjectRow({ name, id, status, delay, industrialCost, completion }: ProjectRowProps) {
   const config = statusConfig[status]
   
   return (
@@ -41,16 +41,16 @@ function ProjectRow({ name, id, status, spi, cpi, completion }: ProjectRowProps)
         
         <div className="flex items-center gap-6">
           <div className="text-right w-16">
-            <span className="text-xs text-muted-foreground block">SPI</span>
-            <span className={`text-sm font-mono ${spi >= 1 ? 'text-success' : 'text-destructive'}`}>
-              {spi.toFixed(2)}
+            <span className="text-xs text-muted-foreground block">Delay</span>
+            <span className={`text-sm font-mono ${delay <= 0 ? 'text-success' : 'text-destructive'}`}>
+              {delay > 0 ? '+' : ''}{delay.toFixed(0)}%
             </span>
           </div>
           
           <div className="text-right w-16">
-            <span className="text-xs text-muted-foreground block">CPI</span>
-            <span className={`text-sm font-mono ${cpi >= 1 ? 'text-success' : 'text-destructive'}`}>
-              {cpi.toFixed(2)}
+            <span className="text-xs text-muted-foreground block">CI</span>
+            <span className={`text-sm font-mono ${industrialCost <= 50 ? 'text-success' : 'text-warning'}`}>
+              {industrialCost.toFixed(0)}%
             </span>
           </div>
           
@@ -91,11 +91,11 @@ function ProjectRow({ name, id, status, spi, cpi, completion }: ProjectRowProps)
 
 export function ProjectList() {
   const projects: ProjectRowProps[] = [
-    { name: "Metro Tower", id: "PRJ-001", status: "on-track", spi: 0.85, cpi: 1.12, completion: 68 },
-    { name: "Harbor Bridge", id: "PRJ-002", status: "delayed", spi: 1.15, cpi: 0.92, completion: 42 },
-    { name: "Skyline Plaza", id: "PRJ-003", status: "on-track", spi: 0.95, cpi: 0.88, completion: 85 },
-    { name: "Industrial Park", id: "PRJ-004", status: "at-risk", spi: 1.08, cpi: 1.05, completion: 31 },
-    { name: "Riverside Homes", id: "PRJ-005", status: "delayed", spi: 0.78, cpi: 1.25, completion: 56 },
+    { name: "Metro Tower", id: "PRJ-001", status: "at-risk", delay: 15, industrialCost: 62, completion: 68 },
+    { name: "Harbor Bridge", id: "PRJ-002", status: "on-track", delay: -8, industrialCost: 42, completion: 42 },
+    { name: "Skyline Plaza", id: "PRJ-003", status: "delayed", delay: 22, industrialCost: 68, completion: 85 },
+    { name: "Industrial Park", id: "PRJ-004", status: "on-track", delay: -15, industrialCost: 45, completion: 31 },
+    { name: "Riverside Homes", id: "PRJ-005", status: "delayed", delay: 28, industrialCost: 75, completion: 56 },
   ]
 
   return (

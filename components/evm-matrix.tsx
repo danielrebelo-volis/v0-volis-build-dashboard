@@ -101,7 +101,7 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
       <div className="absolute inset-0 pointer-events-none">
         {/* Top-Left: Ahead & Over Budget */}
         <div className="absolute top-4 left-4 text-xs text-muted-foreground/50">
-          <span className="text-warning">Ahead</span> & <span className="text-destructive">Over Budget</span>
+          <span className="text-success">Ahead</span> & <span className="text-destructive">Over Budget</span>
         </div>
         {/* Top-Right: Delayed & Over Budget */}
         <div className="absolute top-4 right-4 text-xs text-muted-foreground/50 text-right">

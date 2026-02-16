@@ -132,7 +132,7 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
           </div>
           {/* Top-Right: High Delay & High Cost */}
           <div className="absolute top-6 right-6 text-[11px] text-muted-foreground/40 font-medium text-right">
-            <div className="text-destructive/40">High Cost</div>
+            <div className="text-destructive/60">High Cost</div>
             <div className="text-destructive/60">High Delay</div>
           </div>
           {/* Bottom-Left: Low Delay & Low Cost */}

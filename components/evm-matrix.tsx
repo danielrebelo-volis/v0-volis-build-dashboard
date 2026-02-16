@@ -116,7 +116,7 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
             <rect width="100" height="100" fill="url(#grid)" />
 
             {/* Reference line at 85% industrial cost (85-60)/(110-60) = 50% of range, inverted = 50 */}
-            <line x1="0" y1="50" x2="100" y2="50" stroke="rgba(255,255,255,0.15)" strokeWidth="0.6" strokeDasharray="5,5" />
+            <line x1="0" y1="50" x2="100" y2="50" stroke="rgba(255,255,255,0.15)" strokeWidth="0.4" strokeDasharray="3,3" />
 
             {/* Center line at 0% delay (x = 50) */}
             <line x1="50" y1="0" x2="50" y2="100" stroke="rgba(255,255,255,0.15)" strokeWidth="0.4" strokeDasharray="3,3" />

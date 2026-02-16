@@ -127,23 +127,23 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
         <div className="absolute inset-0 pointer-events-none px-6 py-6">
           {/* Top-Left: Low Delay & High Cost */}
           <div className="absolute top-6 left-6 text-[11px] text-muted-foreground/40 font-medium">
-            <div className="text-destructive/60">High Cost</div>
-            <div className="text-success/60">Low Delay</div>
+            <div className="text-destructive/80">High Cost</div>
+            <div className="text-success/80">Low Delay</div>
           </div>
           {/* Top-Right: High Delay & High Cost */}
           <div className="absolute top-6 right-6 text-[11px] text-muted-foreground/40 font-medium text-right">
-            <div className="text-destructive/60">High Cost</div>
-            <div className="text-destructive/60">High Delay</div>
+            <div className="text-destructive/80">High Cost</div>
+            <div className="text-destructive/80">High Delay</div>
           </div>
           {/* Bottom-Left: Low Delay & Low Cost */}
           <div className="absolute bottom-6 left-6 text-[11px] text-muted-foreground/40 font-medium">
-            <div className="text-success/60">Low Cost</div>
-            <div className="text-success/60">Low Delay</div>
+            <div className="text-success/80">Low Cost</div>
+            <div className="text-success/80">Low Delay</div>
           </div>
           {/* Bottom-Right: High Delay & Low Cost */}
           <div className="absolute bottom-6 right-6 text-[11px] text-muted-foreground/40 font-medium text-right">
-            <div className="text-success/60">Low Cost</div>
-            <div className="text-destructive/60">High Delay</div>
+            <div className="text-success/80">Low Cost</div>
+            <div className="text-destructive/80">High Delay</div>
           </div>
         </div>
 

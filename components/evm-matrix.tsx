@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
+import { useChartColors } from '@/hooks/use-chart-colors'
 
 interface Project {
   id: string
@@ -49,6 +50,7 @@ interface EVMMatrixProps {
 export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
   const [hoveredProject, setHoveredProject] = useState<Project | null>(null)
   const [selectedCategory, setSelectedCategory] = useState<Project["category"] | "all">("all")
+  const colors = useChartColors()
 
   const filteredByCategory = selectedCategory === "all"
     ? projects
@@ -110,16 +112,16 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
             {/* Background grid */}
             <defs>
               <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
-                <path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.03)" strokeWidth="0.2" />
+                <path d="M 10 0 L 0 0 0 10" fill="none" stroke={colors.gridPattern} strokeWidth="0.2" />
               </pattern>
             </defs>
             <rect width="100" height="100" fill="url(#grid)" />
 
             {/* Reference line at 85% industrial cost (85-60)/(110-60) = 50% of range, inverted = 50 */}
-            <line x1="0" y1="50" x2="100" y2="50" stroke="rgba(255,255,255,0.15)" strokeWidth="0.4" strokeDasharray="3,3" />
+            <line x1="0" y1="50" x2="100" y2="50" stroke={colors.gridPatternLine} strokeWidth="0.4" strokeDasharray="3,3" />
 
             {/* Center line at 0% delay (x = 50) */}
-            <line x1="50" y1="0" x2="50" y2="100" stroke="rgba(255,255,255,0.15)" strokeWidth="0.4" strokeDasharray="3,3" />
+            <line x1="50" y1="0" x2="50" y2="100" stroke={colors.gridPatternLine} strokeWidth="0.4" strokeDasharray="3,3" />
 
             {/* Quadrant shading - based on 85% reference line and center line */}
             <rect x="0" y="0" width="50" height="50" fill="rgba(255,100,100,0.03)" />

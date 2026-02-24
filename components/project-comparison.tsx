@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { ChevronDown } from 'lucide-react'
 import { ComposedChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
+import { useChartColors } from '@/hooks/use-chart-colors'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -128,6 +129,7 @@ function IndicatorCard({
   type: IndicatorType
   project: ComparisonProject 
 }) {
+  const colors = useChartColors()
   const calculateDays = (estimatedDate: string, initialDate: string) => {
     const estimated = new Date(estimatedDate)
     const initial = new Date(initialDate)
@@ -150,10 +152,10 @@ function IndicatorCard({
           <div className="h-20">
             <ResponsiveContainer width="100%" height="100%">
               <ComposedChart data={sCurveData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-                <XAxis dataKey="week" tick={{ fontSize: 8, fill: 'rgba(255,255,255,0.3)' }} />
+                <CartesianGrid strokeDasharray="3 3" stroke={colors.grid} />
+                <XAxis dataKey="week" tick={{ fontSize: 8, fill: colors.tickFillLight }} />
                 <YAxis hide />
-                <Line type="monotone" dataKey="actualProgress" stroke="#00c8ff" strokeWidth={1.5} dot={false} />
+                <Line type="monotone" dataKey="actualProgress" stroke={colors.isDark ? "#00c8ff" : "#6C5CE7"} strokeWidth={1.5} dot={false} />
               </ComposedChart>
             </ResponsiveContainer>
           </div>
@@ -230,6 +232,7 @@ function ComparisonSide({
   selectedIndicators: IndicatorType[]
 }) {
   const [showDropdown, setShowDropdown] = useState(false)
+  const colors = useChartColors()
 
   return (
     <div className="flex-1">
@@ -273,12 +276,12 @@ function ComparisonSide({
         <div className="h-40 glass-card rounded-lg p-2">
           <ResponsiveContainer width="100%" height="100%">
             <ComposedChart data={sCurveData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
-              <XAxis dataKey="week" tick={{ fontSize: 10, fill: 'rgba(255,255,255,0.5)' }} />
-              <YAxis tick={{ fontSize: 10, fill: 'rgba(255,255,255,0.5)' }} />
-              <Tooltip contentStyle={{ backgroundColor: 'rgba(20,20,20,0.9)', border: '1px solid rgba(255,255,255,0.2)' }} />
-              <Line type="monotone" dataKey="plannedProgress" stroke="rgba(255,255,255,0.4)" strokeWidth={2} dot={false} />
-              <Line type="monotone" dataKey="actualProgress" stroke="#00c8ff" strokeWidth={2.5} dot={false} />
+              <CartesianGrid strokeDasharray="3 3" stroke={colors.grid} />
+              <XAxis dataKey="week" tick={{ fontSize: 10, fill: colors.tickFill }} />
+              <YAxis tick={{ fontSize: 10, fill: colors.tickFill }} />
+              <Tooltip contentStyle={{ backgroundColor: colors.tooltipBg, border: colors.tooltipBorder }} />
+              <Line type="monotone" dataKey="plannedProgress" stroke={colors.plannedLine} strokeWidth={2} dot={false} />
+              <Line type="monotone" dataKey="actualProgress" stroke={colors.isDark ? "#00c8ff" : "#6C5CE7"} strokeWidth={2.5} dot={false} />
             </ComposedChart>
           </ResponsiveContainer>
         </div>
@@ -290,12 +293,12 @@ function ComparisonSide({
         <div className="h-40 glass-card rounded-lg p-2">
           <ResponsiveContainer width="100%" height="100%">
             <ComposedChart data={sCurveData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
-              <XAxis dataKey="week" tick={{ fontSize: 10, fill: 'rgba(255,255,255,0.5)' }} />
-              <YAxis tick={{ fontSize: 10, fill: 'rgba(255,255,255,0.5)' }} />
-              <Tooltip contentStyle={{ backgroundColor: 'rgba(20,20,20,0.9)', border: '1px solid rgba(255,255,255,0.2)' }} />
-              <Line type="monotone" dataKey="plannedCost" stroke="rgba(255,255,255,0.4)" strokeWidth={2} dot={false} />
-              <Line type="monotone" dataKey="actualCost" stroke="#00c8ff" strokeWidth={2.5} dot={false} />
+              <CartesianGrid strokeDasharray="3 3" stroke={colors.grid} />
+              <XAxis dataKey="week" tick={{ fontSize: 10, fill: colors.tickFill }} />
+              <YAxis tick={{ fontSize: 10, fill: colors.tickFill }} />
+              <Tooltip contentStyle={{ backgroundColor: colors.tooltipBg, border: colors.tooltipBorder }} />
+              <Line type="monotone" dataKey="plannedCost" stroke={colors.plannedLine} strokeWidth={2} dot={false} />
+              <Line type="monotone" dataKey="actualCost" stroke={colors.isDark ? "#00c8ff" : "#6C5CE7"} strokeWidth={2.5} dot={false} />
             </ComposedChart>
           </ResponsiveContainer>
         </div>

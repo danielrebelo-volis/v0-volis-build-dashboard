@@ -1,6 +1,7 @@
 'use client'
 
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
+import { useChartColors } from '@/hooks/use-chart-colors'
 
 const progressData = [
   { week: 1, planned: 5, forecast: 4, actual: 3 },
@@ -15,6 +16,8 @@ const progressData = [
 ]
 
 export function SProgressCurve() {
+  const colors = useChartColors()
+
   return (
     <div className="glass-card rounded-lg p-4 border border-border/50">
       <div className="mb-4">
@@ -23,21 +26,21 @@ export function SProgressCurve() {
       </div>
       <ResponsiveContainer width="100%" height={250}>
         <LineChart data={progressData} margin={{ top: 5, right: 30, left: 0, bottom: 5 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+          <CartesianGrid strokeDasharray="3 3" stroke={colors.grid} />
           <XAxis 
             dataKey="week" 
-            stroke="rgba(255,255,255,0.5)"
+            stroke={colors.axis}
             tick={{ fontSize: 12 }}
           />
           <YAxis 
-            stroke="rgba(255,255,255,0.5)"
+            stroke={colors.axis}
             tick={{ fontSize: 12 }}
           />
-          <Tooltip contentStyle={{ backgroundColor: 'rgba(0,0,0,0.8)', border: '1px solid rgba(0,200,255,0.3)' }} />
+          <Tooltip contentStyle={{ backgroundColor: colors.tooltipBg, border: colors.tooltipBorder }} />
           <Legend />
           <Line type="monotone" dataKey="planned" stroke="#999999" name="Planned" strokeWidth={2} dot={false} />
-          <Line type="monotone" dataKey="forecast" stroke="#00c8ff" name="Forecast" strokeWidth={2} dot={false} />
-          <Line type="monotone" dataKey="actual" stroke="#00ff88" name="Actual" strokeWidth={2} dot={false} />
+          <Line type="monotone" dataKey="forecast" stroke={colors.isDark ? "#00c8ff" : "#6C5CE7"} name="Forecast" strokeWidth={2} dot={false} />
+          <Line type="monotone" dataKey="actual" stroke={colors.isDark ? "#00ff88" : "#00b894"} name="Actual" strokeWidth={2} dot={false} />
         </LineChart>
       </ResponsiveContainer>
     </div>
@@ -45,6 +48,8 @@ export function SProgressCurve() {
 }
 
 export function SCostCurve() {
+  const colors = useChartColors()
+
   const costData = [
     { week: 1, baseline: 3.2, actual: 3.3 },
     { week: 2, baseline: 6.1, actual: 7.0 },
@@ -65,18 +70,18 @@ export function SCostCurve() {
       </div>
       <ResponsiveContainer width="100%" height={250}>
         <LineChart data={costData} margin={{ top: 5, right: 30, left: 0, bottom: 5 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+          <CartesianGrid strokeDasharray="3 3" stroke={colors.grid} />
           <XAxis 
             dataKey="week" 
-            stroke="rgba(255,255,255,0.5)"
+            stroke={colors.axis}
             tick={{ fontSize: 12 }}
           />
           <YAxis 
-            stroke="rgba(255,255,255,0.5)"
+            stroke={colors.axis}
             tick={{ fontSize: 12 }}
             tickFormatter={(value) => `€${value.toFixed(1)}M`}
           />
-          <Tooltip contentStyle={{ backgroundColor: 'rgba(0,0,0,0.8)', border: '1px solid rgba(0,200,255,0.3)' }} formatter={(value: number) => `€${value.toFixed(1)}M`} />
+          <Tooltip contentStyle={{ backgroundColor: colors.tooltipBg, border: colors.tooltipBorder }} formatter={(value: number) => `€${value.toFixed(1)}M`} />
           <Legend />
           <Line type="monotone" dataKey="baseline" stroke="#999999" name="Planned" strokeWidth={2} dot={false} />
           <Line type="monotone" dataKey="actual" stroke="#ff6b6b" name="Actual" strokeWidth={2} dot={false} />

@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 import { X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { useChartColors } from '@/hooks/use-chart-colors'
 
 interface ActivityDrillDownProps {
   isOpen: boolean
@@ -58,6 +59,7 @@ const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
 
 function ActivitySCurve({ activityNumber }: { activityNumber: number }) {
   const data = generateActivityData(activityNumber)
+  const colors = useChartColors()
 
   return (
     <div className="glass-card rounded-lg p-4 border border-border/50">
@@ -67,21 +69,21 @@ function ActivitySCurve({ activityNumber }: { activityNumber: number }) {
       </div>
       <ResponsiveContainer width="100%" height={200}>
         <LineChart data={data} margin={{ top: 5, right: 30, left: 0, bottom: 5 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+          <CartesianGrid strokeDasharray="3 3" stroke={colors.grid} />
           <XAxis 
             dataKey="week" 
-            stroke="rgba(255,255,255,0.3)"
+            stroke={colors.axisLight}
             tick={{ fontSize: 11 }}
           />
           <YAxis 
-            stroke="rgba(255,255,255,0.3)"
+            stroke={colors.axisLight}
             tick={{ fontSize: 11 }}
           />
           <Tooltip content={<CustomTooltip />} />
           <Line 
             type="monotone" 
             dataKey="planned" 
-            stroke="rgba(255,255,255,0.3)" 
+            stroke={colors.plannedLineDashed} 
             strokeDasharray="5 5"
             strokeWidth={1.5}
             dot={false}
@@ -91,7 +93,7 @@ function ActivitySCurve({ activityNumber }: { activityNumber: number }) {
           <Line 
             type="monotone" 
             dataKey="actual" 
-            stroke="rgba(0,200,255,1)" 
+            stroke={colors.isDark ? "rgba(0,200,255,1)" : "#6C5CE7"} 
             strokeWidth={2}
             dot={false}
             name="Actual Progress"

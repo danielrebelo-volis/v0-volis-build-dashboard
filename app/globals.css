@@ -137,6 +137,45 @@
   }
 }
 
+.light {
+  --background: rgb(247, 247, 250);
+  --foreground: rgb(30, 30, 40);
+  --card: rgb(255, 255, 255);
+  --card-foreground: rgb(30, 30, 40);
+  --popover: rgb(255, 255, 255);
+  --popover-foreground: rgb(30, 30, 40);
+  --primary: rgb(108, 92, 231);
+  --primary-foreground: rgb(255, 255, 255);
+  --secondary: rgb(240, 240, 245);
+  --secondary-foreground: rgb(30, 30, 40);
+  --muted: rgb(240, 240, 245);
+  --muted-foreground: rgb(120, 120, 140);
+  --accent: rgb(108, 92, 231);
+  --accent-foreground: rgb(255, 255, 255);
+  --destructive: rgb(220, 60, 60);
+  --destructive-foreground: rgb(255, 255, 255);
+  --border: rgb(225, 225, 235);
+  --input: rgb(240, 240, 245);
+  --ring: rgb(108, 92, 231);
+  --chart-1: rgb(108, 92, 231);
+  --chart-2: rgb(0, 184, 148);
+  --chart-3: rgb(253, 203, 110);
+  --chart-4: rgb(225, 112, 85);
+  --chart-5: rgb(99, 110, 114);
+  --sidebar: rgb(255, 255, 255);
+  --sidebar-foreground: rgb(30, 30, 40);
+  --sidebar-primary: rgb(108, 92, 231);
+  --sidebar-primary-foreground: rgb(255, 255, 255);
+  --sidebar-accent: rgb(240, 240, 245);
+  --sidebar-accent-foreground: rgb(30, 30, 40);
+  --sidebar-border: rgb(225, 225, 235);
+  --sidebar-ring: rgb(108, 92, 231);
+  --cyan: rgb(108, 92, 231);
+  --cyan-glow: rgb(130, 115, 240);
+  --success: rgb(0, 184, 148);
+  --warning: rgb(253, 203, 110);
+}
+
 /* Glassmorphism card effect */
 .glass-card {
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%);
@@ -144,13 +183,28 @@
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
+.light .glass-card {
+  background: rgb(255, 255, 255);
+  backdrop-filter: none;
+  border: 1px solid rgb(225, 225, 235);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
 /* Glow effects */
 .glow-cyan {
   box-shadow: 0 0 20px rgba(0, 200, 255, 0.3), 0 0 40px rgba(0, 200, 255, 0.1);
 }
 
+.light .glow-cyan {
+  box-shadow: 0 0 20px rgba(108, 92, 231, 0.2), 0 0 40px rgba(108, 92, 231, 0.08);
+}
+
 .node-glow {
   filter: drop-shadow(0 0 8px rgba(0, 200, 255, 0.6));
+}
+
+.light .node-glow {
+  filter: drop-shadow(0 0 8px rgba(108, 92, 231, 0.4));
 }
 
 /* Grid background for technical precision */
@@ -160,4 +214,10 @@
     linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
   background-size: 50px 50px;
   background-position: 0 0, 0 0;
+}
+
+.light .grid-background {
+  background-image: 
+    linear-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
 }

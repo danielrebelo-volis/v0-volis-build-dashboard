@@ -13,8 +13,10 @@ import {
 } from "@/components/ui/select"
 import Link from 'next/link'
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts'
+import { useChartColors } from '@/hooks/use-chart-colors'
 
 export default function ProjectOverview({ params }: { params: { id: string } }) {
+  const chartColors = useChartColors()
   const [activeTab, setActiveTab] = useState('overview')
   const [selectedActivity, setSelectedActivity] = useState('all')
   const [selectedWorkfront, setSelectedWorkfront] = useState('all')
@@ -485,10 +487,10 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
               <h3 className="text-sm font-semibold text-foreground mb-4">Production S-Curve</h3>
               <ResponsiveContainer width="100%" height={300}>
                 <LineChart data={getFilteredProgressData()}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
-                  <XAxis dataKey="week" stroke="rgba(255,255,255,0.5)" />
-                  <YAxis stroke="rgba(255,255,255,0.5)" />
-                  <Tooltip contentStyle={{ backgroundColor: 'rgba(0,0,0,0.8)', border: '1px solid rgba(0,200,255,0.3)' }} />
+                  <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} />
+                  <XAxis dataKey="week" stroke={chartColors.axis} />
+                  <YAxis stroke={chartColors.axis} />
+                  <Tooltip contentStyle={{ backgroundColor: chartColors.tooltipBg, border: chartColors.tooltipBorder }} />
                   <Legend />
                   <Line type="monotone" dataKey="planned" stroke="#999999" name="Baseline" strokeWidth={2} dot={false} />
                   <Line type="monotone" dataKey="estimated" stroke="#00c8ff" name="Estimated" strokeWidth={2} dot={false} />
@@ -681,10 +683,10 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
               <h3 className="text-sm font-semibold text-foreground mb-4">Production S-Curve</h3>
               <ResponsiveContainer width="100%" height={300}>
                 <LineChart data={progressData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
-                  <XAxis dataKey="week" stroke="rgba(255,255,255,0.5)" />
-                  <YAxis stroke="rgba(255,255,255,0.5)" />
-                  <Tooltip contentStyle={{ backgroundColor: 'rgba(0,0,0,0.8)', border: '1px solid rgba(0,200,255,0.3)' }} />
+                  <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} />
+                  <XAxis dataKey="week" stroke={chartColors.axis} />
+                  <YAxis stroke={chartColors.axis} />
+                  <Tooltip contentStyle={{ backgroundColor: chartColors.tooltipBg, border: chartColors.tooltipBorder }} />
                   <Legend />
                   <Line type="monotone" dataKey="planned" stroke="#999999" name="Baseline" strokeWidth={2} dot={false} />
                   <Line type="monotone" dataKey="estimated" stroke="#00c8ff" name="Estimated" strokeWidth={2} dot={false} />
@@ -762,10 +764,10 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
               <h3 className="text-sm font-semibold text-foreground mb-4">Economic S-Curve</h3>
               <ResponsiveContainer width="100%" height={300}>
                 <LineChart data={costData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
-                  <XAxis dataKey="week" stroke="rgba(255,255,255,0.5)" />
-                  <YAxis stroke="rgba(255,255,255,0.5)" />
-                  <Tooltip contentStyle={{ backgroundColor: 'rgba(0,0,0,0.8)', border: '1px solid rgba(0,200,255,0.3)' }} />
+                  <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} />
+                  <XAxis dataKey="week" stroke={chartColors.axis} />
+                  <YAxis stroke={chartColors.axis} />
+                  <Tooltip contentStyle={{ backgroundColor: chartColors.tooltipBg, border: chartColors.tooltipBorder }} />
                   <Legend />
                   <Line type="monotone" dataKey="baseline" stroke="#999999" name="Baseline" strokeWidth={2} dot={false} />
                   <Line type="monotone" dataKey="actual" stroke="#ff6b6b" name="Actual" strokeWidth={2} dot={false} />
@@ -933,11 +935,11 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
 
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={getFilteredDailyReportData()}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
-                  <XAxis dataKey="date" stroke="rgba(255,255,255,0.5)" />
-                  <YAxis stroke="rgba(255,255,255,0.5)" />
+                  <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} />
+                  <XAxis dataKey="date" stroke={chartColors.axis} />
+                  <YAxis stroke={chartColors.axis} />
                   <Tooltip
-                    contentStyle={{ backgroundColor: 'rgba(0,0,0,0.8)', border: '1px solid rgba(0,200,255,0.3)' }}
+                    contentStyle={{ backgroundColor: chartColors.tooltipBg, border: chartColors.tooltipBorder }}
                   />
                   <Legend />
                   <Bar dataKey="actual" fill="#00c8ff" name="Actual" radius={[4, 4, 0, 0]} label={{ position: 'inside', fill: '#fff', fontSize: 11 }} />
@@ -977,10 +979,10 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
 
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={getFilteredShiftData()}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
-                  <XAxis dataKey="date" stroke="rgba(255,255,255,0.5)" />
-                  <YAxis stroke="rgba(255,255,255,0.5)" />
-                  <Tooltip contentStyle={{ backgroundColor: 'rgba(0,0,0,0.8)', border: '1px solid rgba(0,200,255,0.3)' }} />
+                  <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} />
+                  <XAxis dataKey="date" stroke={chartColors.axis} />
+                  <YAxis stroke={chartColors.axis} />
+                  <Tooltip contentStyle={{ backgroundColor: chartColors.tooltipBg, border: chartColors.tooltipBorder }} />
                   <Legend />
                   <Bar dataKey="Morning" stackId="a" fill="#00c8ff" label={{ position: 'top', fill: '#fff', fontSize: 10 }} />
                   <Bar dataKey="Afternoon" stackId="a" fill="#ffa500" label={{ position: 'top', fill: '#fff', fontSize: 10 }} />
@@ -1020,10 +1022,10 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
 
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={getFilteredActivityData()}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
-                  <XAxis dataKey="date" stroke="rgba(255,255,255,0.5)" />
-                  <YAxis stroke="rgba(255,255,255,0.5)" stroke="rgba(255,255,255,0.5)" />
-                  <Tooltip contentStyle={{ backgroundColor: 'rgba(0,0,0,0.8)', border: '1px solid rgba(0,200,255,0.3)' }} />
+                  <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} />
+                  <XAxis dataKey="date" stroke={chartColors.axis} />
+                  <YAxis stroke={chartColors.axis} stroke={chartColors.axis} />
+                  <Tooltip contentStyle={{ backgroundColor: chartColors.tooltipBg, border: chartColors.tooltipBorder }} />
                   <Legend />
                   <Bar dataKey="Sleepers-Production" stackId="a" fill="#00c8ff" />
                   <Bar dataKey="Ballast" stackId="a" fill="#00ff88" />
@@ -1084,10 +1086,10 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                 <h3 className="text-sm font-semibold text-foreground mb-4">Economic S-Curve</h3>
                 <ResponsiveContainer width="100%" height={350}>
                   <LineChart data={getFilteredCostData()}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
-                    <XAxis dataKey="week" stroke="rgba(255,255,255,0.5)" />
-                    <YAxis stroke="rgba(255,255,255,0.5)" />
-                    <Tooltip contentStyle={{ backgroundColor: 'rgba(0,0,0,0.8)', border: '1px solid rgba(0,200,255,0.3)' }} />
+                    <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} />
+                    <XAxis dataKey="week" stroke={chartColors.axis} />
+                    <YAxis stroke={chartColors.axis} />
+                    <Tooltip contentStyle={{ backgroundColor: chartColors.tooltipBg, border: chartColors.tooltipBorder }} />
                     <Legend />
                     <Line type="monotone" dataKey="baseline" stroke="#999999" name="Baseline" strokeWidth={2} dot={false} />
                     <Line type="monotone" dataKey="actual" stroke="#ff6b6b" name="Actual" strokeWidth={2} dot={false} />
@@ -1116,10 +1118,10 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
               </div>
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={getFilteredCostBreakdownData()}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
-                  <XAxis dataKey="category" stroke="rgba(255,255,255,0.5)" angle={-45} textAnchor="end" height={80} />
-                  <YAxis stroke="rgba(255,255,255,0.5)" />
-                  <Tooltip contentStyle={{ backgroundColor: 'rgba(0,0,0,0.8)', border: '1px solid rgba(0,200,255,0.3)' }} formatter={(value) => `€${value.toFixed(1)}M`} />
+                  <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} />
+                  <XAxis dataKey="category" stroke={chartColors.axis} angle={-45} textAnchor="end" height={80} />
+                  <YAxis stroke={chartColors.axis} />
+                  <Tooltip contentStyle={{ backgroundColor: chartColors.tooltipBg, border: chartColors.tooltipBorder }} formatter={(value) => `€${value.toFixed(1)}M`} />
                   <Legend />
                   <Bar dataKey="planned" fill="#999999" name="Planned" />
                   <Bar dataKey="estimated" fill="#00c8ff" name="Estimated Cost" />

@@ -22,7 +22,7 @@ interface Project {
   }
 }
 
-  const projects: Project[] = [
+const projects: Project[] = [
   { id: "PRJ-001", name: "Metro Tower", delay: -22, industrialCost: 93, budget: "€24.5M", trend: "up", category: "commercial", region: "north", week: "week-1", weekData: { "week-1": { delay: -22, industrialCost: 93 }, "week-2": { delay: -18, industrialCost: 89 }, "week-3": { delay: -12, industrialCost: 85 }, "week-4": { delay: -8, industrialCost: 82 } } },
   { id: "PRJ-002", name: "Harbor Bridge", delay: 8, industrialCost: 71, budget: "€89.2M", trend: "down", category: "infrastructure", region: "south", week: "week-2", weekData: { "week-1": { delay: 3, industrialCost: 68 }, "week-2": { delay: 8, industrialCost: 71 }, "week-3": { delay: 14, industrialCost: 76 }, "week-4": { delay: 20, industrialCost: 82 } } },
   { id: "PRJ-003", name: "Skyline Plaza", delay: 32, industrialCost: 106, budget: "€156M", trend: "stable", category: "commercial", region: "east", week: "week-1", weekData: { "week-1": { delay: 32, industrialCost: 106 }, "week-2": { delay: 31, industrialCost: 104 }, "week-3": { delay: 30, industrialCost: 105 }, "week-4": { delay: 28, industrialCost: 103 } } },
@@ -157,7 +157,7 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
 
         {/* Reference line labels */}
         <div className="absolute -left-6 top-1/2 -translate-y-1/2 text-xs font-semibold text-warning flex items-center gap-1.5">
-          <div className="text-foreground/60">100%</div>
+          <div className="text-foreground/60">80%</div>
         </div>
 
         {/* Center line label (on-time) */}

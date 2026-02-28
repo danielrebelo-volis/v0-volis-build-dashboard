@@ -53,7 +53,7 @@ export function ProjectDetailsSection({
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
               <DollarSign className="w-4 h-4 text-cyan" />
-              <span className="text-xs text-muted-foreground uppercase tracking-wide">Budget Status</span>
+              <span className="text-xs text-muted-foreground uppercase tracking-wide">Production Status</span>
             </div>
             <span className={`text-xs font-medium ${percentageSpent > 95 ? 'text-orange-400' : 'text-green-400'}`}>
               {percentageSpent.toFixed(1)}%

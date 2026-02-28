@@ -78,14 +78,13 @@ export default function ProjectDeepDive({ params }: { params: { id: string } }) 
             cpi={projectData.cpi}
             forecastedEndDate={projectData.forecastedEndDate}
             deadlineDate="March 22, 2026"
-            industrialCost={95}
           />
         </div>
 
         {/* Project Info Card */}
         <div className="mb-8 glass-card rounded-lg p-6">
           <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-6">Budget & Schedule Variance</h3>
-          <div className="grid grid-cols-2 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-3 lg:grid-cols-3 gap-6">
             {/* Budget Variance */}
             <div>
               <div className="flex items-center gap-2 mb-2">

@@ -7,7 +7,7 @@ import { ProjectDetailsSection } from '@/components/project-details-section'
 import { SProgressCurve, SCostCurve } from '@/components/s-curve-chart'
 import { ActivityDrillDown } from '@/components/activity-drill-down'
 import { OtherIndicators } from '@/components/other-indicators'
-import { ArrowLeft, Zap, TrendingDown, Calendar, Download } from 'lucide-react'
+import { ArrowLeft, Zap, TrendingDown, Calendar, Download, Euro } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 
@@ -101,7 +101,7 @@ export default function ProjectDeepDive({ params }: { params: { id: string } }) 
             {/* Industrial Cost */}
             <div>
               <div className="flex items-center gap-2 mb-2">
-                <TrendingDown className="w-4 h-4 text-success" />
+                <Euro className="w-4 h-4 text-success" />
                 <p className="text-xs text-muted-foreground">Industrial Cost</p>
               </div>
               <div className="flex items-baseline gap-2">

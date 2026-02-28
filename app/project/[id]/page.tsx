@@ -77,6 +77,8 @@ export default function ProjectDeepDive({ params }: { params: { id: string } }) 
             spi={projectData.spi}
             cpi={projectData.cpi}
             forecastedEndDate={projectData.forecastedEndDate}
+            deadlineDate="March 22, 2026"
+            industrialCost={95}
           />
         </div>
 
@@ -160,10 +162,6 @@ export default function ProjectDeepDive({ params }: { params: { id: string } }) 
             </div>
             <div className="flex items-center gap-4">
               <span>Last updated: 2 minutes ago</span>
-              <span className="flex items-center gap-1.5">
-                <div className="w-1.5 h-1.5 rounded-full bg-success" />
-                Real-time data
-              </span>
             </div>
           </div>
         </div>

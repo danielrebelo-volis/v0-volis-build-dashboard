@@ -22,7 +22,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
   const [selectedWorkfront, setSelectedWorkfront] = useState('all')
   const [selectedOwner, setSelectedOwner] = useState('all')
   const [selectedCostMonth, setSelectedCostMonth] = useState('last-month')
-  const [sortBy, setSortBy] = useState<'value' | 'plannedProgress' | 'actualProgress' | 'earnedValue' | null>(null)
+  const [sortBy, setSortBy] = useState<'value' | 'plannedProgress' | 'actualProgress' | 'accumulatedProduction' | null>(null)
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc')
   const [economicSortBy, setEconomicSortBy] = useState<'baselineCost' | 'actualCost' | 'totalBaseline' | 'totalEstimated' | null>(null)
   const [economicSortDirection, setEconomicSortDirection] = useState<'asc' | 'desc'>('desc')
@@ -103,7 +103,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
     { name: 'Exterior Cladding', value: 3.2, total_planned: '800 m²', planned: '500 m²', executed: '420 m²', expected_completeness: (500 / 800).toFixed(2), actual_completeness: 53, earnedValue: 1.696, status: 'Ongoing', estimated_execution: '450 m²', actual_execution: '380 m²', forecast_deadline: '28/05/2024' },
     { name: 'Interior Partitions', value: 2.6, total_planned: '650 m²', planned: '400 m²', executed: '350 m²', expected_completeness: (400 / 650).toFixed(2), actual_completeness: 54, earnedValue: 1.404, status: 'Ongoing', estimated_execution: '375 m²', actual_execution: '320 m²', forecast_deadline: '26/05/2024' },
     { name: 'Roofing Works', value: 4.1, total_planned: '1200 m²', planned: '1000 m²', executed: '950 m²', expected_completeness: (1000 / 1200).toFixed(2), actual_completeness: 79, earnedValue: 3.239, status: 'Ongoing', estimated_execution: '980 m²', actual_execution: '870 m²', forecast_deadline: '18/05/2024' },
-    { name: 'Flooring Installation', value: 1.9, total_planned: '900 m²', planned: '300 m²', executed: '180 m²', expected_completeness: (300 / 900).toFixed(2), actual_completeness: 20, earnedValue: 0.38, status: 'Not Started', estimated_execution: '250 m²', actual_execution: '150 m²', forecast_deadline: '10/07/2024' },
+    { name: 'Flooring Installation', value: 1.9, total_planned: '900 m²', planned: '300 m²', executed: '180 m²', expected_completeness: (300 / 900).toFixed(2), actual_completeness: 20, earnedValue: 0.38, status: 'Not Started', estimated_execution: '250 m²', actual_execution: '150 m��', forecast_deadline: '10/07/2024' },
     { name: 'Painting & Decoration', value: 1.5, total_planned: '1100 m²', planned: '200 m²', executed: '50 m²', expected_completeness: (200 / 1100).toFixed(2), actual_completeness: 5, earnedValue: 0.075, status: 'Not Started', estimated_execution: '150 m²', actual_execution: '40 m²', forecast_deadline: '15/07/2024' },
   ]
 
@@ -134,7 +134,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
     }))
   }
 
-  const handleSort = (column: 'value' | 'plannedProgress' | 'actualProgress' | 'earnedValue') => {
+  const handleSort = (column: 'value' | 'plannedProgress' | 'actualProgress' | 'accumulatedProduction') => {
     if (sortBy === column) {
       setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc')
     } else {
@@ -163,7 +163,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
           aValue = a.actual_completeness
           bValue = b.actual_completeness
           break
-        case 'earnedValue':
+        case 'accumulatedProduction':
           aValue = a.earnedValue
           bValue = b.earnedValue
           break

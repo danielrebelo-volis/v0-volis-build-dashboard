@@ -64,13 +64,13 @@ export function OtherIndicators({
           <p className="text-xs text-muted-foreground mt-2">To finish on initial deadline</p>
         </div>
 
-        {/* Earned Value */}
+        {/* Accumulated Production */}
         <div className="glass-card rounded-lg p-6">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <DollarSign className="w-4 h-4 text-cyan" />
               <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
-                Earned Value
+                Accumulated Production
               </p>
             </div>
           </div>

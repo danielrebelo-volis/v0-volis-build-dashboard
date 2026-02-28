@@ -118,13 +118,13 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
             <rect width="100" height="100" fill="url(#grid)" />
 
             {/* Reference line at 100% industrial cost - baseline (100-60)/(110-60) = 80% of range */}
-            <line x1="0" y1="20" x2="100" y2="20" stroke={colors.gridPatternLine} strokeWidth="0.4" strokeDasharray="3,3" />
+            <line x1="0" y1="20" x2="100" y2="20" stroke={colors.gridPatternLine} strokeWidth="0.4" strokeDasharray="2,5" />
 
             {/* Grey dashed line at y = 100 (top of chart) */}
-            <line x1="0" y1="0" x2="100" y2="0" stroke="#888888" strokeWidth="0.5" strokeDasharray="2,2" opacity="0.4" />
+            <line x1="0" y1="0" x2="100" y2="0" stroke="#888888" strokeWidth="0.4" strokeDasharray="2,2" opacity="0.4" />
 
             {/* Center line at 0% delay (x = 50) */}
-            <line x1="50" y1="0" x2="50" y2="100" stroke="#888888" strokeWidth="0.4" strokeDasharray="3,3" />
+            <line x1="50" y1="0" x2="50" y2="100" stroke="#888888" strokeWidth="0.4" strokeDasharray="2,5" opacity="0.4" />
 
             {/* Quadrant shading - based on 100% reference line and center line */}
             <rect x="0" y="0" width="50" height="20" fill="rgba(255,100,100,0.03)" />

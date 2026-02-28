@@ -27,6 +27,7 @@ export function TrendsSection() {
   return (
     <div className="glass-card rounded-lg p-4 h-full flex flex-col">
       <h2 className="text-sm font-medium text-foreground mb-6">Uptrends / Downtrends</h2>
+      <p className="text-xs text-muted-foreground mb-4">(Actual production vs. last approved baselines)</p>
 
       <div className="flex-1 overflow-y-auto space-y-6">
         {/* Uptrends Section */}

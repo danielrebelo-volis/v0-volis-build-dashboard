@@ -48,7 +48,7 @@ function ProjectRow({ name, id, status, delay, industrialCost, completion }: Pro
           </div>
           
           <div className="text-right w-16">
-            <span className="text-xs text-muted-foreground block">CI</span>
+            <span className="text-xs text-muted-foreground block">IC</span>
             <span className={`text-sm font-mono ${industrialCost <= 85 ? 'text-success' : 'text-warning'}`}>
               {industrialCost.toFixed(0)}%
             </span>

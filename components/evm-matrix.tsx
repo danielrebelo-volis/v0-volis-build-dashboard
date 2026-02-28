@@ -90,15 +90,15 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
   }
 
   const getBudgetSize = (budget: string) => {
-    // Parse budget string (e.g., "$24.5M") to numeric value
-    const value = parseFloat(budget.replace(/[$M]/g, ''))
+    // Parse budget string (e.g., "€24.5M") to numeric value
+    const value = parseFloat(budget.replace(/[€$M]/g, ''))
     // Map to discrete sizes: base 10px, up to 16px based on budget
     const minBudget = 18.3
     const maxBudget = 340
     const normalized = (value - minBudget) / (maxBudget - minBudget)
     const baseSize = 10
     const maxSize = 16
-    return baseSize + normalized * (maxSize - baseSize)
+    return baseSize + Math.max(0, Math.min(1, normalized)) * (maxSize - baseSize)
   }
 
   return (

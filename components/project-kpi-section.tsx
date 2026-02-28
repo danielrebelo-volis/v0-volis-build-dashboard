@@ -18,14 +18,13 @@ export function ProjectKPISection({
   spi = 1.08,
   cpi = 0.95,
   forecastedEndDate = 'March 15, 2026',
-  deadlineDate = 'March 22, 2026',
-  industrialCost = 95
+  deadlineDate = 'March 22, 2026'
 }: ProjectKPISectionProps) {
   const isSPIHealthy = spi >= 1.0
   const isCPIHealthy = cpi >= 1.0
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 
       {/* Project Metadata */}
       <div className="glass-card rounded-lg p-4 border border-border/50">
@@ -71,21 +70,6 @@ export function ProjectKPISection({
         <div className="text-2xl font-bold text-warning">{deadlineDate}</div>
         <div className="mt-3 pt-3 border-t border-border/30">
           <p className="text-xs text-muted-foreground">Original contract deadline</p>
-        </div>
-      </div>
-
-      {/* Industrial Cost */}
-      <div className="glass-card rounded-lg p-4 border border-border/50">
-        <div className="flex items-start justify-between mb-3">
-          <div>
-            <p className="text-xs text-muted-foreground uppercase tracking-wide">Performance</p>
-            <p className="text-sm font-semibold text-foreground mt-0.5">Industrial Cost</p>
-          </div>
-          <CostIcon className="w-4 h-4 text-cyan" />
-        </div>
-        <div className={`text-2xl font-bold ${industrialCost <= 85 ? 'text-success' : 'text-warning'}`}>{industrialCost}%</div>
-        <div className="mt-3 pt-3 border-t border-border/30">
-          <p className="text-xs text-muted-foreground">{industrialCost <= 85 ? 'Within budget baseline' : 'Above budget baseline'}</p>
         </div>
       </div>
     </div>

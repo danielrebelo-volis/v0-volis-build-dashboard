@@ -99,6 +99,21 @@ export default function ProjectDeepDive({ params }: { params: { id: string } }) 
               <p className="text-xs text-muted-foreground mt-2">Budget: €6.85M | Spent: €6.7M</p>
             </div>
 
+            {/* Industrial Cost */}
+            <div>
+              <div className="flex items-center gap-2 mb-2">
+                <TrendingDown className="w-4 h-4 text-success" />
+                <p className="text-xs text-muted-foreground">Industrial Cost</p>
+              </div>
+              <div className="flex items-baseline gap-2">
+                <p className="text-2xl font-bold text-success">5.0%</p>
+                <p className="text-xs text-muted-foreground">Over planned</p>
+              </div>
+              <p className="text-xs text-muted-foreground mt-2">Planned: 3.2%</p>
+            </div>
+
+
+
             {/* Schedule Variance */}
             <div>
               <div className="flex items-center gap-2 mb-2">

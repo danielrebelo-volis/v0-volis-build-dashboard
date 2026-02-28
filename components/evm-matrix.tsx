@@ -23,16 +23,16 @@ interface Project {
 }
 
 const projects: Project[] = [
-  { id: "PRJ-001", name: "Metro Tower", delay: -22, industrialCost: 93, budget: "$24.5M", trend: "up", category: "commercial", region: "north", week: "week-1", weekData: { "week-1": { delay: -22, industrialCost: 93 }, "week-2": { delay: -18, industrialCost: 89 }, "week-3": { delay: -12, industrialCost: 85 }, "week-4": { delay: -8, industrialCost: 82 } } },
-  { id: "PRJ-002", name: "Harbor Bridge", delay: 8, industrialCost: 71, budget: "$89.2M", trend: "down", category: "infrastructure", region: "south", week: "week-2", weekData: { "week-1": { delay: 3, industrialCost: 68 }, "week-2": { delay: 8, industrialCost: 71 }, "week-3": { delay: 14, industrialCost: 76 }, "week-4": { delay: 20, industrialCost: 82 } } },
-  { id: "PRJ-003", name: "Skyline Plaza", delay: 32, industrialCost: 106, budget: "$156M", trend: "stable", category: "commercial", region: "east", week: "week-1", weekData: { "week-1": { delay: 32, industrialCost: 106 }, "week-2": { delay: 31, industrialCost: 104 }, "week-3": { delay: 30, industrialCost: 105 }, "week-4": { delay: 28, industrialCost: 103 } } },
-  { id: "PRJ-004", name: "Industrial Park", delay: -5, industrialCost: 67, budget: "$42.8M", trend: "up", category: "industrial", region: "west", week: "week-3", weekData: { "week-1": { delay: 12, industrialCost: 79 }, "week-2": { delay: 3, industrialCost: 73 }, "week-3": { delay: -5, industrialCost: 67 }, "week-4": { delay: -12, industrialCost: 63 } } },
-  { id: "PRJ-005", name: "Riverside Homes", delay: 18, industrialCost: 98, budget: "$18.3M", trend: "down", category: "residential", region: "north", week: "week-2", weekData: { "week-1": { delay: 22, industrialCost: 102 }, "week-2": { delay: 18, industrialCost: 98 }, "week-3": { delay: 15, industrialCost: 94 }, "week-4": { delay: 10, industrialCost: 89 } } },
-  { id: "PRJ-006", name: "Tech Campus", delay: -28, industrialCost: 77, budget: "$210M", trend: "stable", category: "commercial", region: "south", week: "week-4", weekData: { "week-1": { delay: -18, industrialCost: 82 }, "week-2": { delay: -23, industrialCost: 79 }, "week-3": { delay: -28, industrialCost: 77 }, "week-4": { delay: -28, industrialCost: 76 } } },
-  { id: "PRJ-007", name: "Highway 12 Ext", delay: -12, industrialCost: 64, budget: "$340M", trend: "down", category: "infrastructure", region: "east", week: "week-1", weekData: { "week-1": { delay: -12, industrialCost: 64 }, "week-2": { delay: -8, industrialCost: 67 }, "week-3": { delay: -3, industrialCost: 72 }, "week-4": { delay: 4, industrialCost: 78 } } },
-  { id: "PRJ-008", name: "Green Valley", delay: 25, industrialCost: 88, budget: "$32.1M", trend: "up", category: "residential", region: "west", week: "week-3", weekData: { "week-1": { delay: 35, industrialCost: 95 }, "week-2": { delay: 30, industrialCost: 91 }, "week-3": { delay: 25, industrialCost: 88 }, "week-4": { delay: 18, industrialCost: 84 } } },
-  { id: "PRJ-009", name: "Data Center", delay: 5, industrialCost: 81, budget: "$78.5M", trend: "stable", category: "industrial", region: "north", week: "week-4", weekData: { "week-1": { delay: 15, industrialCost: 87 }, "week-2": { delay: 10, industrialCost: 84 }, "week-3": { delay: 7, industrialCost: 82 }, "week-4": { delay: 5, industrialCost: 81 } } },
-  { id: "PRJ-010", name: "Civic Center", delay: 42, industrialCost: 109, budget: "$125M", trend: "up", category: "commercial", region: "south", week: "week-2", weekData: { "week-1": { delay: 45, industrialCost: 108 }, "week-2": { delay: 42, industrialCost: 109 }, "week-3": { delay: 38, industrialCost: 105 }, "week-4": { delay: 32, industrialCost: 100 } } },
+  { id: "PRJ-001", name: "Metro Tower", delay: -22, industrialCost: 93, budget: "€24.5M", trend: "up", category: "commercial", region: "north", week: "week-1", weekData: { "week-1": { delay: -22, industrialCost: 93 }, "week-2": { delay: -18, industrialCost: 89 }, "week-3": { delay: -12, industrialCost: 85 }, "week-4": { delay: -8, industrialCost: 82 } } },
+  { id: "PRJ-002", name: "Harbor Bridge", delay: 8, industrialCost: 71, budget: "€89.2M", trend: "down", category: "infrastructure", region: "south", week: "week-2", weekData: { "week-1": { delay: 3, industrialCost: 68 }, "week-2": { delay: 8, industrialCost: 71 }, "week-3": { delay: 14, industrialCost: 76 }, "week-4": { delay: 20, industrialCost: 82 } } },
+  { id: "PRJ-003", name: "Skyline Plaza", delay: 32, industrialCost: 106, budget: "€156M", trend: "stable", category: "commercial", region: "east", week: "week-1", weekData: { "week-1": { delay: 32, industrialCost: 106 }, "week-2": { delay: 31, industrialCost: 104 }, "week-3": { delay: 30, industrialCost: 105 }, "week-4": { delay: 28, industrialCost: 103 } } },
+  { id: "PRJ-004", name: "Industrial Park", delay: -5, industrialCost: 67, budget: "€42.8M", trend: "up", category: "industrial", region: "west", week: "week-3", weekData: { "week-1": { delay: 12, industrialCost: 79 }, "week-2": { delay: 3, industrialCost: 73 }, "week-3": { delay: -5, industrialCost: 67 }, "week-4": { delay: -12, industrialCost: 63 } } },
+  { id: "PRJ-005", name: "Riverside Homes", delay: 18, industrialCost: 98, budget: "€18.3M", trend: "down", category: "residential", region: "north", week: "week-2", weekData: { "week-1": { delay: 22, industrialCost: 102 }, "week-2": { delay: 18, industrialCost: 98 }, "week-3": { delay: 15, industrialCost: 94 }, "week-4": { delay: 10, industrialCost: 89 } } },
+  { id: "PRJ-006", name: "Tech Campus", delay: -28, industrialCost: 77, budget: "€210M", trend: "stable", category: "commercial", region: "south", week: "week-4", weekData: { "week-1": { delay: -18, industrialCost: 82 }, "week-2": { delay: -23, industrialCost: 79 }, "week-3": { delay: -28, industrialCost: 77 }, "week-4": { delay: -28, industrialCost: 76 } } },
+  { id: "PRJ-007", name: "Highway 12 Ext", delay: -12, industrialCost: 64, budget: "€340M", trend: "down", category: "infrastructure", region: "east", week: "week-1", weekData: { "week-1": { delay: -12, industrialCost: 64 }, "week-2": { delay: -8, industrialCost: 67 }, "week-3": { delay: -3, industrialCost: 72 }, "week-4": { delay: 4, industrialCost: 78 } } },
+  { id: "PRJ-008", name: "Green Valley", delay: 25, industrialCost: 88, budget: "€32.1M", trend: "up", category: "residential", region: "west", week: "week-3", weekData: { "week-1": { delay: 35, industrialCost: 95 }, "week-2": { delay: 30, industrialCost: 91 }, "week-3": { delay: 25, industrialCost: 88 }, "week-4": { delay: 18, industrialCost: 84 } } },
+  { id: "PRJ-009", name: "Data Center", delay: 5, industrialCost: 81, budget: "€78.5M", trend: "stable", category: "industrial", region: "north", week: "week-4", weekData: { "week-1": { delay: 15, industrialCost: 87 }, "week-2": { delay: 10, industrialCost: 84 }, "week-3": { delay: 7, industrialCost: 82 }, "week-4": { delay: 5, industrialCost: 81 } } },
+  { id: "PRJ-010", name: "Civic Center", delay: 42, industrialCost: 109, budget: "€125M", trend: "up", category: "commercial", region: "south", week: "week-2", weekData: { "week-1": { delay: 45, industrialCost: 108 }, "week-2": { delay: 42, industrialCost: 109 }, "week-3": { delay: 38, industrialCost: 105 }, "week-4": { delay: 32, industrialCost: 100 } } },
 ]
 
 const categoryColors: Record<Project["category"], string> = {
@@ -90,15 +90,15 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
   }
 
   const getBudgetSize = (budget: string) => {
-    // Parse budget string (e.g., "$24.5M") to numeric value
-    const value = parseFloat(budget.replace(/[$M]/g, ''))
+    // Parse budget string (e.g., "€24.5M") to numeric value
+    const value = parseFloat(budget.replace(/[€$M]/g, ''))
     // Map to discrete sizes: base 10px, up to 16px based on budget
     const minBudget = 18.3
     const maxBudget = 340
     const normalized = (value - minBudget) / (maxBudget - minBudget)
     const baseSize = 10
     const maxSize = 16
-    return baseSize + normalized * (maxSize - baseSize)
+    return baseSize + Math.max(0, Math.min(1, normalized)) * (maxSize - baseSize)
   }
 
   return (
@@ -117,17 +117,20 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
             </defs>
             <rect width="100" height="100" fill="url(#grid)" />
 
-            {/* Reference line at 85% industrial cost (85-60)/(110-60) = 50% of range, inverted = 50 */}
-            <line x1="0" y1="50" x2="100" y2="50" stroke={colors.gridPatternLine} strokeWidth="0.4" strokeDasharray="3,3" />
+            {/* Reference line at 100% industrial cost - baseline (100-60)/(110-60) = 80% of range */}
+            <line x1="0" y1="20" x2="100" y2="20" stroke="#888888" strokeWidth="0.2" strokeDasharray="2,2" opacity="0.6" />
+
+            {/* Grey dashed line at y = 100 (top of chart) */}
+            <line x1="0" y1="0" x2="100" y2="0" stroke="#888888" strokeWidth="0.4" strokeDasharray="2,5" opacity="0.4" />
 
             {/* Center line at 0% delay (x = 50) */}
-            <line x1="50" y1="0" x2="50" y2="100" stroke={colors.gridPatternLine} strokeWidth="0.4" strokeDasharray="3,3" />
+            <line x1="50" y1="0" x2="50" y2="100" stroke="#888888" strokeWidth="0.4" strokeDasharray="2,5" opacity="0.4" />
 
-            {/* Quadrant shading - based on 85% reference line and center line */}
-            <rect x="0" y="0" width="50" height="50" fill="rgba(255,100,100,0.03)" />
-            <rect x="50" y="0" width="50" height="50" fill="rgba(255,100,100,0.04)" />
-            <rect x="0" y="50" width="50" height="50" fill="rgba(0,255,136,0.03)" />
-            <rect x="50" y="50" width="50" height="50" fill="rgba(255,170,0,0.02)" />
+            {/* Quadrant shading - based on 100% reference line and center line */}
+            <rect x="0" y="0" width="50" height="20" fill="rgba(255,100,100,0.03)" />
+            <rect x="50" y="0" width="50" height="20" fill="rgba(255,100,100,0.04)" />
+            <rect x="0" y="20" width="50" height="80" fill="rgba(0,255,136,0.03)" />
+            <rect x="50" y="20" width="50" height="80" fill="rgba(255,170,0,0.02)" />
           </svg>
         </div>
 
@@ -135,29 +138,29 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
         <div className="absolute inset-0 pointer-events-none px-6 py-6">
           {/* Top-Left: Ahead & High Cost (>85%) */}
           <div className="absolute top-6 left-6 text-[11px] text-muted-foreground/40 font-medium">
-            <div className="text-foreground/100">Cost {'>'} 85%</div>
+            <div className="text-foreground/100">Industrial Cost {'>'} 85%</div>
             <div className="text-foreground/100">Ahead</div>
           </div>
           {/* Top-Right: Delayed & High Cost (>85%) */}
           <div className="absolute top-6 right-6 text-[11px] text-muted-foreground/40 font-medium text-right">
-            <div className="text-foreground/100">Cost {'>'} 85%</div>
+            <div className="text-foreground/100">Industrial Cost {'>'} 85%</div>
             <div className="text-foreground/100">Delayed</div>
           </div>
           {/* Bottom-Left: Ahead & Good Cost (<85%) */}
           <div className="absolute bottom-6 left-6 text-[11px] text-muted-foreground/40 font-medium">
-            <div className="text-foreground/100">Cost {'<'} 85%</div>
+            <div className="text-foreground/100">Industrial Cost {'<'} 85%</div>
             <div className="text-foreground/100">Ahead</div>
           </div>
           {/* Bottom-Right: Delayed & Good Cost (<85%) */}
           <div className="absolute bottom-6 right-6 text-[11px] text-muted-foreground/40 font-medium text-right">
-            <div className="text-foreground/100">Cost {'<'} 85%</div>
+            <div className="text-foreground/100">Industrial Cost {'<'} 85%</div>
             <div className="text-foreground/100">Delayed</div>
           </div>
         </div>
 
         {/* Reference line labels */}
         <div className="absolute -left-6 top-1/2 -translate-y-1/2 text-xs font-semibold text-warning flex items-center gap-1.5">
-          <div className="text-foreground/60">85%</div>
+          <div className="text-foreground/60">80%</div>
         </div>
 
         {/* Center line label (on-time) */}

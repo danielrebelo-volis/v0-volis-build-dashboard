@@ -164,7 +164,7 @@ function IndicatorCard({
     case 'real-earned-value':
       return (
         <div className="glass-card rounded-lg p-4">
-          <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3">Real Earned Value</h4>
+          <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3">Accumulated Production</h4>
           <div className="text-2xl font-bold text-foreground mb-1">{project.ev}</div>
           <div className="text-xs text-muted-foreground">Weekly Production: {project.weeklyRatio}</div>
         </div>
@@ -323,7 +323,7 @@ export function ProjectComparison() {
 
   const indicatorOptions: { value: IndicatorType; label: string }[] = [
     { value: 'weekly-evolution', label: 'Weekly Evolution' },
-    { value: 'real-earned-value', label: 'Real Earned Value' },
+    { value: 'real-earned-value', label: 'Accumulated Production' },
     { value: 'cpi', label: 'CPI' },
     { value: 'spi', label: 'SPI' },
     { value: 'ppc', label: 'PPC' },

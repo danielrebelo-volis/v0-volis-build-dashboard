@@ -37,7 +37,10 @@ export function SProgressCurve() {
             tick={{ fontSize: 12 }}
           />
           <Tooltip contentStyle={{ backgroundColor: colors.tooltipBg, border: colors.tooltipBorder }} />
-          <Legend />
+          <Legend 
+            wrapperStyle={{ paddingTop: '12px' }}
+            iconType="line"
+          />
           <Line type="monotone" dataKey="planned" stroke="#999999" name="Planned" strokeWidth={2} dot={false} />
           <Line type="monotone" dataKey="forecast" stroke={colors.isDark ? "#00c8ff" : "#6C5CE7"} name="Forecast" strokeWidth={2} dot={false} />
           <Line type="monotone" dataKey="actual" stroke={colors.isDark ? "#00ff88" : "#00b894"} name="Actual" strokeWidth={2} dot={false} />
@@ -82,7 +85,10 @@ export function SCostCurve() {
             tickFormatter={(value) => `€${value.toFixed(1)}M`}
           />
           <Tooltip contentStyle={{ backgroundColor: colors.tooltipBg, border: colors.tooltipBorder }} formatter={(value: number) => `€${value.toFixed(1)}M`} />
-          <Legend />
+          <Legend 
+            wrapperStyle={{ paddingTop: '12px' }}
+            iconType="line"
+          />
           <Line type="monotone" dataKey="baseline" stroke="#999999" name="Planned" strokeWidth={2} dot={false} />
           <Line type="monotone" dataKey="actual" stroke="#ff6b6b" name="Actual" strokeWidth={2} dot={false} />
         </LineChart>

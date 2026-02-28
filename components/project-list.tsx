@@ -48,7 +48,7 @@ function ProjectRow({ name, id, status, delay, industrialCost, completion }: Pro
           </div>
           
           <div className="text-right w-16">
-            <span className="text-xs text-muted-foreground block">CI</span>
+            <span className="text-xs text-muted-foreground block">IC</span>
             <span className={`text-sm font-mono ${industrialCost <= 85 ? 'text-success' : 'text-warning'}`}>
               {industrialCost.toFixed(0)}%
             </span>
@@ -95,7 +95,7 @@ export function ProjectList() {
     { name: "Harbor Bridge", id: "PRJ-002", status: "on-track", delay: 8, industrialCost: 71, completion: 42 },
     { name: "Skyline Plaza", id: "PRJ-003", status: "delayed", delay: 32, industrialCost: 106, completion: 85 },
     { name: "Industrial Park", id: "PRJ-004", status: "on-track", delay: -5, industrialCost: 67, completion: 31 },
-    { name: "Riverside Homes", id: "PRJ-005", status: "at-risk", delay: 18, industrialCost: 98, completion: 56 },
+    { name: "Riverside Homes", id: "PRJ-005", status: "delayed", delay: 18, industrialCost: 98, completion: 56 },
   ]
 
   return (

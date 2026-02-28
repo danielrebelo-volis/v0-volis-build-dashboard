@@ -7,7 +7,7 @@ import { ProjectDetailsSection } from '@/components/project-details-section'
 import { SProgressCurve, SCostCurve } from '@/components/s-curve-chart'
 import { ActivityDrillDown } from '@/components/activity-drill-down'
 import { OtherIndicators } from '@/components/other-indicators'
-import { ArrowLeft, Zap, TrendingDown, Calendar, Download } from 'lucide-react'
+import { ArrowLeft, Zap, TrendingDown, Calendar, Download, Euro } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 
@@ -77,13 +77,14 @@ export default function ProjectDeepDive({ params }: { params: { id: string } }) 
             spi={projectData.spi}
             cpi={projectData.cpi}
             forecastedEndDate={projectData.forecastedEndDate}
+            deadlineDate="March 22, 2026"
           />
         </div>
 
         {/* Project Info Card */}
         <div className="mb-8 glass-card rounded-lg p-6">
           <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-6">Budget & Schedule Variance</h3>
-          <div className="grid grid-cols-2 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-3 lg:grid-cols-3 gap-6">
             {/* Budget Variance */}
             <div>
               <div className="flex items-center gap-2 mb-2">
@@ -96,6 +97,21 @@ export default function ProjectDeepDive({ params }: { params: { id: string } }) 
               </div>
               <p className="text-xs text-muted-foreground mt-2">Budget: €6.85M | Spent: €6.7M</p>
             </div>
+
+            {/* Industrial Cost */}
+            <div>
+              <div className="flex items-center gap-2 mb-2">
+                <Euro className="w-4 h-4 text-success" />
+                <p className="text-xs text-muted-foreground">Industrial Cost</p>
+              </div>
+              <div className="flex items-baseline gap-2">
+                <p className="text-2xl font-bold text-success">5.0%</p>
+                <p className="text-xs text-muted-foreground">Over planned</p>
+              </div>
+              <p className="text-xs text-muted-foreground mt-2">Planned: 3.2%</p>
+            </div>
+
+
 
             {/* Schedule Variance */}
             <div>
@@ -160,10 +176,6 @@ export default function ProjectDeepDive({ params }: { params: { id: string } }) 
             </div>
             <div className="flex items-center gap-4">
               <span>Last updated: 2 minutes ago</span>
-              <span className="flex items-center gap-1.5">
-                <div className="w-1.5 h-1.5 rounded-full bg-success" />
-                Real-time data
-              </span>
             </div>
           </div>
         </div>

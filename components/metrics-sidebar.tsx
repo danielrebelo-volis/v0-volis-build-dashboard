@@ -51,7 +51,7 @@ export function MetricsSidebar() {
       <MetricCard
         title="Active Projects"
         value="24"
-        change="+3"
+        change="+3 in the past month"
         trend="up"
         icon={<Building2 className="w-4 h-4" />}
         accent="#00d4ff"
@@ -59,7 +59,7 @@ export function MetricsSidebar() {
 
       <MetricCard
         title="Total Budget"
-        value="$1.24B"
+        value="€1.24B"
         change="+12.4%"
         trend="up"
         icon={<DollarSign className="w-4 h-4" />}

@@ -11,11 +11,13 @@ export function DashboardHeader() {
     <header className="flex items-center justify-between px-6 py-4 border-b border-border/50">
       {/* Logo & Title */}
       <div className="flex items-center gap-6">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-foreground flex items-center justify-center">
-            <span className="text-background font-bold text-sm">O</span>
-          </div>
-          <span className="font-semibold text-lg text-foreground tracking-tight">One Method</span>
+        <div className="flex items-center gap-3">
+          <img 
+            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Mota-Engil.svg-jOnANF2tKtMSNJhsW6KwGJrzNMS38H.png"
+            alt="Mota Engil Logo"
+            className="h-8 w-auto"
+          />
+          <span className="font-semibold text-lg text-foreground tracking-tight">Dashboard</span>
         </div>
 
         <nav className="hidden md:flex items-center gap-1">

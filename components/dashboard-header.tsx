@@ -12,7 +12,7 @@ export function DashboardHeader() {
       {/* Logo & Title */}
       <div className="flex items-center gap-6">
         <div className="flex items-center gap-3">
-          <img style="background-color: white;"
+          <img
             src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Mota-Engil.svg-jOnANF2tKtMSNJhsW6KwGJrzNMS38H.png"
             alt="Mota Engil Logo"
             className="h-8 w-auto"

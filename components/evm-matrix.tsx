@@ -129,11 +129,11 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
         {/* Background and grid */}
         <div className="absolute inset-0 rounded-lg border border-border/20 bg-gradient-to-br from-background/50 to-background/30 backdrop-blur-sm">
           {/* Grid Lines */}
-          <svg className="absolute inset-0 w-full h-full rounded-lg" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <svg className="absolute inset-0 w-full h-full rounded-lg" viewBox="0 0 100 100" preserveAspectRatio="none" suppressHydrationWarning>
             {/* Background grid */}
             <defs>
               <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
-                <path d="M 10 0 L 0 0 0 10" fill="none" stroke={colors.gridPattern} strokeWidth="0.2" />
+                <path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(100,116,139,0.08)" strokeWidth="0.2" />
               </pattern>
             </defs>
             <rect width="100" height="100" fill="url(#grid)" />

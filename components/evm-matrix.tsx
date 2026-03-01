@@ -38,7 +38,7 @@ const projects: Project[] = [
   // Quadrant 3: Ahead & Good Cost (negative delay, <100 industrial cost)
   { id: "PRJ-004", name: "Industrial Park", delay: -5, industrialCost: 67, budget: "€42.8M", trend: "up", category: "Mineração", region: "west", week: "week-3", weekData: { "week-1": { delay: 12, industrialCost: 79 }, "week-2": { delay: 3, industrialCost: 73 }, "week-3": { delay: -5, industrialCost: 67 }, "week-4": { delay: -12, industrialCost: 63 } } },
   { id: "PRJ-006", name: "Tech Campus", delay: -28, industrialCost: 77, budget: "€210M", trend: "stable", category: "Infraestruturas Urbanas", region: "south", week: "week-4", weekData: { "week-1": { delay: -18, industrialCost: 82 }, "week-2": { delay: -23, industrialCost: 79 }, "week-3": { delay: -28, industrialCost: 77 }, "week-4": { delay: -28, industrialCost: 76 } } },
-  { id: "PRJ-009", name: "Data Center", delay: -15, industrialCost: 81, budget: "€78.5M", trend: "down", category: "Construção Civil", region: "north", week: "week-4", weekData: { "week-1": { delay: -15, industrialCost: 87 }, "week-2": { delay: -15, industrialCost: 84 }, "week-3": { delay: -15, industrialCost: 82 }, "week-4": { delay: -15, industrialCost: 81 } } },
+  { id: "PRJ-009", name: "Data Center", delay: -15, industrialCost: 81, budget: "€78.5M", trend: "down", category: "Infraestruturas Portuárias", region: "north", week: "week-4", weekData: { "week-1": { delay: -15, industrialCost: 87 }, "week-2": { delay: -15, industrialCost: 84 }, "week-3": { delay: -15, industrialCost: 82 }, "week-4": { delay: -15, industrialCost: 81 } } },
   { id: "PRJ-007", name: "Highway 12 Ext", delay: -12, industrialCost: 64, budget: "€340M", trend: "down", category: "Infraestruturas Rodoviárias", region: "east", week: "week-1", weekData: { "week-1": { delay: -12, industrialCost: 64 }, "week-2": { delay: -8, industrialCost: 67 }, "week-3": { delay: -3, industrialCost: 72 }, "week-4": { delay: 4, industrialCost: 78 } } },
 
   // Quadrant 4: Delayed & Good Cost (positive delay, <100 industrial cost)
@@ -46,19 +46,21 @@ const projects: Project[] = [
   { id: "PRJ-005", name: "Riverside Homes", delay: 20, industrialCost: 90, budget: "€18.3M", trend: "down", category: "Infraestruturas Urbanas", region: "north", week: "week-2", weekData: { "week-1": { delay: 22, industrialCost: 102 }, "week-2": { delay: 18, industrialCost: 98 }, "week-3": { delay: 15, industrialCost: 94 }, "week-4": { delay: 10, industrialCost: 89 } } },
   { id: "PRJ-008", name: "Green Valley", delay: 40, industrialCost: 88, budget: "€32.1M", trend: "up", category: "Infraestruturas Hidráulicas", region: "west", week: "week-3", weekData: { "week-1": { delay: 35, industrialCost: 95 }, "week-2": { delay: 30, industrialCost: 91 }, "week-3": { delay: 25, industrialCost: 88 }, "week-4": { delay: 18, industrialCost: 84 } } },
   { id: "PRJ-016", name: "Terminal Building Extension", delay: 10, industrialCost: 80, budget: "€189.2M", trend: "stable", category: "Infraestruturas Aeroportos", region: "south", week: "week-2", weekData: { "week-1": { delay: 2, industrialCost: 84 }, "week-2": { delay: 8, industrialCost: 87 }, "week-3": { delay: 12, industrialCost: 89 }, "week-4": { delay: 15, industrialCost: 91 } } },
+  { id: "PRJ-021", name: "Bridge Rehabilitation", delay: 8, industrialCost: 89, budget: "€67.8M", trend: "stable", category: "Outras obras", region: "north", week: "week-1", weekData: { "week-1": { delay: 2, industrialCost: 86 }, "week-2": { delay: 5, industrialCost: 88 }, "week-3": { delay: 8, industrialCost: 89 }, "week-4": { delay: 12, industrialCost: 91 } } },
 ]
 
 const categoryColors: Record<Project["category"], string> = {
-  "Infraestruturas Rodoviárias": "#64748b",
+  "Infraestruturas Rodoviárias": "#1f56db",
   "Infraestruturas Ferroviárias": "#00d4ff",
-  "Infraestruturas Hidráulicas": "#ffaa00",
-  "Infraestruturas Portuárias": "#ff6b6b",
-  "Infraestruturas Aeroportos": "#a855f7",
-  "Infraestruturas Urbanas": "#00d4ff",
+  "Infraestruturas Hidráulicas": "#06b6d4",
+  "Infraestruturas Portuárias": "#0891b2",
+  "Infraestruturas Aeroportos": "#06b6d4",
+  "Infraestruturas Urbanas": "#0ea5e9",
   "Construção Civil": "#00ff88",
-  "Mineração": "#ffaa00",
-  "Oil&Gas": "#ff6b6b",
-  "Power (energia)": "#a855f7"
+  "Mineração": "#f59e0b",
+  "Oil&Gas": "#ef4444",
+  "Power (energia)": "#a855f7",
+  "Outras obras": "#64748b"
 }
 
 interface EVMMatrixProps {
@@ -311,8 +313,8 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
         <div className="glass-card rounded-md px-2.5 py-1.5 border border-border/30 backdrop-blur-sm">
           <div className="flex items-center gap-2">
             <span className="text-[9px] font-semibold text-muted-foreground tracking-wide uppercase">Typology</span>
-            <div className="flex items-center gap-2 flex-wrap max-w-2xl">
-              {(["all", "Infraestruturas Rodoviárias", "Infraestruturas Ferroviárias", "Infraestruturas Hidráulicas", "Infraestruturas Portuárias", "Infraestruturas Aeroportos", "Infraestruturas Urbanas", "Construção Civil", "Mineração", "Oil&Gas", "Power (energia)"] as const).map((cat) => (
+            <div className="flex items-center gap-2 flex-wrap max-w-full">
+              {(["all", "Infraestruturas Rodoviárias", "Infraestruturas Ferroviárias", "Infraestruturas Hidráulicas", "Infraestruturas Portuárias", "Infraestruturas Aeroportos", "Infraestruturas Urbanas", "Construção Civil", "Mineração", "Oil&Gas", "Power (energia)", "Outras obras"] as const).map((cat) => (
                 <button
                   key={cat}
                   onClick={() => setSelectedCategory(cat)}
@@ -341,6 +343,8 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
                 </button>
               ))}
             </div>
+          </div>
+        </div>
           </div>
         </div>
       </div>

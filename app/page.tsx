@@ -86,21 +86,33 @@ export default function Dashboard() {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56">
                   <DropdownMenuLabel>Filter by Typology</DropdownMenuLabel>
-                  <DropdownMenuItem onClick={() => handleFilterSelect('typology', 'commercial')} className="flex items-center justify-between">
-                    <span>Commercial</span>
-                    {filterType === 'typology' && filterValue === 'commercial' && <Check className="w-4 h-4 text-accent" />}
+                  <DropdownMenuItem onClick={() => handleFilterSelect('typology', 'Obra Geral/Estrada')} className="flex items-center justify-between">
+                    <span>Obra Geral/Estrada</span>
+                    {filterType === 'typology' && filterValue === 'Obra Geral/Estrada' && <Check className="w-4 h-4 text-accent" />}
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => handleFilterSelect('typology', 'residential')} className="flex items-center justify-between">
-                    <span>Residential</span>
-                    {filterType === 'typology' && filterValue === 'residential' && <Check className="w-4 h-4 text-accent" />}
+                  <DropdownMenuItem onClick={() => handleFilterSelect('typology', 'Construção Civil')} className="flex items-center justify-between">
+                    <span>Construção Civil</span>
+                    {filterType === 'typology' && filterValue === 'Construção Civil' && <Check className="w-4 h-4 text-accent" />}
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => handleFilterSelect('typology', 'infrastructure')} className="flex items-center justify-between">
-                    <span>Infrastructure</span>
-                    {filterType === 'typology' && filterValue === 'infrastructure' && <Check className="w-4 h-4 text-accent" />}
+                  <DropdownMenuItem onClick={() => handleFilterSelect('typology', 'Infraestruturas Ferroviárias')} className="flex items-center justify-between">
+                    <span>Infraestruturas Ferroviárias</span>
+                    {filterType === 'typology' && filterValue === 'Infraestruturas Ferroviárias' && <Check className="w-4 h-4 text-accent" />}
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => handleFilterSelect('typology', 'industrial')} className="flex items-center justify-between">
-                    <span>Industrial</span>
-                    {filterType === 'typology' && filterValue === 'industrial' && <Check className="w-4 h-4 text-accent" />}
+                  <DropdownMenuItem onClick={() => handleFilterSelect('typology', 'Infraestruturas Hidráulicas')} className="flex items-center justify-between">
+                    <span>Infraestruturas Hidráulicas</span>
+                    {filterType === 'typology' && filterValue === 'Infraestruturas Hidráulicas' && <Check className="w-4 h-4 text-accent" />}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleFilterSelect('typology', 'Infraestruturas Portuárias')} className="flex items-center justify-between">
+                    <span>Infraestruturas Portuárias</span>
+                    {filterType === 'typology' && filterValue === 'Infraestruturas Portuárias' && <Check className="w-4 h-4 text-accent" />}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleFilterSelect('typology', 'Oil&Gas')} className="flex items-center justify-between">
+                    <span>Oil&Gas</span>
+                    {filterType === 'typology' && filterValue === 'Oil&Gas' && <Check className="w-4 h-4 text-accent" />}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleFilterSelect('typology', 'Power (energia)')} className="flex items-center justify-between">
+                    <span>Power (energia)</span>
+                    {filterType === 'typology' && filterValue === 'Power (energia)' && <Check className="w-4 h-4 text-accent" />}
                   </DropdownMenuItem>
                   
                   <DropdownMenuSeparator />

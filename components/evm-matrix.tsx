@@ -50,16 +50,16 @@ const projects: Project[] = [
 ]
 
 const categoryColors: Record<Project["category"], string> = {
-  "Infraestruturas Rodoviárias": "#1f56db",
-  "Infraestruturas Ferroviárias": "#00d4ff",
-  "Infraestruturas Hidráulicas": "#06b6d4",
-  "Infraestruturas Portuárias": "#0891b2",
-  "Infraestruturas Aeroportos": "#06b6d4",
-  "Infraestruturas Urbanas": "#0ea5e9",
+  "Infraestruturas Rodoviárias": "#166534",
+  "Infraestruturas Ferroviárias": "#fbbf24",
+  "Infraestruturas Hidráulicas": "#d4d4d8",
+  "Infraestruturas Portuárias": "#dc2626",
+  "Infraestruturas Aeroportos": "#9333ea",
+  "Infraestruturas Urbanas": "#06b6d4",
   "Construção Civil": "#00ff88",
   "Mineração": "#f59e0b",
-  "Oil&Gas": "#ef4444",
-  "Power (energia)": "#a855f7",
+  "Oil&Gas": "#8b5cf6",
+  "Power (energia)": "#ec4899",
   "Outras obras": "#64748b"
 }
 
@@ -343,8 +343,6 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
                 </button>
               ))}
             </div>
-          </div>
-        </div>
           </div>
         </div>
       </div>

@@ -312,7 +312,7 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
           <div className="flex items-center gap-2">
             <span className="text-[9px] font-semibold text-muted-foreground tracking-wide uppercase">Typology</span>
             <div className="flex items-center gap-2 flex-wrap max-w-2xl">
-              {(["all", "Obra Geral/Estrada", "Infraestruturas Ferroviárias", "Infraestruturas Hidráulicas", "Construção Civil", "Oil&Gas", "Power (energia)"] as const).map((cat) => (
+              {(["all", "Infraestruturas Rodoviárias", "Infraestruturas Ferroviárias", "Infraestruturas Hidráulicas", "Infraestruturas Portuárias", "Infraestruturas Aeroportos", "Infraestruturas Urbanas", "Construção Civil", "Mineração", "Oil&Gas", "Power (energia)"] as const).map((cat) => (
                 <button
                   key={cat}
                   onClick={() => setSelectedCategory(cat)}

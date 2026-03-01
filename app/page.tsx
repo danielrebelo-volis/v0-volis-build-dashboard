@@ -38,7 +38,7 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-background">
       <DashboardHeader />
-      
+
       <main className="p-6">
         {/* Page Title & Controls */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
@@ -48,7 +48,7 @@ export default function Dashboard() {
               Real-time earned value analysis across all active projects
             </p>
           </div>
-          
+
           <div className="flex items-center gap-2">
             {/* Compare Projects Button */}
             <Link href="/compare">
@@ -57,7 +57,7 @@ export default function Dashboard() {
                 <span className="hidden sm:inline">Compare Projects</span>
               </Button>
             </Link>
-            
+
             <Button variant="outline" size="sm" className="gap-2 text-muted-foreground bg-transparent">
               <Download className="w-4 h-4" />
             </Button>
@@ -73,7 +73,7 @@ export default function Dashboard() {
           <div className="col-span-12 lg:col-span-2">
             <MetricsSidebar />
           </div>
-          
+
           {/* EVM Matrix - Central Focus */}
           <div className="col-span-12 lg:col-span-7">
             <div className="mb-4 flex justify-end">
@@ -114,7 +114,7 @@ export default function Dashboard() {
                     <span>Power (energia)</span>
                     {filterType === 'typology' && filterValue === 'Power (energia)' && <Check className="w-4 h-4 text-accent" />}
                   </DropdownMenuItem>
-                  
+
                   <DropdownMenuSeparator />
                   <DropdownMenuLabel>Filter by Region</DropdownMenuLabel>
                   <DropdownMenuItem onClick={() => handleFilterSelect('region', 'north')} className="flex items-center justify-between">
@@ -133,7 +133,7 @@ export default function Dashboard() {
                     <span>West</span>
                     {filterType === 'region' && filterValue === 'west' && <Check className="w-4 h-4 text-accent" />}
                   </DropdownMenuItem>
-                  
+
                   <DropdownMenuSeparator />
                   <DropdownMenuLabel>Filter by Week</DropdownMenuLabel>
                   <DropdownMenuItem onClick={() => handleFilterSelect('week', 'week-1')} className="flex items-center justify-between">
@@ -152,7 +152,7 @@ export default function Dashboard() {
                     <span>Week 4</span>
                     {filterType === 'week' && filterValue === 'week-4' && <Check className="w-4 h-4 text-accent" />}
                   </DropdownMenuItem>
-                  
+
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={clearFilters}>
                     Clear Filters
@@ -163,8 +163,6 @@ export default function Dashboard() {
             <div className="glass-card rounded-lg p-4 relative w-auto h-11/12">
               <div className="absolute top-4 left-4 z-10">
                 <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-success animate-pulse" />
-                  <span className="text-xs text-muted-foreground">Live data</span>
                   {filterType && filterValue && (
                     <span className="ml-2 text-xs bg-accent/20 text-accent px-2 py-1 rounded">
                       {filterType}: {filterValue}
@@ -175,12 +173,12 @@ export default function Dashboard() {
               <EVMMatrix filterType={filterType} filterValue={filterValue} />
             </div>
           </div>
-          
+
           {/* Uptrends/Downtrends Section */}
           <div className="col-span-12 lg:col-span-3">
             <TrendsSection />
           </div>
-          
+
           {/* Project List - Full Width */}
           <div className="col-span-12">
             <ProjectList />

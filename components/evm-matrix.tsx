@@ -11,7 +11,7 @@ interface Project {
   industrialCost: number // % of contract value (60-110)
   budget: string
   trend: "up" | "down" | "stable"
-  category: "commercial" | "residential" | "infrastructure" | "industrial"
+  category: "Obra Geral/Estrada" | "Infraestruturas Ferroviárias" | "Infraestruturas Hidráulicas" | "Infraestruturas Portuárias" | "Infraestruturas Aeroportos" | "Infraestruturas Urbanas" | "Construção Civil" | "Mineração" | "Oil&Gas" | "Power (energia)" | "Outras obras"
   region: "north" | "south" | "east" | "west"
   week: "week-1" | "week-2" | "week-3" | "week-4"
   weekData: {
@@ -23,23 +23,43 @@ interface Project {
 }
 
 const projects: Project[] = [
-  { id: "PRJ-001", name: "Metro Tower", delay: -22, industrialCost: 93, budget: "€24.5M", trend: "up", category: "commercial", region: "north", week: "week-1", weekData: { "week-1": { delay: -22, industrialCost: 93 }, "week-2": { delay: -18, industrialCost: 89 }, "week-3": { delay: -12, industrialCost: 85 }, "week-4": { delay: -8, industrialCost: 82 } } },
-  { id: "PRJ-002", name: "Harbor Bridge", delay: 8, industrialCost: 71, budget: "€89.2M", trend: "down", category: "infrastructure", region: "south", week: "week-2", weekData: { "week-1": { delay: 3, industrialCost: 68 }, "week-2": { delay: 8, industrialCost: 71 }, "week-3": { delay: 14, industrialCost: 76 }, "week-4": { delay: 20, industrialCost: 82 } } },
-  { id: "PRJ-003", name: "Skyline Plaza", delay: 32, industrialCost: 106, budget: "€156M", trend: "stable", category: "commercial", region: "east", week: "week-1", weekData: { "week-1": { delay: 32, industrialCost: 106 }, "week-2": { delay: 31, industrialCost: 104 }, "week-3": { delay: 30, industrialCost: 105 }, "week-4": { delay: 28, industrialCost: 103 } } },
-  { id: "PRJ-004", name: "Industrial Park", delay: -5, industrialCost: 67, budget: "€42.8M", trend: "up", category: "industrial", region: "west", week: "week-3", weekData: { "week-1": { delay: 12, industrialCost: 79 }, "week-2": { delay: 3, industrialCost: 73 }, "week-3": { delay: -5, industrialCost: 67 }, "week-4": { delay: -12, industrialCost: 63 } } },
-  { id: "PRJ-005", name: "Riverside Homes", delay: 18, industrialCost: 98, budget: "€18.3M", trend: "down", category: "residential", region: "north", week: "week-2", weekData: { "week-1": { delay: 22, industrialCost: 102 }, "week-2": { delay: 18, industrialCost: 98 }, "week-3": { delay: 15, industrialCost: 94 }, "week-4": { delay: 10, industrialCost: 89 } } },
-  { id: "PRJ-006", name: "Tech Campus", delay: -28, industrialCost: 77, budget: "€210M", trend: "stable", category: "commercial", region: "south", week: "week-4", weekData: { "week-1": { delay: -18, industrialCost: 82 }, "week-2": { delay: -23, industrialCost: 79 }, "week-3": { delay: -28, industrialCost: 77 }, "week-4": { delay: -28, industrialCost: 76 } } },
-  { id: "PRJ-007", name: "Highway 12 Ext", delay: -12, industrialCost: 64, budget: "€340M", trend: "down", category: "infrastructure", region: "east", week: "week-1", weekData: { "week-1": { delay: -12, industrialCost: 64 }, "week-2": { delay: -8, industrialCost: 67 }, "week-3": { delay: -3, industrialCost: 72 }, "week-4": { delay: 4, industrialCost: 78 } } },
-  { id: "PRJ-008", name: "Green Valley", delay: 25, industrialCost: 88, budget: "€32.1M", trend: "up", category: "residential", region: "west", week: "week-3", weekData: { "week-1": { delay: 35, industrialCost: 95 }, "week-2": { delay: 30, industrialCost: 91 }, "week-3": { delay: 25, industrialCost: 88 }, "week-4": { delay: 18, industrialCost: 84 } } },
-  { id: "PRJ-009", name: "Data Center", delay: 5, industrialCost: 81, budget: "€78.5M", trend: "stable", category: "industrial", region: "north", week: "week-4", weekData: { "week-1": { delay: 15, industrialCost: 87 }, "week-2": { delay: 10, industrialCost: 84 }, "week-3": { delay: 7, industrialCost: 82 }, "week-4": { delay: 5, industrialCost: 81 } } },
-  { id: "PRJ-010", name: "Civic Center", delay: 42, industrialCost: 109, budget: "€125M", trend: "up", category: "commercial", region: "south", week: "week-2", weekData: { "week-1": { delay: 45, industrialCost: 108 }, "week-2": { delay: 42, industrialCost: 109 }, "week-3": { delay: 38, industrialCost: 105 }, "week-4": { delay: 32, industrialCost: 100 } } },
+  // Quadrant 1: Ahead & High Cost (negative delay, >100 industrial cost)
+  { id: "PRJ-001", name: "Metro Tower", delay: -22, industrialCost: 103, budget: "€24.5M", trend: "up", category: "Construção Civil", region: "north", week: "week-1", weekData: { "week-1": { delay: -22, industrialCost: 93 }, "week-2": { delay: -18, industrialCost: 89 }, "week-3": { delay: -12, industrialCost: 85 }, "week-4": { delay: -8, industrialCost: 82 } } },
+  { id: "PRJ-011", name: "Urban Renewal Center", delay: -8, industrialCost: 102, budget: "€67.3M", trend: "up", category: "Obra Geral/Estrada", region: "north", week: "week-2", weekData: { "week-1": { delay: 2, industrialCost: 86 }, "week-2": { delay: -8, industrialCost: 82 }, "week-3": { delay: -15, industrialCost: 78 }, "week-4": { delay: -22, industrialCost: 75 } } },
+  { id: "PRJ-015", name: "Airport Runway Upgrade", delay: -15, industrialCost: 105, budget: "€234.5M", trend: "up", category: "Infraestruturas Aeroportos", region: "east", week: "week-1", weekData: { "week-1": { delay: -5, industrialCost: 75 }, "week-2": { delay: -12, industrialCost: 71 }, "week-3": { delay: -15, industrialCost: 69 }, "week-4": { delay: -22, industrialCost: 65 } } },
+  { id: "PRJ-020", name: "Solar Farm", delay: -30, industrialCost: 104, budget: "€145.2M", trend: "up", category: "Power (energia)", region: "west", week: "week-4", weekData: { "week-1": { delay: -8, industrialCost: 82 }, "week-2": { delay: -15, industrialCost: 77 }, "week-3": { delay: -20, industrialCost: 74 }, "week-4": { delay: -28, industrialCost: 70 } } },
+
+  // Quadrant 2: Delayed & High Cost (positive delay, >100 industrial cost)
+  { id: "PRJ-003", name: "Skyline Plaza", delay: 32, industrialCost: 101, budget: "€156M", trend: "stable", category: "Construção Civil", region: "east", week: "week-1", weekData: { "week-1": { delay: 32, industrialCost: 106 }, "week-2": { delay: 31, industrialCost: 104 }, "week-3": { delay: 30, industrialCost: 105 }, "week-4": { delay: 28, industrialCost: 103 } } },
+  { id: "PRJ-012", name: "Rail Network Expansion", delay: 5, industrialCost: 102, budget: "€280M", trend: "down", category: "Infraestruturas Ferroviárias", region: "south", week: "week-1", weekData: { "week-1": { delay: 8, industrialCost: 99 }, "week-2": { delay: 12, industrialCost: 101 }, "week-3": { delay: 15, industrialCost: 102 }, "week-4": { delay: 20, industrialCost: 104 } } },
+  { id: "PRJ-013", name: "Dam Construction", delay: 11, industrialCost: 105, budget: "€520M", trend: "stable", category: "Infraestruturas Hidráulicas", region: "north", week: "week-2", weekData: { "week-1": { delay: 25, industrialCost: 103 }, "week-2": { delay: 28, industrialCost: 105 }, "week-3": { delay: 28, industrialCost: 104 }, "week-4": { delay: 30, industrialCost: 106 } } },
+  { id: "PRJ-019", name: "Oil Platform Construction", delay: 24, industrialCost: 107, budget: "€687.2M", trend: "stable", category: "Oil&Gas", region: "north", week: "week-1", weekData: { "week-1": { delay: 30, industrialCost: 105 }, "week-2": { delay: 33, industrialCost: 106 }, "week-3": { delay: 35, industrialCost: 107 }, "week-4": { delay: 38, industrialCost: 108 } } },
+
+  // Quadrant 3: Ahead & Good Cost (negative delay, <100 industrial cost)
+  { id: "PRJ-004", name: "Industrial Park", delay: -5, industrialCost: 67, budget: "€42.8M", trend: "up", category: "Mineração", region: "west", week: "week-3", weekData: { "week-1": { delay: 12, industrialCost: 79 }, "week-2": { delay: 3, industrialCost: 73 }, "week-3": { delay: -5, industrialCost: 67 }, "week-4": { delay: -12, industrialCost: 63 } } },
+  { id: "PRJ-006", name: "Tech Campus", delay: -28, industrialCost: 77, budget: "€210M", trend: "stable", category: "Power (energia)", region: "south", week: "week-4", weekData: { "week-1": { delay: -18, industrialCost: 82 }, "week-2": { delay: -23, industrialCost: 79 }, "week-3": { delay: -28, industrialCost: 77 }, "week-4": { delay: -28, industrialCost: 76 } } },
+  { id: "PRJ-009", name: "Data Center", delay: -15, industrialCost: 81, budget: "€78.5M", trend: "down", category: "Oil&Gas", region: "north", week: "week-4", weekData: { "week-1": { delay: -15, industrialCost: 87 }, "week-2": { delay: -15, industrialCost: 84 }, "week-3": { delay: -15, industrialCost: 82 }, "week-4": { delay: -15, industrialCost: 81 } } },
+  { id: "PRJ-007", name: "Highway 12 Ext", delay: -12, industrialCost: 64, budget: "€340M", trend: "down", category: "Obra Geral/Estrada", region: "east", week: "week-1", weekData: { "week-1": { delay: -12, industrialCost: 64 }, "week-2": { delay: -8, industrialCost: 67 }, "week-3": { delay: -3, industrialCost: 72 }, "week-4": { delay: 4, industrialCost: 78 } } },
+
+  // Quadrant 4: Delayed & Good Cost (positive delay, <100 industrial cost)
+  { id: "PRJ-002", name: "Harbor Bridge", delay: 15, industrialCost: 75, budget: "€89.2M", trend: "down", category: "Infraestruturas Portuárias", region: "south", week: "week-2", weekData: { "week-1": { delay: 3, industrialCost: 68 }, "week-2": { delay: 8, industrialCost: 71 }, "week-3": { delay: 14, industrialCost: 76 }, "week-4": { delay: 20, industrialCost: 82 } } },
+  { id: "PRJ-005", name: "Riverside Homes", delay: 20, industrialCost: 90, budget: "€18.3M", trend: "down", category: "Infraestruturas Urbanas", region: "north", week: "week-2", weekData: { "week-1": { delay: 22, industrialCost: 102 }, "week-2": { delay: 18, industrialCost: 98 }, "week-3": { delay: 15, industrialCost: 94 }, "week-4": { delay: 10, industrialCost: 89 } } },
+  { id: "PRJ-008", name: "Green Valley", delay: 40, industrialCost: 88, budget: "€32.1M", trend: "up", category: "Infraestruturas Hidráulicas", region: "west", week: "week-3", weekData: { "week-1": { delay: 35, industrialCost: 95 }, "week-2": { delay: 30, industrialCost: 91 }, "week-3": { delay: 25, industrialCost: 88 }, "week-4": { delay: 18, industrialCost: 84 } } },
+  { id: "PRJ-016", name: "Terminal Building Extension", delay: 10, industrialCost: 80, budget: "€189.2M", trend: "stable", category: "Infraestruturas Aeroportos", region: "south", week: "week-2", weekData: { "week-1": { delay: 2, industrialCost: 84 }, "week-2": { delay: 8, industrialCost: 87 }, "week-3": { delay: 12, industrialCost: 89 }, "week-4": { delay: 15, industrialCost: 91 } } },
 ]
 
 const categoryColors: Record<Project["category"], string> = {
-  commercial: "#00d4ff",
-  residential: "#00ff88",
-  infrastructure: "#ffaa00",
-  industrial: "#ff6b6b",
+  "Obra Geral/Estrada": "#00d4ff",
+  "Infraestruturas Ferroviárias": "#00ff88",
+  "Infraestruturas Hidráulicas": "#ffaa00",
+  "Infraestruturas Portuárias": "#ff6b6b",
+  "Infraestruturas Aeroportos": "#a855f7",
+  "Infraestruturas Urbanas": "#00d4ff",
+  "Construção Civil": "#00ff88",
+  "Mineração": "#ffaa00",
+  "Oil&Gas": "#ff6b6b",
+  "Power (energia)": "#a855f7",
+  "Outras obras": "#64748b",
 }
 
 interface EVMMatrixProps {
@@ -292,12 +312,12 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
         <div className="glass-card rounded-md px-2.5 py-1.5 border border-border/30 backdrop-blur-sm">
           <div className="flex items-center gap-2">
             <span className="text-[9px] font-semibold text-muted-foreground tracking-wide uppercase">Typology</span>
-            <div className="flex items-center gap-2">
-              {(["all", "commercial", "residential", "infrastructure", "industrial"] as const).map((cat) => (
+            <div className="flex items-center gap-2 flex-wrap max-w-2xl">
+              {(["all", "Obra Geral/Estrada", "Infraestruturas Ferroviárias", "Infraestruturas Hidráulicas", "Construção Civil", "Oil&Gas", "Power (energia)"] as const).map((cat) => (
                 <button
                   key={cat}
                   onClick={() => setSelectedCategory(cat)}
-                  className={`flex items-center gap-1 text-[10px] transition-all ${selectedCategory === cat
+                  className={`flex items-center gap-1 text-[10px] transition-all whitespace-nowrap ${selectedCategory === cat
                     ? "text-foreground font-medium"
                     : "text-muted-foreground/60 hover:text-foreground/80"
                     }`}
@@ -307,16 +327,16 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
                       <div
                         className="w-1.5 h-1.5 rounded-full"
                         style={{
-                          backgroundColor: categoryColors[cat],
-                          boxShadow: selectedCategory === cat ? `0 0 6px ${categoryColors[cat]}80` : 'none'
+                          backgroundColor: categoryColors[cat as Project["category"]],
+                          boxShadow: selectedCategory === cat ? `0 0 6px ${categoryColors[cat as Project["category"]]}80` : 'none'
                         }}
                       />
-                      <span className="capitalize">{cat}</span>
+                      <span>{cat}</span>
                     </>
                   ) : (
                     <>
                       <div className="w-1.5 h-1.5 rounded-full border border-muted-foreground/50" />
-                      <span className="capitalize">{cat}</span>
+                      <span>All</span>
                     </>
                   )}
                 </button>

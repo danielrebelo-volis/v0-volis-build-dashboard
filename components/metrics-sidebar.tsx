@@ -75,15 +75,6 @@ export function MetricsSidebar() {
         accent="#ffaa00"
       />
 
-      <MetricCard
-        title="At Risk"
-        value="4"
-        change="+1"
-        trend="down"
-        icon={<AlertTriangle className="w-4 h-4" />}
-        accent="#ff6b6b"
-      />
-
       {/* Quick Stats */}
       <div className="glass-card rounded-lg p-4 mt-4">
         <h3 className="text-xs text-muted-foreground uppercase tracking-wider mb-3">Performance Overview</h3>

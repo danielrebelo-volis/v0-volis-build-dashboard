@@ -49,8 +49,8 @@ const projects: Project[] = [
 ]
 
 const categoryColors: Record<Project["category"], string> = {
-  "Obra Geral/Estrada": "#00d4ff",
-  "Infraestruturas Ferroviárias": "#00ff88",
+  "Infraestruturas Rodoviária": "#64748b",
+  "Infraestruturas Ferroviárias": "#00d4ff",
   "Infraestruturas Hidráulicas": "#ffaa00",
   "Infraestruturas Portuárias": "#ff6b6b",
   "Infraestruturas Aeroportos": "#a855f7",
@@ -58,8 +58,7 @@ const categoryColors: Record<Project["category"], string> = {
   "Construção Civil": "#00ff88",
   "Mineração": "#ffaa00",
   "Oil&Gas": "#ff6b6b",
-  "Power (energia)": "#a855f7",
-  "Outras obras": "#64748b",
+  "Power (energia)": "#a855f7"
 }
 
 interface EVMMatrixProps {

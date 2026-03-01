@@ -11,7 +11,7 @@ interface Project {
   industrialCost: number // % of contract value (60-110)
   budget: string
   trend: "up" | "down" | "stable"
-  category: "Obra Geral/Estrada" | "Infraestruturas Ferroviárias" | "Infraestruturas Hidráulicas" | "Infraestruturas Portuárias" | "Infraestruturas Aeroportos" | "Infraestruturas Urbanas" | "Construção Civil" | "Mineração" | "Oil&Gas" | "Power (energia)" | "Outras obras"
+  category: "Infraestruturas Rodoviárias" | "Infraestruturas Ferroviárias" | "Infraestruturas Hidráulicas" | "Infraestruturas Portuárias" | "Infraestruturas Aeroportos" | "Infraestruturas Urbanas" | "Construção Civil" | "Mineração" | "Oil&Gas" | "Power (energia)" | "Outras obras"
   region: "north" | "south" | "east" | "west"
   week: "week-1" | "week-2" | "week-3" | "week-4"
   weekData: {
@@ -25,8 +25,8 @@ interface Project {
 const projects: Project[] = [
   // Quadrant 1: Ahead & High Cost (negative delay, >100 industrial cost)
   { id: "PRJ-001", name: "Metro Tower", delay: -22, industrialCost: 103, budget: "€24.5M", trend: "up", category: "Construção Civil", region: "north", week: "week-1", weekData: { "week-1": { delay: -22, industrialCost: 93 }, "week-2": { delay: -18, industrialCost: 89 }, "week-3": { delay: -12, industrialCost: 85 }, "week-4": { delay: -8, industrialCost: 82 } } },
-  { id: "PRJ-011", name: "Urban Renewal Center", delay: -8, industrialCost: 102, budget: "€67.3M", trend: "up", category: "Obra Geral/Estrada", region: "north", week: "week-2", weekData: { "week-1": { delay: 2, industrialCost: 86 }, "week-2": { delay: -8, industrialCost: 82 }, "week-3": { delay: -15, industrialCost: 78 }, "week-4": { delay: -22, industrialCost: 75 } } },
-  { id: "PRJ-015", name: "Airport Runway Upgrade", delay: -15, industrialCost: 105, budget: "€234.5M", trend: "up", category: "Infraestruturas Aeroportos", region: "east", week: "week-1", weekData: { "week-1": { delay: -5, industrialCost: 75 }, "week-2": { delay: -12, industrialCost: 71 }, "week-3": { delay: -15, industrialCost: 69 }, "week-4": { delay: -22, industrialCost: 65 } } },
+  { id: "PRJ-011", name: "Urban Renewal Center", delay: -8, industrialCost: 102, budget: "€67.3M", trend: "up", category: "Infraestruturas Rodoviárias", region: "north", week: "week-2", weekData: { "week-1": { delay: 2, industrialCost: 86 }, "week-2": { delay: -8, industrialCost: 82 }, "week-3": { delay: -15, industrialCost: 78 }, "week-4": { delay: -22, industrialCost: 75 } } },
+  { id: "PRJ-015", name: "Airport Runway", delay: -15, industrialCost: 105, budget: "€234.5M", trend: "up", category: "Infraestruturas Aeroportos", region: "east", week: "week-1", weekData: { "week-1": { delay: -5, industrialCost: 75 }, "week-2": { delay: -12, industrialCost: 71 }, "week-3": { delay: -15, industrialCost: 69 }, "week-4": { delay: -22, industrialCost: 65 } } },
   { id: "PRJ-020", name: "Solar Farm", delay: -30, industrialCost: 104, budget: "€145.2M", trend: "up", category: "Power (energia)", region: "west", week: "week-4", weekData: { "week-1": { delay: -8, industrialCost: 82 }, "week-2": { delay: -15, industrialCost: 77 }, "week-3": { delay: -20, industrialCost: 74 }, "week-4": { delay: -28, industrialCost: 70 } } },
 
   // Quadrant 2: Delayed & High Cost (positive delay, >100 industrial cost)
@@ -37,9 +37,9 @@ const projects: Project[] = [
 
   // Quadrant 3: Ahead & Good Cost (negative delay, <100 industrial cost)
   { id: "PRJ-004", name: "Industrial Park", delay: -5, industrialCost: 67, budget: "€42.8M", trend: "up", category: "Mineração", region: "west", week: "week-3", weekData: { "week-1": { delay: 12, industrialCost: 79 }, "week-2": { delay: 3, industrialCost: 73 }, "week-3": { delay: -5, industrialCost: 67 }, "week-4": { delay: -12, industrialCost: 63 } } },
-  { id: "PRJ-006", name: "Tech Campus", delay: -28, industrialCost: 77, budget: "€210M", trend: "stable", category: "Power (energia)", region: "south", week: "week-4", weekData: { "week-1": { delay: -18, industrialCost: 82 }, "week-2": { delay: -23, industrialCost: 79 }, "week-3": { delay: -28, industrialCost: 77 }, "week-4": { delay: -28, industrialCost: 76 } } },
-  { id: "PRJ-009", name: "Data Center", delay: -15, industrialCost: 81, budget: "€78.5M", trend: "down", category: "Oil&Gas", region: "north", week: "week-4", weekData: { "week-1": { delay: -15, industrialCost: 87 }, "week-2": { delay: -15, industrialCost: 84 }, "week-3": { delay: -15, industrialCost: 82 }, "week-4": { delay: -15, industrialCost: 81 } } },
-  { id: "PRJ-007", name: "Highway 12 Ext", delay: -12, industrialCost: 64, budget: "€340M", trend: "down", category: "Obra Geral/Estrada", region: "east", week: "week-1", weekData: { "week-1": { delay: -12, industrialCost: 64 }, "week-2": { delay: -8, industrialCost: 67 }, "week-3": { delay: -3, industrialCost: 72 }, "week-4": { delay: 4, industrialCost: 78 } } },
+  { id: "PRJ-006", name: "Tech Campus", delay: -28, industrialCost: 77, budget: "€210M", trend: "stable", category: "Infraestruturas Urbanas", region: "south", week: "week-4", weekData: { "week-1": { delay: -18, industrialCost: 82 }, "week-2": { delay: -23, industrialCost: 79 }, "week-3": { delay: -28, industrialCost: 77 }, "week-4": { delay: -28, industrialCost: 76 } } },
+  { id: "PRJ-009", name: "Data Center", delay: -15, industrialCost: 81, budget: "€78.5M", trend: "down", category: "Construção Civil", region: "north", week: "week-4", weekData: { "week-1": { delay: -15, industrialCost: 87 }, "week-2": { delay: -15, industrialCost: 84 }, "week-3": { delay: -15, industrialCost: 82 }, "week-4": { delay: -15, industrialCost: 81 } } },
+  { id: "PRJ-007", name: "Highway 12 Ext", delay: -12, industrialCost: 64, budget: "€340M", trend: "down", category: "Infraestruturas Rodoviárias", region: "east", week: "week-1", weekData: { "week-1": { delay: -12, industrialCost: 64 }, "week-2": { delay: -8, industrialCost: 67 }, "week-3": { delay: -3, industrialCost: 72 }, "week-4": { delay: 4, industrialCost: 78 } } },
 
   // Quadrant 4: Delayed & Good Cost (positive delay, <100 industrial cost)
   { id: "PRJ-002", name: "Harbor Bridge", delay: 15, industrialCost: 75, budget: "€89.2M", trend: "down", category: "Infraestruturas Portuárias", region: "south", week: "week-2", weekData: { "week-1": { delay: 3, industrialCost: 68 }, "week-2": { delay: 8, industrialCost: 71 }, "week-3": { delay: 14, industrialCost: 76 }, "week-4": { delay: 20, industrialCost: 82 } } },
@@ -49,7 +49,7 @@ const projects: Project[] = [
 ]
 
 const categoryColors: Record<Project["category"], string> = {
-  "Infraestruturas Rodoviária": "#64748b",
+  "Infraestruturas Rodoviárias": "#64748b",
   "Infraestruturas Ferroviárias": "#00d4ff",
   "Infraestruturas Hidráulicas": "#ffaa00",
   "Infraestruturas Portuárias": "#ff6b6b",

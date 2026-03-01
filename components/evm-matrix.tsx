@@ -125,11 +125,11 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
   return (
     <div className="relative w-full h-full flex items-center justify-center">
       {/* Main chart container with padding for axes */}
-      <div className="relative w-[calc(100%-80px)] h-[calc(100%-80px)]">
+      <div className="relative w-[calc(100%-80px)] h-[calc(100%-80px)]" suppressHydrationWarning>
         {/* Background and grid */}
         <div className="absolute inset-0 rounded-lg border border-border/20 bg-gradient-to-br from-background/50 to-background/30 backdrop-blur-sm">
           {/* Grid Lines */}
-          <svg className="absolute inset-0 w-full h-full rounded-lg" viewBox="0 0 100 100" preserveAspectRatio="none" suppressHydrationWarning>
+          <svg className="absolute inset-0 w-full h-full rounded-lg" viewBox="0 0 100 100" preserveAspectRatio="none">
             {/* Background grid */}
             <defs>
               <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">

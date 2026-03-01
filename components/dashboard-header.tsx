@@ -36,7 +36,7 @@ export function DashboardHeader() {
       </div>
 
       {/* Search & Actions */}
-      <div disabled="on" className="flex items-center gap-3">
+      <div className="flex items-center gap-3">
         {/* Search */}
         <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-secondary/50 border border-border/50 w-64">
           <Search className="w-4 h-4 text-muted-foreground" />
@@ -49,37 +49,38 @@ export function DashboardHeader() {
         </div>
 
         {/* AI Assistant Button */}
-        <Button disabled="on" variant="outline" size="sm" className="gap-1.5 border-accent/30 text-accent hover:bg-accent/10 hover:text-accent bg-transparent">
+        <Button variant="outline" size="sm" className="gap-1.5 border-accent/30 text-accent hover:bg-accent/10 hover:text-accent bg-transparent">
           <Sparkles className="w-3.5 h-3.5" />
           <span className="hidden sm:inline">AI Insights</span>
         </Button>
 
         {/* Notifications */}
-        <Button disabled="on" variant="ghost" size="icon" className="relative text-muted-foreground hover:text-foreground">
+        <Button variant="ghost" size="icon" className="relative text-muted-foreground hover:text-foreground">
           <Bell className="w-4 h-4" />
           <span className="absolute top-1 right-1 w-2 h-2 bg-destructive rounded-full" />
         </Button>
 
-        {/* Theme Toggle */}
-        <Button
-          variant="ghost"
-          size="icon"
-          className="text-muted-foreground hover:text-foreground"
-          onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-          aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
-        >
-          <Sun className="w-4 h-4 rotate-0 scale-100 transition-all dark:rotate-90 dark:scale-0" />
-          <Moon className="absolute w-4 h-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-          <span className="sr-only">Toggle theme</span>
-        </Button>
+        {/* Theme Toggle - Wrapped with suppressHydrationWarning */}
+        <div suppressHydrationWarning>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="text-muted-foreground hover:text-foreground"
+            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+          >
+            <Sun className="w-4 h-4 rotate-0 scale-100 transition-all dark:rotate-90 dark:scale-0" />
+            <Moon className="absolute w-4 h-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+            <span className="sr-only">Toggle theme</span>
+          </Button>
+        </div>
 
         {/* Settings */}
-        <Button disabled="on" variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
+        <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
           <Settings className="w-4 h-4" />
         </Button>
 
         {/* User */}
-        <Button disabled="on" variant="ghost" size="sm" className="gap-2">
+        <Button variant="ghost" size="sm" className="gap-2">
           <div className="w-7 h-7 rounded-full bg-accent/20 flex items-center justify-center">
             <span className="text-xs font-medium text-accent">ME</span>
           </div>

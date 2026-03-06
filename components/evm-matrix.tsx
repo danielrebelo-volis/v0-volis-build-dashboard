@@ -349,6 +349,5 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
         </div>
       </div>
     </div>
-    </div>
   )
 }

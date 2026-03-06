@@ -86,12 +86,12 @@ export default function Dashboard() {
                   )}
                 </div>
               </div>
-              
+
               {/* Filters Button - Top Right */}
               <div className="absolute top-4 right-4 z-10">
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button size="sm" className="gap-2 text-foreground border border-white hover:bg-foreground/10">
+                    <Button size="sm" className="gap-2 text-foreground bg-foreground border-white/10">
                       <Filter className="w-4 h-4" />
                       <span className="hidden sm:inline">Filters</span>
                     </Button>
@@ -172,10 +172,10 @@ export default function Dashboard() {
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
-              
+
               <EVMMatrix filterType={filterType} filterValue={filterValue} />
             </div>
-            
+
             {/* Typology Legend Card - Below Matrix */}
             <div className="glass-card rounded-md px-3 py-2 border border-border/30 backdrop-blur-sm">
               <div className="flex items-center gap-2">

@@ -21,13 +21,13 @@ const statusConfig = {
 
 function ProjectRow({ name, id, status, delay, industrialCost, completion }: ProjectRowProps) {
   const config = statusConfig[status]
-  
+
   return (
     <Link href={`/project/${id}`}>
       <div className="group grid grid-cols-12 items-center gap-4 py-3 px-4 hover:bg-secondary/30 transition-colors rounded-lg cursor-pointer">
         {/* Project Name Section - 3 columns */}
         <div className="col-span-3 flex items-center gap-4 min-w-0">
-          <div 
+          <div
             className="w-2 h-2 rounded-full flex-shrink-0"
             style={{ backgroundColor: config.color }}
           />
@@ -39,7 +39,7 @@ function ProjectRow({ name, id, status, delay, industrialCost, completion }: Pro
             <span className="text-xs text-muted-foreground">{id}</span>
           </div>
         </div>
-        
+
         {/* Delay - 2 columns */}
         <div className="col-span-2 text-right">
           <span className="text-xs text-muted-foreground block">Delay</span>
@@ -47,15 +47,15 @@ function ProjectRow({ name, id, status, delay, industrialCost, completion }: Pro
             {delay > 0 ? '+' : ''}{delay.toFixed(0)}%
           </span>
         </div>
-        
-        {/* IC - 2 columns */}
+
+        {/* Industrial Cost - 2 columns */}
         <div className="col-span-2 text-right">
-          <span className="text-xs text-muted-foreground block">IC</span>
+          <span className="text-xs text-muted-foreground block">Industrial Cost</span>
           <span className={`text-sm font-mono ${industrialCost <= 85 ? 'text-success' : 'text-warning'}`}>
             {industrialCost.toFixed(0)}%
           </span>
         </div>
-        
+
         {/* Progress - 3 columns */}
         <div className="col-span-3">
           <div className="flex items-center justify-between mb-1">
@@ -63,28 +63,28 @@ function ProjectRow({ name, id, status, delay, industrialCost, completion }: Pro
             <span className="text-xs font-mono text-foreground">{completion}%</span>
           </div>
           <div className="w-full h-1 bg-secondary rounded-full overflow-hidden">
-            <div 
+            <div
               className="h-full rounded-full transition-all"
-              style={{ 
+              style={{
                 width: `${completion}%`,
                 backgroundColor: config.color
               }}
             />
           </div>
         </div>
-        
+
         {/* Status & More - 2 columns */}
         <div className="col-span-2 flex items-center justify-between gap-2">
-          <div 
+          <div
             className="px-2 py-0.5 rounded text-[10px] font-medium uppercase tracking-wider whitespace-nowrap"
-            style={{ 
+            style={{
               backgroundColor: `${config.color}15`,
               color: config.color
             }}
           >
             {config.label}
           </div>
-          
+
           <Button variant="ghost" size="icon" className="opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0">
             <MoreHorizontal className="w-4 h-4 text-muted-foreground" />
           </Button>
@@ -111,7 +111,7 @@ export function ProjectList() {
           View All
         </Button>
       </div>
-      
+
       <div className="space-y-1">
         {projects.map((project) => (
           <ProjectRow key={project.id} {...project} />

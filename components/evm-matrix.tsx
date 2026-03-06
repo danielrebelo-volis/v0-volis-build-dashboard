@@ -123,9 +123,9 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
   }
 
   return (
-    <div className="relative w-full h-full flex items-center justify-center">
+    <div className="relative w-full flex flex-col items-center justify-start" style={{ minHeight: '600px' }}>
       {/* Main chart container with padding for axes */}
-      <div className="relative w-[calc(100%-80px)] h-[calc(100%-80px)]" suppressHydrationWarning>
+      <div className="relative w-[calc(100%-80px)] flex-1" style={{ minHeight: '480px' }} suppressHydrationWarning>
         {/* Background and grid */}
         <div className="absolute inset-0 rounded-lg border border-border/20 bg-gradient-to-br from-background/50 to-background/30 backdrop-blur-sm">
           {/* Grid Lines */}
@@ -273,7 +273,7 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
       </div>
 
       {/* Y-Axis (left) - Industrial Cost % */}
-      <div className="absolute left-0 top-1/2 -translate-y-1/2 flex flex-col justify-between h-[calc(100%-80px)]">
+      <div className="absolute left-0 top-1/2 -translate-y-1/2 flex flex-col justify-between h-[calc(100%-60px)]">
         <div className="flex items-center gap-2">
           <span className="text-[10px] text-muted-foreground font-mono">110%</span>
         </div>
@@ -297,7 +297,7 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
       </div>
 
       {/* X-Axis (bottom) - delay % */}
-      <div className="absolute bottom-8 left-10 right-10 flex justify-between">
+      <div className="absolute bottom-14 left-10 right-10 flex justify-between">
         <span className="text-[10px] text-muted-foreground font-mono">-50%</span>
         <span className="text-[10px] text-muted-foreground font-mono">-25%</span>
         <span className="text-[10px] text-success font-mono font-semibold">0%</span>
@@ -305,47 +305,50 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
         <span className="text-[10px] text-muted-foreground font-mono">+50%</span>
       </div>
 
-      {/* X-Axis Label and Category Legend */}
-      <div className="absolute bottom-0 left-10 right-10 flex items-center justify-between">
+      {/* X-Axis Label */}
+      <div className="absolute bottom-3 left-10 right-10 flex items-center justify-center">
         <span className="text-xs font-semibold text-muted-foreground tracking-wider">DELAY</span>
+      </div>
+    </div>
 
-        {/* Category Legend - Compact */}
-        <div className="glass-card rounded-md px-2.5 py-1.5 border border-border/30 backdrop-blur-sm">
-          <div className="flex items-center gap-2">
-            <span className="text-[9px] font-semibold text-muted-foreground tracking-wide uppercase">Typology</span>
-            <div className="flex items-center gap-2 flex-wrap max-w-full">
-              {(["all", "Infraestruturas Rodoviárias", "Infraestruturas Ferroviárias", "Infraestruturas Hidráulicas", "Infraestruturas Portuárias", "Infraestruturas Aeroportos", "Infraestruturas Urbanas", "Construção Civil", "Mineração", "Oil&Gas", "Power (energia)", "Outras obras"] as const).map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => setSelectedCategory(cat)}
-                  className={`flex items-center gap-1 text-[10px] transition-all whitespace-nowrap ${selectedCategory === cat
-                    ? "text-foreground font-medium"
-                    : "text-muted-foreground/60 hover:text-foreground/80"
-                    }`}
-                >
-                  {cat !== "all" ? (
-                    <>
-                      <div
-                        className="w-1.5 h-1.5 rounded-full"
-                        style={{
-                          backgroundColor: categoryColors[cat as Project["category"]],
-                          boxShadow: selectedCategory === cat ? `0 0 6px ${categoryColors[cat as Project["category"]]}80` : 'none'
-                        }}
-                      />
-                      <span>{cat}</span>
-                    </>
-                  ) : (
-                    <>
-                      <div className="w-1.5 h-1.5 rounded-full border border-muted-foreground/50" />
-                      <span>All</span>
-                    </>
-                  )}
-                </button>
-              ))}
-            </div>
+    {/* Category Legend - Below Matrix */}
+    <div className="w-full mt-8 px-6">
+      <div className="glass-card rounded-lg p-4 border border-border/40 backdrop-blur-sm bg-gradient-to-r from-background/40 to-background/20">
+        <div className="flex items-center gap-4 flex-wrap">
+          <span className="text-sm font-semibold text-foreground tracking-wide">Typology Legend:</span>
+          <div className="flex items-center gap-3 flex-wrap">
+            {(["all", "Infraestruturas Rodoviárias", "Infraestruturas Ferroviárias", "Infraestruturas Hidráulicas", "Infraestruturas Portuárias", "Infraestruturas Aeroportos", "Infraestruturas Urbanas", "Construção Civil", "Mineração", "Oil&Gas", "Power (energia)", "Outras obras"] as const).map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setSelectedCategory(cat)}
+                className={`flex items-center gap-2 px-3 py-1.5 rounded-md transition-all whitespace-nowrap text-sm ${selectedCategory === cat
+                  ? "bg-foreground/10 text-foreground font-semibold border border-foreground/30"
+                  : "text-muted-foreground hover:text-foreground hover:bg-background/50 border border-transparent"
+                  }`}
+              >
+                {cat !== "all" ? (
+                  <>
+                    <div
+                      className="w-2.5 h-2.5 rounded-full flex-shrink-0"
+                      style={{
+                        backgroundColor: categoryColors[cat as Project["category"]],
+                        boxShadow: selectedCategory === cat ? `0 0 8px ${categoryColors[cat as Project["category"]]}` : 'none'
+                      }}
+                    />
+                    <span>{cat}</span>
+                  </>
+                ) : (
+                  <>
+                    <div className="w-2.5 h-2.5 rounded-full border-2 border-muted-foreground/60 flex-shrink-0" />
+                    <span>All</span>
+                  </>
+                )}
+              </button>
+            ))}
           </div>
         </div>
       </div>
+    </div>
     </div>
   )
 }

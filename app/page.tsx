@@ -91,170 +91,170 @@ export default function Dashboard() {
               <div className="absolute top-4 right-4 z-10">
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button size="sm" className="gap-2 text-foreground /10">
+                    <Button size="sm" className="gap-2 bg-black text-background hover:bg-cyan/10 self-start sm:self-auto"
                       <Filter className="w-4 h-4" />
-                      <span className="hidden sm:inline">Filters</span>
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-56">
-                    <DropdownMenuLabel>Filter by Typology</DropdownMenuLabel>
-                    <DropdownMenuItem onClick={() => handleFilterSelect('typology', 'Obra Geral/Estrada')} className="flex items-center justify-between">
-                      <span>Obra Geral/Estrada</span>
-                      {filterType === 'typology' && filterValue === 'Obra Geral/Estrada' && <Check className="w-4 h-4 text-accent" />}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => handleFilterSelect('typology', 'Construção Civil')} className="flex items-center justify-between">
-                      <span>Construção Civil</span>
-                      {filterType === 'typology' && filterValue === 'Construção Civil' && <Check className="w-4 h-4 text-accent" />}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => handleFilterSelect('typology', 'Infraestruturas Ferroviárias')} className="flex items-center justify-between">
-                      <span>Infraestruturas Ferroviárias</span>
-                      {filterType === 'typology' && filterValue === 'Infraestruturas Ferroviárias' && <Check className="w-4 h-4 text-accent" />}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => handleFilterSelect('typology', 'Infraestruturas Hidráulicas')} className="flex items-center justify-between">
-                      <span>Infraestruturas Hidráulicas</span>
-                      {filterType === 'typology' && filterValue === 'Infraestruturas Hidráulicas' && <Check className="w-4 h-4 text-accent" />}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => handleFilterSelect('typology', 'Infraestruturas Portuárias')} className="flex items-center justify-between">
-                      <span>Infraestruturas Portuárias</span>
-                      {filterType === 'typology' && filterValue === 'Infraestruturas Portuárias' && <Check className="w-4 h-4 text-accent" />}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => handleFilterSelect('typology', 'Oil&Gas')} className="flex items-center justify-between">
-                      <span>Oil&Gas</span>
-                      {filterType === 'typology' && filterValue === 'Oil&Gas' && <Check className="w-4 h-4 text-accent" />}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => handleFilterSelect('typology', 'Power (energia)')} className="flex items-center justify-between">
-                      <span>Power (energia)</span>
-                      {filterType === 'typology' && filterValue === 'Power (energia)' && <Check className="w-4 h-4 text-accent" />}
-                    </DropdownMenuItem>
+                    <span className="hidden sm:inline">Filters</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  <DropdownMenuLabel>Filter by Typology</DropdownMenuLabel>
+                  <DropdownMenuItem onClick={() => handleFilterSelect('typology', 'Obra Geral/Estrada')} className="flex items-center justify-between">
+                    <span>Obra Geral/Estrada</span>
+                    {filterType === 'typology' && filterValue === 'Obra Geral/Estrada' && <Check className="w-4 h-4 text-accent" />}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleFilterSelect('typology', 'Construção Civil')} className="flex items-center justify-between">
+                    <span>Construção Civil</span>
+                    {filterType === 'typology' && filterValue === 'Construção Civil' && <Check className="w-4 h-4 text-accent" />}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleFilterSelect('typology', 'Infraestruturas Ferroviárias')} className="flex items-center justify-between">
+                    <span>Infraestruturas Ferroviárias</span>
+                    {filterType === 'typology' && filterValue === 'Infraestruturas Ferroviárias' && <Check className="w-4 h-4 text-accent" />}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleFilterSelect('typology', 'Infraestruturas Hidráulicas')} className="flex items-center justify-between">
+                    <span>Infraestruturas Hidráulicas</span>
+                    {filterType === 'typology' && filterValue === 'Infraestruturas Hidráulicas' && <Check className="w-4 h-4 text-accent" />}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleFilterSelect('typology', 'Infraestruturas Portuárias')} className="flex items-center justify-between">
+                    <span>Infraestruturas Portuárias</span>
+                    {filterType === 'typology' && filterValue === 'Infraestruturas Portuárias' && <Check className="w-4 h-4 text-accent" />}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleFilterSelect('typology', 'Oil&Gas')} className="flex items-center justify-between">
+                    <span>Oil&Gas</span>
+                    {filterType === 'typology' && filterValue === 'Oil&Gas' && <Check className="w-4 h-4 text-accent" />}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleFilterSelect('typology', 'Power (energia)')} className="flex items-center justify-between">
+                    <span>Power (energia)</span>
+                    {filterType === 'typology' && filterValue === 'Power (energia)' && <Check className="w-4 h-4 text-accent" />}
+                  </DropdownMenuItem>
 
-                    <DropdownMenuSeparator />
-                    <DropdownMenuLabel>Filter by Region</DropdownMenuLabel>
-                    <DropdownMenuItem onClick={() => handleFilterSelect('region', 'north')} className="flex items-center justify-between">
-                      <span>North</span>
-                      {filterType === 'region' && filterValue === 'north' && <Check className="w-4 h-4 text-accent" />}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => handleFilterSelect('region', 'south')} className="flex items-center justify-between">
-                      <span>South</span>
-                      {filterType === 'region' && filterValue === 'south' && <Check className="w-4 h-4 text-accent" />}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => handleFilterSelect('region', 'east')} className="flex items-center justify-between">
-                      <span>East</span>
-                      {filterType === 'region' && filterValue === 'east' && <Check className="w-4 h-4 text-accent" />}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => handleFilterSelect('region', 'west')} className="flex items-center justify-between">
-                      <span>West</span>
-                      {filterType === 'region' && filterValue === 'west' && <Check className="w-4 h-4 text-accent" />}
-                    </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuLabel>Filter by Region</DropdownMenuLabel>
+                  <DropdownMenuItem onClick={() => handleFilterSelect('region', 'north')} className="flex items-center justify-between">
+                    <span>North</span>
+                    {filterType === 'region' && filterValue === 'north' && <Check className="w-4 h-4 text-accent" />}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleFilterSelect('region', 'south')} className="flex items-center justify-between">
+                    <span>South</span>
+                    {filterType === 'region' && filterValue === 'south' && <Check className="w-4 h-4 text-accent" />}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleFilterSelect('region', 'east')} className="flex items-center justify-between">
+                    <span>East</span>
+                    {filterType === 'region' && filterValue === 'east' && <Check className="w-4 h-4 text-accent" />}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleFilterSelect('region', 'west')} className="flex items-center justify-between">
+                    <span>West</span>
+                    {filterType === 'region' && filterValue === 'west' && <Check className="w-4 h-4 text-accent" />}
+                  </DropdownMenuItem>
 
-                    <DropdownMenuSeparator />
-                    <DropdownMenuLabel>Filter by Week</DropdownMenuLabel>
-                    <DropdownMenuItem onClick={() => handleFilterSelect('week', 'week-1')} className="flex items-center justify-between">
-                      <span>Week 1</span>
-                      {filterType === 'week' && filterValue === 'week-1' && <Check className="w-4 h-4 text-accent" />}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => handleFilterSelect('week', 'week-2')} className="flex items-center justify-between">
-                      <span>Week 2</span>
-                      {filterType === 'week' && filterValue === 'week-2' && <Check className="w-4 h-4 text-accent" />}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => handleFilterSelect('week', 'week-3')} className="flex items-center justify-between">
-                      <span>Week 3</span>
-                      {filterType === 'week' && filterValue === 'week-3' && <Check className="w-4 h-4 text-accent" />}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => handleFilterSelect('week', 'week-4')} className="flex items-center justify-between">
-                      <span>Week 4</span>
-                      {filterType === 'week' && filterValue === 'week-4' && <Check className="w-4 h-4 text-accent" />}
-                    </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuLabel>Filter by Week</DropdownMenuLabel>
+                  <DropdownMenuItem onClick={() => handleFilterSelect('week', 'week-1')} className="flex items-center justify-between">
+                    <span>Week 1</span>
+                    {filterType === 'week' && filterValue === 'week-1' && <Check className="w-4 h-4 text-accent" />}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleFilterSelect('week', 'week-2')} className="flex items-center justify-between">
+                    <span>Week 2</span>
+                    {filterType === 'week' && filterValue === 'week-2' && <Check className="w-4 h-4 text-accent" />}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleFilterSelect('week', 'week-3')} className="flex items-center justify-between">
+                    <span>Week 3</span>
+                    {filterType === 'week' && filterValue === 'week-3' && <Check className="w-4 h-4 text-accent" />}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleFilterSelect('week', 'week-4')} className="flex items-center justify-between">
+                    <span>Week 4</span>
+                    {filterType === 'week' && filterValue === 'week-4' && <Check className="w-4 h-4 text-accent" />}
+                  </DropdownMenuItem>
 
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={clearFilters}>
-                      Clear Filters
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
-
-              <EVMMatrix filterType={filterType} filterValue={filterValue} />
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={clearFilters}>
+                    Clear Filters
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
 
-            {/* Typology Legend Card - Below Matrix */}
-            <div className="glass-card rounded-md px-3 py-2 border border-border/30 backdrop-blur-sm">
-              <div className="flex items-center gap-2">
-                <span className="text-[9px] font-semibold text-muted-foreground tracking-wide uppercase">Typology</span>
-                <div className="flex items-center gap-2 flex-wrap max-w-full">
-                  {(["all", "Infraestruturas Rodoviárias", "Infraestruturas Ferroviárias", "Infraestruturas Hidráulicas", "Infraestruturas Portuárias", "Infraestruturas Aeroportos", "Infraestruturas Urbanas", "Construção Civil", "Mineração", "Oil&Gas", "Power (energia)", "Outras obras"] as const).map((cat) => {
-                    const categoryColors: Record<string, string> = {
-                      "Infraestruturas Rodoviárias": "#166534",
-                      "Infraestruturas Ferroviárias": "#fbbf24",
-                      "Infraestruturas Hidráulicas": "#d4d4d8",
-                      "Infraestruturas Portuárias": "#dc2626",
-                      "Infraestruturas Aeroportos": "#9333ea",
-                      "Infraestruturas Urbanas": "#06b6d4",
-                      "Construção Civil": "#00ff88",
-                      "Mineração": "#f59e0b",
-                      "Oil&Gas": "#8b5cf6",
-                      "Power (energia)": "#ec4899",
-                      "Outras obras": "#64748b"
-                    }
-                    return (
-                      <button
-                        key={cat}
-                        onClick={() => handleFilterSelect(cat === 'all' ? null : 'typology', cat === 'all' ? null : cat)}
-                        className={`flex items-center gap-1 text-[10px] transition-all whitespace-nowrap ${filterType === 'typology' && filterValue === cat || (cat === 'all' && !filterType)
-                          ? "text-foreground font-medium"
-                          : "text-muted-foreground/60 hover:text-foreground/80"
-                          }`}
-                      >
-                        {cat !== "all" ? (
-                          <>
-                            <div
-                              className="w-1.5 h-1.5 rounded-full"
-                              style={{
-                                backgroundColor: categoryColors[cat],
-                                boxShadow: (filterType === 'typology' && filterValue === cat) ? `0 0 6px ${categoryColors[cat]}80` : 'none'
-                              }}
-                            />
-                            <span>{cat}</span>
-                          </>
-                        ) : (
-                          <>
-                            <div className="w-1.5 h-1.5 rounded-full border border-muted-foreground/50" />
-                            <span>All</span>
-                          </>
-                        )}
-                      </button>
-                    )
-                  })}
-                </div>
+            <EVMMatrix filterType={filterType} filterValue={filterValue} />
+          </div>
+
+          {/* Typology Legend Card - Below Matrix */}
+          <div className="glass-card rounded-md px-3 py-2 border border-border/30 backdrop-blur-sm">
+            <div className="flex items-center gap-2">
+              <span className="text-[9px] font-semibold text-muted-foreground tracking-wide uppercase">Typology</span>
+              <div className="flex items-center gap-2 flex-wrap max-w-full">
+                {(["all", "Infraestruturas Rodoviárias", "Infraestruturas Ferroviárias", "Infraestruturas Hidráulicas", "Infraestruturas Portuárias", "Infraestruturas Aeroportos", "Infraestruturas Urbanas", "Construção Civil", "Mineração", "Oil&Gas", "Power (energia)", "Outras obras"] as const).map((cat) => {
+                  const categoryColors: Record<string, string> = {
+                    "Infraestruturas Rodoviárias": "#166534",
+                    "Infraestruturas Ferroviárias": "#fbbf24",
+                    "Infraestruturas Hidráulicas": "#d4d4d8",
+                    "Infraestruturas Portuárias": "#dc2626",
+                    "Infraestruturas Aeroportos": "#9333ea",
+                    "Infraestruturas Urbanas": "#06b6d4",
+                    "Construção Civil": "#00ff88",
+                    "Mineração": "#f59e0b",
+                    "Oil&Gas": "#8b5cf6",
+                    "Power (energia)": "#ec4899",
+                    "Outras obras": "#64748b"
+                  }
+                  return (
+                    <button
+                      key={cat}
+                      onClick={() => handleFilterSelect(cat === 'all' ? null : 'typology', cat === 'all' ? null : cat)}
+                      className={`flex items-center gap-1 text-[10px] transition-all whitespace-nowrap ${filterType === 'typology' && filterValue === cat || (cat === 'all' && !filterType)
+                        ? "text-foreground font-medium"
+                        : "text-muted-foreground/60 hover:text-foreground/80"
+                        }`}
+                    >
+                      {cat !== "all" ? (
+                        <>
+                          <div
+                            className="w-1.5 h-1.5 rounded-full"
+                            style={{
+                              backgroundColor: categoryColors[cat],
+                              boxShadow: (filterType === 'typology' && filterValue === cat) ? `0 0 6px ${categoryColors[cat]}80` : 'none'
+                            }}
+                          />
+                          <span>{cat}</span>
+                        </>
+                      ) : (
+                        <>
+                          <div className="w-1.5 h-1.5 rounded-full border border-muted-foreground/50" />
+                          <span>All</span>
+                        </>
+                      )}
+                    </button>
+                  )
+                })}
               </div>
             </div>
-          </div>
-
-          {/* Uptrends/Downtrends Section */}
-          <div className="col-span-12 lg:col-span-3">
-            <TrendsSection />
-          </div>
-
-          {/* Project List - Full Width */}
-          <div className="col-span-12">
-            <ProjectList />
           </div>
         </div>
 
-        {/* Footer Stats */}
-        <div className="mt-6 flex flex-wrap items-center justify-between gap-4 text-xs text-muted-foreground border-t border-border/50 pt-4">
-          <div className="flex items-center gap-4">
-            <span>Last sync: 2 minutes ago</span>
-            <span className="hidden sm:inline">•</span>
-            <span className="hidden sm:inline">Data freshness: 99.9%</span>
-          </div>
-          <div className="flex items-center gap-4">
-            <span className="flex items-center gap-1.5">
-              <div className="w-1.5 h-1.5 rounded-full bg-success" />
-              All systems operational
-            </span>
-          </div>
+        {/* Uptrends/Downtrends Section */}
+        <div className="col-span-12 lg:col-span-3">
+          <TrendsSection />
         </div>
-      </main>
+
+        {/* Project List - Full Width */}
+        <div className="col-span-12">
+          <ProjectList />
+        </div>
     </div>
+
+        {/* Footer Stats */ }
+  <div className="mt-6 flex flex-wrap items-center justify-between gap-4 text-xs text-muted-foreground border-t border-border/50 pt-4">
+    <div className="flex items-center gap-4">
+      <span>Last sync: 2 minutes ago</span>
+      <span className="hidden sm:inline">•</span>
+      <span className="hidden sm:inline">Data freshness: 99.9%</span>
+    </div>
+    <div className="flex items-center gap-4">
+      <span className="flex items-center gap-1.5">
+        <div className="w-1.5 h-1.5 rounded-full bg-success" />
+        All systems operational
+      </span>
+    </div>
+  </div>
+      </main >
+    </div >
   )
 }

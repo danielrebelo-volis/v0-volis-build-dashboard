@@ -91,7 +91,7 @@ export default function Dashboard() {
               <div className="absolute top-4 right-4 z-10">
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button size="sm" className="gap-2 bg-white text-background self-start sm:self-auto">
+                    <Button size="sm" className="gap-2 text-foreground border border-white dark:border-white light:border-accent light:bg-accent light:text-accent-foreground dark:hover:bg-foreground/10 light:hover:bg-accent/90 self-start sm:self-auto">
                       <Filter className="w-4 h-4" />
                       <span className="hidden sm:inline">Filters</span>
                     </Button>

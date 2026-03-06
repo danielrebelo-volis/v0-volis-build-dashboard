@@ -127,7 +127,7 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
       {/* Main chart container with padding for axes */}
       <div className="relative w-[calc(100%-80px)] h-[calc(100%-80px)]" suppressHydrationWarning>
         {/* Background and grid */}
-        <div className="absolute inset-0 rounded-lg border border-border/20 bg-gradient-to-br from-background/50 to-background/30 backdrop-blur-sm">
+        <div className="absolute inset-0 rounded-lg border-2 border-white/30 bg-gradient-to-br from-background/50 to-background/30 backdrop-blur-sm">
           {/* Grid Lines */}
           <svg className="absolute inset-0 w-full h-full rounded-lg" viewBox="0 0 100 100" preserveAspectRatio="none">
             {/* Background grid */}
@@ -155,27 +155,27 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
           </svg>
         </div>
 
-        {/* Quadrant Labels */}
-        <div className="absolute inset-0 pointer-events-none px-6 py-6">
+        {/* Quadrant Labels with better background separation */}
+        <div className="absolute inset-0 pointer-events-none">
           {/* Top-Left: Ahead & High Cost (>80%) */}
-          <div className="absolute top-6 left-6 text-[11px] text-muted-foreground/40 font-medium">
-            <div className="text-foreground/100">Industrial Cost {'>'} 80%</div>
-            <div className="text-foreground/100">Ahead</div>
+          <div className="absolute top-4 left-4 bg-background/60 backdrop-blur px-2 py-1 rounded border border-white/10">
+            <div className="text-[11px] font-medium text-foreground">Industrial Cost {'>'} 80%</div>
+            <div className="text-[11px] font-medium text-foreground">Ahead</div>
           </div>
           {/* Top-Right: Delayed & High Cost (>80%) */}
-          <div className="absolute top-6 right-6 text-[11px] text-muted-foreground/40 font-medium text-right">
-            <div className="text-foreground/100">Industrial Cost {'>'} 80%</div>
-            <div className="text-foreground/100">Delayed</div>
+          <div className="absolute top-4 right-4 bg-background/60 backdrop-blur px-2 py-1 rounded border border-white/10 text-right">
+            <div className="text-[11px] font-medium text-foreground">Industrial Cost {'>'} 80%</div>
+            <div className="text-[11px] font-medium text-foreground">Delayed</div>
           </div>
           {/* Bottom-Left: Ahead & Good Cost (<80%) */}
-          <div className="absolute bottom-6 left-6 text-[11px] text-muted-foreground/40 font-medium">
-            <div className="text-foreground/100">Industrial Cost {'<'} 80%</div>
-            <div className="text-foreground/100">Ahead</div>
+          <div className="absolute bottom-4 left-4 bg-background/60 backdrop-blur px-2 py-1 rounded border border-white/10">
+            <div className="text-[11px] font-medium text-foreground">Industrial Cost {'<'} 80%</div>
+            <div className="text-[11px] font-medium text-foreground">Ahead</div>
           </div>
           {/* Bottom-Right: Delayed & Good Cost (<80%) */}
-          <div className="absolute bottom-6 right-6 text-[11px] text-muted-foreground/40 font-medium text-right">
-            <div className="text-foreground/100">Industrial Cost {'<'} 80%</div>
-            <div className="text-foreground/100">Delayed</div>
+          <div className="absolute bottom-4 right-4 bg-background/60 backdrop-blur px-2 py-1 rounded border border-white/10 text-right">
+            <div className="text-[11px] font-medium text-foreground">Industrial Cost {'<'} 80%</div>
+            <div className="text-[11px] font-medium text-foreground">Delayed</div>
           </div>
         </div>
 
@@ -301,7 +301,7 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
       </div>
 
       {/* X-Axis Label and Category Legend */}
-      <div className="absolute bottom-0 left-10 right-10 flex items-center justify-between">
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 flex items-center justify-center">
         <span className="text-xs font-semibold text-muted-foreground tracking-wider">DELAY</span>
       </div>
     </div>

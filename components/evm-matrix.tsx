@@ -268,7 +268,7 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
       </div>
 
       {/* Y-Axis (left) - Industrial Cost % */}
-      <div className="absolute left-0 top-1/2 -translate-y-1/2 flex flex-col justify-between h-[calc(100%-80px)]">
+      <div className="absolute left-5 top-1/2 -translate-y-1/2 flex flex-col justify-between h-[calc(100%-80px)]">
         <div className="flex items-center gap-2">
           <span className="text-[10px] text-muted-foreground font-mono">100%</span>
         </div>

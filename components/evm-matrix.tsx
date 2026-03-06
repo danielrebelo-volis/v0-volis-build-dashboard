@@ -311,7 +311,6 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
       </div>
     </div>
 
-    {/* Category Legend - Below Matrix */}
     <div className="w-full mt-8 px-6">
       <div className="glass-card rounded-lg p-4 border border-border/40 backdrop-blur-sm bg-gradient-to-r from-background/40 to-background/20">
         <div className="flex items-center gap-4 flex-wrap">

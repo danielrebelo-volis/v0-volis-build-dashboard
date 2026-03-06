@@ -179,11 +179,6 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
           </div>
         </div>
 
-        {/* Reference line labels */}
-        <div className="absolute -left-8 top-1/2 -translate-y-1/2 text-xs font-semibold text-orange-500 flex items-center gap-1.5">
-          <div className="text-foreground/60">80%</div>
-        </div>
-
         {/* Center line label (on-time) */}
         <div className="absolute top-2 left-1/2 -translate-x-1/2 text-[9px] font-semibold text-success/70 tracking-wider">
           ON TIME

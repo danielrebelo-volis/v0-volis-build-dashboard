@@ -64,90 +64,6 @@ export default function Dashboard() {
             <Button variant="ghost" size="sm" className="gap-2 text-muted-foreground">
               <RefreshCw className="w-4 h-4" />
             </Button>
-            
-            {/* Filters Button */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button size="sm" className="gap-2 text-foreground border border-white hover:bg-foreground/10">
-                  <Filter className="w-4 h-4" />
-                  <span className="hidden sm:inline">Filters</span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuLabel>Filter by Typology</DropdownMenuLabel>
-                <DropdownMenuItem onClick={() => handleFilterSelect('typology', 'Obra Geral/Estrada')} className="flex items-center justify-between">
-                  <span>Obra Geral/Estrada</span>
-                  {filterType === 'typology' && filterValue === 'Obra Geral/Estrada' && <Check className="w-4 h-4 text-accent" />}
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleFilterSelect('typology', 'Construção Civil')} className="flex items-center justify-between">
-                  <span>Construção Civil</span>
-                  {filterType === 'typology' && filterValue === 'Construção Civil' && <Check className="w-4 h-4 text-accent" />}
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleFilterSelect('typology', 'Infraestruturas Ferroviárias')} className="flex items-center justify-between">
-                  <span>Infraestruturas Ferroviárias</span>
-                  {filterType === 'typology' && filterValue === 'Infraestruturas Ferroviárias' && <Check className="w-4 h-4 text-accent" />}
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleFilterSelect('typology', 'Infraestruturas Hidráulicas')} className="flex items-center justify-between">
-                  <span>Infraestruturas Hidráulicas</span>
-                  {filterType === 'typology' && filterValue === 'Infraestruturas Hidráulicas' && <Check className="w-4 h-4 text-accent" />}
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleFilterSelect('typology', 'Infraestruturas Portuárias')} className="flex items-center justify-between">
-                  <span>Infraestruturas Portuárias</span>
-                  {filterType === 'typology' && filterValue === 'Infraestruturas Portuárias' && <Check className="w-4 h-4 text-accent" />}
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleFilterSelect('typology', 'Oil&Gas')} className="flex items-center justify-between">
-                  <span>Oil&Gas</span>
-                  {filterType === 'typology' && filterValue === 'Oil&Gas' && <Check className="w-4 h-4 text-accent" />}
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleFilterSelect('typology', 'Power (energia)')} className="flex items-center justify-between">
-                  <span>Power (energia)</span>
-                  {filterType === 'typology' && filterValue === 'Power (energia)' && <Check className="w-4 h-4 text-accent" />}
-                </DropdownMenuItem>
-
-                <DropdownMenuSeparator />
-                <DropdownMenuLabel>Filter by Region</DropdownMenuLabel>
-                <DropdownMenuItem onClick={() => handleFilterSelect('region', 'north')} className="flex items-center justify-between">
-                  <span>North</span>
-                  {filterType === 'region' && filterValue === 'north' && <Check className="w-4 h-4 text-accent" />}
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleFilterSelect('region', 'south')} className="flex items-center justify-between">
-                  <span>South</span>
-                  {filterType === 'region' && filterValue === 'south' && <Check className="w-4 h-4 text-accent" />}
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleFilterSelect('region', 'east')} className="flex items-center justify-between">
-                  <span>East</span>
-                  {filterType === 'region' && filterValue === 'east' && <Check className="w-4 h-4 text-accent" />}
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleFilterSelect('region', 'west')} className="flex items-center justify-between">
-                  <span>West</span>
-                  {filterType === 'region' && filterValue === 'west' && <Check className="w-4 h-4 text-accent" />}
-                </DropdownMenuItem>
-
-                <DropdownMenuSeparator />
-                <DropdownMenuLabel>Filter by Week</DropdownMenuLabel>
-                <DropdownMenuItem onClick={() => handleFilterSelect('week', 'week-1')} className="flex items-center justify-between">
-                  <span>Week 1</span>
-                  {filterType === 'week' && filterValue === 'week-1' && <Check className="w-4 h-4 text-accent" />}
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleFilterSelect('week', 'week-2')} className="flex items-center justify-between">
-                  <span>Week 2</span>
-                  {filterType === 'week' && filterValue === 'week-2' && <Check className="w-4 h-4 text-accent" />}
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleFilterSelect('week', 'week-3')} className="flex items-center justify-between">
-                  <span>Week 3</span>
-                  {filterType === 'week' && filterValue === 'week-3' && <Check className="w-4 h-4 text-accent" />}
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleFilterSelect('week', 'week-4')} className="flex items-center justify-between">
-                  <span>Week 4</span>
-                  {filterType === 'week' && filterValue === 'week-4' && <Check className="w-4 h-4 text-accent" />}
-                </DropdownMenuItem>
-
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={clearFilters}>
-                  Clear Filters
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
           </div>
         </div>
 
@@ -170,6 +86,93 @@ export default function Dashboard() {
                   )}
                 </div>
               </div>
+              
+              {/* Filters Button - Top Right */}
+              <div className="absolute top-4 right-4 z-10">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button size="sm" className="gap-2 text-foreground border border-white hover:bg-foreground/10">
+                      <Filter className="w-4 h-4" />
+                      <span className="hidden sm:inline">Filters</span>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56">
+                    <DropdownMenuLabel>Filter by Typology</DropdownMenuLabel>
+                    <DropdownMenuItem onClick={() => handleFilterSelect('typology', 'Obra Geral/Estrada')} className="flex items-center justify-between">
+                      <span>Obra Geral/Estrada</span>
+                      {filterType === 'typology' && filterValue === 'Obra Geral/Estrada' && <Check className="w-4 h-4 text-accent" />}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleFilterSelect('typology', 'Construção Civil')} className="flex items-center justify-between">
+                      <span>Construção Civil</span>
+                      {filterType === 'typology' && filterValue === 'Construção Civil' && <Check className="w-4 h-4 text-accent" />}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleFilterSelect('typology', 'Infraestruturas Ferroviárias')} className="flex items-center justify-between">
+                      <span>Infraestruturas Ferroviárias</span>
+                      {filterType === 'typology' && filterValue === 'Infraestruturas Ferroviárias' && <Check className="w-4 h-4 text-accent" />}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleFilterSelect('typology', 'Infraestruturas Hidráulicas')} className="flex items-center justify-between">
+                      <span>Infraestruturas Hidráulicas</span>
+                      {filterType === 'typology' && filterValue === 'Infraestruturas Hidráulicas' && <Check className="w-4 h-4 text-accent" />}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleFilterSelect('typology', 'Infraestruturas Portuárias')} className="flex items-center justify-between">
+                      <span>Infraestruturas Portuárias</span>
+                      {filterType === 'typology' && filterValue === 'Infraestruturas Portuárias' && <Check className="w-4 h-4 text-accent" />}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleFilterSelect('typology', 'Oil&Gas')} className="flex items-center justify-between">
+                      <span>Oil&Gas</span>
+                      {filterType === 'typology' && filterValue === 'Oil&Gas' && <Check className="w-4 h-4 text-accent" />}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleFilterSelect('typology', 'Power (energia)')} className="flex items-center justify-between">
+                      <span>Power (energia)</span>
+                      {filterType === 'typology' && filterValue === 'Power (energia)' && <Check className="w-4 h-4 text-accent" />}
+                    </DropdownMenuItem>
+
+                    <DropdownMenuSeparator />
+                    <DropdownMenuLabel>Filter by Region</DropdownMenuLabel>
+                    <DropdownMenuItem onClick={() => handleFilterSelect('region', 'north')} className="flex items-center justify-between">
+                      <span>North</span>
+                      {filterType === 'region' && filterValue === 'north' && <Check className="w-4 h-4 text-accent" />}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleFilterSelect('region', 'south')} className="flex items-center justify-between">
+                      <span>South</span>
+                      {filterType === 'region' && filterValue === 'south' && <Check className="w-4 h-4 text-accent" />}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleFilterSelect('region', 'east')} className="flex items-center justify-between">
+                      <span>East</span>
+                      {filterType === 'region' && filterValue === 'east' && <Check className="w-4 h-4 text-accent" />}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleFilterSelect('region', 'west')} className="flex items-center justify-between">
+                      <span>West</span>
+                      {filterType === 'region' && filterValue === 'west' && <Check className="w-4 h-4 text-accent" />}
+                    </DropdownMenuItem>
+
+                    <DropdownMenuSeparator />
+                    <DropdownMenuLabel>Filter by Week</DropdownMenuLabel>
+                    <DropdownMenuItem onClick={() => handleFilterSelect('week', 'week-1')} className="flex items-center justify-between">
+                      <span>Week 1</span>
+                      {filterType === 'week' && filterValue === 'week-1' && <Check className="w-4 h-4 text-accent" />}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleFilterSelect('week', 'week-2')} className="flex items-center justify-between">
+                      <span>Week 2</span>
+                      {filterType === 'week' && filterValue === 'week-2' && <Check className="w-4 h-4 text-accent" />}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleFilterSelect('week', 'week-3')} className="flex items-center justify-between">
+                      <span>Week 3</span>
+                      {filterType === 'week' && filterValue === 'week-3' && <Check className="w-4 h-4 text-accent" />}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => handleFilterSelect('week', 'week-4')} className="flex items-center justify-between">
+                      <span>Week 4</span>
+                      {filterType === 'week' && filterValue === 'week-4' && <Check className="w-4 h-4 text-accent" />}
+                    </DropdownMenuItem>
+
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={clearFilters}>
+                      Clear Filters
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+              
               <EVMMatrix filterType={filterType} filterValue={filterValue} />
             </div>
             

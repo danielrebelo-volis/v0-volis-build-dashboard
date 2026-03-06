@@ -1,307 +1,246 @@
-"use client"
+'use client'
 
-import { useState } from "react"
-import Link from "next/link"
-import { useChartColors } from '@/hooks/use-chart-colors'
+import { useMemo, useState } from 'react'
+import { Button } from '@/components/ui/button'
+import type { Project } from '@/lib/types'
 
-interface Project {
-  id: string
-  name: string
-  delay: number
-  industrialCost: number
-  budget: string
-  trend: "up" | "down" | "stable"
-  category: "Infraestruturas Rodoviárias" | "Infraestruturas Ferroviárias" | "Infraestruturas Hidráulicas" | "Infraestruturas Portuárias" | "Infraestruturas Aeroportos" | "Infraestruturas Urbanas" | "Construção Civil" | "Mineração" | "Oil&Gas" | "Power (energia)" | "Outras obras"
-  region: "north" | "south" | "east" | "west"
-  week: "week-1" | "week-2" | "week-3" | "week-4"
-  weekData: {
-    "week-1": { delay: number; industrialCost: number }
-    "week-2": { delay: number; industrialCost: number }
-    "week-3": { delay: number; industrialCost: number }
-    "week-4": { delay: number; industrialCost: number }
-  }
+const categoryColors: Record<Project['category'], string> = {
+  'Infraestruturas Rodoviárias': '#EF4444',
+  'Infraestruturas Ferroviárias': '#F97316',
+  'Infraestruturas Hidráulicas': '#3B82F6',
+  'Infraestruturas Portuárias': '#06B6D4',
+  'Infraestruturas Aeroportos': '#8B5CF6',
+  'Infraestruturas Urbanas': '#EC4899',
+  'Construção Civil': '#F59E0B',
+  'Mineração': '#6B7280',
+  'Oil&Gas': '#000000',
+  'Power (energia)': '#FBBF24',
+  'Outras obras': '#A1A5B8'
 }
 
-const projects: Project[] = [
-  { id: "PRJ-001", name: "Metro Tower", delay: -22, industrialCost: 103, budget: "€24.5M", trend: "up", category: "Construção Civil", region: "north", week: "week-1", weekData: { "week-1": { delay: -22, industrialCost: 93 }, "week-2": { delay: -18, industrialCost: 89 }, "week-3": { delay: -12, industrialCost: 85 }, "week-4": { delay: -8, industrialCost: 82 } } },
-  { id: "PRJ-011", name: "Urban Renewal Center", delay: -8, industrialCost: 102, budget: "€67.3M", trend: "up", category: "Infraestruturas Rodoviárias", region: "north", week: "week-2", weekData: { "week-1": { delay: 2, industrialCost: 86 }, "week-2": { delay: -8, industrialCost: 82 }, "week-3": { delay: -15, industrialCost: 78 }, "week-4": { delay: -22, industrialCost: 75 } } },
-  { id: "PRJ-015", name: "Airport Runway", delay: -15, industrialCost: 105, budget: "€234.5M", trend: "up", category: "Infraestruturas Aeroportos", region: "east", week: "week-1", weekData: { "week-1": { delay: -5, industrialCost: 75 }, "week-2": { delay: -12, industrialCost: 71 }, "week-3": { delay: -15, industrialCost: 69 }, "week-4": { delay: -22, industrialCost: 65 } } },
-  { id: "PRJ-020", name: "Solar Farm", delay: -30, industrialCost: 104, budget: "€145.2M", trend: "up", category: "Power (energia)", region: "west", week: "week-4", weekData: { "week-1": { delay: -8, industrialCost: 82 }, "week-2": { delay: -15, industrialCost: 77 }, "week-3": { delay: -20, industrialCost: 74 }, "week-4": { delay: -28, industrialCost: 70 } } },
-  { id: "PRJ-003", name: "Skyline Plaza", delay: 32, industrialCost: 101, budget: "€156M", trend: "stable", category: "Construção Civil", region: "east", week: "week-1", weekData: { "week-1": { delay: 32, industrialCost: 106 }, "week-2": { delay: 31, industrialCost: 104 }, "week-3": { delay: 30, industrialCost: 105 }, "week-4": { delay: 28, industrialCost: 103 } } },
-  { id: "PRJ-012", name: "Rail Network Expansion", delay: 5, industrialCost: 102, budget: "€280M", trend: "down", category: "Infraestruturas Ferroviárias", region: "south", week: "week-1", weekData: { "week-1": { delay: 8, industrialCost: 99 }, "week-2": { delay: 12, industrialCost: 101 }, "week-3": { delay: 15, industrialCost: 102 }, "week-4": { delay: 20, industrialCost: 104 } } },
-  { id: "PRJ-013", name: "Dam Construction", delay: 11, industrialCost: 105, budget: "€520M", trend: "stable", category: "Infraestruturas Hidráulicas", region: "north", week: "week-2", weekData: { "week-1": { delay: 25, industrialCost: 103 }, "week-2": { delay: 28, industrialCost: 105 }, "week-3": { delay: 28, industrialCost: 104 }, "week-4": { delay: 30, industrialCost: 106 } } },
-  { id: "PRJ-019", name: "Oil Platform Construction", delay: 24, industrialCost: 107, budget: "€687.2M", trend: "stable", category: "Oil&Gas", region: "north", week: "week-1", weekData: { "week-1": { delay: 30, industrialCost: 105 }, "week-2": { delay: 33, industrialCost: 106 }, "week-3": { delay: 35, industrialCost: 107 }, "week-4": { delay: 38, industrialCost: 108 } } },
-  { id: "PRJ-004", name: "Industrial Park", delay: -5, industrialCost: 67, budget: "€42.8M", trend: "up", category: "Mineração", region: "west", week: "week-3", weekData: { "week-1": { delay: 12, industrialCost: 79 }, "week-2": { delay: 3, industrialCost: 73 }, "week-3": { delay: -5, industrialCost: 67 }, "week-4": { delay: -12, industrialCost: 63 } } },
-  { id: "PRJ-006", name: "Tech Campus", delay: -28, industrialCost: 77, budget: "€210M", trend: "stable", category: "Infraestruturas Urbanas", region: "south", week: "week-4", weekData: { "week-1": { delay: -18, industrialCost: 82 }, "week-2": { delay: -23, industrialCost: 79 }, "week-3": { delay: -28, industrialCost: 77 }, "week-4": { delay: -28, industrialCost: 76 } } },
-  { id: "PRJ-009", name: "Data Center", delay: -15, industrialCost: 81, budget: "€78.5M", trend: "down", category: "Infraestruturas Portuárias", region: "north", week: "week-4", weekData: { "week-1": { delay: -15, industrialCost: 87 }, "week-2": { delay: -15, industrialCost: 84 }, "week-3": { delay: -15, industrialCost: 82 }, "week-4": { delay: -15, industrialCost: 81 } } },
-  { id: "PRJ-007", name: "Highway 12 Ext", delay: -12, industrialCost: 64, budget: "€340M", trend: "down", category: "Infraestruturas Rodoviárias", region: "east", week: "week-1", weekData: { "week-1": { delay: -12, industrialCost: 64 }, "week-2": { delay: -8, industrialCost: 67 }, "week-3": { delay: -3, industrialCost: 72 }, "week-4": { delay: 4, industrialCost: 78 } } },
-  { id: "PRJ-002", name: "Harbor Bridge", delay: 15, industrialCost: 75, budget: "€89.2M", trend: "down", category: "Infraestruturas Portuárias", region: "south", week: "week-2", weekData: { "week-1": { delay: 3, industrialCost: 68 }, "week-2": { delay: 8, industrialCost: 71 }, "week-3": { delay: 14, industrialCost: 76 }, "week-4": { delay: 20, industrialCost: 82 } } },
-  { id: "PRJ-005", name: "Riverside Homes", delay: 20, industrialCost: 90, budget: "€18.3M", trend: "down", category: "Infraestruturas Urbanas", region: "north", week: "week-2", weekData: { "week-1": { delay: 22, industrialCost: 102 }, "week-2": { delay: 18, industrialCost: 98 }, "week-3": { delay: 15, industrialCost: 94 }, "week-4": { delay: 10, industrialCost: 89 } } },
-  { id: "PRJ-008", name: "Green Valley", delay: 40, industrialCost: 88, budget: "€32.1M", trend: "up", category: "Infraestruturas Hidráulicas", region: "west", week: "week-3", weekData: { "week-1": { delay: 35, industrialCost: 95 }, "week-2": { delay: 30, industrialCost: 91 }, "week-3": { delay: 25, industrialCost: 88 }, "week-4": { delay: 18, industrialCost: 84 } } },
-  { id: "PRJ-016", name: "Terminal Building Extension", delay: 10, industrialCost: 80, budget: "€189.2M", trend: "stable", category: "Infraestruturas Aeroportos", region: "south", week: "week-2", weekData: { "week-1": { delay: 2, industrialCost: 84 }, "week-2": { delay: 8, industrialCost: 87 }, "week-3": { delay: 12, industrialCost: 89 }, "week-4": { delay: 15, industrialCost: 91 } } },
-  { id: "PRJ-021", name: "Bridge Rehabilitation", delay: 8, industrialCost: 89, budget: "€67.8M", trend: "stable", category: "Outras obras", region: "north", week: "week-1", weekData: { "week-1": { delay: 2, industrialCost: 86 }, "week-2": { delay: 5, industrialCost: 88 }, "week-3": { delay: 8, industrialCost: 89 }, "week-4": { delay: 12, industrialCost: 91 } } },
-]
-
-const categoryColors: Record<Project["category"], string> = {
-  "Infraestruturas Rodoviárias": "#166534",
-  "Infraestruturas Ferroviárias": "#fbbf24",
-  "Infraestruturas Hidráulicas": "#d4d4d8",
-  "Infraestruturas Portuárias": "#dc2626",
-  "Infraestruturas Aeroportos": "#9333ea",
-  "Infraestruturas Urbanas": "#06b6d4",
-  "Construção Civil": "#00ff88",
-  "Mineração": "#f59e0b",
-  "Oil&Gas": "#8b5cf6",
-  "Power (energia)": "#ec4899",
-  "Outras obras": "#64748b"
+type Matrix = {
+  x: number
+  y: number
+  data: Project[]
 }
 
 interface EVMMatrixProps {
-  filterType?: 'typology' | 'region' | 'week' | null
-  filterValue?: string | null
+  projects: Project[]
 }
 
-export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
-  const [hoveredProject, setHoveredProject] = useState<Project | null>(null)
-  const [selectedCategory, setSelectedCategory] = useState<Project["category"] | "all">("all")
-  const colors = useChartColors()
+export function EVMMatrix({ projects }: EVMMatrixProps) {
+  const [selectedCategory, setSelectedCategory] = useState<Project['category'] | 'all'>('all')
 
-  const filteredByCategory = selectedCategory === "all"
-    ? projects
-    : projects.filter(p => p.category === selectedCategory)
+  const matrix = useMemo(() => {
+    const filtered = selectedCategory === 'all' ? projects : projects.filter(p => p.category === selectedCategory)
 
-  const getProjectData = (project: Project) => {
-    if (filterType === 'week' && filterValue && filterValue in project.weekData) {
-      const weekKey = filterValue as keyof typeof project.weekData
-      return {
-        ...project,
-        delay: project.weekData[weekKey].delay,
-        industrialCost: project.weekData[weekKey].industrialCost,
+    const grid: Record<string, Matrix> = {}
+
+    filtered.forEach((project) => {
+      const delay = ((project.delayPercentage ?? 0) / 25) * 2
+      const cost = ((project.industrialCostPercentage ?? 100) / 25 - 2) * 2
+
+      const x = Math.round(delay)
+      const y = Math.round(cost)
+
+      const key = `${x},${y}`
+
+      if (!grid[key]) {
+        grid[key] = { x, y, data: [] }
       }
-    }
-    return project
-  }
 
-  const filteredProjects = (filterType && filterValue
-    ? filteredByCategory.filter(p => {
-      if (filterType === 'typology') return p.category === filterValue
-      if (filterType === 'region') return p.region === filterValue
-      if (filterType === 'week') return true
-      return true
-    }).map(getProjectData)
-    : filteredByCategory
-  ).filter(p => p.industrialCost >= 60 && p.industrialCost <= 110)
+      grid[key].data.push(project)
+    })
 
-  const mapToPosition = (delay: number, industrialCost: number) => {
-    const x = ((delay + 50) / 100) * 100
-    const y = ((industrialCost - 60) / 50) * 100
-    return { x: Math.max(2, Math.min(98, x)), y: Math.max(2, Math.min(98, y)) }
-  }
-
-  const getBudgetSize = (budget: string) => {
-    const value = parseFloat(budget.replace(/[€$M]/g, ''))
-    const minBudget = 18.3
-    const maxBudget = 340
-    const normalized = (value - minBudget) / (maxBudget - minBudget)
-    const baseSize = 10
-    const maxSize = 16
-    return baseSize + Math.max(0, Math.min(1, normalized)) * (maxSize - baseSize)
-  }
+    return Object.values(grid)
+  }, [projects, selectedCategory])
 
   return (
     <div className="relative w-full flex flex-col items-center justify-start" style={{ minHeight: '600px' }}>
       <div className="relative w-[calc(100%-80px)] flex-1" style={{ minHeight: '480px' }} suppressHydrationWarning>
-        <div className="absolute inset-0 rounded-lg border border-border/20 bg-gradient-to-br from-background/50 to-background/30 backdrop-blur-sm">
-          <svg className="absolute inset-0 w-full h-full rounded-lg" viewBox="0 0 100 100" preserveAspectRatio="none">
-            <defs>
-              <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
-                <path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(100,116,139,0.08)" strokeWidth="0.2" />
-              </pattern>
-            </defs>
-            <rect width="100" height="100" fill="url(#grid)" />
-            <line x1="0" y1="20" x2="100" y2="20" stroke="#888888" strokeWidth="0.2" strokeDasharray="2,2" opacity="0.6" />
-            <line x1="0" y1="0" x2="100" y2="0" stroke="#888888" strokeWidth="0.4" strokeDasharray="2,5" opacity="0.4" />
-            <line x1="50" y1="0" x2="50" y2="100" stroke="#888888" strokeWidth="0.4" strokeDasharray="2,5" opacity="0.4" />
-            <rect x="0" y="0" width="50" height="20" fill="rgba(255,100,100,0.03)" />
-            <rect x="50" y="0" width="50" height="20" fill="rgba(255,100,100,0.04)" />
-            <rect x="0" y="20" width="50" height="80" fill="rgba(0,255,136,0.03)" />
-            <rect x="50" y="20" width="50" height="80" fill="rgba(255,170,0,0.02)" />
-          </svg>
-        </div>
-
-        <div className="absolute inset-0 pointer-events-none px-6 py-6">
-          <div className="absolute top-6 left-6 text-[11px] text-muted-foreground/40 font-medium">
-            <div className="text-foreground/100">Industrial Cost {'>'} 85%</div>
-            <div className="text-foreground/100">Ahead</div>
+        {/* Y-Axis (left) - Industrial Cost % */}
+        <div className="absolute left-0 top-1/2 -translate-y-1/2 flex flex-col justify-between h-[calc(100%-60px)]">
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] text-muted-foreground font-mono">110%</span>
           </div>
-          <div className="absolute top-6 right-6 text-[11px] text-muted-foreground/40 font-medium text-right">
-            <div className="text-foreground/100">Industrial Cost {'>'} 85%</div>
-            <div className="text-foreground/100">Delayed</div>
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] text-muted-foreground font-mono">97.5%</span>
           </div>
-          <div className="absolute bottom-6 left-6 text-[11px] text-muted-foreground/40 font-medium">
-            <div className="text-foreground/100">Industrial Cost {'<'} 85%</div>
-            <div className="text-foreground/100">Ahead</div>
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] text-warning font-mono font-semibold"></span>
           </div>
-          <div className="absolute bottom-6 right-6 text-[11px] text-muted-foreground/40 font-medium text-right">
-            <div className="text-foreground/100">Industrial Cost {'<'} 85%</div>
-            <div className="text-foreground/100">Delayed</div>
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] text-muted-foreground font-mono">72.5%</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] text-muted-foreground font-mono">60%</span>
           </div>
         </div>
 
-        <div className="absolute -left-6 top-1/2 -translate-y-1/2 text-xs font-semibold text-warning flex items-center gap-1.5">
-          <div className="text-foreground/60">80%</div>
+        {/* Y-Axis Label */}
+        <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-12 origin-center -rotate-90">
+          <span className="text-xs font-semibold text-muted-foreground tracking-wider">INDUSTRIAL COST</span>
         </div>
 
-        <div className="absolute top-2 left-1/2 -translate-x-1/2 text-[9px] font-semibold text-success/70 tracking-wider">
-          ON TIME
+        {/* X-Axis (bottom) - delay % */}
+        <div className="absolute bottom-14 left-10 right-10 flex justify-between">
+          <span className="text-[10px] text-muted-foreground font-mono">-50%</span>
+          <span className="text-[10px] text-muted-foreground font-mono">-25%</span>
+          <span className="text-[10px] text-success font-mono font-semibold">0%</span>
+          <span className="text-[10px] text-muted-foreground font-mono">+25%</span>
+          <span className="text-[10px] text-muted-foreground font-mono">+50%</span>
         </div>
 
-        {filteredProjects.map((project) => {
-          const pos = mapToPosition(project.delay, project.industrialCost)
-          const isHovered = hoveredProject?.id === project.id
-          const color = categoryColors[project.category]
-          const baseSize = getBudgetSize(project.budget)
+        {/* X-Axis Label */}
+        <div className="absolute bottom-3 left-10 right-10 flex items-center justify-center">
+          <span className="text-xs font-semibold text-muted-foreground tracking-wider">DELAY</span>
+        </div>
+
+        {/* Grid lines */}
+        <svg className="absolute inset-0 w-full h-full pointer-events-none" suppressHydrationWarning>
+          {/* Vertical lines */}
+          {[-2, -1, 0, 1, 2].map((i) => (
+            <line
+              key={`v-${i}`}
+              x1={`${50 + i * 20}%`}
+              y1="0%"
+              x2={`${50 + i * 20}%`}
+              y2="100%"
+              stroke="currentColor"
+              strokeWidth="1"
+              className="text-border/20"
+            />
+          ))}
+          {/* Horizontal lines */}
+          {[-2, -1, 0, 1, 2].map((i) => (
+            <line
+              key={`h-${i}`}
+              x1="0%"
+              y1={`${50 + i * 20}%`}
+              x2="100%"
+              y2={`${50 + i * 20}%`}
+              stroke="currentColor"
+              strokeWidth="1"
+              className="text-border/20"
+            />
+          ))}
+
+          {/* Center lines (0,0) */}
+          <line x1="50%" y1="0%" x2="50%" y2="100%" stroke="currentColor" strokeWidth="1.5" className="text-success/40" />
+          <line x1="0%" y1="50%" x2="100%" y2="50%" stroke="currentColor" strokeWidth="1.5" className="text-success/40" />
+
+          {/* Quadrant backgrounds */}
+          <rect x="50%" y="0%" width="50%" height="50%" fill="currentColor" className="text-destructive/5" />
+          <rect x="0%" y="0%" width="50%" height="50%" fill="currentColor" className="text-success/5" />
+        </svg>
+
+        {/* Matrix bubbles */}
+        {matrix.map((point) => {
+          const xPercent = 50 + point.x * 20
+          const yPercent = 50 - point.y * 20
 
           return (
-            <Link
-              key={project.id}
-              href={`/project/${project.id}`}
-              className="absolute cursor-pointer transition-all duration-300"
+            <div
+              key={`${point.x},${point.y}`}
+              className="absolute flex items-center justify-center group cursor-pointer"
               style={{
-                left: `${pos.x}%`,
-                top: `${100 - pos.y}%`,
-                transform: "translate(-50%, -50%)",
+                left: `${xPercent}%`,
+                top: `${yPercent}%`,
+                transform: 'translate(-50%, -50%)'
               }}
-              onMouseEnter={() => setHoveredProject(project)}
-              onMouseLeave={() => setHoveredProject(null)}
             >
-              <div
-                className="absolute inset-0 rounded-full transition-all duration-300"
-                style={{
-                  width: isHovered ? baseSize + 20 : baseSize + 12,
-                  height: isHovered ? baseSize + 20 : baseSize + 12,
-                  marginLeft: isHovered ? -(baseSize + 20) / 2 : -(baseSize + 12) / 2,
-                  marginTop: isHovered ? -(baseSize + 20) / 2 : -(baseSize + 12) / 2,
-                  background: `radial-gradient(circle, ${color}40 0%, transparent 70%)`,
-                  filter: isHovered ? `blur(8px)` : "blur(4px)",
-                }}
-              />
+              {/* Bubble container */}
+              <div className="relative">
+                {/* Outer ring with hover effect */}
+                <div className="absolute inset-0 rounded-full bg-background/50 backdrop-blur-sm border border-border/40 group-hover:border-foreground/40 transition-all group-hover:scale-110" />
 
-              <div
-                className="relative rounded-full border transition-all duration-300"
-                style={{
-                  width: isHovered ? baseSize + 8 : baseSize,
-                  height: isHovered ? baseSize + 8 : baseSize,
-                  backgroundColor: color,
-                  borderColor: color,
-                  boxShadow: `0 0 ${isHovered ? 20 : 10}px ${color}80`,
-                }}
-              />
+                {/* Content */}
+                <div className="relative px-3 py-2 flex flex-col items-center justify-center min-w-[60px]">
+                  <span className="text-[11px] font-semibold text-foreground">{point.data.length}</span>
+                  <span className="text-[9px] text-muted-foreground whitespace-nowrap">
+                    {point.data.length === 1 ? 'project' : 'projects'}
+                  </span>
 
-              {project.trend !== "stable" && (
-                <div
-                  className="absolute -top-3 left-1/2 -translate-x-1/2 text-[8px]"
-                  style={{ color }}
-                >
-                  {project.trend === "up" ? "↑" : "↓"}
-                </div>
-              )}
-
-              {isHovered && (
-                <div className="absolute z-50 bottom-full left-1/2 -translate-x-1/2 mb-3 w-48 glass-card rounded-lg p-3 pointer-events-none">
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="w-2 h-2 rounded-full" style={{ backgroundColor: color }} />
-                    <span className="font-medium text-sm text-foreground">{project.name}</span>
+                  {/* Tooltip */}
+                  <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-background/95 backdrop-blur-sm border border-border rounded-md p-2 whitespace-nowrap text-[10px] opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-20 shadow-lg">
+                    {point.data
+                      .slice(0, 3)
+                      .map((p) => p.name)
+                      .join(', ')}
+                    {point.data.length > 3 && ` +${point.data.length - 3}`}
                   </div>
-                  <div className="space-y-1 text-xs text-muted-foreground">
-                    <div className="flex justify-between">
-                      <span>% delay</span>
-                      <span className="text-foreground font-mono">{project.delay.toFixed(1)}%</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>% Industrial Cost</span>
-                      <span className="text-foreground font-mono">{project.industrialCost.toFixed(1)}%</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>Budget</span>
-                      <span className="text-foreground font-mono">{project.budget}</span>
-                    </div>
+
+                  {/* Category color indicators */}
+                  <div className="absolute -bottom-1 flex gap-1">
+                    {point.data.slice(0, 3).map((p, i) => (
+                      <div
+                        key={i}
+                        className="w-1.5 h-1.5 rounded-full"
+                        style={{ backgroundColor: categoryColors[p.category] }}
+                      />
+                    ))}
                   </div>
                 </div>
-              )}
-            </Link>
+              </div>
+            </div>
           )
         })}
       </div>
 
-      <div className="absolute left-0 top-1/2 -translate-y-1/2 flex flex-col justify-between h-[calc(100%-60px)]">
-        <div className="flex items-center gap-2">
-          <span className="text-[10px] text-muted-foreground font-mono">110%</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="text-[10px] text-muted-foreground font-mono">97.5%</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="text-[10px] text-warning font-mono font-semibold"></span>
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="text-[10px] text-muted-foreground font-mono">72.5%</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="text-[10px] text-muted-foreground font-mono">60%</span>
-        </div>
-      </div>
-
-      <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-12 origin-center -rotate-90">
-        <span className="text-xs font-semibold text-muted-foreground tracking-wider">INDUSTRIAL COST</span>
-      </div>
-
-      <div className="absolute bottom-14 left-10 right-10 flex justify-between">
-        <span className="text-[10px] text-muted-foreground font-mono">-50%</span>
-        <span className="text-[10px] text-muted-foreground font-mono">-25%</span>
-        <span className="text-[10px] text-success font-mono font-semibold">0%</span>
-        <span className="text-[10px] text-muted-foreground font-mono">+25%</span>
-        <span className="text-[10px] text-muted-foreground font-mono">+50%</span>
-      </div>
-
-      <div className="absolute bottom-3 left-10 right-10 flex items-center justify-center">
-        <span className="text-xs font-semibold text-muted-foreground tracking-wider">DELAY</span>
-      </div>
-    </div>
-
-    <div className="w-full mt-8 px-6">
-      <div className="glass-card rounded-lg p-4 border border-border/40 backdrop-blur-sm bg-gradient-to-r from-background/40 to-background/20">
-        <div className="flex items-center gap-4 flex-wrap">
-          <span className="text-sm font-semibold text-foreground tracking-wide">Work Typology:</span>
-          <div className="flex items-center gap-3 flex-wrap">
-            {(["all", "Infraestruturas Rodoviárias", "Infraestruturas Ferroviárias", "Infraestruturas Hidráulicas", "Infraestruturas Portuárias", "Infraestruturas Aeroportos", "Infraestruturas Urbanas", "Construção Civil", "Mineração", "Oil&Gas", "Power (energia)", "Outras obras"] as const).map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setSelectedCategory(cat)}
-                className={`flex items-center gap-2 px-3 py-1.5 rounded-md transition-all whitespace-nowrap text-sm ${selectedCategory === cat
-                  ? "bg-foreground/10 text-foreground font-semibold border border-foreground/30"
-                  : "text-muted-foreground hover:text-foreground hover:bg-background/50 border border-transparent"
+      {/* Category Legend - Below Matrix */}
+      <div className="w-full mt-8 px-6 mb-6">
+        <div className="glass-card rounded-lg p-4 border border-border/40 backdrop-blur-sm bg-gradient-to-r from-background/40 to-background/20">
+          <div className="flex items-center gap-4 flex-wrap">
+            <span className="text-sm font-semibold text-foreground tracking-wide">Work Typology:</span>
+            <div className="flex items-center gap-3 flex-wrap">
+              {(
+                [
+                  'all',
+                  'Infraestruturas Rodoviárias',
+                  'Infraestruturas Ferroviárias',
+                  'Infraestruturas Hidráulicas',
+                  'Infraestruturas Portuárias',
+                  'Infraestruturas Aeroportos',
+                  'Infraestruturas Urbanas',
+                  'Construção Civil',
+                  'Mineração',
+                  'Oil&Gas',
+                  'Power (energia)',
+                  'Outras obras'
+                ] as const
+              ).map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => setSelectedCategory(cat)}
+                  className={`flex items-center gap-2 px-3 py-1.5 rounded-md transition-all whitespace-nowrap text-sm ${
+                    selectedCategory === cat
+                      ? 'bg-foreground/10 text-foreground font-semibold border border-foreground/30'
+                      : 'text-muted-foreground hover:text-foreground hover:bg-background/50 border border-transparent'
                   }`}
-              >
-                {cat !== "all" ? (
-                  <>
-                    <div
-                      className="w-2.5 h-2.5 rounded-full flex-shrink-0"
-                      style={{
-                        backgroundColor: categoryColors[cat as Project["category"]],
-                        boxShadow: selectedCategory === cat ? `0 0 8px ${categoryColors[cat as Project["category"]]}` : 'none'
-                      }}
-                    />
-                    <span>{cat}</span>
-                  </>
-                ) : (
-                  <>
-                    <div className="w-2.5 h-2.5 rounded-full border-2 border-muted-foreground/60 flex-shrink-0" />
-                    <span>All</span>
-                  </>
-                )}
-              </button>
-            ))}
+                >
+                  {cat !== 'all' ? (
+                    <>
+                      <div
+                        className="w-2.5 h-2.5 rounded-full flex-shrink-0"
+                        style={{
+                          backgroundColor: categoryColors[cat as Project['category']],
+                          boxShadow:
+                            selectedCategory === cat
+                              ? `0 0 8px ${categoryColors[cat as Project['category']]}`
+                              : 'none'
+                        }}
+                      />
+                      <span>{cat}</span>
+                    </>
+                  ) : (
+                    <>
+                      <div className="w-2.5 h-2.5 rounded-full border-2 border-muted-foreground/60 flex-shrink-0" />
+                      <span>All</span>
+                    </>
+                  )}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </div>

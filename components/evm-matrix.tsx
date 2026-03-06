@@ -139,7 +139,7 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
             <rect width="100" height="100" fill="url(#grid)" />
 
             {/* Reference line at 80% industrial cost - baseline (80-60)/(100-60) = 50% of range */}
-            <line x1="0" y1="50" x2="100" y2="50" stroke="#f97316" strokeWidth="0.3" strokeDasharray="2,2" opacity="0.8" />
+            <line x1="0" y1="50" x2="100" y2="50" stroke="#888888" strokeWidth="0.3" strokeDasharray="2,2" opacity="0.4" />
 
             {/* Grey dashed line at y = 100 (top of chart) */}
             <line x1="0" y1="0" x2="100" y2="0" stroke="#888888" strokeWidth="0.4" strokeDasharray="2,5" opacity="0.4" />

@@ -127,22 +127,19 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
       {/* Main chart container with padding for axes */}
       <div className="relative w-[calc(100%-80px)] h-[calc(100%-80px)]" suppressHydrationWarning>
         {/* Background and grid */}
-        <div className="absolute inset-0 rounded-lg border-2 border-white/30 bg-gradient-to-br from-background/50 to-background/30 backdrop-blur-sm">
+        <div className="absolute inset-0 rounded-lg border border-white/10 bg-gradient-to-br from-background/50 to-background/30 backdrop-blur-sm">
           {/* Grid Lines */}
           <svg className="absolute inset-0 w-full h-full rounded-lg" viewBox="0 0 100 100" preserveAspectRatio="none">
             {/* Background grid */}
             <defs>
               <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
-                <path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(100,116,139,0.08)" strokeWidth="0.2" />
+                <path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.15)" strokeWidth="0.2" />
               </pattern>
             </defs>
             <rect width="100" height="100" fill="url(#grid)" />
 
             {/* Reference line at 80% industrial cost - baseline (80-60)/(100-60) = 50% of range */}
-            <line x1="0" y1="50" x2="100" y2="50" stroke="#888888" strokeWidth="0.3" strokeDasharray="2,2" opacity="0.4" />
-
-            {/* Grey dashed line at y = 100 (top of chart) */}
-            <line x1="0" y1="0" x2="100" y2="0" stroke="#888888" strokeWidth="0.4" strokeDasharray="2,5" opacity="0.4" />
+            <line x1="0" y1="50" x2="100" y2="50" stroke="#f97316" strokeWidth="0.3" strokeDasharray="2,2" opacity="0.8" />
 
             {/* Center line at 0% delay (x = 50) */}
             <line x1="50" y1="0" x2="50" y2="100" stroke="#888888" strokeWidth="0.4" strokeDasharray="2,5" opacity="0.4" />

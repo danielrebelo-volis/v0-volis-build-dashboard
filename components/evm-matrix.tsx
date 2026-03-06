@@ -308,43 +308,6 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
       {/* X-Axis Label and Category Legend */}
       <div className="absolute bottom-0 left-10 right-10 flex items-center justify-between">
         <span className="text-xs font-semibold text-muted-foreground tracking-wider">DELAY</span>
-
-        {/* Category Legend - Compact */}
-        <div className="glass-card rounded-md px-2.5 py-1.5 border border-border/30 backdrop-blur-sm">
-          <div className="flex items-center gap-2">
-            <span className="text-[9px] font-semibold text-muted-foreground tracking-wide uppercase">Typology</span>
-            <div className="flex items-center gap-2 flex-wrap max-w-full">
-              {(["all", "Infraestruturas Rodoviárias", "Infraestruturas Ferroviárias", "Infraestruturas Hidráulicas", "Infraestruturas Portuárias", "Infraestruturas Aeroportos", "Infraestruturas Urbanas", "Construção Civil", "Mineração", "Oil&Gas", "Power (energia)", "Outras obras"] as const).map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => setSelectedCategory(cat)}
-                  className={`flex items-center gap-1 text-[10px] transition-all whitespace-nowrap ${selectedCategory === cat
-                    ? "text-foreground font-medium"
-                    : "text-muted-foreground/60 hover:text-foreground/80"
-                    }`}
-                >
-                  {cat !== "all" ? (
-                    <>
-                      <div
-                        className="w-1.5 h-1.5 rounded-full"
-                        style={{
-                          backgroundColor: categoryColors[cat as Project["category"]],
-                          boxShadow: selectedCategory === cat ? `0 0 6px ${categoryColors[cat as Project["category"]]}80` : 'none'
-                        }}
-                      />
-                      <span>{cat}</span>
-                    </>
-                  ) : (
-                    <>
-                      <div className="w-1.5 h-1.5 rounded-full border border-muted-foreground/50" />
-                      <span>All</span>
-                    </>
-                  )}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   )

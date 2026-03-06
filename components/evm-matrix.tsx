@@ -292,7 +292,7 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
       </div>
 
       {/* X-Axis (bottom) - delay % */}
-      <div className="absolute bottom-8 left-10 right-10 flex justify-between">
+      <div className="absolute bottom-5 left-10 right-10 flex justify-between">
         <span className="text-[10px] text-muted-foreground font-mono">-50%</span>
         <span className="text-[10px] text-muted-foreground font-mono">-25%</span>
         <span className="text-[10px] text-success font-mono font-semibold">0%</span>

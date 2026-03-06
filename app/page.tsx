@@ -79,7 +79,7 @@ export default function Dashboard() {
             <div className="mb-4 flex justify-end">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="sm" className="gap-2 text-foreground bg-transparent">
+                  <Button variant="outline" size="sm" className="gap-2 text-foreground bg-transparent border-white">
                     <Filter className="w-4 h-4" />
                     <span className="hidden sm:inline">Filters</span>
                   </Button>

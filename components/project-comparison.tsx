@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { ChevronDown } from 'lucide-react'
-import { ComposedChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
+import { ComposedChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts'
 import { useChartColors } from '@/hooks/use-chart-colors'
 import {
   DropdownMenu,
@@ -29,45 +29,19 @@ interface ComparisonProject {
   plannedBudget: number
   estimatedDeadline: string
   initialDeadline: string
+  delay: number
+  industrialCost: number
+  completion: number
 }
 
+// Data from project-list.tsx and overview page
 const projects: ComparisonProject[] = [
   {
     id: 'PRJ-001',
-    name: 'Project Alpha',
-    location: 'Portugal',
-    spi: 1.05,
-    cpi: 0.98,
-    ev: '€12.5M',
-    weeklyRatio: '€850k/week',
-    weeklyChange: '+4.2%',
-    ppc: 87,
-    estimatedFinalCost: 48.5,
-    plannedBudget: 50,
-    estimatedDeadline: 'March 15, 2025',
-    initialDeadline: 'March 22, 2025',
-  },
-  {
-    id: 'PRJ-002',
-    name: 'Project Beta',
-    location: 'Brazil',
-    spi: 0.92,
-    cpi: 1.08,
-    ev: '€18.2M',
-    weeklyRatio: '€920k/week',
-    weeklyChange: '-2.1%',
-    ppc: 72,
-    estimatedFinalCost: 52.8,
-    plannedBudget: 48,
-    estimatedDeadline: 'April 5, 2025',
-    initialDeadline: 'March 28, 2025',
-  },
-  {
-    id: 'PRJ-003',
     name: 'Metro Tower',
-    location: 'Singapore',
+    location: 'Lisbon, Portugal',
     spi: 1.15,
-    cpi: 0.85,
+    cpi: 0.88,
     ev: '€24.1M',
     weeklyRatio: '€1.1M/week',
     weeklyChange: '+6.8%',
@@ -76,9 +50,12 @@ const projects: ComparisonProject[] = [
     plannedBudget: 50,
     estimatedDeadline: 'February 28, 2025',
     initialDeadline: 'March 10, 2025',
+    delay: -35,
+    industrialCost: 95,
+    completion: 68,
   },
   {
-    id: 'PRJ-004',
+    id: 'PRJ-002',
     name: 'Harbor Bridge',
     location: 'Dubai',
     spi: 0.88,
@@ -91,33 +68,76 @@ const projects: ComparisonProject[] = [
     plannedBudget: 60,
     estimatedDeadline: 'April 18, 2025',
     initialDeadline: 'March 30, 2025',
+    delay: 20,
+    industrialCost: 73,
+    completion: 42,
+  },
+  {
+    id: 'PRJ-003',
+    name: 'Skyline Plaza',
+    location: 'London',
+    spi: 0.85,
+    cpi: 0.92,
+    ev: '€28.7M',
+    weeklyRatio: '€880k/week',
+    weeklyChange: '-3.5%',
+    ppc: 78,
+    estimatedFinalCost: 52.0,
+    plannedBudget: 47.5,
+    estimatedDeadline: 'April 15, 2025',
+    initialDeadline: 'March 25, 2025',
+    delay: 32,
+    industrialCost: 94,
+    completion: 85,
+  },
+  {
+    id: 'PRJ-004',
+    name: 'Industrial Park',
+    location: 'São Paulo, Brazil',
+    spi: 1.08,
+    cpi: 0.95,
+    ev: '€18.5M',
+    weeklyRatio: '€750k/week',
+    weeklyChange: '+5.1%',
+    ppc: 88,
+    estimatedFinalCost: 38.2,
+    plannedBudget: 40,
+    estimatedDeadline: 'March 5, 2025',
+    initialDeadline: 'March 20, 2025',
+    delay: -30,
+    industrialCost: 70,
+    completion: 31,
   },
   {
     id: 'PRJ-005',
-    name: 'Skyline Plaza',
-    location: 'London',
-    spi: 1.02,
-    cpi: 0.95,
-    ev: '€28.7M',
-    weeklyRatio: '€880k/week',
-    weeklyChange: '+3.2%',
-    ppc: 85,
-    estimatedFinalCost: 45.2,
-    plannedBudget: 47.5,
-    estimatedDeadline: 'March 20, 2025',
-    initialDeadline: 'March 25, 2025',
+    name: 'Riverside Homes',
+    location: 'Toronto, Canada',
+    spi: 0.92,
+    cpi: 1.05,
+    ev: '€15.2M',
+    weeklyRatio: '€620k/week',
+    weeklyChange: '-2.3%',
+    ppc: 71,
+    estimatedFinalCost: 48.5,
+    plannedBudget: 45,
+    estimatedDeadline: 'April 22, 2025',
+    initialDeadline: 'April 5, 2025',
+    delay: 28,
+    industrialCost: 78,
+    completion: 56,
   },
 ]
 
+// S-curve data with larger gaps between planned, estimated, and actual
 const sCurveData = [
-  { week: 'W1', plannedProgress: 5, actualProgress: 6, plannedCost: 2, actualCost: 2.1 },
-  { week: 'W2', plannedProgress: 12, actualProgress: 13, plannedCost: 4.5, actualCost: 4.4 },
-  { week: 'W3', plannedProgress: 22, actualProgress: 23, plannedCost: 8, actualCost: 7.8 },
-  { week: 'W4', plannedProgress: 35, actualProgress: 38, plannedCost: 12.5, actualCost: 12.2 },
-  { week: 'W5', plannedProgress: 50, actualProgress: 52, plannedCost: 18, actualCost: 17.6 },
-  { week: 'W6', plannedProgress: 65, actualProgress: 67, plannedCost: 24, actualCost: 23.8 },
-  { week: 'W7', plannedProgress: 78, actualProgress: 79, plannedCost: 30, actualCost: 29.5 },
-  { week: 'W8', plannedProgress: 88, actualProgress: 90, plannedCost: 35, actualCost: 34.2 },
+  { week: 'W1', planned: 5, estimated: 4, actual: 2, plannedCost: 2, estimatedCost: 1.8, actualCost: 1.5 },
+  { week: 'W2', planned: 12, estimated: 10, actual: 6, plannedCost: 4.5, estimatedCost: 4, actualCost: 3.2 },
+  { week: 'W3', planned: 22, estimated: 19, actual: 10, plannedCost: 8, estimatedCost: 7, actualCost: 5.5 },
+  { week: 'W4', planned: 35, estimated: 31, actual: 18, plannedCost: 12.5, estimatedCost: 11, actualCost: 8.5 },
+  { week: 'W5', planned: 50, estimated: 44, actual: 28, plannedCost: 18, estimatedCost: 16, actualCost: 12 },
+  { week: 'W6', planned: 65, estimated: 57, actual: 38, plannedCost: 24, estimatedCost: 21, actualCost: 16.5 },
+  { week: 'W7', planned: 78, estimated: 69, actual: 48, plannedCost: 30, estimatedCost: 27, actualCost: 21 },
+  { week: 'W8', planned: 88, estimated: 78, actual: 55, plannedCost: 35, estimatedCost: 31, actualCost: 24 },
 ]
 
 type IndicatorType = 'weekly-evolution' | 'real-earned-value' | 'cpi' | 'spi' | 'ppc' | 'estimated-cost' | 'estimated-deadline'
@@ -280,8 +300,10 @@ function ComparisonSide({
               <XAxis dataKey="week" tick={{ fontSize: 10, fill: colors.tickFill }} />
               <YAxis tick={{ fontSize: 10, fill: colors.tickFill }} />
               <Tooltip contentStyle={{ backgroundColor: colors.tooltipBg, border: colors.tooltipBorder }} />
-              <Line type="monotone" dataKey="plannedProgress" stroke={colors.plannedLine} strokeWidth={2} dot={false} />
-              <Line type="monotone" dataKey="actualProgress" stroke={colors.isDark ? "#00c8ff" : "#6C5CE7"} strokeWidth={2.5} dot={false} />
+              <Legend wrapperStyle={{ paddingTop: '12px' }} iconType="line" />
+              <Line type="monotone" dataKey="planned" stroke="#999999" strokeWidth={2} dot={false} name="Planned" />
+              <Line type="monotone" dataKey="estimated" stroke={colors.isDark ? "#00c8ff" : "#6C5CE7"} strokeWidth={2.5} dot={false} name="Estimated" />
+              <Line type="monotone" dataKey="actual" stroke={colors.isDark ? "#00ff88" : "#00b894"} strokeWidth={2.5} dot={false} name="Actual" />
             </ComposedChart>
           </ResponsiveContainer>
         </div>
@@ -296,9 +318,11 @@ function ComparisonSide({
               <CartesianGrid strokeDasharray="3 3" stroke={colors.grid} />
               <XAxis dataKey="week" tick={{ fontSize: 10, fill: colors.tickFill }} />
               <YAxis tick={{ fontSize: 10, fill: colors.tickFill }} />
-              <Tooltip contentStyle={{ backgroundColor: colors.tooltipBg, border: colors.tooltipBorder }} />
-              <Line type="monotone" dataKey="plannedCost" stroke={colors.plannedLine} strokeWidth={2} dot={false} />
-              <Line type="monotone" dataKey="actualCost" stroke={colors.isDark ? "#00c8ff" : "#6C5CE7"} strokeWidth={2.5} dot={false} />
+              <Tooltip contentStyle={{ backgroundColor: colors.tooltipBg, border: colors.tooltipBorder }} formatter={(value: number) => `€${value.toFixed(1)}M`} />
+              <Legend wrapperStyle={{ paddingTop: '12px' }} iconType="line" />
+              <Line type="monotone" dataKey="plannedCost" stroke="#999999" strokeWidth={2} dot={false} name="Planned" />
+              <Line type="monotone" dataKey="estimatedCost" stroke={colors.isDark ? "#00c8ff" : "#6C5CE7"} strokeWidth={2.5} dot={false} name="Estimated" />
+              <Line type="monotone" dataKey="actualCost" stroke={colors.isDark ? "#00ff88" : "#00b894"} strokeWidth={2.5} dot={false} name="Actual" />
             </ComposedChart>
           </ResponsiveContainer>
         </div>

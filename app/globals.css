@@ -47,22 +47,22 @@
 
 .dark {
   /* Data-Dark - Core Surfaces & Backgrounds */
-  --background: #14161B;
+  --background: #2f343c;
   --foreground: #FFFFFF;
-  --card: #242832;
+  --card: #252a32;
   --card-foreground: #FFFFFF;
-  --popover: #242832;
+  --popover: #252a32;
   --popover-foreground: #FFFFFF;
   --secondary: #1C1F26;
   --secondary-foreground: #FFFFFF;
   --muted: #1C1F26;
   --muted-foreground: #9CA3AF;
   --border: #334155;
-  --input: #242832;
+  --input: #252a32;
   
   /* Data-Dark - Action & Status */
   --primary: #FFFFFF;
-  --primary-foreground: #14161B;
+  --primary-foreground: #2f343c;
   --accent: #3B82F6;
   --accent-foreground: #FFFFFF;
   --ring: #3B82F6;

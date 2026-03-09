@@ -127,52 +127,57 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
       {/* Main chart container with padding for axes */}
       <div className="relative w-[calc(100%-80px)] h-[calc(100%-80px)]" suppressHydrationWarning>
         {/* Background and grid */}
-        <div className="absolute inset-0 rounded-lg border border-white/10 bg-gradient-to-br from-background/50 to-background/30 backdrop-blur-sm">
+        <div className="absolute inset-0 rounded-lg border dark:border-white/10 border-gray-300 bg-gradient-to-br from-background/50 to-background/30 dark:backdrop-blur-sm">
           {/* Grid Lines */}
           <svg className="absolute inset-0 w-full h-full rounded-lg" viewBox="0 0 100 100" preserveAspectRatio="none">
             {/* Background grid */}
             <defs>
               <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
-                <path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.15)" strokeWidth="0.2" />
+                <path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.15)" strokeWidth="0.2" className="dark:block hidden" />
+                <path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(0,0,0,0.12)" strokeWidth="0.2" className="dark:hidden block" />
               </pattern>
             </defs>
             <rect width="100" height="100" fill="url(#grid)" />
 
             {/* Reference line at 80% industrial cost - baseline (80-60)/(100-60) = 50% of range */}
-            <line x1="0" y1="50" x2="100" y2="50" stroke="#f97316" strokeWidth="0.3" strokeDasharray="2,2" opacity="0.8" />
+            <line x1="0" y1="50" x2="100" y2="50" stroke="#f97316" strokeWidth="0.5" strokeDasharray="2,2" opacity="1" className="dark:opacity-80 opacity-100" />
 
             {/* Center line at 0% delay (x = 50) */}
-            <line x1="50" y1="0" x2="50" y2="100" stroke="#888888" strokeWidth="0.4" strokeDasharray="2,5" opacity="0.4" />
+            <line x1="50" y1="0" x2="50" y2="100" stroke="#888888" strokeWidth="0.5" strokeDasharray="2,5" className="dark:opacity-40 opacity-60" />
 
             {/* Quadrant shading - based on 80% reference line and center line */}
-            <rect x="0" y="0" width="50" height="50" fill="rgba(34,197,94,0.03)" />
-            <rect x="50" y="0" width="50" height="50" fill="rgba(255,152,0,0.03)" />
-            <rect x="0" y="50" width="50" height="50" fill="rgba(34,197,94,0.02)" />
-            <rect x="50" y="50" width="50" height="50" fill="rgba(255,152,0,0.02)" />
+            <rect x="0" y="0" width="50" height="50" fill="rgba(34,197,94,0.03)" className="dark:block hidden" />
+            <rect x="50" y="0" width="50" height="50" fill="rgba(255,152,0,0.03)" className="dark:block hidden" />
+            <rect x="0" y="50" width="50" height="50" fill="rgba(34,197,94,0.02)" className="dark:block hidden" />
+            <rect x="50" y="50" width="50" height="50" fill="rgba(255,152,0,0.02)" className="dark:block hidden" />
+            <rect x="0" y="0" width="50" height="50" fill="rgba(34,197,94,0.08)" className="dark:hidden block" />
+            <rect x="50" y="0" width="50" height="50" fill="rgba(255,152,0,0.08)" className="dark:hidden block" />
+            <rect x="0" y="50" width="50" height="50" fill="rgba(34,197,94,0.06)" className="dark:hidden block" />
+            <rect x="50" y="50" width="50" height="50" fill="rgba(255,152,0,0.06)" className="dark:hidden block" />
           </svg>
         </div>
 
         {/* Quadrant Labels with better background separation */}
         <div className="absolute inset-0 pointer-events-none">
           {/* Top-Left: Ahead & High Cost (>80%) */}
-          <div className="absolute top-4 left-4 bg-background/60 backdrop-blur px-2 py-1 rounded border border-white/10">
-            <div className="text-[11px] font-medium text-foreground">Industrial Cost {'>'} 80%</div>
-            <div className="text-[11px] font-medium text-foreground">Ahead</div>
+          <div className="absolute top-4 left-4 bg-background/80 dark:bg-background/60 backdrop-blur px-2 py-1 rounded border dark:border-white/10 border-gray-300">
+            <div className="text-[11px] font-medium text-foreground dark:text-white text-gray-900">Industrial Cost {'>'} 80%</div>
+            <div className="text-[11px] font-medium text-foreground dark:text-white text-gray-900">Ahead</div>
           </div>
           {/* Top-Right: Delayed & High Cost (>80%) */}
-          <div className="absolute top-4 right-4 bg-background/60 backdrop-blur px-2 py-1 rounded border border-white/10 text-right">
-            <div className="text-[11px] font-medium text-foreground">Industrial Cost {'>'} 80%</div>
-            <div className="text-[11px] font-medium text-foreground">Delayed</div>
+          <div className="absolute top-4 right-4 bg-background/80 dark:bg-background/60 backdrop-blur px-2 py-1 rounded border dark:border-white/10 border-gray-300 text-right">
+            <div className="text-[11px] font-medium text-foreground dark:text-white text-gray-900">Industrial Cost {'>'} 80%</div>
+            <div className="text-[11px] font-medium text-foreground dark:text-white text-gray-900">Delayed</div>
           </div>
           {/* Bottom-Left: Ahead & Good Cost (<80%) */}
-          <div className="absolute bottom-4 left-4 bg-background/60 backdrop-blur px-2 py-1 rounded border border-white/10">
-            <div className="text-[11px] font-medium text-foreground">Industrial Cost {'<'} 80%</div>
-            <div className="text-[11px] font-medium text-foreground">Ahead</div>
+          <div className="absolute bottom-4 left-4 bg-background/80 dark:bg-background/60 backdrop-blur px-2 py-1 rounded border dark:border-white/10 border-gray-300">
+            <div className="text-[11px] font-medium text-foreground dark:text-white text-gray-900">Industrial Cost {'<'} 80%</div>
+            <div className="text-[11px] font-medium text-foreground dark:text-white text-gray-900">Ahead</div>
           </div>
           {/* Bottom-Right: Delayed & Good Cost (<80%) */}
-          <div className="absolute bottom-4 right-4 bg-background/60 backdrop-blur px-2 py-1 rounded border border-white/10 text-right">
-            <div className="text-[11px] font-medium text-foreground">Industrial Cost {'<'} 80%</div>
-            <div className="text-[11px] font-medium text-foreground">Delayed</div>
+          <div className="absolute bottom-4 right-4 bg-background/80 dark:bg-background/60 backdrop-blur px-2 py-1 rounded border dark:border-white/10 border-gray-300 text-right">
+            <div className="text-[11px] font-medium text-foreground dark:text-white text-gray-900">Industrial Cost {'<'} 80%</div>
+            <div className="text-[11px] font-medium text-foreground dark:text-white text-gray-900">Delayed</div>
           </div>
         </div>
 
@@ -267,34 +272,34 @@ export function EVMMatrix({ filterType, filterValue }: EVMMatrixProps) {
       {/* Y-Axis (left) - Industrial Cost % */}
       <div className="absolute left-5 top-1/2 -translate-y-1/2 flex flex-col justify-between h-[calc(100%-80px)]">
         <div className="flex items-center gap-2">
-          <span className="text-[10px] text-muted-foreground font-mono">100%</span>
+          <span className="text-[10px] text-muted-foreground dark:text-muted-foreground text-gray-700 font-mono">100%</span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-[10px] text-muted-foreground font-mono">90%</span>
+          <span className="text-[10px] text-muted-foreground dark:text-muted-foreground text-gray-700 font-mono">90%</span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-[10px] text-muted-foreground font-mono font-semibold">80%</span>
+          <span className="text-[10px] text-muted-foreground dark:text-muted-foreground text-gray-700 font-mono font-semibold">80%</span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-[10px] text-muted-foreground font-mono">70%</span>
+          <span className="text-[10px] text-muted-foreground dark:text-muted-foreground text-gray-700 font-mono">70%</span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-[10px] text-muted-foreground font-mono">60%</span>
+          <span className="text-[10px] text-muted-foreground dark:text-muted-foreground text-gray-700 font-mono">60%</span>
         </div>
       </div>
 
       {/* Y-Axis Label */}
       <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-12 origin-center -rotate-90">
-        <span className="text-xs font-semibold text-muted-foreground tracking-wider">INDUSTRIAL COST</span>
+        <span className="text-xs font-semibold text-muted-foreground dark:text-muted-foreground text-gray-700 tracking-wider">INDUSTRIAL COST</span>
       </div>
 
       {/* X-Axis (bottom) - delay % */}
       <div className="absolute bottom-5 left-10 right-10 flex justify-between">
-        <span className="text-[10px] text-muted-foreground font-mono">-50%</span>
-        <span className="text-[10px] text-muted-foreground font-mono">-25%</span>
-        <span className="text-[10px] text-success font-mono font-semibold">0%</span>
-        <span className="text-[10px] text-muted-foreground font-mono">+25%</span>
-        <span className="text-[10px] text-muted-foreground font-mono">+50%</span>
+        <span className="text-[10px] text-muted-foreground dark:text-muted-foreground text-gray-700 font-mono">-50%</span>
+        <span className="text-[10px] text-muted-foreground dark:text-muted-foreground text-gray-700 font-mono">-25%</span>
+        <span className="text-[10px] text-success dark:text-success text-green-600 font-mono font-semibold">0%</span>
+        <span className="text-[10px] text-muted-foreground dark:text-muted-foreground text-gray-700 font-mono">+25%</span>
+        <span className="text-[10px] text-muted-foreground dark:text-muted-foreground text-gray-700 font-mono">+50%</span>
       </div>
 
       {/* X-Axis Label and Category Legend */}

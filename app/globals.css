@@ -38,46 +38,53 @@
   --sidebar-accent-foreground: rgb(0, 0, 0);
   --sidebar-border: oklch(0.22 0 0);
   --sidebar-ring: oklch(0.7 0.15 220);
-  /* Custom tokens for Palantir theme */
-  --cyan: oklch(0.65 0.22 255);
-  --cyan-glow: oklch(0.72 0.25 255);
-  --success: oklch(0.72 0.2 160);
-  --warning: oklch(0.75 0.22 85);
+  /* Palantir Blueprint custom tokens */
+  --cyan: #4C90F0;
+  --cyan-glow: #5BA3F5;
+  --success: #32A467;
+  --warning: #EC9A3C;
 }
 
 .dark {
-  --background: oklch(0.05 0 0);
-  --foreground: oklch(0.95 0 0);
-  --card: oklch(0.12 0 0);
-  --card-foreground: oklch(0.95 0 0);
-  --popover: oklch(0.12 0 0);
-  --popover-foreground: oklch(0.95 0 0);
-  --primary: oklch(0.95 0 0);
-  --primary-foreground: oklch(0.05 0 0);
-  --secondary: oklch(0.18 0 0);
-  --secondary-foreground: oklch(0.95 0 0);
-  --muted: oklch(0.2 0 0);
-  --muted-foreground: oklch(0.55 0 0);
-  --accent: oklch(0.65 0.22 255);
-  --accent-foreground: oklch(0.95 0 0);
-  --destructive: oklch(0.58 0.25 40);
-  --destructive-foreground: oklch(0.95 0 0);
-  --border: oklch(0.18 0 0);
-  --input: oklch(0.18 0 0);
-  --ring: oklch(0.65 0.22 255);
-  --chart-1: oklch(0.65 0.22 255);
-  --chart-2: oklch(0.72 0.2 160);
-  --chart-3: oklch(0.75 0.18 85);
-  --chart-4: oklch(0.58 0.25 40);
-  --chart-5: oklch(0.68 0.15 280);
-  --sidebar: oklch(0.08 0 0);
-  --sidebar-foreground: oklch(0.95 0 0);
-  --sidebar-primary: oklch(0.65 0.22 255);
-  --sidebar-primary-foreground: oklch(0.95 0 0);
-  --sidebar-accent: oklch(0.18 0 0);
-  --sidebar-accent-foreground: oklch(0.95 0 0);
-  --sidebar-border: oklch(0.18 0 0);
-  --sidebar-ring: oklch(0.65 0.22 255);
+  /* Palantir Blueprint - Core Surfaces */
+  --background: #111418;
+  --foreground: #F6F7F9;
+  --card: #1C2127;
+  --card-foreground: #F6F7F9;
+  --popover: #1C2127;
+  --popover-foreground: #F6F7F9;
+  --secondary: #252A31;
+  --secondary-foreground: #F6F7F9;
+  --muted: #252A31;
+  --muted-foreground: #ABB3BF;
+  --border: #383E47;
+  --input: #1C2127;
+  
+  /* Palantir Blueprint - Action & Status (Intent) */
+  --primary: #F6F7F9;
+  --primary-foreground: #111418;
+  --accent: #4C90F0;
+  --accent-foreground: #F6F7F9;
+  --ring: #4C90F0;
+  --destructive: #E76A6E;
+  --destructive-foreground: #F6F7F9;
+  
+  /* Palantir Blueprint - Chart Colors */
+  --chart-1: #4C90F0;
+  --chart-2: #32A467;
+  --chart-3: #EC9A3C;
+  --chart-4: #E76A6E;
+  --chart-5: #8A9BA8;
+  
+  /* Sidebar */
+  --sidebar: #111418;
+  --sidebar-foreground: #F6F7F9;
+  --sidebar-primary: #4C90F0;
+  --sidebar-primary-foreground: #F6F7F9;
+  --sidebar-accent: #1C2127;
+  --sidebar-accent-foreground: #F6F7F9;
+  --sidebar-border: #383E47;
+  --sidebar-ring: #4C90F0;
 }
 
 @theme inline {
@@ -192,7 +199,7 @@
 
 /* Glow effects */
 .glow-cyan {
-  box-shadow: 0 0 20px rgba(0, 136, 255, 0.4), 0 0 40px rgba(0, 136, 255, 0.15);
+  box-shadow: 0 0 20px rgba(76, 144, 240, 0.5), 0 0 40px rgba(76, 144, 240, 0.2);
 }
 
 .light .glow-cyan {
@@ -200,7 +207,7 @@
 }
 
 .node-glow {
-  filter: drop-shadow(0 0 8px rgba(0, 136, 255, 0.7));
+  filter: drop-shadow(0 0 8px rgba(76, 144, 240, 0.8));
 }
 
 .light .node-glow {

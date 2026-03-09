@@ -138,11 +138,11 @@
 }
 
 .light {
-  --background: rgb(247, 247, 250);
+  --background: rgb(252, 252, 253);
   --foreground: rgb(30, 30, 40);
-  --card: rgb(255, 255, 255);
+  --card: rgb(248, 248, 250);
   --card-foreground: rgb(30, 30, 40);
-  --popover: rgb(255, 255, 255);
+  --popover: rgb(248, 248, 250);
   --popover-foreground: rgb(30, 30, 40);
   --primary: rgb(108, 92, 231);
   --primary-foreground: rgb(255, 255, 255);
@@ -154,21 +154,21 @@
   --accent-foreground: rgb(255, 255, 255);
   --destructive: rgb(220, 60, 60);
   --destructive-foreground: rgb(255, 255, 255);
-  --border: rgb(225, 225, 235);
-  --input: rgb(240, 240, 245);
+  --border: rgb(235, 235, 240);
+  --input: rgb(245, 245, 248);
   --ring: rgb(108, 92, 231);
   --chart-1: rgb(108, 92, 231);
   --chart-2: rgb(0, 184, 148);
   --chart-3: rgb(253, 203, 110);
   --chart-4: rgb(225, 112, 85);
   --chart-5: rgb(99, 110, 114);
-  --sidebar: rgb(255, 255, 255);
+  --sidebar: rgb(252, 252, 253);
   --sidebar-foreground: rgb(30, 30, 40);
   --sidebar-primary: rgb(108, 92, 231);
   --sidebar-primary-foreground: rgb(255, 255, 255);
   --sidebar-accent: rgb(240, 240, 245);
   --sidebar-accent-foreground: rgb(30, 30, 40);
-  --sidebar-border: rgb(225, 225, 235);
+  --sidebar-border: rgb(235, 235, 240);
   --sidebar-ring: rgb(108, 92, 231);
   --cyan: rgb(108, 92, 231);
   --cyan-glow: rgb(130, 115, 240);

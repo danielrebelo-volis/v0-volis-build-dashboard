@@ -95,12 +95,17 @@ function ProjectRow({ name, id, delay, industrialCost, completion }: ProjectRowP
 }
 
 export function ProjectList() {
+  // Aligned with EVM matrix data - same delay and Industrial Cost values
   const allProjects: ProjectRowProps[] = [
-    { name: "Metro Tower", id: "PRJ-001", delay: -22, industrialCost: 93, completion: 68 },
-    { name: "Harbor Bridge", id: "PRJ-002", delay: 8, industrialCost: 71, completion: 42 },
-    { name: "Skyline Plaza", id: "PRJ-003", delay: 32, industrialCost: 106, completion: 85 },
-    { name: "Industrial Park", id: "PRJ-004", delay: -5, industrialCost: 67, completion: 31 },
-    { name: "Riverside Homes", id: "PRJ-005", delay: 18, industrialCost: 98, completion: 56 },
+    { name: "Metro Tower", id: "PRJ-001", delay: -35, industrialCost: 95, completion: 68 },
+    { name: "Harbor Bridge", id: "PRJ-002", delay: 20, industrialCost: 73, completion: 42 },
+    { name: "Skyline Plaza", id: "PRJ-003", delay: 32, industrialCost: 94, completion: 85 },
+    { name: "Industrial Park", id: "PRJ-004", delay: -30, industrialCost: 70, completion: 31 },
+    { name: "Riverside Homes", id: "PRJ-005", delay: 28, industrialCost: 78, completion: 56 },
+    { name: "Tech Campus", id: "PRJ-006", delay: -38, industrialCost: 79, completion: 45 },
+    { name: "Highway 12 Ext", id: "PRJ-007", delay: -25, industrialCost: 68, completion: 72 },
+    { name: "Green Valley", id: "PRJ-008", delay: 38, industrialCost: 72, completion: 51 },
+    { name: "Data Center", id: "PRJ-009", delay: -15, industrialCost: 75, completion: 39 },
   ]
 
   // Filter: Industrial Cost must always be < 100%

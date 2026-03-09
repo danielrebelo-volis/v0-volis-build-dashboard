@@ -7,19 +7,19 @@ import Link from "next/link"
 interface ProjectRowProps {
   name: string
   id: string
-  status: "on-track" | "at-risk" | "delayed"
   delay: number // % delay (-50 to +50)
   industrialCost: number // % of contract value (0-100)
   completion: number
 }
 
 const statusConfig = {
-  "on-track": { label: "On Track", color: "#00ff88" },
-  "at-risk": { label: "At Risk", color: "#ffaa00" },
+  "ahead": { label: "Ahead", color: "#00ff88" },
   "delayed": { label: "Delayed", color: "#ff6b6b" },
 }
 
-function ProjectRow({ name, id, status, delay, industrialCost, completion }: ProjectRowProps) {
+function ProjectRow({ name, id, delay, industrialCost, completion }: ProjectRowProps) {
+  // Determine status based on delay: delay < 0 = "Ahead" (green), delay > 0 = "Delayed" (red)
+  const status: "ahead" | "delayed" = delay < 0 ? "ahead" : "delayed"
   const config = statusConfig[status]
 
   return (
@@ -43,7 +43,7 @@ function ProjectRow({ name, id, status, delay, industrialCost, completion }: Pro
         {/* Delay - 2 columns */}
         <div className="col-span-2 text-right">
           <span className="text-xs text-muted-foreground block">Delay</span>
-          <span className={`text-sm font-mono ${delay <= 0 ? 'text-success' : 'text-destructive'}`}>
+          <span className={`text-sm font-mono ${delay < 0 ? 'text-green-500' : 'text-red-500'}`}>
             {delay > 0 ? '+' : ''}{delay.toFixed(0)}%
           </span>
         </div>
@@ -95,13 +95,21 @@ function ProjectRow({ name, id, status, delay, industrialCost, completion }: Pro
 }
 
 export function ProjectList() {
-  const projects: ProjectRowProps[] = [
-    { name: "Metro Tower", id: "PRJ-001", status: "on-track", delay: -22, industrialCost: 93, completion: 68 },
-    { name: "Harbor Bridge", id: "PRJ-002", status: "on-track", delay: 8, industrialCost: 71, completion: 42 },
-    { name: "Skyline Plaza", id: "PRJ-003", status: "delayed", delay: 32, industrialCost: 106, completion: 85 },
-    { name: "Industrial Park", id: "PRJ-004", status: "on-track", delay: -5, industrialCost: 67, completion: 31 },
-    { name: "Riverside Homes", id: "PRJ-005", status: "delayed", delay: 18, industrialCost: 98, completion: 56 },
+  // Aligned with EVM matrix data - same delay and Industrial Cost values
+  const allProjects: ProjectRowProps[] = [
+    { name: "Metro Tower", id: "PRJ-001", delay: -35, industrialCost: 95, completion: 68 },
+    { name: "Harbor Bridge", id: "PRJ-002", delay: 20, industrialCost: 73, completion: 42 },
+    { name: "Skyline Plaza", id: "PRJ-003", delay: 32, industrialCost: 94, completion: 85 },
+    { name: "Industrial Park", id: "PRJ-004", delay: -30, industrialCost: 70, completion: 31 },
+    { name: "Riverside Homes", id: "PRJ-005", delay: 28, industrialCost: 78, completion: 56 },
+    { name: "Tech Campus", id: "PRJ-006", delay: -38, industrialCost: 79, completion: 45 },
+    { name: "Highway 12 Ext", id: "PRJ-007", delay: -25, industrialCost: 68, completion: 72 },
+    { name: "Green Valley", id: "PRJ-008", delay: 38, industrialCost: 72, completion: 51 },
+    { name: "Data Center", id: "PRJ-009", delay: -15, industrialCost: 75, completion: 39 },
   ]
+
+  // Filter: Industrial Cost must always be < 100%
+  const projects = allProjects.filter(project => project.industrialCost < 100)
 
   return (
     <div className="glass-card rounded-lg p-4">

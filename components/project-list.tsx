@@ -7,7 +7,6 @@ import Link from "next/link"
 interface ProjectRowProps {
   name: string
   id: string
-  status: "on-track" | "at-risk" | "delayed"
   delay: number // % delay (-50 to +50)
   industrialCost: number // % of contract value (0-100)
   completion: number
@@ -15,11 +14,12 @@ interface ProjectRowProps {
 
 const statusConfig = {
   "on-track": { label: "On Track", color: "#00ff88" },
-  "at-risk": { label: "At Risk", color: "#ffaa00" },
   "delayed": { label: "Delayed", color: "#ff6b6b" },
 }
 
-function ProjectRow({ name, id, status, delay, industrialCost, completion }: ProjectRowProps) {
+function ProjectRow({ name, id, delay, industrialCost, completion }: ProjectRowProps) {
+  // Determine status based on delay: delay > 0 = "on track", delay < 0 = "delayed"
+  const status: "on-track" | "delayed" = delay > 0 ? "on-track" : "delayed"
   const config = statusConfig[status]
 
   return (
@@ -95,13 +95,16 @@ function ProjectRow({ name, id, status, delay, industrialCost, completion }: Pro
 }
 
 export function ProjectList() {
-  const projects: ProjectRowProps[] = [
-    { name: "Metro Tower", id: "PRJ-001", status: "on-track", delay: -22, industrialCost: 93, completion: 68 },
-    { name: "Harbor Bridge", id: "PRJ-002", status: "on-track", delay: 8, industrialCost: 71, completion: 42 },
-    { name: "Skyline Plaza", id: "PRJ-003", status: "delayed", delay: 32, industrialCost: 106, completion: 85 },
-    { name: "Industrial Park", id: "PRJ-004", status: "on-track", delay: -5, industrialCost: 67, completion: 31 },
-    { name: "Riverside Homes", id: "PRJ-005", status: "delayed", delay: 18, industrialCost: 98, completion: 56 },
+  const allProjects: ProjectRowProps[] = [
+    { name: "Metro Tower", id: "PRJ-001", delay: -22, industrialCost: 93, completion: 68 },
+    { name: "Harbor Bridge", id: "PRJ-002", delay: 8, industrialCost: 71, completion: 42 },
+    { name: "Skyline Plaza", id: "PRJ-003", delay: 32, industrialCost: 106, completion: 85 },
+    { name: "Industrial Park", id: "PRJ-004", delay: -5, industrialCost: 67, completion: 31 },
+    { name: "Riverside Homes", id: "PRJ-005", delay: 18, industrialCost: 98, completion: 56 },
   ]
+
+  // Filter: Industrial Cost must always be < 100%
+  const projects = allProjects.filter(project => project.industrialCost < 100)
 
   return (
     <div className="glass-card rounded-lg p-4">

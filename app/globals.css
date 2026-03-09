@@ -38,46 +38,53 @@
   --sidebar-accent-foreground: rgb(0, 0, 0);
   --sidebar-border: oklch(0.22 0 0);
   --sidebar-ring: oklch(0.7 0.15 220);
-  /* Custom tokens for Volis */
-  --cyan: oklch(0.7 0.15 220);
-  --cyan-glow: oklch(0.75 0.18 220);
-  --success: oklch(0.65 0.18 160);
-  --warning: oklch(0.75 0.12 85);
+  /* Data-Dark custom tokens */
+  --cyan: #3B82F6;
+  --cyan-glow: #60A5FA;
+  --success: #A5B4FC;
+  --warning: #C2996B;
 }
 
 .dark {
-  --background: oklch(0 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.08 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.08 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.985 0 0);
-  --primary-foreground: oklch(0 0 0);
-  --secondary: oklch(0.15 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.18 0 0);
-  --muted-foreground: oklch(0.6 0 0);
-  --accent: oklch(0.7 0.15 220);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.55 0.22 25);
-  --destructive-foreground: oklch(0.985 0 0);
-  --border: oklch(0.22 0 0);
-  --input: oklch(0.15 0 0);
-  --ring: oklch(0.7 0.15 220);
-  --chart-1: oklch(0.7 0.15 220);
-  --chart-2: oklch(0.65 0.18 160);
-  --chart-3: oklch(0.75 0.12 85);
-  --chart-4: oklch(0.55 0.22 25);
-  --chart-5: oklch(0.6 0.15 280);
-  --sidebar: oklch(0.06 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.7 0.15 220);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.15 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(0.22 0 0);
-  --sidebar-ring: oklch(0.7 0.15 220);
+  /* Data-Dark - Core Surfaces & Backgrounds */
+  --background: #2f343c;
+  --foreground: #FFFFFF;
+  --card: #252a32;
+  --card-foreground: #FFFFFF;
+  --popover: #252a32;
+  --popover-foreground: #FFFFFF;
+  --secondary: #1C1F26;
+  --secondary-foreground: #FFFFFF;
+  --muted: #1C1F26;
+  --muted-foreground: #9CA3AF;
+  --border: #334155;
+  --input: #252a32;
+  
+  /* Data-Dark - Action & Status */
+  --primary: #FFFFFF;
+  --primary-foreground: #2f343c;
+  --accent: #3B82F6;
+  --accent-foreground: #FFFFFF;
+  --ring: #3B82F6;
+  --destructive: #EF4444;
+  --destructive-foreground: #FFFFFF;
+  
+  /* Data-Dark - Chart & Data Colors */
+  --chart-1: #3B82F6;
+  --chart-2: #A5B4FC;
+  --chart-3: #C2996B;
+  --chart-4: #EF4444;
+  --chart-5: #9CA3AF;
+  
+  /* Sidebar */
+  --sidebar: #1C1F26;
+  --sidebar-foreground: #FFFFFF;
+  --sidebar-primary: #3B82F6;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #242832;
+  --sidebar-accent-foreground: #FFFFFF;
+  --sidebar-border: #334155;
+  --sidebar-ring: #3B82F6;
 }
 
 @theme inline {
@@ -178,9 +185,9 @@
 
 /* Glassmorphism card effect */
 .glass-card {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%);
+  background: var(--card);
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border);
 }
 
 .light .glass-card {
@@ -192,7 +199,7 @@
 
 /* Glow effects */
 .glow-cyan {
-  box-shadow: 0 0 20px rgba(0, 200, 255, 0.3), 0 0 40px rgba(0, 200, 255, 0.1);
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.5), 0 0 40px rgba(59, 130, 246, 0.2);
 }
 
 .light .glow-cyan {
@@ -200,11 +207,17 @@
 }
 
 .node-glow {
-  filter: drop-shadow(0 0 8px rgba(0, 200, 255, 0.6));
+  filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.8));
 }
 
 .light .node-glow {
   filter: drop-shadow(0 0 8px rgba(108, 92, 231, 0.4));
+}
+
+/* Table row hover state for Data-Dark theme */
+.table-row-hover:hover {
+  background-color: #2D333F;
+  transition: background-color 0.2s ease-in-out;
 }
 
 /* Grid background for technical precision */

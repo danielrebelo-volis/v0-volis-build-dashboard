@@ -13,13 +13,13 @@ interface ProjectRowProps {
 }
 
 const statusConfig = {
-  "on-track": { label: "On Track", color: "#00ff88" },
+  "ahead": { label: "Ahead", color: "#00ff88" },
   "delayed": { label: "Delayed", color: "#ff6b6b" },
 }
 
 function ProjectRow({ name, id, delay, industrialCost, completion }: ProjectRowProps) {
-  // Determine status based on delay: delay > 0 = "on track", delay < 0 = "delayed"
-  const status: "on-track" | "delayed" = delay > 0 ? "on-track" : "delayed"
+  // Determine status based on delay: delay < 0 = "Ahead" (green), delay > 0 = "Delayed" (red)
+  const status: "ahead" | "delayed" = delay < 0 ? "ahead" : "delayed"
   const config = statusConfig[status]
 
   return (
@@ -43,7 +43,7 @@ function ProjectRow({ name, id, delay, industrialCost, completion }: ProjectRowP
         {/* Delay - 2 columns */}
         <div className="col-span-2 text-right">
           <span className="text-xs text-muted-foreground block">Delay</span>
-          <span className={`text-sm font-mono ${delay <= 0 ? 'text-success' : 'text-destructive'}`}>
+          <span className={`text-sm font-mono ${delay < 0 ? 'text-green-500' : 'text-red-500'}`}>
             {delay > 0 ? '+' : ''}{delay.toFixed(0)}%
           </span>
         </div>

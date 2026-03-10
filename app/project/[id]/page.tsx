@@ -123,7 +123,6 @@ export default function ProjectDeepDive({ params }: { params: { id: string } }) 
                 <p className="text-2xl font-bold text-failure">-15 days</p>
                 <p className="text-xs text-muted-foreground">behind schedule</p>
               </div>
-              <p className="text-xs text-muted-foreground mt-2">Expected: March 1 | Forecast: March 15</p>
             </div>
           </div>
         </div>

@@ -95,7 +95,6 @@ export default function ProjectDeepDive({ params }: { params: { id: string } }) 
                 <p className="text-2xl font-bold text-success">€150,000</p>
                 <p className="text-xs text-muted-foreground">under budget</p>
               </div>
-              <p className="text-xs text-muted-foreground mt-2">Budget: €6.85M | Spent: €6.7M</p>
             </div>
 
             {/* Industrial Cost */}
@@ -106,9 +105,8 @@ export default function ProjectDeepDive({ params }: { params: { id: string } }) 
               </div>
               <div className="flex items-baseline gap-2">
                 <p className="text-2xl font-bold text-success">85.0%</p>
-                <p className="text-xs text-muted-foreground">Over baseline</p>
+                <p className="text-xs text-muted-foreground">Over company average(80.0%)</p>
               </div>
-              <p className="text-xs text-muted-foreground mt-2">Average: 80.0%</p>
             </div>
 
 

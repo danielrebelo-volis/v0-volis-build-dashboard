@@ -22,7 +22,7 @@ export default function ProjectDeepDive({ params }: { params: { id: string } }) 
     portfolio: '€2.5B',
     spi: 1.08,
     cpi: 0.95,
-    forecastedEndDate: 'March 15, 2025',
+    forecastedEndDate: 'March 15, 2026',
     budget: 6850000,
     spent: 6700000,
     teamSize: 45,
@@ -77,7 +77,7 @@ export default function ProjectDeepDive({ params }: { params: { id: string } }) 
             spi={projectData.spi}
             cpi={projectData.cpi}
             forecastedEndDate={projectData.forecastedEndDate}
-            deadlineDate="March 22, 2026"
+            deadlineDate="March 1, 2026"
           />
         </div>
 
@@ -95,7 +95,6 @@ export default function ProjectDeepDive({ params }: { params: { id: string } }) 
                 <p className="text-2xl font-bold text-success">€150,000</p>
                 <p className="text-xs text-muted-foreground">under budget</p>
               </div>
-              <p className="text-xs text-muted-foreground mt-2">Budget: €6.85M | Spent: €6.7M</p>
             </div>
 
             {/* Industrial Cost */}
@@ -105,10 +104,9 @@ export default function ProjectDeepDive({ params }: { params: { id: string } }) 
                 <p className="text-xs text-muted-foreground">Industrial Cost</p>
               </div>
               <div className="flex items-baseline gap-2">
-                <p className="text-2xl font-bold text-success">5.0%</p>
-                <p className="text-xs text-muted-foreground">Over planned</p>
+                <p className="text-2xl font-bold text-success">85.0%</p>
+                <p className="text-xs text-muted-foreground">Over company average  (80.0%)</p>
               </div>
-              <p className="text-xs text-muted-foreground mt-2">Planned: 3.2%</p>
             </div>
 
 
@@ -120,10 +118,9 @@ export default function ProjectDeepDive({ params }: { params: { id: string } }) 
                 <p className="text-xs text-muted-foreground">Schedule Variance</p>
               </div>
               <div className="flex items-baseline gap-2">
-                <p className="text-2xl font-bold text-success">+12 days</p>
-                <p className="text-xs text-muted-foreground">ahead of schedule</p>
+                <p className="text-2xl font-bold text-destructive">-15 days</p>
+                <p className="text-xs text-muted-foreground">behind schedule</p>
               </div>
-              <p className="text-xs text-muted-foreground mt-2">Expected: March 27 | Forecast: March 15</p>
             </div>
           </div>
         </div>

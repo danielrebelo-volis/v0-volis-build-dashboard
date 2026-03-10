@@ -41,7 +41,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
     country: 'Portugal',
     typology: 'Commercial',
     client: 'Investor Group ABC',
-    contractValue: '$24.5M',
+    contractValue: '$120.0M',
     manager: 'John Silva',
   }
 

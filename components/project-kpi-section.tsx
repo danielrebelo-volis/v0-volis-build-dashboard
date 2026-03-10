@@ -18,7 +18,7 @@ export function ProjectKPISection({
   spi = 1.08,
   cpi = 0.95,
   forecastedEndDate = 'March 15, 2026',
-  deadlineDate = 'March 22, 2026'
+  deadlineDate = 'March 1, 2026'
 }: ProjectKPISectionProps) {
   const isSPIHealthy = spi >= 1.0
   const isCPIHealthy = cpi >= 1.0
@@ -35,8 +35,8 @@ export function ProjectKPISection({
           </div>
           <MapPin className="w-4 h-4 text-cyan" />
         </div>
-        <div className="flex items-center gap-1 text-sm text-foreground mb-3">
-          <span>{location}</span>
+        <div className="flex items-center gap-1 text-sm">
+          <p className="text-2xl font-bold text-foreground">{location}</p>
         </div>
         <div className="mt-3 pt-3 border-t border-border/30">
           <p className="text-xs text-muted-foreground">Part of €2.5B portfolio</p>
@@ -52,7 +52,7 @@ export function ProjectKPISection({
           </div>
           <Calendar className="w-4 h-4 text-cyan" />
         </div>
-        <div className="text-2xl font-bold text-cyan">{forecastedEndDate}</div>
+        <div className="text-2xl font-bold text-destructive">{forecastedEndDate}</div>
         <div className="mt-3 pt-3 border-t border-border/30">
           <p className="text-xs text-muted-foreground">Based on historical trends & current velocity</p>
         </div>
@@ -67,7 +67,7 @@ export function ProjectKPISection({
           </div>
           <Calendar className="w-4 h-4 text-warning" />
         </div>
-        <div className="text-2xl font-bold text-warning">{deadlineDate}</div>
+        <div className="text-2xl font-bold text-foreground">{deadlineDate}</div>
         <div className="mt-3 pt-3 border-t border-border/30">
           <p className="text-xs text-muted-foreground">Original contract deadline</p>
         </div>

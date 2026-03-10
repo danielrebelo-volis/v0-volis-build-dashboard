@@ -19,9 +19,9 @@ export function TrendsSection() {
 
   // Mock data for projects with downtrends
   const downtrends: TrendProject[] = [
-    { id: "4", name: "Riverside Homes", costTrend: -15.3, scheduleTrend: -9.5 },
-    { id: "5", name: "Industrial Park", costTrend: -11.2, scheduleTrend: -7.8 },
-    { id: "6", name: "Skyline Plaza", costTrend: -8.6, scheduleTrend: -5.2 },
+    { id: "4", name: "Riverside Homes", costTrend: 15.3, scheduleTrend: -9.5 },
+    { id: "5", name: "Industrial Park", costTrend: 11.2, scheduleTrend: -7.8 },
+    { id: "6", name: "Skyline Plaza", costTrend: 8.6, scheduleTrend: -5.2 },
   ]
 
   return (
@@ -46,7 +46,7 @@ export function TrendsSection() {
                   <div className="flex-1">
                     <div className="flex items-center justify-between mb-0.5">
                       <span className="text-xs text-muted-foreground">Cost</span>
-                      <span className="text-xs font-semibold text-success">+{project.costTrend}%</span>
+                      <span className="text-xs font-semibold text-success">{project.costTrend}%</span>
                     </div>
                     <div className="h-1.5 bg-secondary/50 rounded-full overflow-hidden">
                       <div
@@ -58,7 +58,7 @@ export function TrendsSection() {
                   <div className="flex-1">
                     <div className="flex items-center justify-between mb-0.5">
                       <span className="text-xs text-muted-foreground">Schedule</span>
-                      <span className="text-xs font-semibold text-success">+{project.scheduleTrend}%</span>
+                      <span className="text-xs font-semibold text-success">{project.scheduleTrend}%</span>
                     </div>
                     <div className="h-1.5 bg-secondary/50 rounded-full overflow-hidden">
                       <div

@@ -19,9 +19,9 @@ export function TrendsSection() {
 
   // Mock data for projects with downtrends
   const downtrends: TrendProject[] = [
-    { id: "4", name: "Riverside Homes", costTrend: 15.3, scheduleTrend: -9.5 },
-    { id: "5", name: "Industrial Park", costTrend: 11.2, scheduleTrend: -7.8 },
-    { id: "6", name: "Skyline Plaza", costTrend: 8.6, scheduleTrend: -5.2 },
+    { id: "4", name: "Riverside Homes", costTrend: 15.3, scheduleTrend: 9.5 },
+    { id: "5", name: "Industrial Park", costTrend: 11.2, scheduleTrend: 7.8 },
+    { id: "6", name: "Skyline Plaza", costTrend: 8.6, scheduleTrend: 5.2 },
   ]
 
   return (

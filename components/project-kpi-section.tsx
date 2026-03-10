@@ -36,7 +36,6 @@ export function ProjectKPISection({
           <MapPin className="w-4 h-4 text-cyan" />
         </div>
         <div className="flex items-center gap-1 text-sm">
-          <p className="text-2xl font-bold text-foreground">{location}</p>
         </div>
         <div className="mt-3 pt-3 border-t border-border/30">
           <p className="text-xs text-muted-foreground">Part of €2.5B portfolio</p>

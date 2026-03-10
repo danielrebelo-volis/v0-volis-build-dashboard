@@ -52,7 +52,7 @@ export function ProjectKPISection({
           </div>
           <Calendar className="w-4 h-4 text-cyan" />
         </div>
-        <div className="text-2xl font-bold text-cyan">{forecastedEndDate}</div>
+        <div className="text-2xl font-bold text-destructive">{forecastedEndDate}</div>
         <div className="mt-3 pt-3 border-t border-border/30">
           <p className="text-xs text-muted-foreground">Based on historical trends & current velocity</p>
         </div>

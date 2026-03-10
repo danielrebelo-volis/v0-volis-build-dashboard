@@ -18,7 +18,7 @@ export function ProjectKPISection({
   spi = 1.08,
   cpi = 0.95,
   forecastedEndDate = 'March 15, 2026',
-  deadlineDate = 'March 22, 2026'
+  deadlineDate = 'March 1, 2026'
 }: ProjectKPISectionProps) {
   const isSPIHealthy = spi >= 1.0
   const isCPIHealthy = cpi >= 1.0

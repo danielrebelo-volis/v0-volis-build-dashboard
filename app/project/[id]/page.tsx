@@ -22,7 +22,7 @@ export default function ProjectDeepDive({ params }: { params: { id: string } }) 
     portfolio: '€2.5B',
     spi: 1.08,
     cpi: 0.95,
-    forecastedEndDate: 'March 15, 2025',
+    forecastedEndDate: 'March 15, 2026',
     budget: 6850000,
     spent: 6700000,
     teamSize: 45,
@@ -77,7 +77,7 @@ export default function ProjectDeepDive({ params }: { params: { id: string } }) 
             spi={projectData.spi}
             cpi={projectData.cpi}
             forecastedEndDate={projectData.forecastedEndDate}
-            deadlineDate="March 22, 2026"
+            deadlineDate="March 1, 2026"
           />
         </div>
 

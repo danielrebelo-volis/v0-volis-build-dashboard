@@ -120,8 +120,8 @@ export default function ProjectDeepDive({ params }: { params: { id: string } }) 
                 <p className="text-xs text-muted-foreground">Schedule Variance</p>
               </div>
               <div className="flex items-baseline gap-2">
-                <p className="text-2xl font-bold text-success">+12 days</p>
-                <p className="text-xs text-muted-foreground">ahead of schedule</p>
+                <p className="text-2xl font-bold text-failure">-15 days</p>
+                <p className="text-xs text-muted-foreground">behind schedule</p>
               </div>
               <p className="text-xs text-muted-foreground mt-2">Expected: March 27 | Forecast: March 15</p>
             </div>

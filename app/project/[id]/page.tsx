@@ -105,10 +105,10 @@ export default function ProjectDeepDive({ params }: { params: { id: string } }) 
                 <p className="text-xs text-muted-foreground">Industrial Cost</p>
               </div>
               <div className="flex items-baseline gap-2">
-                <p className="text-2xl font-bold text-success">5.0%</p>
-                <p className="text-xs text-muted-foreground">Over planned</p>
+                <p className="text-2xl font-bold text-success">85.0%</p>
+                <p className="text-xs text-muted-foreground">Over baseline</p>
               </div>
-              <p className="text-xs text-muted-foreground mt-2">Planned: 3.2%</p>
+              <p className="text-xs text-muted-foreground mt-2">Average: 80.0%</p>
             </div>
 
 

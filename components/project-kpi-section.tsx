@@ -67,7 +67,7 @@ export function ProjectKPISection({
           </div>
           <Calendar className="w-4 h-4 text-warning" />
         </div>
-        <div className="text-2xl font-bold text-warning">{deadlineDate}</div>
+        <div className="text-2xl font-bold text-foreground">{deadlineDate}</div>
         <div className="mt-3 pt-3 border-t border-border/30">
           <p className="text-xs text-muted-foreground">Original contract deadline</p>
         </div>

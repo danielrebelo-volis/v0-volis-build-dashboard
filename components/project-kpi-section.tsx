@@ -35,7 +35,7 @@ export function ProjectKPISection({
           </div>
           <MapPin className="w-4 h-4 text-cyan" />
         </div>
-        <div className="flex items-center gap-1 text-sm text-foreground mb-3">
+        <div className="flex items-center gap-1 text-sm text-2xl font-bold text-foreground">
           <span>{location}</span>
         </div>
         <div className="mt-3 pt-3 border-t border-border/30">

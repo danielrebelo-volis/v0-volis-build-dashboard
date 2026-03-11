@@ -17,6 +17,10 @@ const progressData = [
 
 export function SProgressCurve() {
   const colors = useChartColors()
+  
+  // Split data: solid line up to week 8, dashed line for week 8-9
+  const solidData = progressData.slice(0, 8)
+  const dashedData = progressData.slice(7) // Include week 8 for continuity
 
   return (
     <div className="glass-card rounded-lg p-4 border border-border/50">
@@ -41,9 +45,15 @@ export function SProgressCurve() {
             wrapperStyle={{ paddingTop: '12px' }}
             iconType="line"
           />
-          <Line type="monotone" dataKey="planned" stroke="#999999" name="Planned" strokeWidth={2} dot={false} />
-          <Line type="monotone" dataKey="forecast" stroke={colors.isDark ? "#00c8ff" : "#6C5CE7"} name="Forecast" strokeWidth={2} dot={false} />
-          <Line type="monotone" dataKey="actual" stroke={colors.isDark ? "#00ff88" : "#00b894"} name="Actual" strokeWidth={2} dot={false} />
+          {/* Solid lines for weeks 1-8 */}
+          <Line type="monotone" dataKey="planned" stroke="#999999" name="Planned" strokeWidth={2} dot={false} data={solidData} />
+          <Line type="monotone" dataKey="forecast" stroke={colors.isDark ? "#00c8ff" : "#6C5CE7"} name="Forecast" strokeWidth={2} dot={false} data={solidData} />
+          <Line type="monotone" dataKey="actual" stroke={colors.isDark ? "#00ff88" : "#00b894"} name="Actual" strokeWidth={2} dot={false} data={solidData} />
+          
+          {/* Dashed lines for weeks 8-9 (forecast) */}
+          <Line type="monotone" dataKey="planned" stroke="#999999" strokeWidth={2} dot={false} strokeDasharray="5 5" data={dashedData} />
+          <Line type="monotone" dataKey="forecast" stroke={colors.isDark ? "#00c8ff" : "#6C5CE7"} strokeWidth={2} dot={false} strokeDasharray="5 5" data={dashedData} />
+          <Line type="monotone" dataKey="actual" stroke={colors.isDark ? "#00ff88" : "#00b894"} strokeWidth={2} dot={false} strokeDasharray="5 5" data={dashedData} />
         </LineChart>
       </ResponsiveContainer>
     </div>
@@ -64,6 +74,10 @@ export function SCostCurve() {
     { week: 8, baseline: 28.4, actual: 33.3 },
     { week: 9, baseline: 33.5, actual: 40.0 },
   ]
+  
+  // Split data: solid line up to week 8, dashed line for week 8-9
+  const solidData = costData.slice(0, 8)
+  const dashedData = costData.slice(7) // Include week 8 for continuity
 
   return (
     <div className="glass-card rounded-lg p-4 border border-border/50">
@@ -89,8 +103,13 @@ export function SCostCurve() {
             wrapperStyle={{ paddingTop: '12px' }}
             iconType="line"
           />
-          <Line type="monotone" dataKey="baseline" stroke="#999999" name="Planned" strokeWidth={2} dot={false} />
-          <Line type="monotone" dataKey="actual" stroke="#ff6b6b" name="Actual" strokeWidth={2} dot={false} />
+          {/* Solid lines for weeks 1-8 */}
+          <Line type="monotone" dataKey="baseline" stroke="#999999" name="Planned" strokeWidth={2} dot={false} data={solidData} />
+          <Line type="monotone" dataKey="actual" stroke="#ff6b6b" name="Actual" strokeWidth={2} dot={false} data={solidData} />
+          
+          {/* Dashed lines for weeks 8-9 (forecast) */}
+          <Line type="monotone" dataKey="baseline" stroke="#999999" strokeWidth={2} dot={false} strokeDasharray="5 5" data={dashedData} />
+          <Line type="monotone" dataKey="actual" stroke="#ff6b6b" strokeWidth={2} dot={false} strokeDasharray="5 5" data={dashedData} />
         </LineChart>
       </ResponsiveContainer>
     </div>

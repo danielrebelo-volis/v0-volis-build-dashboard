@@ -70,7 +70,7 @@ export function SProgressCurve() {
           {/* Dashed portion: weeks 8–9 (forecast) */}
           <Line
             type="monotone"
-            dataKey=""
+            dataKey="actualDashed"
             stroke={colors.isDark ? "#00ff88" : "#00b894"}
             strokeWidth={2}
             dot={false}

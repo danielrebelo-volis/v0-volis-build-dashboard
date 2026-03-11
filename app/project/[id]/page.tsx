@@ -109,8 +109,6 @@ export default function ProjectDeepDive({ params }: { params: { id: string } }) 
               </div>
             </div>
 
-
-
             {/* Schedule Variance */}
             <div>
               <div className="flex items-center gap-2 mb-2">

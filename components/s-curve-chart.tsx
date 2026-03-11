@@ -145,6 +145,7 @@ export function SCostCurve() {
           <Line
             type="monotone"
             legendType="none"
+            name=""
             dataKey="actualDashed"
             stroke="#ff6b6b"
             strokeWidth={2}

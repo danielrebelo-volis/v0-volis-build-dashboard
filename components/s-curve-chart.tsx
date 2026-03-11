@@ -144,12 +144,12 @@ export function SCostCurve() {
           {/* Dashed portion: weeks 8–9 (forecast) */}
           <Line
             type="monotone"
+            legendType="none"
             dataKey="actualDashed"
             stroke="#ff6b6b"
             strokeWidth={2}
             dot={false}
             strokeDasharray="6 4"
-            legendType="none"
             connectNulls={false}
           />
         </LineChart>

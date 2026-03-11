@@ -122,6 +122,12 @@ export function SCostCurve() {
           <Legend
             wrapperStyle={{ paddingTop: '12px' }}
             iconType="line"
+            payload={
+              [
+                { value: 'Planned', type: 'line', id: 'baseline', color: '#999999' },
+                { value: 'Actual', type: 'line', id: 'actualSolid', color: '#ff6b6b' },
+              ]
+            }
           />
           <Line
             type="monotone"
@@ -145,7 +151,6 @@ export function SCostCurve() {
           <Line
             type="monotone"
             legendType="none"
-            name=""
             dataKey="actualDashed"
             stroke="#ff6b6b"
             strokeWidth={2}

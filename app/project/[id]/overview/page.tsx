@@ -46,38 +46,43 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
   }
 
   const progressData = [
-    { week: '1', planned: 5, estimated: 4, actual: 3 },
-    { week: '2', planned: 10, estimated: 8, actual: 5 },
-    { week: '3', planned: 15, estimated: 14, actual: 8 },
-    { week: '4', planned: 20, estimated: 18, actual: 12 },
-    { week: '5', planned: 28, estimated: 26, actual: 18 },
-    { week: '6', planned: 36, estimated: 34, actual: 25 },
-    { week: '7', planned: 45, estimated: 42, actual: 34 },
-    { week: '8', planned: 55, estimated: 51, actual: 45 },
-    { week: '9', planned: 65, estimated: 60, actual: 50 },
+    { week: '1', planned: 5, estimated: 4, actual: 3,    actualSolid: 3,    actualDashed: null },
+    { week: '2', planned: 10, estimated: 8, actual: 5,   actualSolid: 5,    actualDashed: null },
+    { week: '3', planned: 15, estimated: 14, actual: 8,  actualSolid: 8,    actualDashed: null },
+    { week: '4', planned: 20, estimated: 18, actual: 12, actualSolid: 12,   actualDashed: null },
+    { week: '5', planned: 28, estimated: 26, actual: 18, actualSolid: 18,   actualDashed: null },
+    { week: '6', planned: 36, estimated: 34, actual: 25, actualSolid: 25,   actualDashed: null },
+    { week: '7', planned: 45, estimated: 42, actual: 34, actualSolid: 34,   actualDashed: null },
+    { week: '8', planned: 55, estimated: 51, actual: 45, actualSolid: 45,   actualDashed: 45  },
+    { week: '9', planned: 65, estimated: 60, actual: 50, actualSolid: null, actualDashed: 50  },
   ]
 
   const costData = [
-    { week: '1', baseline: 3.2, actual: 3.3 },
-    { week: '2', baseline: 6.1, actual: 7.0 },
-    { week: '3', baseline: 9.2, actual: 10.3 },
-    { week: '4', baseline: 12.4, actual: 14.1 },
-    { week: '5', baseline: 15.1, actual: 18.0 },
-    { week: '6', baseline: 19.1, actual: 22.5 },
-    { week: '7', baseline: 24.6, actual: 27.5 },
-    { week: '8', baseline: 28.4, actual: 33.3 },
-    { week: '9', baseline: 33.5, actual: 40.0 },
+    { week: '1', baseline: 3.2, actualSolid: 3.3,  actualDashed: null },
+    { week: '2', baseline: 6.1, actualSolid: 7.0,  actualDashed: null },
+    { week: '3', baseline: 9.2, actualSolid: 10.3, actualDashed: null },
+    { week: '4', baseline: 12.4, actualSolid: 14.1, actualDashed: null },
+    { week: '5', baseline: 15.1, actualSolid: 18.0, actualDashed: null },
+    { week: '6', baseline: 19.1, actualSolid: 22.5, actualDashed: null },
+    { week: '7', baseline: 24.6, actualSolid: 27.5, actualDashed: null },
+    { week: '8', baseline: 28.4, actualSolid: 33.3, actualDashed: 33.3 },
+    { week: '9', baseline: 33.5, actualSolid: null, actualDashed: 40.0 },
   ]
 
   const getFilteredProgressData = () => {
     if (selectedActivity === 'all' && selectedWorkfront === 'all' && selectedOwner === 'all') {
       return progressData
     }
-    return progressData.map(d => ({
-      ...d,
-      actual: Math.max(d.actual * 0.8, d.actual * (Math.random() * 0.3 + 0.7)),
-      estimated: d.estimated * 0.9,
-    }))
+    return progressData.map(d => {
+      const factor = Math.random() * 0.3 + 0.7
+      return {
+        ...d,
+        actual: d.actual != null ? Math.max(d.actual * 0.8, d.actual * factor) : null,
+        actualSolid: d.actualSolid != null ? Math.max(d.actualSolid * 0.8, d.actualSolid * factor) : null,
+        actualDashed: d.actualDashed != null ? Math.max(d.actualDashed * 0.8, d.actualDashed * factor) : null,
+        estimated: d.estimated * 0.9,
+      }
+    })
   }
 
   const getFilteredCostData = () => {
@@ -86,8 +91,8 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
     }
     return costData.map(d => ({
       ...d,
-      actual: d.actual * 1.05,
-      estimated: d.estimated * 1.02,
+      actualSolid: d.actualSolid != null ? d.actualSolid * 1.05 : null,
+      actualDashed: d.actualDashed != null ? d.actualDashed * 1.05 : null,
     }))
   }
 
@@ -494,7 +499,8 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                   <Legend />
                   <Line type="monotone" dataKey="planned" stroke="#999999" name="Baseline" strokeWidth={2} dot={false} />
                   <Line type="monotone" dataKey="estimated" stroke="#00c8ff" name="Estimated" strokeWidth={2} dot={false} />
-                  <Line type="monotone" dataKey="actual" stroke="#00ff88" name="Actual" strokeWidth={2} dot={false} />
+                  <Line type="monotone" dataKey="actualSolid" stroke="#00ff88" name="Actual" strokeWidth={2} dot={false} connectNulls={false} />
+                  <Line type="monotone" dataKey="actualDashed" stroke="#00ff88" strokeWidth={2} dot={false} strokeDasharray="6 4" legendType="none" connectNulls={false} />
                 </LineChart>
               </ResponsiveContainer>
             </div>
@@ -690,7 +696,8 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                   <Legend />
                   <Line type="monotone" dataKey="planned" stroke="#999999" name="Baseline" strokeWidth={2} dot={false} />
                   <Line type="monotone" dataKey="estimated" stroke="#00c8ff" name="Estimated" strokeWidth={2} dot={false} />
-                  <Line type="monotone" dataKey="actual" stroke="#00ff88" name="Actual" strokeWidth={2} dot={false} />
+                  <Line type="monotone" dataKey="actualSolid" stroke="#00ff88" name="Actual" strokeWidth={2} dot={false} connectNulls={false} />
+                  <Line type="monotone" dataKey="actualDashed" stroke="#00ff88" strokeWidth={2} dot={false} strokeDasharray="6 4" legendType="none" connectNulls={false} />
                 </LineChart>
               </ResponsiveContainer>
             </div>
@@ -766,11 +773,12 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                 <LineChart data={costData}>
                   <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} />
                   <XAxis dataKey="week" stroke={chartColors.axis} />
-                  <YAxis stroke={chartColors.axis} />
-                  <Tooltip contentStyle={{ backgroundColor: chartColors.tooltipBg, border: chartColors.tooltipBorder }} />
+                  <YAxis stroke={chartColors.axis} tickFormatter={(v) => `€${v.toFixed(1)}M`} />
+                  <Tooltip contentStyle={{ backgroundColor: chartColors.tooltipBg, border: chartColors.tooltipBorder }} formatter={(v: number) => `€${v.toFixed(1)}M`} />
                   <Legend />
                   <Line type="monotone" dataKey="baseline" stroke="#999999" name="Baseline" strokeWidth={2} dot={false} />
-                  <Line type="monotone" dataKey="actual" stroke="#ff6b6b" name="Actual" strokeWidth={2} dot={false} />
+                  <Line type="monotone" dataKey="actualSolid" stroke="#ff6b6b" name="Actual" strokeWidth={2} dot={false} connectNulls={false} />
+                  <Line type="monotone" dataKey="actualDashed" stroke="#ff6b6b" strokeWidth={2} dot={false} strokeDasharray="6 4" legendType="none" connectNulls={false} />
                 </LineChart>
               </ResponsiveContainer>
             </div>
@@ -1088,11 +1096,12 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                   <LineChart data={getFilteredCostData()}>
                     <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} />
                     <XAxis dataKey="week" stroke={chartColors.axis} />
-                    <YAxis stroke={chartColors.axis} />
-                    <Tooltip contentStyle={{ backgroundColor: chartColors.tooltipBg, border: chartColors.tooltipBorder }} />
+                    <YAxis stroke={chartColors.axis} tickFormatter={(v) => `€${v.toFixed(1)}M`} />
+                    <Tooltip contentStyle={{ backgroundColor: chartColors.tooltipBg, border: chartColors.tooltipBorder }} formatter={(v: number) => `€${v.toFixed(1)}M`} />
                     <Legend />
                     <Line type="monotone" dataKey="baseline" stroke="#999999" name="Baseline" strokeWidth={2} dot={false} />
-                    <Line type="monotone" dataKey="actual" stroke="#ff6b6b" name="Actual" strokeWidth={2} dot={false} />
+                    <Line type="monotone" dataKey="actualSolid" stroke="#ff6b6b" name="Actual" strokeWidth={2} dot={false} connectNulls={false} />
+                    <Line type="monotone" dataKey="actualDashed" stroke="#ff6b6b" strokeWidth={2} dot={false} strokeDasharray="6 4" legendType="none" connectNulls={false} />
                   </LineChart>
                 </ResponsiveContainer>
               </div>

@@ -40,6 +40,13 @@ export function SProgressCurve() {
           <Legend
             wrapperStyle={{ paddingTop: '12px' }}
             iconType="line"
+            payload={
+              [
+                { value: 'Planned', type: 'line', id: 'baseline', color: '#999999' },
+                { value: 'Forecast', type: 'line', id: 'actualSolid', color: colors.isDark ? "#00c8ff" : "#6C5CE7" },
+                { value: 'Actual', type: 'line', id: 'actualSolid', color: colors.isDark ? "#00ff88" : "#00b894" },
+              ]
+            }
           />
           <Line
             type="monotone"

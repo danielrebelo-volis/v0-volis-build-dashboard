@@ -4,15 +4,15 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 import { useChartColors } from '@/hooks/use-chart-colors'
 
 const progressData = [
-  { week: 1, planned: 5, forecast: 4, actual: 3,    actualSolid: 3,    actualDashed: null },
-  { week: 2, planned: 10, forecast: 8, actual: 5,   actualSolid: 5,    actualDashed: null },
-  { week: 3, planned: 15, forecast: 11, actual: 8,  actualSolid: 8,    actualDashed: null },
-  { week: 4, planned: 20, forecast: 16, actual: 12, actualSolid: 12,   actualDashed: null },
-  { week: 5, planned: 28, forecast: 22, actual: 18, actualSolid: 18,   actualDashed: null },
-  { week: 6, planned: 36, forecast: 30, actual: 25, actualSolid: 25,   actualDashed: null },
-  { week: 7, planned: 45, forecast: 38, actual: 34, actualSolid: 34,   actualDashed: null },
-  { week: 8, planned: 55, forecast: 48, actual: 45, actualSolid: 45,   actualDashed: 45  },
-  { week: 9, planned: 65, forecast: 55, actual: 50, actualSolid: null, actualDashed: 50  },
+  { week: 1, planned: 5, forecast: 4, actual: 3, actualSolid: 3, actualDashed: null },
+  { week: 2, planned: 10, forecast: 8, actual: 5, actualSolid: 5, actualDashed: null },
+  { week: 3, planned: 15, forecast: 11, actual: 8, actualSolid: 8, actualDashed: null },
+  { week: 4, planned: 20, forecast: 16, actual: 12, actualSolid: 12, actualDashed: null },
+  { week: 5, planned: 28, forecast: 22, actual: 18, actualSolid: 18, actualDashed: null },
+  { week: 6, planned: 36, forecast: 30, actual: 25, actualSolid: 25, actualDashed: null },
+  { week: 7, planned: 45, forecast: 38, actual: 34, actualSolid: 34, actualDashed: null },
+  { week: 8, planned: 55, forecast: 48, actual: 45, actualSolid: 45, actualDashed: 45 },
+  { week: 9, planned: 65, forecast: 55, actual: 50, actualSolid: null, actualDashed: 50 },
 ]
 
 export function SProgressCurve() {
@@ -27,34 +27,34 @@ export function SProgressCurve() {
       <ResponsiveContainer width="100%" height={250}>
         <LineChart data={progressData} margin={{ top: 5, right: 30, left: 0, bottom: 5 }}>
           <CartesianGrid strokeDasharray="3 3" stroke={colors.grid} />
-          <XAxis 
-            dataKey="week" 
+          <XAxis
+            dataKey="week"
             stroke={colors.axis}
             tick={{ fontSize: 12 }}
           />
-          <YAxis 
+          <YAxis
             stroke={colors.axis}
             tick={{ fontSize: 12 }}
           />
           <Tooltip contentStyle={{ backgroundColor: colors.tooltipBg, border: colors.tooltipBorder }} />
-          <Legend 
+          <Legend
             wrapperStyle={{ paddingTop: '12px' }}
             iconType="line"
           />
-          <Line 
-            type="monotone" 
-            dataKey="planned" 
-            stroke="#999999" 
-            name="Planned" 
-            strokeWidth={2} 
+          <Line
+            type="monotone"
+            dataKey="planned"
+            stroke="#999999"
+            name="Planned"
+            strokeWidth={2}
             dot={false}
           />
-          <Line 
-            type="monotone" 
-            dataKey="forecast" 
-            stroke={colors.isDark ? "#00c8ff" : "#6C5CE7"} 
-            name="Forecast" 
-            strokeWidth={2} 
+          <Line
+            type="monotone"
+            dataKey="forecast"
+            stroke={colors.isDark ? "#00c8ff" : "#6C5CE7"}
+            name="Forecast"
+            strokeWidth={2}
             dot={false}
           />
           {/* Solid portion: weeks 1–8 */}
@@ -70,7 +70,7 @@ export function SProgressCurve() {
           {/* Dashed portion: weeks 8–9 (forecast) */}
           <Line
             type="monotone"
-            dataKey="actualDashed"
+            dataKey=""
             stroke={colors.isDark ? "#00ff88" : "#00b894"}
             strokeWidth={2}
             dot={false}
@@ -88,8 +88,8 @@ export function SCostCurve() {
   const colors = useChartColors()
 
   const costData = [
-    { week: 1, baseline: 3.2, actualSolid: 3.3,  actualDashed: null },
-    { week: 2, baseline: 6.1, actualSolid: 7.0,  actualDashed: null },
+    { week: 1, baseline: 3.2, actualSolid: 3.3, actualDashed: null },
+    { week: 2, baseline: 6.1, actualSolid: 7.0, actualDashed: null },
     { week: 3, baseline: 9.2, actualSolid: 10.3, actualDashed: null },
     { week: 4, baseline: 12.4, actualSolid: 14.1, actualDashed: null },
     { week: 5, baseline: 15.1, actualSolid: 18.0, actualDashed: null },
@@ -108,27 +108,27 @@ export function SCostCurve() {
       <ResponsiveContainer width="100%" height={250}>
         <LineChart data={costData} margin={{ top: 5, right: 30, left: 0, bottom: 5 }}>
           <CartesianGrid strokeDasharray="3 3" stroke={colors.grid} />
-          <XAxis 
-            dataKey="week" 
+          <XAxis
+            dataKey="week"
             stroke={colors.axis}
             tick={{ fontSize: 12 }}
           />
-          <YAxis 
+          <YAxis
             stroke={colors.axis}
             tick={{ fontSize: 12 }}
             tickFormatter={(value) => `€${value.toFixed(1)}M`}
           />
           <Tooltip contentStyle={{ backgroundColor: colors.tooltipBg, border: colors.tooltipBorder }} formatter={(value: number) => `€${value.toFixed(1)}M`} />
-          <Legend 
+          <Legend
             wrapperStyle={{ paddingTop: '12px' }}
             iconType="line"
           />
-          <Line 
-            type="monotone" 
-            dataKey="baseline" 
-            stroke="#999999" 
-            name="Planned" 
-            strokeWidth={2} 
+          <Line
+            type="monotone"
+            dataKey="baseline"
+            stroke="#999999"
+            name="Planned"
+            strokeWidth={2}
             dot={false}
           />
           {/* Solid portion: weeks 1–8 */}

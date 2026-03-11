@@ -128,16 +128,17 @@ const projects: ComparisonProject[] = [
   },
 ]
 
-// S-curve data with larger gaps between planned, estimated, and actual
+// S-curve data — actualSolid is confirmed, actualDashed is the last-week forecast segment
 const sCurveData = [
-  { week: 'W1', planned: 5, estimated: 4, actual: 2, plannedCost: 2, estimatedCost: 1.8, actualCost: 1.5 },
-  { week: 'W2', planned: 12, estimated: 10, actual: 6, plannedCost: 4.5, estimatedCost: 4, actualCost: 3.2 },
-  { week: 'W3', planned: 22, estimated: 19, actual: 10, plannedCost: 8, estimatedCost: 7, actualCost: 5.5 },
-  { week: 'W4', planned: 35, estimated: 31, actual: 18, plannedCost: 12.5, estimatedCost: 11, actualCost: 8.5 },
-  { week: 'W5', planned: 50, estimated: 44, actual: 28, plannedCost: 18, estimatedCost: 16, actualCost: 12 },
-  { week: 'W6', planned: 65, estimated: 57, actual: 38, plannedCost: 24, estimatedCost: 21, actualCost: 16.5 },
-  { week: 'W7', planned: 78, estimated: 69, actual: 48, plannedCost: 30, estimatedCost: 27, actualCost: 21 },
-  { week: 'W8', planned: 88, estimated: 78, actual: 55, plannedCost: 35, estimatedCost: 31, actualCost: 24 },
+  { week: 'W1', planned: 5,  estimated: 4,  plannedCost: 2,    estimatedCost: 1.8, actualSolid: 2,    actualDashed: null, actualCostSolid: 1.5,  actualCostDashed: null },
+  { week: 'W2', planned: 12, estimated: 10, plannedCost: 4.5,  estimatedCost: 4,   actualSolid: 6,    actualDashed: null, actualCostSolid: 3.2,  actualCostDashed: null },
+  { week: 'W3', planned: 22, estimated: 19, plannedCost: 8,    estimatedCost: 7,   actualSolid: 10,   actualDashed: null, actualCostSolid: 5.5,  actualCostDashed: null },
+  { week: 'W4', planned: 35, estimated: 31, plannedCost: 12.5, estimatedCost: 11,  actualSolid: 18,   actualDashed: null, actualCostSolid: 8.5,  actualCostDashed: null },
+  { week: 'W5', planned: 50, estimated: 44, plannedCost: 18,   estimatedCost: 16,  actualSolid: 28,   actualDashed: null, actualCostSolid: 12,   actualCostDashed: null },
+  { week: 'W6', planned: 65, estimated: 57, plannedCost: 24,   estimatedCost: 21,  actualSolid: 38,   actualDashed: null, actualCostSolid: 16.5, actualCostDashed: null },
+  { week: 'W7', planned: 78, estimated: 69, plannedCost: 30,   estimatedCost: 27,  actualSolid: 48,   actualDashed: null, actualCostSolid: 21,   actualCostDashed: null },
+  { week: 'W8', planned: 88, estimated: 78, plannedCost: 35,   estimatedCost: 31,  actualSolid: 55,   actualDashed: 55,   actualCostSolid: 24,   actualCostDashed: 24   },
+  { week: 'W9', planned: 95, estimated: 86, plannedCost: 39,   estimatedCost: 35,  actualSolid: null, actualDashed: 62,   actualCostSolid: null,  actualCostDashed: 27.5 },
 ]
 
 type IndicatorType = 'weekly-evolution' | 'real-earned-value' | 'cpi' | 'spi' | 'ppc' | 'estimated-cost' | 'estimated-deadline'
@@ -300,10 +301,13 @@ function ComparisonSide({
               <XAxis dataKey="week" tick={{ fontSize: 10, fill: colors.tickFill }} />
               <YAxis tick={{ fontSize: 10, fill: colors.tickFill }} />
               <Tooltip contentStyle={{ backgroundColor: colors.tooltipBg, border: colors.tooltipBorder }} />
-              <Legend wrapperStyle={{ paddingTop: '12px' }} iconType="line" />
+              <Legend wrapperStyle={{ paddingTop: '8px' }} iconType="line" />
               <Line type="monotone" dataKey="planned" stroke="#999999" strokeWidth={2} dot={false} name="Planned" />
-              <Line type="monotone" dataKey="estimated" stroke={colors.isDark ? "#00c8ff" : "#6C5CE7"} strokeWidth={2.5} dot={false} name="Estimated" />
-              <Line type="monotone" dataKey="actual" stroke={colors.isDark ? "#00ff88" : "#00b894"} strokeWidth={2.5} dot={false} name="Actual" />
+              <Line type="monotone" dataKey="estimated" stroke={colors.isDark ? "#00c8ff" : "#6C5CE7"} strokeWidth={2} dot={false} name="Estimated" />
+              {/* Solid portion: W1–W8 */}
+              <Line type="monotone" dataKey="actualSolid" stroke={colors.isDark ? "#00ff88" : "#00b894"} strokeWidth={2} dot={false} name="Actual" connectNulls={false} />
+              {/* Dashed portion: W8–W9 forecast */}
+              <Line type="monotone" dataKey="actualDashed" stroke={colors.isDark ? "#00ff88" : "#00b894"} strokeWidth={2} dot={false} strokeDasharray="6 4" legendType="none" connectNulls={false} />
             </ComposedChart>
           </ResponsiveContainer>
         </div>
@@ -317,12 +321,15 @@ function ComparisonSide({
             <ComposedChart data={sCurveData}>
               <CartesianGrid strokeDasharray="3 3" stroke={colors.grid} />
               <XAxis dataKey="week" tick={{ fontSize: 10, fill: colors.tickFill }} />
-              <YAxis tick={{ fontSize: 10, fill: colors.tickFill }} />
+              <YAxis tick={{ fontSize: 10, fill: colors.tickFill }} tickFormatter={(v) => `€${v}M`} />
               <Tooltip contentStyle={{ backgroundColor: colors.tooltipBg, border: colors.tooltipBorder }} formatter={(value: number) => `€${value.toFixed(1)}M`} />
-              <Legend wrapperStyle={{ paddingTop: '12px' }} iconType="line" />
+              <Legend wrapperStyle={{ paddingTop: '8px' }} iconType="line" />
               <Line type="monotone" dataKey="plannedCost" stroke="#999999" strokeWidth={2} dot={false} name="Planned" />
-              <Line type="monotone" dataKey="estimatedCost" stroke={colors.isDark ? "#00c8ff" : "#6C5CE7"} strokeWidth={2.5} dot={false} name="Estimated" />
-              <Line type="monotone" dataKey="actualCost" stroke={colors.isDark ? "#00ff88" : "#00b894"} strokeWidth={2.5} dot={false} name="Actual" />
+              <Line type="monotone" dataKey="estimatedCost" stroke={colors.isDark ? "#00c8ff" : "#6C5CE7"} strokeWidth={2} dot={false} name="Estimated" />
+              {/* Solid portion: W1–W8 */}
+              <Line type="monotone" dataKey="actualCostSolid" stroke="#ff6b6b" strokeWidth={2} dot={false} name="Actual" connectNulls={false} />
+              {/* Dashed portion: W8–W9 forecast */}
+              <Line type="monotone" dataKey="actualCostDashed" stroke="#ff6b6b" strokeWidth={2} dot={false} strokeDasharray="6 4" legendType="none" connectNulls={false} />
             </ComposedChart>
           </ResponsiveContainer>
         </div>

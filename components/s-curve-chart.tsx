@@ -3,54 +3,6 @@
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 import { useChartColors } from '@/hooks/use-chart-colors'
 
-// Custom shape that renders both solid and dashed line segments
-const DashedLineShape = ({ points, stroke, strokeWidth, weekThreshold = 8 }: any) => {
-  if (!points || points.length === 0) return null
-
-  const solidPoints: any[] = []
-  const dashedPoints: any[] = []
-
-  points.forEach((point: any) => {
-    if (point.payload.week <= weekThreshold) {
-      solidPoints.push(point)
-    } else {
-      dashedPoints.push(point)
-    }
-  })
-
-  // Always include week 8 in both for continuity
-  if (solidPoints.length > 0 && dashedPoints.length > 0) {
-    const lastSolidIndex = points.findIndex(p => p.payload.week === weekThreshold)
-    if (lastSolidIndex >= 0) {
-      dashedPoints.unshift(points[lastSolidIndex])
-    }
-  }
-
-  return (
-    <g>
-      {/* Solid line for weeks 1-8 */}
-      {solidPoints.length > 1 && (
-        <polyline
-          fill="none"
-          stroke={stroke}
-          strokeWidth={strokeWidth}
-          points={solidPoints.map(p => `${p.x},${p.y}`).join(' ')}
-        />
-      )}
-      {/* Dashed line for weeks 8-9 */}
-      {dashedPoints.length > 1 && (
-        <polyline
-          fill="none"
-          stroke={stroke}
-          strokeWidth={strokeWidth}
-          strokeDasharray="5 5"
-          points={dashedPoints.map(p => `${p.x},${p.y}`).join(' ')}
-        />
-      )}
-    </g>
-  )
-}
-
 const progressData = [
   { week: 1, planned: 5, forecast: 4, actual: 3 },
   { week: 2, planned: 10, forecast: 8, actual: 5 },
@@ -62,6 +14,11 @@ const progressData = [
   { week: 8, planned: 55, forecast: 48, actual: 45 },
   { week: 9, planned: 65, forecast: 55, actual: 50 },
 ]
+
+// Solid portion of actual: weeks 1–8
+const progressActualSolid = progressData.slice(0, 8)
+// Dashed portion of actual: weeks 8–9 (start at 8 for a seamless join)
+const progressActualDashed = progressData.slice(7)
 
 export function SProgressCurve() {
   const colors = useChartColors()
@@ -105,6 +62,7 @@ export function SProgressCurve() {
             strokeWidth={2} 
             dot={false}
           />
+          {/* Solid portion: weeks 1–8 */}
           <Line 
             type="monotone" 
             dataKey="actual" 
@@ -112,7 +70,18 @@ export function SProgressCurve() {
             name="Actual" 
             strokeWidth={2} 
             dot={false}
-            shape={<DashedLineShape stroke={colors.isDark ? "#00ff88" : "#00b894"} strokeWidth={2} weekThreshold={8} />}
+            data={progressActualSolid}
+          />
+          {/* Dashed portion: weeks 8–9 (forecast) */}
+          <Line 
+            type="monotone" 
+            dataKey="actual" 
+            stroke={colors.isDark ? "#00ff88" : "#00b894"} 
+            strokeWidth={2} 
+            dot={false}
+            strokeDasharray="6 4"
+            legendType="none"
+            data={progressActualDashed}
           />
         </LineChart>
       </ResponsiveContainer>
@@ -134,6 +103,8 @@ export function SCostCurve() {
     { week: 8, baseline: 28.4, actual: 33.3 },
     { week: 9, baseline: 33.5, actual: 40.0 },
   ]
+  const costActualSolid = costData.slice(0, 8)
+  const costActualDashed = costData.slice(7)
 
   return (
     <div className="glass-card rounded-lg p-4 border border-border/50">
@@ -167,6 +138,7 @@ export function SCostCurve() {
             strokeWidth={2} 
             dot={false}
           />
+          {/* Solid portion: weeks 1–8 */}
           <Line 
             type="monotone" 
             dataKey="actual" 
@@ -174,7 +146,18 @@ export function SCostCurve() {
             name="Actual" 
             strokeWidth={2} 
             dot={false}
-            shape={<DashedLineShape stroke="#ff6b6b" strokeWidth={2} weekThreshold={8} />}
+            data={costActualSolid}
+          />
+          {/* Dashed portion: weeks 8–9 (forecast) */}
+          <Line 
+            type="monotone" 
+            dataKey="actual" 
+            stroke="#ff6b6b" 
+            strokeWidth={2} 
+            dot={false}
+            strokeDasharray="6 4"
+            legendType="none"
+            data={costActualDashed}
           />
         </LineChart>
       </ResponsiveContainer>

@@ -22,6 +22,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
   const [selectedWorkfront, setSelectedWorkfront] = useState('all')
   const [selectedOwner, setSelectedOwner] = useState('all')
   const [selectedCostMonth, setSelectedCostMonth] = useState('last-month')
+  const [selectedCostType, setSelectedCostType] = useState('all')
   const [sortBy, setSortBy] = useState<'value' | 'plannedProgress' | 'actualProgress' | 'accumulatedProduction' | null>(null)
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc')
   const [economicSortBy, setEconomicSortBy] = useState<'baselineCost' | 'actualCost' | 'totalBaseline' | 'totalEstimated' | null>(null)
@@ -85,14 +86,26 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
     })
   }
 
+  const costTypeMultipliers: Record<string, number> = {
+    all: 1.0,
+    labour: 0.38,
+    materials: 0.25,
+    equipment: 0.16,
+    indirect: 0.11,
+    subcontracted: 0.10,
+  }
+
   const getFilteredCostData = () => {
-    if (selectedActivity === 'all' && selectedWorkfront === 'all' && selectedOwner === 'all') {
-      return costData
-    }
+    const ctScale = costTypeMultipliers[selectedCostType] ?? 1
+    const actScale = selectedActivity !== 'all' ? 0.88 : 1
+    const wfScale = selectedWorkfront !== 'all' ? 0.93 : 1
+    const scale = ctScale * actScale * wfScale
+    if (scale === 1) return costData
     return costData.map(d => ({
       ...d,
-      actualSolid: d.actualSolid != null ? d.actualSolid * 1.05 : null,
-      actualDashed: d.actualDashed != null ? d.actualDashed * 1.05 : null,
+      baseline:     parseFloat((d.baseline * scale).toFixed(2)),
+      actualSolid:  d.actualSolid  != null ? parseFloat((d.actualSolid  * scale).toFixed(2)) : null,
+      actualDashed: d.actualDashed != null ? parseFloat((d.actualDashed * scale).toFixed(2)) : null,
     }))
   }
 
@@ -1086,6 +1099,20 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                     <SelectItem value="all">All Workfronts</SelectItem>
                     <SelectItem value="section1">Section 1</SelectItem>
                     <SelectItem value="section2">Section 2</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                <Select value={selectedCostType} onValueChange={setSelectedCostType}>
+                  <SelectTrigger className="w-52 bg-secondary border-border/50">
+                    <SelectValue placeholder="Filter by Cost Type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Cost Types</SelectItem>
+                    <SelectItem value="labour">Labour</SelectItem>
+                    <SelectItem value="materials">Materials</SelectItem>
+                    <SelectItem value="equipment">Equipment</SelectItem>
+                    <SelectItem value="indirect">Indirect Costs</SelectItem>
+                    <SelectItem value="subcontracted">Subcontracted</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

@@ -128,26 +128,144 @@ const projects: ComparisonProject[] = [
   },
 ]
 
-// S-curve data with larger gaps between planned, estimated, and actual
-const sCurveData = [
-  { week: 'W1', planned: 5, estimated: 4, actual: 2, plannedCost: 2, estimatedCost: 1.8, actualCost: 1.5 },
-  { week: 'W2', planned: 12, estimated: 10, actual: 6, plannedCost: 4.5, estimatedCost: 4, actualCost: 3.2 },
-  { week: 'W3', planned: 22, estimated: 19, actual: 10, plannedCost: 8, estimatedCost: 7, actualCost: 5.5 },
-  { week: 'W4', planned: 35, estimated: 31, actual: 18, plannedCost: 12.5, estimatedCost: 11, actualCost: 8.5 },
-  { week: 'W5', planned: 50, estimated: 44, actual: 28, plannedCost: 18, estimatedCost: 16, actualCost: 12 },
-  { week: 'W6', planned: 65, estimated: 57, actual: 38, plannedCost: 24, estimatedCost: 21, actualCost: 16.5 },
-  { week: 'W7', planned: 78, estimated: 69, actual: 48, plannedCost: 30, estimatedCost: 27, actualCost: 21 },
-  { week: 'W8', planned: 88, estimated: 78, actual: 55, plannedCost: 35, estimatedCost: 31, actualCost: 24 },
-]
+type WeekPoint = { week: string; planned: number; estimated: number; actualSolid: number | null; actualDashed: number | null }
+type CostPoint = { week: string; planned: number; estimated: number; actualSolid: number | null; actualDashed: number | null }
+
+// Per-project s-curve data — each project has distinct curves
+// actualSolid = confirmed data (W1–W8), actualDashed = forecast segment (W8–W9)
+const sCurveDataByProject: Record<string, { progress: WeekPoint[]; cost: CostPoint[] }> = {
+  'PRJ-001': {
+    progress: [
+      { week: 'W1', planned: 6, estimated: 5, actualSolid: 4, actualDashed: null },
+      { week: 'W2', planned: 14, estimated: 12, actualSolid: 9, actualDashed: null },
+      { week: 'W3', planned: 25, estimated: 22, actualSolid: 15, actualDashed: null },
+      { week: 'W4', planned: 38, estimated: 34, actualSolid: 24, actualDashed: null },
+      { week: 'W5', planned: 52, estimated: 47, actualSolid: 35, actualDashed: null },
+      { week: 'W6', planned: 66, estimated: 60, actualSolid: 46, actualDashed: null },
+      { week: 'W7', planned: 78, estimated: 71, actualSolid: 57, actualDashed: null },
+      { week: 'W8', planned: 87, estimated: 80, actualSolid: 68, actualDashed: 68 },
+      { week: 'W9', planned: 94, estimated: 88, actualSolid: null, actualDashed: 76 },
+    ],
+    cost: [
+      { week: 'W1', planned: 2.5, estimated: 2.2, actualSolid: 1.9, actualDashed: null },
+      { week: 'W2', planned: 5.0, estimated: 4.5, actualSolid: 4.0, actualDashed: null },
+      { week: 'W3', planned: 8.5, estimated: 7.8, actualSolid: 6.8, actualDashed: null },
+      { week: 'W4', planned: 13.0, estimated: 12.0, actualSolid: 10.5, actualDashed: null },
+      { week: 'W5', planned: 18.5, estimated: 17.0, actualSolid: 15.0, actualDashed: null },
+      { week: 'W6', planned: 24.5, estimated: 22.5, actualSolid: 20.0, actualDashed: null },
+      { week: 'W7', planned: 30.0, estimated: 27.5, actualSolid: 25.0, actualDashed: null },
+      { week: 'W8', planned: 35.5, estimated: 32.0, actualSolid: 29.5, actualDashed: 29.5 },
+      { week: 'W9', planned: 40.0, estimated: 36.5, actualSolid: null, actualDashed: 34.0 },
+    ],
+  },
+  'PRJ-002': {
+    progress: [
+      { week: 'W1', planned: 4, estimated: 4, actualSolid: 3, actualDashed: null },
+      { week: 'W2', planned: 10, estimated: 9, actualSolid: 6, actualDashed: null },
+      { week: 'W3', planned: 18, estimated: 16, actualSolid: 10, actualDashed: null },
+      { week: 'W4', planned: 28, estimated: 25, actualSolid: 16, actualDashed: null },
+      { week: 'W5', planned: 40, estimated: 36, actualSolid: 23, actualDashed: null },
+      { week: 'W6', planned: 53, estimated: 47, actualSolid: 30, actualDashed: null },
+      { week: 'W7', planned: 65, estimated: 57, actualSolid: 37, actualDashed: null },
+      { week: 'W8', planned: 76, estimated: 66, actualSolid: 43, actualDashed: 43 },
+      { week: 'W9', planned: 85, estimated: 74, actualSolid: null, actualDashed: 50 },
+    ],
+    cost: [
+      { week: 'W1', planned: 3.5, estimated: 3.2, actualSolid: 3.8, actualDashed: null },
+      { week: 'W2', planned: 7.5, estimated: 7.0, actualSolid: 8.5, actualDashed: null },
+      { week: 'W3', planned: 13.0, estimated: 12.0, actualSolid: 15.0, actualDashed: null },
+      { week: 'W4', planned: 20.0, estimated: 18.5, actualSolid: 23.0, actualDashed: null },
+      { week: 'W5', planned: 28.5, estimated: 26.5, actualSolid: 33.0, actualDashed: null },
+      { week: 'W6', planned: 38.0, estimated: 35.5, actualSolid: 44.0, actualDashed: null },
+      { week: 'W7', planned: 47.5, estimated: 44.0, actualSolid: 55.0, actualDashed: null },
+      { week: 'W8', planned: 55.5, estimated: 51.5, actualSolid: 64.0, actualDashed: 64.0 },
+      { week: 'W9', planned: 62.0, estimated: 57.5, actualSolid: null, actualDashed: 72.0 },
+    ],
+  },
+  'PRJ-003': {
+    progress: [
+      { week: 'W1', planned: 7, estimated: 6, actualSolid: 5, actualDashed: null },
+      { week: 'W2', planned: 16, estimated: 14, actualSolid: 12, actualDashed: null },
+      { week: 'W3', planned: 28, estimated: 25, actualSolid: 20, actualDashed: null },
+      { week: 'W4', planned: 42, estimated: 37, actualSolid: 32, actualDashed: null },
+      { week: 'W5', planned: 57, estimated: 51, actualSolid: 45, actualDashed: null },
+      { week: 'W6', planned: 70, estimated: 63, actualSolid: 57, actualDashed: null },
+      { week: 'W7', planned: 81, estimated: 73, actualSolid: 68, actualDashed: null },
+      { week: 'W8', planned: 89, estimated: 81, actualSolid: 77, actualDashed: 77 },
+      { week: 'W9', planned: 95, estimated: 88, actualSolid: null, actualDashed: 84 },
+    ],
+    cost: [
+      { week: 'W1', planned: 2.0, estimated: 1.9, actualSolid: 2.1, actualDashed: null },
+      { week: 'W2', planned: 4.5, estimated: 4.3, actualSolid: 4.8, actualDashed: null },
+      { week: 'W3', planned: 8.0, estimated: 7.5, actualSolid: 8.5, actualDashed: null },
+      { week: 'W4', planned: 12.5, estimated: 11.5, actualSolid: 13.0, actualDashed: null },
+      { week: 'W5', planned: 18.0, estimated: 16.5, actualSolid: 18.5, actualDashed: null },
+      { week: 'W6', planned: 24.0, estimated: 22.0, actualSolid: 25.0, actualDashed: null },
+      { week: 'W7', planned: 30.5, estimated: 28.0, actualSolid: 31.5, actualDashed: null },
+      { week: 'W8', planned: 36.5, estimated: 33.5, actualSolid: 38.0, actualDashed: 38.0 },
+      { week: 'W9', planned: 42.0, estimated: 38.5, actualSolid: null, actualDashed: 44.0 },
+    ],
+  },
+  'PRJ-004': {
+    progress: [
+      { week: 'W1', planned: 5, estimated: 5, actualSolid: 6, actualDashed: null },
+      { week: 'W2', planned: 12, estimated: 11, actualSolid: 14, actualDashed: null },
+      { week: 'W3', planned: 22, estimated: 21, actualSolid: 26, actualDashed: null },
+      { week: 'W4', planned: 34, estimated: 33, actualSolid: 38, actualDashed: null },
+      { week: 'W5', planned: 48, estimated: 46, actualSolid: 52, actualDashed: null },
+      { week: 'W6', planned: 62, estimated: 60, actualSolid: 64, actualDashed: null },
+      { week: 'W7', planned: 74, estimated: 72, actualSolid: 75, actualDashed: null },
+      { week: 'W8', planned: 84, estimated: 82, actualSolid: 84, actualDashed: 84 },
+      { week: 'W9', planned: 92, estimated: 90, actualSolid: null, actualDashed: 91 },
+    ],
+    cost: [
+      { week: 'W1', planned: 1.8, estimated: 1.7, actualSolid: 1.7, actualDashed: null },
+      { week: 'W2', planned: 4.0, estimated: 3.8, actualSolid: 3.8, actualDashed: null },
+      { week: 'W3', planned: 7.0, estimated: 6.6, actualSolid: 6.5, actualDashed: null },
+      { week: 'W4', planned: 11.0, estimated: 10.4, actualSolid: 10.2, actualDashed: null },
+      { week: 'W5', planned: 16.0, estimated: 15.2, actualSolid: 14.8, actualDashed: null },
+      { week: 'W6', planned: 21.5, estimated: 20.4, actualSolid: 19.8, actualDashed: null },
+      { week: 'W7', planned: 27.0, estimated: 25.6, actualSolid: 24.8, actualDashed: null },
+      { week: 'W8', planned: 32.0, estimated: 30.4, actualSolid: 29.5, actualDashed: 29.5 },
+      { week: 'W9', planned: 36.5, estimated: 34.7, actualSolid: null, actualDashed: 33.5 },
+    ],
+  },
+  'PRJ-005': {
+    progress: [
+      { week: 'W1', planned: 4, estimated: 3, actualSolid: 3, actualDashed: null },
+      { week: 'W2', planned: 9, estimated: 8, actualSolid: 7, actualDashed: null },
+      { week: 'W3', planned: 17, estimated: 15, actualSolid: 12, actualDashed: null },
+      { week: 'W4', planned: 27, estimated: 23, actualSolid: 19, actualDashed: null },
+      { week: 'W5', planned: 39, estimated: 34, actualSolid: 28, actualDashed: null },
+      { week: 'W6', planned: 52, estimated: 45, actualSolid: 37, actualDashed: null },
+      { week: 'W7', planned: 64, estimated: 56, actualSolid: 47, actualDashed: null },
+      { week: 'W8', planned: 74, estimated: 65, actualSolid: 55, actualDashed: 55 },
+      { week: 'W9', planned: 83, estimated: 73, actualSolid: null, actualDashed: 62 },
+    ],
+    cost: [
+      { week: 'W1', planned: 2.8, estimated: 2.5, actualSolid: 2.6, actualDashed: null },
+      { week: 'W2', planned: 6.0, estimated: 5.5, actualSolid: 5.8, actualDashed: null },
+      { week: 'W3', planned: 10.5, estimated: 9.5, actualSolid: 10.0, actualDashed: null },
+      { week: 'W4', planned: 16.0, estimated: 14.5, actualSolid: 15.5, actualDashed: null },
+      { week: 'W5', planned: 22.5, estimated: 20.5, actualSolid: 22.0, actualDashed: null },
+      { week: 'W6', planned: 30.0, estimated: 27.5, actualSolid: 29.5, actualDashed: null },
+      { week: 'W7', planned: 37.5, estimated: 34.5, actualSolid: 37.0, actualDashed: null },
+      { week: 'W8', planned: 44.0, estimated: 40.5, actualSolid: 44.0, actualDashed: 44.0 },
+      { week: 'W9', planned: 49.5, estimated: 46.0, actualSolid: null, actualDashed: 50.0 },
+    ],
+  },
+}
+
+
 
 type IndicatorType = 'weekly-evolution' | 'real-earned-value' | 'cpi' | 'spi' | 'ppc' | 'estimated-cost' | 'estimated-deadline'
 
-function IndicatorCard({ 
-  type, 
-  project 
-}: { 
+function IndicatorCard({
+  type,
+  project
+}: {
   type: IndicatorType
-  project: ComparisonProject 
+  project: ComparisonProject
 }) {
   const colors = useChartColors()
   const calculateDays = (estimatedDate: string, initialDate: string) => {
@@ -240,6 +358,66 @@ function IndicatorCard({
   }
 }
 
+const ACTIVITIES = [
+  { value: 'all', label: 'All Activities' },
+  { value: 'a1', label: 'A1 - Site Prep' },
+  { value: 'a2', label: 'A2 - Foundation' },
+  { value: 'a3', label: 'A3 - Structure' },
+]
+const WORKFRONTS = [
+  { value: 'all', label: 'All Workfronts' },
+  { value: 'section1', label: 'Section 1' },
+  { value: 'section2', label: 'Section 2' },
+]
+const OWNERS = [
+  { value: 'all', label: 'All Owners' },
+  { value: 'owner1', label: 'John Silva' },
+  { value: 'owner2', label: 'Maria Costa' },
+  { value: 'owner3', label: 'Ahmed Al-Rashid' },
+]
+const COST_TYPES = [
+  { value: 'all', label: 'All Cost Types' },
+  { value: 'labour', label: 'Labour' },
+  { value: 'materials', label: 'Materials' },
+  { value: 'equipment', label: 'Equipment' },
+  { value: 'indirect', label: 'Indirect Costs' },
+  { value: 'subcontracted', label: 'Subcontracted' },
+]
+
+// Cost type multipliers — each type shifts the curve up or down relative to total
+const costTypeMultipliers: Record<string, number> = {
+  all: 1.0,
+  labour: 0.38,
+  materials: 0.25,
+  equipment: 0.16,
+  indirect: 0.11,
+  subcontracted: 0.10,
+}
+
+function FilterSelect({
+  value,
+  onChange,
+  options,
+  placeholder,
+}: {
+  value: string
+  onChange: (v: string) => void
+  options: { value: string; label: string }[]
+  placeholder: string
+}) {
+  return (
+    <select
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      className="text-xs h-7 px-2 rounded-md border border-border/50 bg-secondary text-foreground focus:outline-none focus:ring-1 focus:ring-ring"
+    >
+      {options.map((o) => (
+        <option key={o.value} value={o.value}>{o.label}</option>
+      ))}
+    </select>
+  )
+}
+
 function ComparisonSide({
   side,
   selectedProject,
@@ -252,6 +430,14 @@ function ComparisonSide({
   selectedIndicators: IndicatorType[]
 }) {
   const [showDropdown, setShowDropdown] = useState(false)
+  // Progress filters
+  const [progressActivity, setProgressActivity] = useState('all')
+  const [progressWorkfront, setProgressWorkfront] = useState('all')
+  const [progressOwner, setProgressOwner] = useState('all')
+  // Cost filters
+  const [costActivity, setCostActivity] = useState('all')
+  const [costWorkfront, setCostWorkfront] = useState('all')
+  const [costType, setCostType] = useState('all')
   const colors = useChartColors()
 
   return (
@@ -291,42 +477,107 @@ function ComparisonSide({
       </div>
 
       {/* S-Curves - Progress and Cost */}
-      <div className="mb-8">
-        <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Progress S-Curve</h3>
-        <div className="h-40 glass-card rounded-lg p-2">
-          <ResponsiveContainer width="100%" height="100%">
-            <ComposedChart data={sCurveData}>
-              <CartesianGrid strokeDasharray="3 3" stroke={colors.grid} />
-              <XAxis dataKey="week" tick={{ fontSize: 10, fill: colors.tickFill }} />
-              <YAxis tick={{ fontSize: 10, fill: colors.tickFill }} />
-              <Tooltip contentStyle={{ backgroundColor: colors.tooltipBg, border: colors.tooltipBorder }} />
-              <Legend wrapperStyle={{ paddingTop: '12px' }} iconType="line" />
-              <Line type="monotone" dataKey="planned" stroke="#999999" strokeWidth={2} dot={false} name="Planned" />
-              <Line type="monotone" dataKey="estimated" stroke={colors.isDark ? "#00c8ff" : "#6C5CE7"} strokeWidth={2.5} dot={false} name="Estimated" />
-              <Line type="monotone" dataKey="actual" stroke={colors.isDark ? "#00ff88" : "#00b894"} strokeWidth={2.5} dot={false} name="Actual" />
-            </ComposedChart>
-          </ResponsiveContainer>
-        </div>
-      </div>
+      {(() => {
+        const base = sCurveDataByProject[selectedProject.id] ?? sCurveDataByProject['PRJ-001']
+        const actualColor = colors.isDark ? "#00ff88" : "#00b894"
 
-      {/* Cost S-Curve */}
-      <div className="mb-8">
-        <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Cost S-Curve</h3>
-        <div className="h-40 glass-card rounded-lg p-2">
-          <ResponsiveContainer width="100%" height="100%">
-            <ComposedChart data={sCurveData}>
-              <CartesianGrid strokeDasharray="3 3" stroke={colors.grid} />
-              <XAxis dataKey="week" tick={{ fontSize: 10, fill: colors.tickFill }} />
-              <YAxis tick={{ fontSize: 10, fill: colors.tickFill }} />
-              <Tooltip contentStyle={{ backgroundColor: colors.tooltipBg, border: colors.tooltipBorder }} formatter={(value: number) => `€${value.toFixed(1)}M`} />
-              <Legend wrapperStyle={{ paddingTop: '12px' }} iconType="line" />
-              <Line type="monotone" dataKey="plannedCost" stroke="#999999" strokeWidth={2} dot={false} name="Planned" />
-              <Line type="monotone" dataKey="estimatedCost" stroke={colors.isDark ? "#00c8ff" : "#6C5CE7"} strokeWidth={2.5} dot={false} name="Estimated" />
-              <Line type="monotone" dataKey="actualCost" stroke={colors.isDark ? "#00ff88" : "#00b894"} strokeWidth={2.5} dot={false} name="Actual" />
-            </ComposedChart>
-          </ResponsiveContainer>
-        </div>
-      </div>
+        // Apply progress filters — scale actual values slightly when filtered
+        const progressFiltered = (progressActivity !== 'all' || progressWorkfront !== 'all' || progressOwner !== 'all')
+          ? base.progress.map(d => {
+              const f = 0.82 + (progressActivity.charCodeAt(progressActivity.length - 1) % 10) * 0.018
+              return {
+                ...d,
+                actualSolid: d.actualSolid != null ? parseFloat((d.actualSolid * f).toFixed(1)) : null,
+                actualDashed: d.actualDashed != null ? parseFloat((d.actualDashed * f).toFixed(1)) : null,
+                estimated: parseFloat((d.estimated * (f + 0.05)).toFixed(1)),
+              }
+            })
+          : base.progress
+
+        // Apply cost filters — cost type scales the whole curve by its share
+        const ctMultiplier = costTypeMultipliers[costType] ?? 1
+        const costFiltered = (costActivity !== 'all' || costWorkfront !== 'all' || costType !== 'all')
+          ? base.cost.map(d => {
+              const af = costActivity !== 'all' ? 0.88 : 1
+              const wf = costWorkfront !== 'all' ? 0.93 : 1
+              const scale = ctMultiplier * af * wf
+              return {
+                ...d,
+                planned: parseFloat((d.planned * scale).toFixed(2)),
+                estimated: parseFloat((d.estimated * scale).toFixed(2)),
+                actualSolid: d.actualSolid != null ? parseFloat((d.actualSolid * scale).toFixed(2)) : null,
+                actualDashed: d.actualDashed != null ? parseFloat((d.actualDashed * scale).toFixed(2)) : null,
+              }
+            })
+          : base.cost
+
+        const progressLegend = [
+          { value: 'Planned',   type: 'line' as const, color: '#999999' },
+          { value: 'Estimated', type: 'line' as const, color: colors.isDark ? "#00c8ff" : "#6C5CE7" },
+          { value: 'Actual',    type: 'line' as const, color: actualColor },
+        ]
+        const costLegend = [
+          { value: 'Planned', type: 'line' as const, color: '#999999' },
+          { value: 'Actual',  type: 'line' as const, color: '#ff6b6b' },
+        ]
+
+        return (
+          <>
+            {/* Progress S-Curve */}
+            <div className="mb-8">
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Progress S-Curve</h3>
+              </div>
+              <div className="flex flex-wrap gap-2 mb-3">
+                <FilterSelect value={progressActivity} onChange={setProgressActivity} options={ACTIVITIES} placeholder="Activity" />
+                <FilterSelect value={progressWorkfront} onChange={setProgressWorkfront} options={WORKFRONTS} placeholder="Workfront" />
+                <FilterSelect value={progressOwner} onChange={setProgressOwner} options={OWNERS} placeholder="Owner" />
+              </div>
+              <div className="h-44 glass-card rounded-lg p-2">
+                <ResponsiveContainer width="100%" height="100%">
+                  <ComposedChart data={progressFiltered}>
+                    <CartesianGrid strokeDasharray="3 3" stroke={colors.grid} />
+                    <XAxis dataKey="week" tick={{ fontSize: 10, fill: colors.tickFill }} />
+                    <YAxis tick={{ fontSize: 10, fill: colors.tickFill }} />
+                    <Tooltip contentStyle={{ backgroundColor: colors.tooltipBg, border: colors.tooltipBorder }} />
+                    <Legend wrapperStyle={{ paddingTop: '8px' }} iconType="line" payload={progressLegend} />
+                    <Line type="monotone" dataKey="planned"      stroke="#999999"   strokeWidth={2} dot={false} name="Planned" />
+                    <Line type="monotone" dataKey="estimated"    stroke={colors.isDark ? "#00c8ff" : "#6C5CE7"} strokeWidth={2} dot={false} name="Estimated" />
+                    <Line type="monotone" dataKey="actualSolid"  stroke={actualColor} strokeWidth={2} dot={false} name="Actual" connectNulls={false} />
+                    <Line type="monotone" dataKey="actualDashed" stroke={actualColor} strokeWidth={2} dot={false} strokeDasharray="6 4" legendType="none" connectNulls={false} />
+                  </ComposedChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+
+            {/* Cost S-Curve */}
+            <div className="mb-8">
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Cost S-Curve</h3>
+              </div>
+              <div className="flex flex-wrap gap-2 mb-3">
+                <FilterSelect value={costActivity}  onChange={setCostActivity}  options={ACTIVITIES}  placeholder="Activity" />
+                <FilterSelect value={costWorkfront} onChange={setCostWorkfront} options={WORKFRONTS}  placeholder="Workfront" />
+                <FilterSelect value={costType}      onChange={setCostType}      options={COST_TYPES}  placeholder="Cost Type" />
+              </div>
+              <div className="h-44 glass-card rounded-lg p-2">
+                <ResponsiveContainer width="100%" height="100%">
+                  <ComposedChart data={costFiltered}>
+                    <CartesianGrid strokeDasharray="3 3" stroke={colors.grid} />
+                    <XAxis dataKey="week" tick={{ fontSize: 10, fill: colors.tickFill }} />
+                    <YAxis tick={{ fontSize: 10, fill: colors.tickFill }} tickFormatter={(v) => `€${v}M`} />
+                    <Tooltip contentStyle={{ backgroundColor: colors.tooltipBg, border: colors.tooltipBorder }} formatter={(v: number) => `€${v.toFixed(1)}M`} />
+                    <Legend wrapperStyle={{ paddingTop: '8px' }} iconType="line" payload={costLegend} />
+                    <Line type="monotone" dataKey="planned"      stroke="#999999" strokeWidth={2} dot={false} name="Planned" />
+                    <Line type="monotone" dataKey="actualSolid"  stroke="#ff6b6b" strokeWidth={2} dot={false} name="Actual" connectNulls={false} />
+                    <Line type="monotone" dataKey="actualDashed" stroke="#ff6b6b" strokeWidth={2} dot={false} strokeDasharray="6 4" legendType="none" connectNulls={false} />
+                  </ComposedChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+          </>
+        )
+      })()}
 
       {/* Selected Indicators */}
       {selectedIndicators.length > 0 && (

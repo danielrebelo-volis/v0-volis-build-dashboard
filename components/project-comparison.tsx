@@ -358,6 +358,66 @@ function IndicatorCard({
   }
 }
 
+const ACTIVITIES = [
+  { value: 'all', label: 'All Activities' },
+  { value: 'a1', label: 'A1 - Site Prep' },
+  { value: 'a2', label: 'A2 - Foundation' },
+  { value: 'a3', label: 'A3 - Structure' },
+]
+const WORKFRONTS = [
+  { value: 'all', label: 'All Workfronts' },
+  { value: 'section1', label: 'Section 1' },
+  { value: 'section2', label: 'Section 2' },
+]
+const OWNERS = [
+  { value: 'all', label: 'All Owners' },
+  { value: 'owner1', label: 'John Silva' },
+  { value: 'owner2', label: 'Maria Costa' },
+  { value: 'owner3', label: 'Ahmed Al-Rashid' },
+]
+const COST_TYPES = [
+  { value: 'all', label: 'All Cost Types' },
+  { value: 'labour', label: 'Labour' },
+  { value: 'materials', label: 'Materials' },
+  { value: 'equipment', label: 'Equipment' },
+  { value: 'indirect', label: 'Indirect Costs' },
+  { value: 'subcontracted', label: 'Subcontracted' },
+]
+
+// Cost type multipliers — each type shifts the curve up or down relative to total
+const costTypeMultipliers: Record<string, number> = {
+  all: 1.0,
+  labour: 0.38,
+  materials: 0.25,
+  equipment: 0.16,
+  indirect: 0.11,
+  subcontracted: 0.10,
+}
+
+function FilterSelect({
+  value,
+  onChange,
+  options,
+  placeholder,
+}: {
+  value: string
+  onChange: (v: string) => void
+  options: { value: string; label: string }[]
+  placeholder: string
+}) {
+  return (
+    <select
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      className="text-xs h-7 px-2 rounded-md border border-border/50 bg-secondary text-foreground focus:outline-none focus:ring-1 focus:ring-ring"
+    >
+      {options.map((o) => (
+        <option key={o.value} value={o.value}>{o.label}</option>
+      ))}
+    </select>
+  )
+}
+
 function ComparisonSide({
   side,
   selectedProject,
@@ -370,6 +430,14 @@ function ComparisonSide({
   selectedIndicators: IndicatorType[]
 }) {
   const [showDropdown, setShowDropdown] = useState(false)
+  // Progress filters
+  const [progressActivity, setProgressActivity] = useState('all')
+  const [progressWorkfront, setProgressWorkfront] = useState('all')
+  const [progressOwner, setProgressOwner] = useState('all')
+  // Cost filters
+  const [costActivity, setCostActivity] = useState('all')
+  const [costWorkfront, setCostWorkfront] = useState('all')
+  const [costType, setCostType] = useState('all')
   const colors = useChartColors()
 
   return (
@@ -410,50 +478,98 @@ function ComparisonSide({
 
       {/* S-Curves - Progress and Cost */}
       {(() => {
-        const curves = sCurveDataByProject[selectedProject.id] ?? sCurveDataByProject['PRJ-001']
+        const base = sCurveDataByProject[selectedProject.id] ?? sCurveDataByProject['PRJ-001']
         const actualColor = colors.isDark ? "#00ff88" : "#00b894"
+
+        // Apply progress filters — scale actual values slightly when filtered
+        const progressFiltered = (progressActivity !== 'all' || progressWorkfront !== 'all' || progressOwner !== 'all')
+          ? base.progress.map(d => {
+              const f = 0.82 + (progressActivity.charCodeAt(progressActivity.length - 1) % 10) * 0.018
+              return {
+                ...d,
+                actualSolid: d.actualSolid != null ? parseFloat((d.actualSolid * f).toFixed(1)) : null,
+                actualDashed: d.actualDashed != null ? parseFloat((d.actualDashed * f).toFixed(1)) : null,
+                estimated: parseFloat((d.estimated * (f + 0.05)).toFixed(1)),
+              }
+            })
+          : base.progress
+
+        // Apply cost filters — cost type scales the whole curve by its share
+        const ctMultiplier = costTypeMultipliers[costType] ?? 1
+        const costFiltered = (costActivity !== 'all' || costWorkfront !== 'all' || costType !== 'all')
+          ? base.cost.map(d => {
+              const af = costActivity !== 'all' ? 0.88 : 1
+              const wf = costWorkfront !== 'all' ? 0.93 : 1
+              const scale = ctMultiplier * af * wf
+              return {
+                ...d,
+                planned: parseFloat((d.planned * scale).toFixed(2)),
+                estimated: parseFloat((d.estimated * scale).toFixed(2)),
+                actualSolid: d.actualSolid != null ? parseFloat((d.actualSolid * scale).toFixed(2)) : null,
+                actualDashed: d.actualDashed != null ? parseFloat((d.actualDashed * scale).toFixed(2)) : null,
+              }
+            })
+          : base.cost
+
         const progressLegend = [
-          { value: 'Planned', type: 'line' as const, color: '#999999' },
+          { value: 'Planned',   type: 'line' as const, color: '#999999' },
           { value: 'Estimated', type: 'line' as const, color: colors.isDark ? "#00c8ff" : "#6C5CE7" },
-          { value: 'Actual', type: 'line' as const, color: actualColor },
+          { value: 'Actual',    type: 'line' as const, color: actualColor },
         ]
         const costLegend = [
           { value: 'Planned', type: 'line' as const, color: '#999999' },
-          { value: 'Actual', type: 'line' as const, color: '#ff6b6b' },
+          { value: 'Actual',  type: 'line' as const, color: '#ff6b6b' },
         ]
+
         return (
           <>
+            {/* Progress S-Curve */}
             <div className="mb-8">
-              <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Progress S-Curve</h3>
-              <div className="h-40 glass-card rounded-lg p-2">
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Progress S-Curve</h3>
+              </div>
+              <div className="flex flex-wrap gap-2 mb-3">
+                <FilterSelect value={progressActivity} onChange={setProgressActivity} options={ACTIVITIES} placeholder="Activity" />
+                <FilterSelect value={progressWorkfront} onChange={setProgressWorkfront} options={WORKFRONTS} placeholder="Workfront" />
+                <FilterSelect value={progressOwner} onChange={setProgressOwner} options={OWNERS} placeholder="Owner" />
+              </div>
+              <div className="h-44 glass-card rounded-lg p-2">
                 <ResponsiveContainer width="100%" height="100%">
-                  <ComposedChart data={curves.progress}>
+                  <ComposedChart data={progressFiltered}>
                     <CartesianGrid strokeDasharray="3 3" stroke={colors.grid} />
                     <XAxis dataKey="week" tick={{ fontSize: 10, fill: colors.tickFill }} />
                     <YAxis tick={{ fontSize: 10, fill: colors.tickFill }} />
                     <Tooltip contentStyle={{ backgroundColor: colors.tooltipBg, border: colors.tooltipBorder }} />
                     <Legend wrapperStyle={{ paddingTop: '8px' }} iconType="line" payload={progressLegend} />
-                    <Line type="monotone" dataKey="planned" stroke="#999999" strokeWidth={2} dot={false} name="Planned" />
-                    <Line type="monotone" dataKey="estimated" stroke={colors.isDark ? "#00c8ff" : "#6C5CE7"} strokeWidth={2} dot={false} name="Estimated" />
-                    <Line type="monotone" dataKey="actualSolid" stroke={actualColor} strokeWidth={2} dot={false} name="Actual" connectNulls={false} />
+                    <Line type="monotone" dataKey="planned"      stroke="#999999"   strokeWidth={2} dot={false} name="Planned" />
+                    <Line type="monotone" dataKey="estimated"    stroke={colors.isDark ? "#00c8ff" : "#6C5CE7"} strokeWidth={2} dot={false} name="Estimated" />
+                    <Line type="monotone" dataKey="actualSolid"  stroke={actualColor} strokeWidth={2} dot={false} name="Actual" connectNulls={false} />
                     <Line type="monotone" dataKey="actualDashed" stroke={actualColor} strokeWidth={2} dot={false} strokeDasharray="6 4" legendType="none" connectNulls={false} />
                   </ComposedChart>
                 </ResponsiveContainer>
               </div>
             </div>
 
+            {/* Cost S-Curve */}
             <div className="mb-8">
-              <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Cost S-Curve</h3>
-              <div className="h-40 glass-card rounded-lg p-2">
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Cost S-Curve</h3>
+              </div>
+              <div className="flex flex-wrap gap-2 mb-3">
+                <FilterSelect value={costActivity}  onChange={setCostActivity}  options={ACTIVITIES}  placeholder="Activity" />
+                <FilterSelect value={costWorkfront} onChange={setCostWorkfront} options={WORKFRONTS}  placeholder="Workfront" />
+                <FilterSelect value={costType}      onChange={setCostType}      options={COST_TYPES}  placeholder="Cost Type" />
+              </div>
+              <div className="h-44 glass-card rounded-lg p-2">
                 <ResponsiveContainer width="100%" height="100%">
-                  <ComposedChart data={curves.cost}>
+                  <ComposedChart data={costFiltered}>
                     <CartesianGrid strokeDasharray="3 3" stroke={colors.grid} />
                     <XAxis dataKey="week" tick={{ fontSize: 10, fill: colors.tickFill }} />
                     <YAxis tick={{ fontSize: 10, fill: colors.tickFill }} tickFormatter={(v) => `€${v}M`} />
                     <Tooltip contentStyle={{ backgroundColor: colors.tooltipBg, border: colors.tooltipBorder }} formatter={(v: number) => `€${v.toFixed(1)}M`} />
                     <Legend wrapperStyle={{ paddingTop: '8px' }} iconType="line" payload={costLegend} />
-                    <Line type="monotone" dataKey="planned" stroke="#999999" strokeWidth={2} dot={false} name="Planned" />
-                    <Line type="monotone" dataKey="actualSolid" stroke="#ff6b6b" strokeWidth={2} dot={false} name="Actual" connectNulls={false} />
+                    <Line type="monotone" dataKey="planned"      stroke="#999999" strokeWidth={2} dot={false} name="Planned" />
+                    <Line type="monotone" dataKey="actualSolid"  stroke="#ff6b6b" strokeWidth={2} dot={false} name="Actual" connectNulls={false} />
                     <Line type="monotone" dataKey="actualDashed" stroke="#ff6b6b" strokeWidth={2} dot={false} strokeDasharray="6 4" legendType="none" connectNulls={false} />
                   </ComposedChart>
                 </ResponsiveContainer>

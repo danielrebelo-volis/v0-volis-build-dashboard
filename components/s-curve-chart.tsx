@@ -96,7 +96,6 @@ export function SProgressCurve() {
             name="Planned" 
             strokeWidth={2} 
             dot={false}
-            shape={<DashedLineShape stroke="#999999" strokeWidth={2} weekThreshold={8} />}
           />
           <Line 
             type="monotone" 
@@ -105,7 +104,6 @@ export function SProgressCurve() {
             name="Forecast" 
             strokeWidth={2} 
             dot={false}
-            shape={<DashedLineShape stroke={colors.isDark ? "#00c8ff" : "#6C5CE7"} strokeWidth={2} weekThreshold={8} />}
           />
           <Line 
             type="monotone" 
@@ -168,7 +166,6 @@ export function SCostCurve() {
             name="Planned" 
             strokeWidth={2} 
             dot={false}
-            shape={<DashedLineShape stroke="#999999" strokeWidth={2} weekThreshold={8} />}
           />
           <Line 
             type="monotone" 

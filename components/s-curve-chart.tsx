@@ -3,6 +3,54 @@
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 import { useChartColors } from '@/hooks/use-chart-colors'
 
+// Custom shape that renders both solid and dashed line segments
+const DashedLineShape = ({ points, stroke, strokeWidth, weekThreshold = 8 }: any) => {
+  if (!points || points.length === 0) return null
+
+  const solidPoints: any[] = []
+  const dashedPoints: any[] = []
+
+  points.forEach((point: any) => {
+    if (point.payload.week <= weekThreshold) {
+      solidPoints.push(point)
+    } else {
+      dashedPoints.push(point)
+    }
+  })
+
+  // Always include week 8 in both for continuity
+  if (solidPoints.length > 0 && dashedPoints.length > 0) {
+    const lastSolidIndex = points.findIndex(p => p.payload.week === weekThreshold)
+    if (lastSolidIndex >= 0) {
+      dashedPoints.unshift(points[lastSolidIndex])
+    }
+  }
+
+  return (
+    <g>
+      {/* Solid line for weeks 1-8 */}
+      {solidPoints.length > 1 && (
+        <polyline
+          fill="none"
+          stroke={stroke}
+          strokeWidth={strokeWidth}
+          points={solidPoints.map(p => `${p.x},${p.y}`).join(' ')}
+        />
+      )}
+      {/* Dashed line for weeks 8-9 */}
+      {dashedPoints.length > 1 && (
+        <polyline
+          fill="none"
+          stroke={stroke}
+          strokeWidth={strokeWidth}
+          strokeDasharray="5 5"
+          points={dashedPoints.map(p => `${p.x},${p.y}`).join(' ')}
+        />
+      )}
+    </g>
+  )
+}
+
 const progressData = [
   { week: 1, planned: 5, forecast: 4, actual: 3 },
   { week: 2, planned: 10, forecast: 8, actual: 5 },
@@ -17,10 +65,6 @@ const progressData = [
 
 export function SProgressCurve() {
   const colors = useChartColors()
-  
-  // Split data: solid line up to week 8, dashed line for week 8-9
-  const solidData = progressData.slice(0, 8)
-  const dashedData = progressData.slice(7) // Include week 8 for continuity
 
   return (
     <div className="glass-card rounded-lg p-4 border border-border/50">
@@ -45,15 +89,33 @@ export function SProgressCurve() {
             wrapperStyle={{ paddingTop: '12px' }}
             iconType="line"
           />
-          {/* Solid lines for weeks 1-8 */}
-          <Line type="monotone" dataKey="planned" stroke="#999999" name="Planned" strokeWidth={2} dot={false} data={solidData} />
-          <Line type="monotone" dataKey="forecast" stroke={colors.isDark ? "#00c8ff" : "#6C5CE7"} name="Forecast" strokeWidth={2} dot={false} data={solidData} />
-          <Line type="monotone" dataKey="actual" stroke={colors.isDark ? "#00ff88" : "#00b894"} name="Actual" strokeWidth={2} dot={false} data={solidData} />
-          
-          {/* Dashed lines for weeks 8-9 (forecast) */}
-          <Line type="monotone" dataKey="planned" stroke="#999999" strokeWidth={2} dot={false} strokeDasharray="5 5" data={dashedData} />
-          <Line type="monotone" dataKey="forecast" stroke={colors.isDark ? "#00c8ff" : "#6C5CE7"} strokeWidth={2} dot={false} strokeDasharray="5 5" data={dashedData} />
-          <Line type="monotone" dataKey="actual" stroke={colors.isDark ? "#00ff88" : "#00b894"} strokeWidth={2} dot={false} strokeDasharray="5 5" data={dashedData} />
+          <Line 
+            type="monotone" 
+            dataKey="planned" 
+            stroke="#999999" 
+            name="Planned" 
+            strokeWidth={2} 
+            dot={false}
+            shape={<DashedLineShape stroke="#999999" strokeWidth={2} weekThreshold={8} />}
+          />
+          <Line 
+            type="monotone" 
+            dataKey="forecast" 
+            stroke={colors.isDark ? "#00c8ff" : "#6C5CE7"} 
+            name="Forecast" 
+            strokeWidth={2} 
+            dot={false}
+            shape={<DashedLineShape stroke={colors.isDark ? "#00c8ff" : "#6C5CE7"} strokeWidth={2} weekThreshold={8} />}
+          />
+          <Line 
+            type="monotone" 
+            dataKey="actual" 
+            stroke={colors.isDark ? "#00ff88" : "#00b894"} 
+            name="Actual" 
+            strokeWidth={2} 
+            dot={false}
+            shape={<DashedLineShape stroke={colors.isDark ? "#00ff88" : "#00b894"} strokeWidth={2} weekThreshold={8} />}
+          />
         </LineChart>
       </ResponsiveContainer>
     </div>
@@ -74,10 +136,6 @@ export function SCostCurve() {
     { week: 8, baseline: 28.4, actual: 33.3 },
     { week: 9, baseline: 33.5, actual: 40.0 },
   ]
-  
-  // Split data: solid line up to week 8, dashed line for week 8-9
-  const solidData = costData.slice(0, 8)
-  const dashedData = costData.slice(7) // Include week 8 for continuity
 
   return (
     <div className="glass-card rounded-lg p-4 border border-border/50">
@@ -103,13 +161,24 @@ export function SCostCurve() {
             wrapperStyle={{ paddingTop: '12px' }}
             iconType="line"
           />
-          {/* Solid lines for weeks 1-8 */}
-          <Line type="monotone" dataKey="baseline" stroke="#999999" name="Planned" strokeWidth={2} dot={false} data={solidData} />
-          <Line type="monotone" dataKey="actual" stroke="#ff6b6b" name="Actual" strokeWidth={2} dot={false} data={solidData} />
-          
-          {/* Dashed lines for weeks 8-9 (forecast) */}
-          <Line type="monotone" dataKey="baseline" stroke="#999999" strokeWidth={2} dot={false} strokeDasharray="5 5" data={dashedData} />
-          <Line type="monotone" dataKey="actual" stroke="#ff6b6b" strokeWidth={2} dot={false} strokeDasharray="5 5" data={dashedData} />
+          <Line 
+            type="monotone" 
+            dataKey="baseline" 
+            stroke="#999999" 
+            name="Planned" 
+            strokeWidth={2} 
+            dot={false}
+            shape={<DashedLineShape stroke="#999999" strokeWidth={2} weekThreshold={8} />}
+          />
+          <Line 
+            type="monotone" 
+            dataKey="actual" 
+            stroke="#ff6b6b" 
+            name="Actual" 
+            strokeWidth={2} 
+            dot={false}
+            shape={<DashedLineShape stroke="#ff6b6b" strokeWidth={2} weekThreshold={8} />}
+          />
         </LineChart>
       </ResponsiveContainer>
     </div>

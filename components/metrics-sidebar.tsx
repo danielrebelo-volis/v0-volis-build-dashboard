@@ -58,7 +58,7 @@ export function MetricsSidebar() {
       />
 
       <MetricCard
-        title="Total Budget"
+        title="Portfolio Value"
         value="€1.24B"
         change="+12.4%"
         trend="up"

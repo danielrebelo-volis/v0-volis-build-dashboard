@@ -45,7 +45,7 @@ export default function Dashboard() {
           <div>
             <h1 className="text-2xl font-semibold text-foreground tracking-tight">Performance Matrix</h1>
             <p className="text-sm text-muted-foreground mt-0.5">
-              Real-time earned value analysis across all active projects
+              Real-time accumulated production analysis across all active projects
             </p>
           </div>
 
@@ -98,33 +98,33 @@ export default function Dashboard() {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="w-56">
                     <DropdownMenuLabel>Filter by Typology</DropdownMenuLabel>
-                    <DropdownMenuItem onClick={() => handleFilterSelect('typology', 'Obra Geral/Estrada')} className="flex items-center justify-between">
-                      <span>Obra Geral/Estrada</span>
-                      {filterType === 'typology' && filterValue === 'Obra Geral/Estrada' && <Check className="w-4 h-4 text-accent" />}
+                    <DropdownMenuItem onClick={() => handleFilterSelect('typology', 'Road Infrastructure')} className="flex items-center justify-between">
+                      <span>Road Infrastructure</span>
+                      {filterType === 'typology' && filterValue === 'Road Infrastructure' && <Check className="w-4 h-4 text-accent" />}
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => handleFilterSelect('typology', 'Construção Civil')} className="flex items-center justify-between">
-                      <span>Construção Civil</span>
-                      {filterType === 'typology' && filterValue === 'Construção Civil' && <Check className="w-4 h-4 text-accent" />}
+                    <DropdownMenuItem onClick={() => handleFilterSelect('typology', 'Civil Construction')} className="flex items-center justify-between">
+                      <span>Civil Construction</span>
+                      {filterType === 'typology' && filterValue === 'Civil Construction' && <Check className="w-4 h-4 text-accent" />}
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => handleFilterSelect('typology', 'Infraestruturas Ferroviárias')} className="flex items-center justify-between">
-                      <span>Infraestruturas Ferroviárias</span>
-                      {filterType === 'typology' && filterValue === 'Infraestruturas Ferroviárias' && <Check className="w-4 h-4 text-accent" />}
+                    <DropdownMenuItem onClick={() => handleFilterSelect('typology', 'Railway Infrastructure')} className="flex items-center justify-between">
+                      <span>Railway Infrastructure</span>
+                      {filterType === 'typology' && filterValue === 'Railway Infrastructure' && <Check className="w-4 h-4 text-accent" />}
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => handleFilterSelect('typology', 'Infraestruturas Hidráulicas')} className="flex items-center justify-between">
-                      <span>Infraestruturas Hidráulicas</span>
-                      {filterType === 'typology' && filterValue === 'Infraestruturas Hidráulicas' && <Check className="w-4 h-4 text-accent" />}
+                    <DropdownMenuItem onClick={() => handleFilterSelect('typology', 'Hydraulic Infrastructure')} className="flex items-center justify-between">
+                      <span>Hydraulic Infrastructure</span>
+                      {filterType === 'typology' && filterValue === 'Hydraulic Infrastructure' && <Check className="w-4 h-4 text-accent" />}
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => handleFilterSelect('typology', 'Infraestruturas Portuárias')} className="flex items-center justify-between">
-                      <span>Infraestruturas Portuárias</span>
-                      {filterType === 'typology' && filterValue === 'Infraestruturas Portuárias' && <Check className="w-4 h-4 text-accent" />}
+                    <DropdownMenuItem onClick={() => handleFilterSelect('typology', 'Port Infrastructure')} className="flex items-center justify-between">
+                      <span>Port Infrastructure</span>
+                      {filterType === 'typology' && filterValue === 'Port Infrastructure' && <Check className="w-4 h-4 text-accent" />}
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => handleFilterSelect('typology', 'Oil&Gas')} className="flex items-center justify-between">
                       <span>Oil&Gas</span>
                       {filterType === 'typology' && filterValue === 'Oil&Gas' && <Check className="w-4 h-4 text-accent" />}
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => handleFilterSelect('typology', 'Power (energia)')} className="flex items-center justify-between">
-                      <span>Power (energia)</span>
-                      {filterType === 'typology' && filterValue === 'Power (energia)' && <Check className="w-4 h-4 text-accent" />}
+                    <DropdownMenuItem onClick={() => handleFilterSelect('typology', 'Power (Energy)')} className="flex items-center justify-between">
+                      <span>Power (Energy)</span>
+                      {filterType === 'typology' && filterValue === 'Power (Energy)' && <Check className="w-4 h-4 text-accent" />}
                     </DropdownMenuItem>
 
                     <DropdownMenuSeparator />
@@ -181,19 +181,19 @@ export default function Dashboard() {
               <div className="flex items-center gap-2">
                 <span className="text-[9px] font-semibold text-muted-foreground tracking-wide uppercase">Typology</span>
                 <div className="flex items-center gap-2 flex-wrap max-w-full">
-                  {(["all", "Infraestruturas Rodoviárias", "Infraestruturas Ferroviárias", "Infraestruturas Hidráulicas", "Infraestruturas Portuárias", "Infraestruturas Aeroportos", "Infraestruturas Urbanas", "Construção Civil", "Mineração", "Oil&Gas", "Power (energia)", "Outras obras"] as const).map((cat) => {
+                  {(["all", "Road Infrastructure", "Railway Infrastructure", "Hydraulic Infrastructure", "Port Infrastructure", "Airport Infrastructure", "Urban Infrastructure", "Civil Construction", "Mining", "Oil&Gas", "Power (Energy)", "Other Works"] as const).map((cat) => {
                     const categoryColors: Record<string, string> = {
-                      "Infraestruturas Rodoviárias": "#166534",
-                      "Infraestruturas Ferroviárias": "#fbbf24",
-                      "Infraestruturas Hidráulicas": "#d4d4d8",
-                      "Infraestruturas Portuárias": "#dc2626",
-                      "Infraestruturas Aeroportos": "#9333ea",
-                      "Infraestruturas Urbanas": "#06b6d4",
-                      "Construção Civil": "#00ff88",
-                      "Mineração": "#f59e0b",
+                      "Road Infrastructure": "#166534",
+                      "Railway Infrastructure": "#fbbf24",
+                      "Hydraulic Infrastructure": "#d4d4d8",
+                      "Port Infrastructure": "#dc2626",
+                      "Airport Infrastructure": "#9333ea",
+                      "Urban Infrastructure": "#06b6d4",
+                      "Civil Construction": "#00ff88",
+                      "Mining": "#f59e0b",
                       "Oil&Gas": "#8b5cf6",
-                      "Power (energia)": "#ec4899",
-                      "Outras obras": "#64748b"
+                      "Power (Energy)": "#ec4899",
+                      "Other Works": "#64748b"
                     }
                     return (
                       <button

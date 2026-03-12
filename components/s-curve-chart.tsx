@@ -22,7 +22,7 @@ export function SProgressCurve() {
     <div className="glass-card rounded-lg p-4 border border-border/50">
       <div className="mb-4">
         <h3 className="text-sm font-semibold text-foreground">Progress S-Curve</h3>
-        <p className="text-xs text-muted-foreground mt-1">Planned vs. Forecast vs. Actual completion</p>
+        <p className="text-xs text-muted-foreground mt-1">Commercial vs. Forecast vs. Actual completion</p>
       </div>
       <ResponsiveContainer width="100%" height={250}>
         <LineChart data={progressData} margin={{ top: 5, right: 30, left: 0, bottom: 5 }}>
@@ -42,7 +42,7 @@ export function SProgressCurve() {
             iconType="line"
             payload={
               [
-                { value: 'Planned', type: 'line', id: 'baseline', color: '#999999' },
+                { value: 'Commercial', type: 'line', id: 'baseline', color: '#999999' },
                 { value: 'Forecast', type: 'line', id: 'actualSolid', color: colors.isDark ? "#00c8ff" : "#6C5CE7" },
                 { value: 'Actual', type: 'line', id: 'actualSolid', color: colors.isDark ? "#00ff88" : "#00b894" },
               ]
@@ -52,7 +52,7 @@ export function SProgressCurve() {
             type="monotone"
             dataKey="planned"
             stroke="#999999"
-            name="Planned"
+            name="Commercial"
             strokeWidth={2}
             dot={false}
           />
@@ -110,7 +110,7 @@ export function SCostCurve() {
     <div className="glass-card rounded-lg p-4 border border-border/50">
       <div className="mb-4">
         <h3 className="text-sm font-semibold text-foreground">Economic S-Curve</h3>
-        <p className="text-xs text-muted-foreground mt-1">Planned vs. Actual expenditure</p>
+        <p className="text-xs text-muted-foreground mt-1">Commercial vs. Actual expenditure</p>
       </div>
       <ResponsiveContainer width="100%" height={250}>
         <LineChart data={costData} margin={{ top: 5, right: 30, left: 0, bottom: 5 }}>
@@ -131,7 +131,7 @@ export function SCostCurve() {
             iconType="line"
             payload={
               [
-                { value: 'Planned', type: 'line', id: 'baseline', color: '#999999' },
+                { value: 'Commercial', type: 'line', id: 'baseline', color: '#999999' },
                 { value: 'Actual', type: 'line', id: 'actualSolid', color: '#ff6b6b' },
               ]
             }
@@ -140,7 +140,7 @@ export function SCostCurve() {
             type="monotone"
             dataKey="baseline"
             stroke="#999999"
-            name="Planned"
+            name="Commercial"
             strokeWidth={2}
             dot={false}
           />

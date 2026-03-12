@@ -510,8 +510,8 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                   <YAxis stroke={chartColors.axis} />
                   <Tooltip contentStyle={{ backgroundColor: chartColors.tooltipBg, border: chartColors.tooltipBorder }} />
                   <Legend />
-                  <Line type="monotone" dataKey="planned" stroke="#999999" name="Baseline" strokeWidth={2} dot={false} />
-                  <Line type="monotone" dataKey="estimated" stroke="#00c8ff" name="Estimated" strokeWidth={2} dot={false} />
+                  <Line type="monotone" dataKey="planned" stroke="#999999" name="Commercial" strokeWidth={2} dot={false} />
+                  <Line type="monotone" dataKey="estimated" stroke="#00c8ff" name="Current Baseline" strokeWidth={2} dot={false} />
                   <Line type="monotone" dataKey="actualSolid" stroke="#00ff88" name="Actual" strokeWidth={2} dot={false} connectNulls={false} />
                   <Line type="monotone" dataKey="actualDashed" stroke="#00ff88" strokeWidth={2} dot={false} strokeDasharray="6 4" legendType="none" connectNulls={false} />
                 </LineChart>
@@ -601,7 +601,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                         className="text-left text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors"
                         onClick={() => handleSort('earnedValue')}
                       >
-                        Earned Value (€M) {sortBy === 'earnedValue' && (sortDirection === 'asc' ? '↑' : '↓')}
+                        Accum. Production (€M) {sortBy === 'earnedValue' && (sortDirection === 'asc' ? '↑' : '↓')}
                       </th>
                       <th className="text-left text-xs text-muted-foreground font-semibold py-2">Forecast Deadline</th>
                       <th className="text-left text-xs text-muted-foreground font-semibold py-2">Status</th>
@@ -707,8 +707,8 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                   <YAxis stroke={chartColors.axis} />
                   <Tooltip contentStyle={{ backgroundColor: chartColors.tooltipBg, border: chartColors.tooltipBorder }} />
                   <Legend />
-                  <Line type="monotone" dataKey="planned" stroke="#999999" name="Baseline" strokeWidth={2} dot={false} />
-                  <Line type="monotone" dataKey="estimated" stroke="#00c8ff" name="Estimated" strokeWidth={2} dot={false} />
+                  <Line type="monotone" dataKey="planned" stroke="#999999" name="Commercial" strokeWidth={2} dot={false} />
+                  <Line type="monotone" dataKey="estimated" stroke="#00c8ff" name="Current Baseline" strokeWidth={2} dot={false} />
                   <Line type="monotone" dataKey="actualSolid" stroke="#00ff88" name="Actual" strokeWidth={2} dot={false} connectNulls={false} />
                   <Line type="monotone" dataKey="actualDashed" stroke="#00ff88" strokeWidth={2} dot={false} strokeDasharray="6 4" legendType="none" connectNulls={false} />
                 </LineChart>
@@ -736,7 +736,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                         className="text-left text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors"
                         onClick={() => handleSort('earnedValue')}
                       >
-                        Earned Value (€M) {sortBy === 'earnedValue' && (sortDirection === 'asc' ? '↑' : '↓')}
+                        Accum. Production (€M) {sortBy === 'earnedValue' && (sortDirection === 'asc' ? '↑' : '↓')}
                       </th>
                       <th className="text-left text-xs text-muted-foreground font-semibold py-2">Forecast Deadline</th>
                       <th className="text-left text-xs text-muted-foreground font-semibold py-2">Status</th>
@@ -766,8 +766,10 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                 </table>
               </div>
             </div>
+          </>
+        )}
 
-            {/* Economic Control Section */}
+        {/* Economic Control Section */}
             <h2 className="text-lg font-semibold text-foreground mb-4 mt-8">Economic Control</h2>
 
             {/* Economic Control KPIs */}
@@ -789,7 +791,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                   <YAxis stroke={chartColors.axis} tickFormatter={(v) => `€${v.toFixed(1)}M`} />
                   <Tooltip contentStyle={{ backgroundColor: chartColors.tooltipBg, border: chartColors.tooltipBorder }} formatter={(v: number) => `€${v.toFixed(1)}M`} />
                   <Legend />
-                  <Line type="monotone" dataKey="baseline" stroke="#999999" name="Baseline" strokeWidth={2} dot={false} />
+                  <Line type="monotone" dataKey="baseline" stroke="#999999" name="Commercial" strokeWidth={2} dot={false} />
                   <Line type="monotone" dataKey="actualSolid" stroke="#ff6b6b" name="Actual" strokeWidth={2} dot={false} connectNulls={false} />
                   <Line type="monotone" dataKey="actualDashed" stroke="#ff6b6b" strokeWidth={2} dot={false} strokeDasharray="6 4" legendType="none" connectNulls={false} />
                 </LineChart>
@@ -1069,7 +1071,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
               </div>
 
               <div className="glass-card rounded-lg p-6 border border-border/50">
-                <p className="text-xs text-muted-foreground uppercase tracking-wide mb-4">Earned Value (EV)</p>
+                <p className="text-xs text-muted-foreground uppercase tracking-wide mb-4">Accumulated Production</p>
                 <div>
                   <p className="text-4xl font-bold text-success">€32M</p>
                 </div>
@@ -1126,7 +1128,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                     <YAxis stroke={chartColors.axis} tickFormatter={(v) => `€${v.toFixed(1)}M`} />
                     <Tooltip contentStyle={{ backgroundColor: chartColors.tooltipBg, border: chartColors.tooltipBorder }} formatter={(v: number) => `€${v.toFixed(1)}M`} />
                     <Legend />
-                    <Line type="monotone" dataKey="baseline" stroke="#999999" name="Baseline" strokeWidth={2} dot={false} />
+                    <Line type="monotone" dataKey="baseline" stroke="#999999" name="Commercial" strokeWidth={2} dot={false} />
                     <Line type="monotone" dataKey="actualSolid" stroke="#ff6b6b" name="Actual" strokeWidth={2} dot={false} connectNulls={false} />
                     <Line type="monotone" dataKey="actualDashed" stroke="#ff6b6b" strokeWidth={2} dot={false} strokeDasharray="6 4" legendType="none" connectNulls={false} />
                   </LineChart>

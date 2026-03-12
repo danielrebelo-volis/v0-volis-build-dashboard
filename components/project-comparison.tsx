@@ -512,13 +512,13 @@ function ComparisonSide({
           : base.cost
 
         const progressLegend = [
-          { value: 'Planned',   type: 'line' as const, color: '#999999' },
-          { value: 'Estimated', type: 'line' as const, color: colors.isDark ? "#00c8ff" : "#6C5CE7" },
-          { value: 'Actual',    type: 'line' as const, color: actualColor },
+          { value: 'Commercial',       type: 'line' as const, color: '#999999' },
+          { value: 'Current Baseline', type: 'line' as const, color: colors.isDark ? "#00c8ff" : "#6C5CE7" },
+          { value: 'Actual',           type: 'line' as const, color: actualColor },
         ]
         const costLegend = [
-          { value: 'Planned', type: 'line' as const, color: '#999999' },
-          { value: 'Actual',  type: 'line' as const, color: '#ff6b6b' },
+          { value: 'Commercial', type: 'line' as const, color: '#999999' },
+          { value: 'Actual',     type: 'line' as const, color: '#ff6b6b' },
         ]
 
         return (
@@ -541,8 +541,8 @@ function ComparisonSide({
                     <YAxis tick={{ fontSize: 10, fill: colors.tickFill }} />
                     <Tooltip contentStyle={{ backgroundColor: colors.tooltipBg, border: colors.tooltipBorder }} />
                     <Legend wrapperStyle={{ paddingTop: '8px' }} iconType="line" payload={progressLegend} />
-                    <Line type="monotone" dataKey="planned"      stroke="#999999"   strokeWidth={2} dot={false} name="Planned" />
-                    <Line type="monotone" dataKey="estimated"    stroke={colors.isDark ? "#00c8ff" : "#6C5CE7"} strokeWidth={2} dot={false} name="Estimated" />
+                    <Line type="monotone" dataKey="planned"      stroke="#999999"   strokeWidth={2} dot={false} name="Commercial" />
+                    <Line type="monotone" dataKey="estimated"    stroke={colors.isDark ? "#00c8ff" : "#6C5CE7"} strokeWidth={2} dot={false} name="Current Baseline" />
                     <Line type="monotone" dataKey="actualSolid"  stroke={actualColor} strokeWidth={2} dot={false} name="Actual" connectNulls={false} />
                     <Line type="monotone" dataKey="actualDashed" stroke={actualColor} strokeWidth={2} dot={false} strokeDasharray="6 4" legendType="none" connectNulls={false} />
                   </ComposedChart>
@@ -568,7 +568,7 @@ function ComparisonSide({
                     <YAxis tick={{ fontSize: 10, fill: colors.tickFill }} tickFormatter={(v) => `€${v}M`} />
                     <Tooltip contentStyle={{ backgroundColor: colors.tooltipBg, border: colors.tooltipBorder }} formatter={(v: number) => `€${v.toFixed(1)}M`} />
                     <Legend wrapperStyle={{ paddingTop: '8px' }} iconType="line" payload={costLegend} />
-                    <Line type="monotone" dataKey="planned"      stroke="#999999" strokeWidth={2} dot={false} name="Planned" />
+                    <Line type="monotone" dataKey="planned"      stroke="#999999" strokeWidth={2} dot={false} name="Commercial" />
                     <Line type="monotone" dataKey="actualSolid"  stroke="#ff6b6b" strokeWidth={2} dot={false} name="Actual" connectNulls={false} />
                     <Line type="monotone" dataKey="actualDashed" stroke="#ff6b6b" strokeWidth={2} dot={false} strokeDasharray="6 4" legendType="none" connectNulls={false} />
                   </ComposedChart>

@@ -766,10 +766,8 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                 </table>
               </div>
             </div>
-          </>
-        )}
 
-        {/* Economic Control Section */}
+            {/* Economic Control Section */}
             <h2 className="text-lg font-semibold text-foreground mb-4 mt-8">Economic Control</h2>
 
             {/* Economic Control KPIs */}

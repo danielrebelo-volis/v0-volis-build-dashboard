@@ -5,6 +5,7 @@ interface OtherIndicatorsProps {
   priorWeekProgress: number
   requiredWeeklyProgress: number
   earnedValue: number
+  totalBudget?: number
 }
 
 export function OtherIndicators({
@@ -12,6 +13,7 @@ export function OtherIndicators({
   priorWeekProgress,
   requiredWeeklyProgress,
   earnedValue,
+  totalBudget = 24500000,
 }: OtherIndicatorsProps) {
   const progressTrend = weeklyProgress - priorWeekProgress
   const progressTrendPercent = ((progressTrend / priorWeekProgress) * 100).toFixed(1)
@@ -80,7 +82,7 @@ export function OtherIndicators({
           <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
             <span>Completed activities value</span>
           </div>
-          <p className="text-xs text-muted-foreground mt-2">Out of €6.85M total budget</p>
+          <p className="text-xs text-muted-foreground mt-2">Out of €{(totalBudget / 1000000).toFixed(1)}M contract value</p>
         </div>
       </div>
     </div>

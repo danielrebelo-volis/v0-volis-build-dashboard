@@ -11,7 +11,7 @@ interface Project {
   industrialCost: number // % of contract value (60-110)
   budget: string
   trend: "up" | "down" | "stable"
-  category: "Infraestruturas Rodoviárias" | "Infraestruturas Ferroviárias" | "Infraestruturas Hidráulicas" | "Infraestruturas Portuárias" | "Infraestruturas Aeroportos" | "Infraestruturas Urbanas" | "Construção Civil" | "Mineração" | "Oil&Gas" | "Power (energia)" | "Outras obras"
+  category: "Road Infrastructure" | "Railway Infrastructure" | "Hydraulic Infrastructure" | "Port Infrastructure" | "Airport Infrastructure" | "Urban Infrastructure" | "Civil Construction" | "Mining" | "Oil&Gas" | "Power (Energy)" | "Other Works"
   region: "north" | "south" | "east" | "west"
   week: "week-1" | "week-2" | "week-3" | "week-4"
   weekData: {
@@ -24,43 +24,43 @@ interface Project {
 
 const projects: Project[] = [
   // Quadrant 1: Ahead & High Cost (negative delay, >80% industrial cost)
-  { id: "PRJ-001", name: "Metro Tower", delay: -35, industrialCost: 90, budget: "€24.5M", trend: "up", category: "Construção Civil", region: "north", week: "week-1", weekData: { "week-1": { delay: -35, industrialCost: 95 }, "week-2": { delay: -30, industrialCost: 92 }, "week-3": { delay: -25, industrialCost: 88 }, "week-4": { delay: -20, industrialCost: 85 } } },
-  { id: "PRJ-011", name: "Urban Renewal Center", delay: -5, industrialCost: 87, budget: "€67.3M", trend: "up", category: "Infraestruturas Rodoviárias", region: "north", week: "week-2", weekData: { "week-1": { delay: -15, industrialCost: 89 }, "week-2": { delay: -20, industrialCost: 92 }, "week-3": { delay: -25, industrialCost: 94 }, "week-4": { delay: -30, industrialCost: 96 } } },
-  { id: "PRJ-015", name: "Airport Runway", delay: -22, industrialCost: 88, budget: "€234.5M", trend: "up", category: "Infraestruturas Aeroportos", region: "east", week: "week-1", weekData: { "week-1": { delay: -25, industrialCost: 97 }, "week-2": { delay: -28, industrialCost: 98 }, "week-3": { delay: -30, industrialCost: 99 }, "week-4": { delay: -35, industrialCost: 100 } } },
-  { id: "PRJ-020", name: "Solar Farm", delay: -40, industrialCost: 85, budget: "€145.2M", trend: "up", category: "Power (energia)", region: "west", week: "week-4", weekData: { "week-1": { delay: -35, industrialCost: 88 }, "week-2": { delay: -38, industrialCost: 89 }, "week-3": { delay: -40, industrialCost: 90 }, "week-4": { delay: -42, industrialCost: 91 } } },
+  { id: "PRJ-001", name: "Metro Tower", delay: -35, industrialCost: 90, budget: "€24.5M", trend: "up", category: "Civil Construction", region: "north", week: "week-1", weekData: { "week-1": { delay: -35, industrialCost: 95 }, "week-2": { delay: -30, industrialCost: 92 }, "week-3": { delay: -25, industrialCost: 88 }, "week-4": { delay: -20, industrialCost: 85 } } },
+  { id: "PRJ-011", name: "Urban Renewal Center", delay: -5, industrialCost: 87, budget: "€67.3M", trend: "up", category: "Road Infrastructure", region: "north", week: "week-2", weekData: { "week-1": { delay: -15, industrialCost: 89 }, "week-2": { delay: -20, industrialCost: 92 }, "week-3": { delay: -25, industrialCost: 94 }, "week-4": { delay: -30, industrialCost: 96 } } },
+  { id: "PRJ-015", name: "Airport Runway", delay: -22, industrialCost: 88, budget: "€234.5M", trend: "up", category: "Airport Infrastructure", region: "east", week: "week-1", weekData: { "week-1": { delay: -25, industrialCost: 97 }, "week-2": { delay: -28, industrialCost: 98 }, "week-3": { delay: -30, industrialCost: 99 }, "week-4": { delay: -35, industrialCost: 100 } } },
+  { id: "PRJ-020", name: "Solar Farm", delay: -40, industrialCost: 85, budget: "€145.2M", trend: "up", category: "Power (Energy)", region: "west", week: "week-4", weekData: { "week-1": { delay: -35, industrialCost: 88 }, "week-2": { delay: -38, industrialCost: 89 }, "week-3": { delay: -40, industrialCost: 90 }, "week-4": { delay: -42, industrialCost: 91 } } },
 
   // Quadrant 2: Delayed & High Cost (positive delay, >80% industrial cost)
-  { id: "PRJ-003", name: "Skyline Plaza", delay: 32, industrialCost: 88, budget: "€156M", trend: "stable", category: "Construção Civil", region: "east", week: "week-1", weekData: { "week-1": { delay: 28, industrialCost: 92 }, "week-2": { delay: 31, industrialCost: 93 }, "week-3": { delay: 35, industrialCost: 95 }, "week-4": { delay: 38, industrialCost: 97 } } },
-  { id: "PRJ-012", name: "Rail Network Expansion", delay: 18, industrialCost: 87, budget: "€280M", trend: "down", category: "Infraestruturas Ferroviárias", region: "south", week: "week-1", weekData: { "week-1": { delay: 15, industrialCost: 85 }, "week-2": { delay: 18, industrialCost: 86 }, "week-3": { delay: 22, industrialCost: 88 }, "week-4": { delay: 25, industrialCost: 90 } } },
-  { id: "PRJ-013", name: "Dam Construction", delay: 25, industrialCost: 89, budget: "€520M", trend: "stable", category: "Infraestruturas Hidráulicas", region: "north", week: "week-2", weekData: { "week-1": { delay: 20, industrialCost: 93 }, "week-2": { delay: 25, industrialCost: 96 }, "week-3": { delay: 28, industrialCost: 98 }, "week-4": { delay: 32, industrialCost: 99 } } },
+  { id: "PRJ-003", name: "Skyline Plaza", delay: 32, industrialCost: 88, budget: "€156M", trend: "stable", category: "Civil Construction", region: "east", week: "week-1", weekData: { "week-1": { delay: 28, industrialCost: 92 }, "week-2": { delay: 31, industrialCost: 93 }, "week-3": { delay: 35, industrialCost: 95 }, "week-4": { delay: 38, industrialCost: 97 } } },
+  { id: "PRJ-012", name: "Rail Network Expansion", delay: 18, industrialCost: 87, budget: "€280M", trend: "down", category: "Railway Infrastructure", region: "south", week: "week-1", weekData: { "week-1": { delay: 15, industrialCost: 85 }, "week-2": { delay: 18, industrialCost: 86 }, "week-3": { delay: 22, industrialCost: 88 }, "week-4": { delay: 25, industrialCost: 90 } } },
+  { id: "PRJ-013", name: "Dam Construction", delay: 25, industrialCost: 89, budget: "€520M", trend: "stable", category: "Hydraulic Infrastructure", region: "north", week: "week-2", weekData: { "week-1": { delay: 20, industrialCost: 93 }, "week-2": { delay: 25, industrialCost: 96 }, "week-3": { delay: 28, industrialCost: 98 }, "week-4": { delay: 32, industrialCost: 99 } } },
   { id: "PRJ-019", name: "Oil Platform Construction", delay: 40, industrialCost: 83, budget: "€687.2M", trend: "stable", category: "Oil&Gas", region: "north", week: "week-1", weekData: { "week-1": { delay: 32, industrialCost: 89 }, "week-2": { delay: 35, industrialCost: 90 }, "week-3": { delay: 38, industrialCost: 92 }, "week-4": { delay: 40, industrialCost: 93 } } },
 
   // Quadrant 3: Ahead & Good Cost (negative delay, <80% industrial cost)
-  { id: "PRJ-004", name: "Industrial Park", delay: -30, industrialCost: 70, budget: "€42.8M", trend: "up", category: "Mineração", region: "west", week: "week-3", weekData: { "week-1": { delay: -25, industrialCost: 72 }, "week-2": { delay: -28, industrialCost: 71 }, "week-3": { delay: -30, industrialCost: 70 }, "week-4": { delay: -35, industrialCost: 68 } } },
-  { id: "PRJ-006", name: "Tech Campus", delay: -38, industrialCost: 79, budget: "€210M", trend: "stable", category: "Infraestruturas Urbanas", region: "south", week: "week-4", weekData: { "week-1": { delay: -35, industrialCost: 81 }, "week-2": { delay: -38, industrialCost: 80 }, "week-3": { delay: -40, industrialCost: 79 }, "week-4": { delay: -42, industrialCost: 77 } } },
-  { id: "PRJ-009", name: "Data Center", delay: -15, industrialCost: 75, budget: "€78.5M", trend: "down", category: "Infraestruturas Portuárias", region: "north", week: "week-4", weekData: { "week-1": { delay: -12, industrialCost: 78 }, "week-2": { delay: -14, industrialCost: 76 }, "week-3": { delay: -16, industrialCost: 75 }, "week-4": { delay: -18, industrialCost: 74 } } },
-  { id: "PRJ-007", name: "Highway 12 Ext", delay: -25, industrialCost: 68, budget: "€340M", trend: "down", category: "Infraestruturas Rodoviárias", region: "east", week: "week-1", weekData: { "week-1": { delay: -20, industrialCost: 70 }, "week-2": { delay: -23, industrialCost: 69 }, "week-3": { delay: -26, industrialCost: 68 }, "week-4": { delay: -28, industrialCost: 67 } } },
+  { id: "PRJ-004", name: "Industrial Park", delay: -30, industrialCost: 70, budget: "€42.8M", trend: "up", category: "Mining", region: "west", week: "week-3", weekData: { "week-1": { delay: -25, industrialCost: 72 }, "week-2": { delay: -28, industrialCost: 71 }, "week-3": { delay: -30, industrialCost: 70 }, "week-4": { delay: -35, industrialCost: 68 } } },
+  { id: "PRJ-006", name: "Tech Campus", delay: -38, industrialCost: 79, budget: "€210M", trend: "stable", category: "Urban Infrastructure", region: "south", week: "week-4", weekData: { "week-1": { delay: -35, industrialCost: 81 }, "week-2": { delay: -38, industrialCost: 80 }, "week-3": { delay: -40, industrialCost: 79 }, "week-4": { delay: -42, industrialCost: 77 } } },
+  { id: "PRJ-009", name: "Data Center", delay: -15, industrialCost: 75, budget: "€78.5M", trend: "down", category: "Port Infrastructure", region: "north", week: "week-4", weekData: { "week-1": { delay: -12, industrialCost: 78 }, "week-2": { delay: -14, industrialCost: 76 }, "week-3": { delay: -16, industrialCost: 75 }, "week-4": { delay: -18, industrialCost: 74 } } },
+  { id: "PRJ-007", name: "Highway 12 Ext", delay: -25, industrialCost: 68, budget: "€340M", trend: "down", category: "Road Infrastructure", region: "east", week: "week-1", weekData: { "week-1": { delay: -20, industrialCost: 70 }, "week-2": { delay: -23, industrialCost: 69 }, "week-3": { delay: -26, industrialCost: 68 }, "week-4": { delay: -28, industrialCost: 67 } } },
 
   // Quadrant 4: Delayed & Good Cost (positive delay, <80% industrial cost)
-  { id: "PRJ-002", name: "Harbor Bridge", delay: 20, industrialCost: 73, budget: "€89.2M", trend: "down", category: "Infraestruturas Portuárias", region: "south", week: "week-2", weekData: { "week-1": { delay: 18, industrialCost: 71 }, "week-2": { delay: 20, industrialCost: 73 }, "week-3": { delay: 22, industrialCost: 75 }, "week-4": { delay: 25, industrialCost: 77 } } },
-  { id: "PRJ-005", name: "Riverside Homes", delay: 28, industrialCost: 78, budget: "€18.3M", trend: "down", category: "Infraestruturas Urbanas", region: "north", week: "week-2", weekData: { "week-1": { delay: 25, industrialCost: 76 }, "week-2": { delay: 28, industrialCost: 78 }, "week-3": { delay: 30, industrialCost: 79 }, "week-4": { delay: 32, industrialCost: 80 } } },
-  { id: "PRJ-008", name: "Green Valley", delay: 38, industrialCost: 72, budget: "€32.1M", trend: "up", category: "Infraestruturas Hidráulicas", region: "west", week: "week-3", weekData: { "week-1": { delay: 35, industrialCost: 74 }, "week-2": { delay: 37, industrialCost: 73 }, "week-3": { delay: 38, industrialCost: 72 }, "week-4": { delay: 40, industrialCost: 70 } } },
-  { id: "PRJ-016", name: "Terminal Building Extension", delay: 12, industrialCost: 77, budget: "€189.2M", trend: "stable", category: "Infraestruturas Aeroportos", region: "south", week: "week-2", weekData: { "week-1": { delay: 10, industrialCost: 75 }, "week-2": { delay: 12, industrialCost: 77 }, "week-3": { delay: 14, industrialCost: 78 }, "week-4": { delay: 16, industrialCost: 79 } } },
-  { id: "PRJ-021", name: "Bridge Rehabilitation", delay: 8, industrialCost: 74, budget: "€67.8M", trend: "stable", category: "Outras obras", region: "north", week: "week-1", weekData: { "week-1": { delay: 5, industrialCost: 72 }, "week-2": { delay: 8, industrialCost: 74 }, "week-3": { delay: 10, industrialCost: 76 }, "week-4": { delay: 12, industrialCost: 77 } } },
+  { id: "PRJ-002", name: "Harbor Bridge", delay: 20, industrialCost: 73, budget: "€89.2M", trend: "down", category: "Port Infrastructure", region: "south", week: "week-2", weekData: { "week-1": { delay: 18, industrialCost: 71 }, "week-2": { delay: 20, industrialCost: 73 }, "week-3": { delay: 22, industrialCost: 75 }, "week-4": { delay: 25, industrialCost: 77 } } },
+  { id: "PRJ-005", name: "Riverside Homes", delay: 28, industrialCost: 78, budget: "€18.3M", trend: "down", category: "Urban Infrastructure", region: "north", week: "week-2", weekData: { "week-1": { delay: 25, industrialCost: 76 }, "week-2": { delay: 28, industrialCost: 78 }, "week-3": { delay: 30, industrialCost: 79 }, "week-4": { delay: 32, industrialCost: 80 } } },
+  { id: "PRJ-008", name: "Green Valley", delay: 38, industrialCost: 72, budget: "€32.1M", trend: "up", category: "Hydraulic Infrastructure", region: "west", week: "week-3", weekData: { "week-1": { delay: 35, industrialCost: 74 }, "week-2": { delay: 37, industrialCost: 73 }, "week-3": { delay: 38, industrialCost: 72 }, "week-4": { delay: 40, industrialCost: 70 } } },
+  { id: "PRJ-016", name: "Terminal Building Extension", delay: 12, industrialCost: 77, budget: "€189.2M", trend: "stable", category: "Airport Infrastructure", region: "south", week: "week-2", weekData: { "week-1": { delay: 10, industrialCost: 75 }, "week-2": { delay: 12, industrialCost: 77 }, "week-3": { delay: 14, industrialCost: 78 }, "week-4": { delay: 16, industrialCost: 79 } } },
+  { id: "PRJ-021", name: "Bridge Rehabilitation", delay: 8, industrialCost: 74, budget: "€67.8M", trend: "stable", category: "Other Works", region: "north", week: "week-1", weekData: { "week-1": { delay: 5, industrialCost: 72 }, "week-2": { delay: 8, industrialCost: 74 }, "week-3": { delay: 10, industrialCost: 76 }, "week-4": { delay: 12, industrialCost: 77 } } },
 ]
 
 const categoryColors: Record<Project["category"], string> = {
-  "Infraestruturas Rodoviárias": "#166534",
-  "Infraestruturas Ferroviárias": "#fbbf24",
-  "Infraestruturas Hidráulicas": "#d4d4d8",
-  "Infraestruturas Portuárias": "#dc2626",
-  "Infraestruturas Aeroportos": "#9333ea",
-  "Infraestruturas Urbanas": "#06b6d4",
-  "Construção Civil": "#00ff88",
-  "Mineração": "#f59e0b",
+  "Road Infrastructure": "#166534",
+  "Railway Infrastructure": "#fbbf24",
+  "Hydraulic Infrastructure": "#d4d4d8",
+  "Port Infrastructure": "#dc2626",
+  "Airport Infrastructure": "#9333ea",
+  "Urban Infrastructure": "#06b6d4",
+  "Civil Construction": "#00ff88",
+  "Mining": "#f59e0b",
   "Oil&Gas": "#8b5cf6",
-  "Power (energia)": "#ec4899",
-  "Outras obras": "#64748b"
+  "Power (Energy)": "#ec4899",
+  "Other Works": "#64748b"
 }
 
 interface EVMMatrixProps {

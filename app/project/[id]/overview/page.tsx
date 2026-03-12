@@ -801,61 +801,6 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
               </ResponsiveContainer>
             </div>
 
-            {/* Economic Table */}
-            <div className="glass-card rounded-lg p-4 border border-border/50">
-              <h3 className="text-sm font-semibold text-foreground mb-4">Economic Summary Table</h3>
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm">
-                  <thead>
-                    <tr className="border-b border-border/50">
-                      <th className="text-left text-xs text-muted-foreground font-semibold py-2">Activity</th>
-                      <th
-                        className="text-center text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors"
-                        onClick={() => handleEconomicSort('baselineCost')}
-                      >
-                        Baseline Cost<br />(for progress %) {economicSortBy === 'baselineCost' && (economicSortDirection === 'asc' ? '↑' : '↓')}
-                      </th>
-                      <th
-                        className="text-center text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors"
-                        onClick={() => handleEconomicSort('actualCost')}
-                      >
-                        Actual Cost<br />(for progress %) {economicSortBy === 'actualCost' && (economicSortDirection === 'asc' ? '↑' : '↓')}
-                      </th>
-                      <th
-                        className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors"
-                        onClick={() => handleEconomicSort('totalBaseline')}
-                      >
-                        Total Baseline {economicSortBy === 'totalBaseline' && (economicSortDirection === 'asc' ? '↑' : '↓')}
-                      </th>
-                      <th
-                        className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors"
-                        onClick={() => handleEconomicSort('totalEstimated')}
-                      >
-                        Total Estimated {economicSortBy === 'totalEstimated' && (economicSortDirection === 'asc' ? '↑' : '↓')}
-                      </th>
-                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Float</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {getSortedEconomicTable().map((row, idx) => {
-                      const totalBaseline = row.baseline / (row.completeness / 100);
-                      const totalEstimated = row.actual / (row.completeness / 100) * 1.05;
-                      const floatWeeks = 2 - Math.floor(idx / 2);
-                      return (
-                        <tr key={idx} className="border-b border-border/30 hover:bg-secondary/20">
-                          <td className="py-3 text-foreground">{row.activity}</td>
-                          <td className="py-3 text-center text-foreground">€{row.baseline.toFixed(2)}M ({row.completeness}%)</td>
-                          <td className="py-3 text-center text-foreground">€{row.actual.toFixed(2)}M ({row.completeness}%)</td>
-                          <td className="py-3 text-right text-foreground">€{totalBaseline.toFixed(1)}M</td>
-                          <td className="py-3 text-right text-foreground">€{totalEstimated.toFixed(1)}M</td>
-                          <td className={`py-3 text-right font-semibold ${floatWeeks === 0 ? 'text-destructive' : 'text-foreground'}`}>{floatWeeks}w</td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            </div>
           </>
         )}
 

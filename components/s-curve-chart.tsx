@@ -60,7 +60,7 @@ export function SProgressCurve() {
             type="monotone"
             dataKey="forecast"
             stroke={colors.isDark ? "#00c8ff" : "#6C5CE7"}
-            name="Forecast"
+            name="Current Baseline"
             strokeWidth={2}
             dot={false}
           />

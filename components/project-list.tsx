@@ -97,7 +97,7 @@ function ProjectRow({ name, id, delay, industrialCost, completion }: ProjectRowP
 export function ProjectList() {
   // Aligned with EVM matrix data - same delay and Industrial Cost values
   const allProjects: ProjectRowProps[] = [
-    { name: "Metro Tower", id: "PRJ-001", delay: -35, industrialCost: 95, completion: 68 },
+    { name: "Metro Tower", id: "PRJ-001", delay: -35, industrialCost: 90, completion: 68 },
     { name: "Harbor Bridge", id: "PRJ-002", delay: 20, industrialCost: 73, completion: 42 },
     { name: "Skyline Plaza", id: "PRJ-003", delay: 32, industrialCost: 94, completion: 85 },
     { name: "Industrial Park", id: "PRJ-004", delay: -30, industrialCost: 70, completion: 31 },

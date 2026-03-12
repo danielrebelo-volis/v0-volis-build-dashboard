@@ -40,9 +40,9 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
     name: 'Metro Tower Development',
     city: 'Lisbon',
     country: 'Portugal',
-    typology: 'Commercial',
+    typology: 'Civil Construction',
     client: 'Investor Group ABC',
-    contractValue: '$120.0M',
+    contractValue: '€24.5M',
     manager: 'John Silva',
   }
 
@@ -425,7 +425,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
         {/* Header */}
         <div className="flex items-center justify-between gap-4 mb-8">
           <div>
-            <Link href={`/project/PRJ-007`}>
+            <Link href={`/project/PRJ-001`}>
               <Button
                 variant="ghost"
                 size="sm"
@@ -539,11 +539,11 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                 <div className="space-y-2">
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-muted-foreground">Planned</span>
-                    <span className="font-mono text-lg font-bold text-foreground">12/31/2024</span>
+                    <span className="font-mono text-lg font-bold text-foreground">03/01/2026</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-muted-foreground">Estimated</span>
-                    <span className="font-mono text-lg font-bold text-destructive">01/12/2025</span>
+                    <span className="font-mono text-lg font-bold text-success">01/15/2026</span>
                   </div>
                 </div>
               </div>
@@ -553,12 +553,12 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
               <div className="glass-card rounded-lg p-4 border border-border/50">
                 <p className="text-xs text-muted-foreground mb-3 uppercase tracking-wide">Planned Progress</p>
-                <p className="font-mono text-5xl font-bold text-foreground">53%</p>
+                <p className="font-mono text-5xl font-bold text-foreground">50%</p>
               </div>
 
               <div className="glass-card rounded-lg p-4 border border-border/50">
                 <p className="text-xs text-muted-foreground mb-3 uppercase tracking-wide">Actual Cumulative Progress</p>
-                <p className="font-mono text-5xl font-bold text-destructive">50%</p>
+                <p className="font-mono text-5xl font-bold text-success">68%</p>
               </div>
             </div>
 
@@ -567,15 +567,15 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
               <div className="glass-card rounded-lg p-4 border border-border/50">
                 <p className="text-xs text-muted-foreground mb-3 uppercase tracking-wide">Avg. Weekly Progress (Last 4 weeks)</p>
                 <div className="space-y-3">
-                  <p className="font-mono text-3xl font-bold text-foreground">1.9%</p>
-                  <p className="text-xs text-muted-foreground">Trend: <span className="text-success">+1.3% vs prior week</span></p>
+                  <p className="font-mono text-3xl font-bold text-foreground">2.4%</p>
+                  <p className="text-xs text-muted-foreground">Trend: <span className="text-success">+0.9% vs prior week</span></p>
                 </div>
               </div>
 
               <div className="glass-card rounded-lg p-4 border border-border/50">
                 <p className="text-xs text-muted-foreground mb-3 uppercase tracking-wide">Required Weekly Progress</p>
                 <div className="space-y-3">
-                  <p className="font-mono text-3xl font-bold text-foreground">2.1%</p>
+                  <p className="font-mono text-3xl font-bold text-foreground">2.0%</p>
                   <p className="text-xs text-muted-foreground">Target to meet deadline</p>
                 </div>
               </div>
@@ -654,11 +654,11 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
               <div className="glass-card rounded-lg p-4 border border-border/50">
                 <p className="text-xs text-muted-foreground uppercase tracking-wide mb-2">Contract Value</p>
-                <p className="text-lg font-semibold text-foreground">€25.0 M</p>
+                <p className="text-lg font-semibold text-foreground">€24.5M</p>
               </div>
               <div className="glass-card rounded-lg p-4 border border-border/50">
                 <p className="text-xs text-muted-foreground uppercase tracking-wide mb-2">Construction Cost</p>
-                <p className="text-lg font-semibold text-foreground">€23.0 M</p>
+                <p className="text-lg font-semibold text-foreground">€22.05M</p>
               </div>
               <div className="glass-card rounded-lg p-4 border border-border/50">
                 <p className="text-xs text-muted-foreground uppercase tracking-wide mb-2">Contract Deadline</p>
@@ -673,27 +673,27 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-5">
               <div className="glass-card rounded-lg p-3 border border-border/50">
                 <p className="text-xs text-muted-foreground mb-2">Planned Accum. Progress</p>
-                <p className="text-2xl font-bold text-foreground">53%</p>
+                <p className="text-2xl font-bold text-foreground">50%</p>
               </div>
               <div className="glass-card rounded-lg p-3 border border-border/50">
                 <p className="text-xs text-muted-foreground mb-2">Avg. Weekly Advance</p>
-                <p className="text-2xl font-bold text-foreground">1.9%</p>
+                <p className="text-2xl font-bold text-foreground">2.4%</p>
               </div>
               <div className="glass-card rounded-lg p-3 border border-border/50">
-                <p className="text-xs text-muted-foreground mb-2">Current Delay</p>
-                <p className="text-2xl font-bold text-chart-4">2 weeks</p>
+                <p className="text-xs text-muted-foreground mb-2">Current Advance</p>
+                <p className="text-2xl font-bold text-success">+5 weeks</p>
               </div>
               <div className="glass-card rounded-lg p-3 border border-border/50">
                 <p className="text-xs text-muted-foreground mb-2">Actual Accum. Progress</p>
-                <p className="text-2xl font-bold text-destructive">50%</p>
+                <p className="text-2xl font-bold text-success">68%</p>
               </div>
               <div className="glass-card rounded-lg p-3 border border-border/50">
                 <p className="text-xs text-muted-foreground mb-2">Required Weekly Advance</p>
-                <p className="text-2xl font-bold text-foreground">2.1%</p>
+                <p className="text-2xl font-bold text-foreground">2.0%</p>
               </div>
               <div className="glass-card rounded-lg p-3 border border-border/50">
                 <p className="text-xs text-muted-foreground mb-2">AI Forecast Deadline</p>
-                <p className="text-2xl font-bold text-foreground">March 15, 2026</p>
+                <p className="text-2xl font-bold text-success">January 15, 2026</p>
               </div>
             </div>
 
@@ -771,11 +771,16 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
             <h2 className="text-lg font-semibold text-foreground mb-4 mt-8">Economic Control</h2>
 
             {/* Economic Control KPIs */}
-            <div className="grid grid-cols-1 gap-4 mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
               <div className="glass-card rounded-lg p-4 border border-border/50">
-                <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">Industrial Cost</p>
-                <p className="text-3xl font-bold text-foreground">5.0%</p>
-                <p className="text-xs text-muted-foreground mt-2">Planned CI: 3.2%</p>
+                <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">Industrial Cost (CI)</p>
+                <p className="text-3xl font-bold text-warning">90.0%</p>
+                <p className="text-xs text-muted-foreground mt-2">Commercial CI: 80.0%</p>
+              </div>
+              <div className="glass-card rounded-lg p-4 border border-border/50">
+                <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">Accumulated Production</p>
+                <p className="text-3xl font-bold text-success">€16.66M</p>
+                <p className="text-xs text-muted-foreground mt-2">Of €24.5M contract value</p>
               </div>
             </div>
 
@@ -1065,13 +1070,15 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
               <div className="glass-card rounded-lg p-6 border border-border/50">
                 <p className="text-xs text-muted-foreground uppercase tracking-wide mb-4">Industrial Cost (CI)</p>
-                <p className="text-4xl font-bold text-foreground">5.0%</p>
+                <p className="text-4xl font-bold text-warning">90.0%</p>
+                <p className="text-xs text-muted-foreground mt-2">Commercial CI: 80.0% — CPI: 0.89</p>
               </div>
 
               <div className="glass-card rounded-lg p-6 border border-border/50">
                 <p className="text-xs text-muted-foreground uppercase tracking-wide mb-4">Accumulated Production</p>
                 <div>
-                  <p className="text-4xl font-bold text-success">€32M</p>
+                  <p className="text-4xl font-bold text-success">€16.66M</p>
+                  <p className="text-xs text-muted-foreground mt-2">68% of €24.5M contract value</p>
                 </div>
               </div>
             </div>

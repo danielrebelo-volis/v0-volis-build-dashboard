@@ -16,19 +16,19 @@ export default function ProjectDeepDive({ params }: { params: { id: string } }) 
 
   // Mock project data - in a real app, this would come from a database
   const projectData = {
-    id: 'PRJ-007',
+    id: 'PRJ-001',
     name: 'Metro Tower Development',
     location: 'Lisbon, Portugal',
     portfolio: '€2.5B',
-    spi: 1.08,
-    cpi: 0.95,
-    forecastedEndDate: 'March 15, 2026',
-    budget: 6850000,
-    spent: 6700000,
+    spi: 1.35,
+    cpi: 0.89,
+    forecastedEndDate: 'January 15, 2026',
+    budget: 24500000,
+    spent: 15000000,
     teamSize: 45,
-    taskCompletion: 98,
+    taskCompletion: 68,
     riskLevel: 'low' as const,
-    statusMessage: 'Critical path maintained. All major milestones on track. Minor resource constraints identified in electrical systems phase.'
+    statusMessage: 'Project is 35 days ahead of schedule. Industrial cost at 90% vs commercial baseline of 80%. All major milestones on track with strong production velocity.'
   }
 
   return (
@@ -59,7 +59,7 @@ export default function ProjectDeepDive({ params }: { params: { id: string } }) 
             </div>
           </div>
 
-          <Link href={`/project/PRJ-007/overview`}>
+          <Link href={`/project/PRJ-001/overview`}>
             <Button
               className="gap-2 bg-cyan text-background hover:bg-cyan/90 self-start sm:self-auto"
             >
@@ -88,24 +88,24 @@ export default function ProjectDeepDive({ params }: { params: { id: string } }) 
             {/* Budget Variance */}
             <div>
               <div className="flex items-center gap-2 mb-2">
-                <TrendingDown className="w-4 h-4 text-success" />
+                <TrendingDown className="w-4 h-4 text-warning" />
                 <p className="text-xs text-muted-foreground">Budget Variance</p>
               </div>
               <div className="flex items-baseline gap-2">
-                <p className="text-2xl font-bold text-success">€150,000</p>
-                <p className="text-xs text-muted-foreground">over budget</p>
+                <p className="text-2xl font-bold text-warning">€1.67M</p>
+                <p className="text-xs text-muted-foreground">over commercial budget</p>
               </div>
             </div>
 
             {/* Industrial Cost */}
             <div>
               <div className="flex items-center gap-2 mb-2">
-                <Euro className="w-4 h-4 text-success" />
+                <Euro className="w-4 h-4 text-warning" />
                 <p className="text-xs text-muted-foreground">Industrial Cost</p>
               </div>
               <div className="flex items-baseline gap-2">
-                <p className="text-2xl font-bold text-success">85.0%</p>
-                <p className="text-xs text-muted-foreground">Over commercial IC (80.0%)</p>
+                <p className="text-2xl font-bold text-warning">90.0%</p>
+                <p className="text-xs text-muted-foreground">vs commercial CI (80.0%)</p>
               </div>
             </div>
 
@@ -116,8 +116,8 @@ export default function ProjectDeepDive({ params }: { params: { id: string } }) 
                 <p className="text-xs text-muted-foreground">Schedule Variance</p>
               </div>
               <div className="flex items-baseline gap-2">
-                <p className="text-2xl font-bold text-destructive">-15 days</p>
-                <p className="text-xs text-muted-foreground">behind schedule</p>
+                <p className="text-2xl font-bold text-success">+35 days</p>
+                <p className="text-xs text-muted-foreground">ahead of schedule</p>
               </div>
             </div>
           </div>
@@ -144,10 +144,11 @@ export default function ProjectDeepDive({ params }: { params: { id: string } }) 
 
         {/* Other Indicators Section */}
         <OtherIndicators
-          weeklyProgress={1.9}
-          priorWeekProgress={1.8}
-          requiredWeeklyProgress={2.1}
-          earnedValue={32000000}
+          weeklyProgress={2.4}
+          priorWeekProgress={2.2}
+          requiredWeeklyProgress={2.0}
+          earnedValue={16660000}
+          totalBudget={24500000}
         />
 
         {/* Details & Status */}
@@ -167,7 +168,7 @@ export default function ProjectDeepDive({ params }: { params: { id: string } }) 
         <div className="mt-8 pt-6 border-t border-border/50">
           <div className="flex flex-wrap items-center justify-between gap-4 text-xs text-muted-foreground">
             <div>
-              <span>Project ID: {projectData.id}</span>
+              <span>Project ID: PRJ-001</span>
             </div>
             <div className="flex items-center gap-4">
               <span>Last updated: 2 minutes ago</span>

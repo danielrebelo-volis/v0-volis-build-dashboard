@@ -279,7 +279,8 @@ function IndicatorCard({
   const days = calculateDays(project.estimatedDeadline, project.initialDeadline)
 
   switch (type) {
-    case 'weekly-evolution':
+    case 'weekly-evolution': {
+      const progressData = sCurveDataByProject[project.id]?.progress ?? sCurveDataByProject['PRJ-001'].progress
       return (
         <div className="glass-card rounded-lg p-4">
           <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3">Weekly Evolution</h4>
@@ -289,16 +290,17 @@ function IndicatorCard({
           </div>
           <div className="h-20">
             <ResponsiveContainer width="100%" height="100%">
-              <ComposedChart data={sCurveData}>
+              <ComposedChart data={progressData}>
                 <CartesianGrid strokeDasharray="3 3" stroke={colors.grid} />
-                <XAxis dataKey="week" tick={{ fontSize: 8, fill: colors.tickFillLight }} />
+                <XAxis dataKey="week" tick={{ fontSize: 8, fill: colors.tickFill }} />
                 <YAxis hide />
-                <Line type="monotone" dataKey="actualProgress" stroke={colors.isDark ? "#00c8ff" : "#6C5CE7"} strokeWidth={1.5} dot={false} />
+                <Line type="monotone" dataKey="actualSolid" stroke={colors.isDark ? "#00c8ff" : "#6C5CE7"} strokeWidth={1.5} dot={false} connectNulls={false} />
               </ComposedChart>
             </ResponsiveContainer>
           </div>
         </div>
       )
+    }
     case 'real-earned-value':
       return (
         <div className="glass-card rounded-lg p-4">

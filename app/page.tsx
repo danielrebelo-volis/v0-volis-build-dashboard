@@ -97,37 +97,6 @@ export default function Dashboard() {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="w-56">
-                    <DropdownMenuLabel>Filter by Typology</DropdownMenuLabel>
-                    <DropdownMenuItem onClick={() => handleFilterSelect('typology', 'Road Infrastructure')} className="flex items-center justify-between">
-                      <span>Road Infrastructure</span>
-                      {filterType === 'typology' && filterValue === 'Road Infrastructure' && <Check className="w-4 h-4 text-accent" />}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => handleFilterSelect('typology', 'Civil Construction')} className="flex items-center justify-between">
-                      <span>Civil Construction</span>
-                      {filterType === 'typology' && filterValue === 'Civil Construction' && <Check className="w-4 h-4 text-accent" />}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => handleFilterSelect('typology', 'Railway Infrastructure')} className="flex items-center justify-between">
-                      <span>Railway Infrastructure</span>
-                      {filterType === 'typology' && filterValue === 'Railway Infrastructure' && <Check className="w-4 h-4 text-accent" />}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => handleFilterSelect('typology', 'Hydraulic Infrastructure')} className="flex items-center justify-between">
-                      <span>Hydraulic Infrastructure</span>
-                      {filterType === 'typology' && filterValue === 'Hydraulic Infrastructure' && <Check className="w-4 h-4 text-accent" />}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => handleFilterSelect('typology', 'Port Infrastructure')} className="flex items-center justify-between">
-                      <span>Port Infrastructure</span>
-                      {filterType === 'typology' && filterValue === 'Port Infrastructure' && <Check className="w-4 h-4 text-accent" />}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => handleFilterSelect('typology', 'Oil&Gas')} className="flex items-center justify-between">
-                      <span>Oil&Gas</span>
-                      {filterType === 'typology' && filterValue === 'Oil&Gas' && <Check className="w-4 h-4 text-accent" />}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => handleFilterSelect('typology', 'Power (Energy)')} className="flex items-center justify-between">
-                      <span>Power (Energy)</span>
-                      {filterType === 'typology' && filterValue === 'Power (Energy)' && <Check className="w-4 h-4 text-accent" />}
-                    </DropdownMenuItem>
-
-                    <DropdownMenuSeparator />
                     <DropdownMenuLabel>Filter by Region</DropdownMenuLabel>
                     <DropdownMenuItem onClick={() => handleFilterSelect('region', 'north')} className="flex items-center justify-between">
                       <span>North</span>

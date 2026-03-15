@@ -59,15 +59,15 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
   ]
 
   const costData = [
-    { week: '1', baseline: 3.2, actualSolid: 3.3,  actualDashed: null },
-    { week: '2', baseline: 6.1, actualSolid: 7.0,  actualDashed: null },
-    { week: '3', baseline: 9.2, actualSolid: 10.3, actualDashed: null },
-    { week: '4', baseline: 12.4, actualSolid: 14.1, actualDashed: null },
-    { week: '5', baseline: 15.1, actualSolid: 18.0, actualDashed: null },
-    { week: '6', baseline: 19.1, actualSolid: 22.5, actualDashed: null },
-    { week: '7', baseline: 24.6, actualSolid: 27.5, actualDashed: null },
-    { week: '8', baseline: 28.4, actualSolid: 33.3, actualDashed: 33.3 },
-    { week: '9', baseline: 33.5, actualSolid: null, actualDashed: 40.0 },
+    { week: '1', baseline: 3.2, currentBaseline: 3.0, actualSolid: 3.3,  actualDashed: null },
+    { week: '2', baseline: 6.1, currentBaseline: 5.8, actualSolid: 7.0,  actualDashed: null },
+    { week: '3', baseline: 9.2, currentBaseline: 8.8, actualSolid: 10.3, actualDashed: null },
+    { week: '4', baseline: 12.4, currentBaseline: 12.0, actualSolid: 14.1, actualDashed: null },
+    { week: '5', baseline: 15.1, currentBaseline: 14.8, actualSolid: 18.0, actualDashed: null },
+    { week: '6', baseline: 19.1, currentBaseline: 18.5, actualSolid: 22.5, actualDashed: null },
+    { week: '7', baseline: 24.6, currentBaseline: 23.8, actualSolid: 27.5, actualDashed: null },
+    { week: '8', baseline: 28.4, currentBaseline: 27.5, actualSolid: 33.3, actualDashed: 33.3 },
+    { week: '9', baseline: 33.5, currentBaseline: 32.0, actualSolid: null, actualDashed: 40.0 },
   ]
 
   const getFilteredProgressData = () => {
@@ -103,9 +103,10 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
     if (scale === 1) return costData
     return costData.map(d => ({
       ...d,
-      baseline:     parseFloat((d.baseline * scale).toFixed(2)),
-      actualSolid:  d.actualSolid  != null ? parseFloat((d.actualSolid  * scale).toFixed(2)) : null,
-      actualDashed: d.actualDashed != null ? parseFloat((d.actualDashed * scale).toFixed(2)) : null,
+      baseline:        parseFloat((d.baseline        * scale).toFixed(2)),
+      currentBaseline: parseFloat((d.currentBaseline * scale).toFixed(2)),
+      actualSolid:     d.actualSolid  != null ? parseFloat((d.actualSolid  * scale).toFixed(2)) : null,
+      actualDashed:    d.actualDashed != null ? parseFloat((d.actualDashed * scale).toFixed(2)) : null,
     }))
   }
 
@@ -795,6 +796,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                   <Tooltip contentStyle={{ backgroundColor: chartColors.tooltipBg, border: chartColors.tooltipBorder }} formatter={(v: number) => `€${v.toFixed(1)}M`} />
                   <Legend />
                   <Line type="monotone" dataKey="baseline" stroke="#999999" name="Commercial" strokeWidth={2} dot={false} />
+                  <Line type="monotone" dataKey="currentBaseline" stroke={chartColors.isDark ? "#00c8ff" : "#6C5CE7"} name="Current Baseline" strokeWidth={2} dot={false} />
                   <Line type="monotone" dataKey="actualSolid" stroke="#ff6b6b" name="Actual" strokeWidth={2} dot={false} connectNulls={false} />
                   <Line type="monotone" dataKey="actualDashed" stroke="#ff6b6b" strokeWidth={2} dot={false} strokeDasharray="6 4" legendType="none" connectNulls={false} />
                 </LineChart>
@@ -1135,6 +1137,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                     <Tooltip contentStyle={{ backgroundColor: chartColors.tooltipBg, border: chartColors.tooltipBorder }} formatter={(v: number) => `€${v.toFixed(1)}M`} />
                     <Legend />
                     <Line type="monotone" dataKey="baseline" stroke="#999999" name="Commercial" strokeWidth={2} dot={false} />
+                    <Line type="monotone" dataKey="currentBaseline" stroke={chartColors.isDark ? "#00c8ff" : "#6C5CE7"} name="Current Baseline" strokeWidth={2} dot={false} />
                     <Line type="monotone" dataKey="actualSolid" stroke="#ff6b6b" name="Actual" strokeWidth={2} dot={false} connectNulls={false} />
                     <Line type="monotone" dataKey="actualDashed" stroke="#ff6b6b" strokeWidth={2} dot={false} strokeDasharray="6 4" legendType="none" connectNulls={false} />
                   </LineChart>

@@ -95,15 +95,15 @@ export function SCostCurve() {
   const colors = useChartColors()
 
   const costData = [
-    { week: 1, baseline: 3.2, actualSolid: 3.3, actualDashed: null },
-    { week: 2, baseline: 6.1, actualSolid: 7.0, actualDashed: null },
-    { week: 3, baseline: 9.2, actualSolid: 10.3, actualDashed: null },
-    { week: 4, baseline: 12.4, actualSolid: 14.1, actualDashed: null },
-    { week: 5, baseline: 15.1, actualSolid: 18.0, actualDashed: null },
-    { week: 6, baseline: 19.1, actualSolid: 22.5, actualDashed: null },
-    { week: 7, baseline: 24.6, actualSolid: 27.5, actualDashed: null },
-    { week: 8, baseline: 28.4, actualSolid: 33.3, actualDashed: 33.3 },
-    { week: 9, baseline: 33.5, actualSolid: null, actualDashed: 40.0 },
+    { week: 1, baseline: 3.2, currentBaseline: 3.0, actualSolid: 3.3, actualDashed: null },
+    { week: 2, baseline: 6.1, currentBaseline: 5.8, actualSolid: 7.0, actualDashed: null },
+    { week: 3, baseline: 9.2, currentBaseline: 8.8, actualSolid: 10.3, actualDashed: null },
+    { week: 4, baseline: 12.4, currentBaseline: 12.0, actualSolid: 14.1, actualDashed: null },
+    { week: 5, baseline: 15.1, currentBaseline: 14.8, actualSolid: 18.0, actualDashed: null },
+    { week: 6, baseline: 19.1, currentBaseline: 18.5, actualSolid: 22.5, actualDashed: null },
+    { week: 7, baseline: 24.6, currentBaseline: 23.8, actualSolid: 27.5, actualDashed: null },
+    { week: 8, baseline: 28.4, currentBaseline: 27.5, actualSolid: 33.3, actualDashed: 33.3 },
+    { week: 9, baseline: 33.5, currentBaseline: 32.0, actualSolid: null, actualDashed: 40.0 },
   ]
 
   return (
@@ -132,6 +132,7 @@ export function SCostCurve() {
             payload={
               [
                 { value: 'Commercial', type: 'line', id: 'baseline', color: '#999999' },
+                { value: 'Current Baseline', type: 'line', id: 'currentBaseline', color: colors.isDark ? "#00c8ff" : "#6C5CE7" },
                 { value: 'Actual', type: 'line', id: 'actualSolid', color: '#ff6b6b' },
               ]
             }
@@ -141,6 +142,14 @@ export function SCostCurve() {
             dataKey="baseline"
             stroke="#999999"
             name="Commercial"
+            strokeWidth={2}
+            dot={false}
+          />
+          <Line
+            type="monotone"
+            dataKey="currentBaseline"
+            stroke={colors.isDark ? "#00c8ff" : "#6C5CE7"}
+            name="Current Baseline"
             strokeWidth={2}
             dot={false}
           />

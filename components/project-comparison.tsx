@@ -373,9 +373,9 @@ const WORKFRONTS = [
 ]
 const OWNERS = [
   { value: 'all', label: 'All Owners' },
-  { value: 'owner1', label: 'John Silva' },
-  { value: 'owner2', label: 'Maria Costa' },
-  { value: 'owner3', label: 'Ahmed Al-Rashid' },
+  { value: 'owner1', label: 'Mota-Engil' },
+  { value: 'owner2', label: 'Subcontractor 1' },
+  { value: 'owner3', label: 'Subcontractor 2' },
 ]
 const COST_TYPES = [
   { value: 'all', label: 'All Cost Types' },
@@ -486,42 +486,42 @@ function ComparisonSide({
         // Apply progress filters — scale actual values slightly when filtered
         const progressFiltered = (progressActivity !== 'all' || progressWorkfront !== 'all' || progressOwner !== 'all')
           ? base.progress.map(d => {
-              const f = 0.82 + (progressActivity.charCodeAt(progressActivity.length - 1) % 10) * 0.018
-              return {
-                ...d,
-                actualSolid: d.actualSolid != null ? parseFloat((d.actualSolid * f).toFixed(1)) : null,
-                actualDashed: d.actualDashed != null ? parseFloat((d.actualDashed * f).toFixed(1)) : null,
-                estimated: parseFloat((d.estimated * (f + 0.05)).toFixed(1)),
-              }
-            })
+            const f = 0.82 + (progressActivity.charCodeAt(progressActivity.length - 1) % 10) * 0.018
+            return {
+              ...d,
+              actualSolid: d.actualSolid != null ? parseFloat((d.actualSolid * f).toFixed(1)) : null,
+              actualDashed: d.actualDashed != null ? parseFloat((d.actualDashed * f).toFixed(1)) : null,
+              estimated: parseFloat((d.estimated * (f + 0.05)).toFixed(1)),
+            }
+          })
           : base.progress
 
         // Apply cost filters — cost type scales the whole curve by its share
         const ctMultiplier = costTypeMultipliers[costType] ?? 1
         const costFiltered = (costActivity !== 'all' || costWorkfront !== 'all' || costType !== 'all')
           ? base.cost.map(d => {
-              const af = costActivity !== 'all' ? 0.88 : 1
-              const wf = costWorkfront !== 'all' ? 0.93 : 1
-              const scale = ctMultiplier * af * wf
-              return {
-                ...d,
-                planned: parseFloat((d.planned * scale).toFixed(2)),
-                estimated: parseFloat((d.estimated * scale).toFixed(2)),
-                actualSolid: d.actualSolid != null ? parseFloat((d.actualSolid * scale).toFixed(2)) : null,
-                actualDashed: d.actualDashed != null ? parseFloat((d.actualDashed * scale).toFixed(2)) : null,
-              }
-            })
+            const af = costActivity !== 'all' ? 0.88 : 1
+            const wf = costWorkfront !== 'all' ? 0.93 : 1
+            const scale = ctMultiplier * af * wf
+            return {
+              ...d,
+              planned: parseFloat((d.planned * scale).toFixed(2)),
+              estimated: parseFloat((d.estimated * scale).toFixed(2)),
+              actualSolid: d.actualSolid != null ? parseFloat((d.actualSolid * scale).toFixed(2)) : null,
+              actualDashed: d.actualDashed != null ? parseFloat((d.actualDashed * scale).toFixed(2)) : null,
+            }
+          })
           : base.cost
 
         const progressLegend = [
-          { value: 'Commercial',       type: 'line' as const, color: '#999999' },
+          { value: 'Commercial', type: 'line' as const, color: '#999999' },
           { value: 'Current Baseline', type: 'line' as const, color: colors.isDark ? "#00c8ff" : "#6C5CE7" },
-          { value: 'Actual',           type: 'line' as const, color: actualColor },
+          { value: 'Actual', type: 'line' as const, color: actualColor },
         ]
         const costLegend = [
-          { value: 'Commercial',       type: 'line' as const, color: '#999999' },
+          { value: 'Commercial', type: 'line' as const, color: '#999999' },
           { value: 'Current Baseline', type: 'line' as const, color: colors.isDark ? "#00c8ff" : "#6C5CE7" },
-          { value: 'Actual',           type: 'line' as const, color: '#ff6b6b' },
+          { value: 'Actual', type: 'line' as const, color: '#ff6b6b' },
         ]
 
         return (
@@ -544,9 +544,9 @@ function ComparisonSide({
                     <YAxis tick={{ fontSize: 10, fill: colors.tickFill }} />
                     <Tooltip contentStyle={{ backgroundColor: colors.tooltipBg, border: colors.tooltipBorder }} />
                     <Legend wrapperStyle={{ paddingTop: '8px' }} iconType="line" payload={progressLegend} />
-                    <Line type="monotone" dataKey="planned"      stroke="#999999"   strokeWidth={2} dot={false} name="Commercial" />
-                    <Line type="monotone" dataKey="estimated"    stroke={colors.isDark ? "#00c8ff" : "#6C5CE7"} strokeWidth={2} dot={false} name="Current Baseline" />
-                    <Line type="monotone" dataKey="actualSolid"  stroke={actualColor} strokeWidth={2} dot={false} name="Actual" connectNulls={false} />
+                    <Line type="monotone" dataKey="planned" stroke="#999999" strokeWidth={2} dot={false} name="Commercial" />
+                    <Line type="monotone" dataKey="estimated" stroke={colors.isDark ? "#00c8ff" : "#6C5CE7"} strokeWidth={2} dot={false} name="Current Baseline" />
+                    <Line type="monotone" dataKey="actualSolid" stroke={actualColor} strokeWidth={2} dot={false} name="Actual" connectNulls={false} />
                     <Line type="monotone" dataKey="actualDashed" stroke={actualColor} strokeWidth={2} dot={false} strokeDasharray="6 4" legendType="none" connectNulls={false} />
                   </ComposedChart>
                 </ResponsiveContainer>
@@ -559,9 +559,9 @@ function ComparisonSide({
                 <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Cost S-Curve</h3>
               </div>
               <div className="flex flex-wrap gap-2 mb-3">
-                <FilterSelect value={costActivity}  onChange={setCostActivity}  options={ACTIVITIES}  placeholder="Activity" />
-                <FilterSelect value={costWorkfront} onChange={setCostWorkfront} options={WORKFRONTS}  placeholder="Workfront" />
-                <FilterSelect value={costType}      onChange={setCostType}      options={COST_TYPES}  placeholder="Cost Type" />
+                <FilterSelect value={costActivity} onChange={setCostActivity} options={ACTIVITIES} placeholder="Activity" />
+                <FilterSelect value={costWorkfront} onChange={setCostWorkfront} options={WORKFRONTS} placeholder="Workfront" />
+                <FilterSelect value={costType} onChange={setCostType} options={COST_TYPES} placeholder="Cost Type" />
               </div>
               <div className="h-44 glass-card rounded-lg p-2">
                 <ResponsiveContainer width="100%" height="100%">
@@ -571,9 +571,9 @@ function ComparisonSide({
                     <YAxis tick={{ fontSize: 10, fill: colors.tickFill }} tickFormatter={(v) => `€${v}M`} />
                     <Tooltip contentStyle={{ backgroundColor: colors.tooltipBg, border: colors.tooltipBorder }} formatter={(v: number) => `€${v.toFixed(1)}M`} />
                     <Legend wrapperStyle={{ paddingTop: '8px' }} iconType="line" payload={costLegend} />
-                    <Line type="monotone" dataKey="planned"      stroke="#999999" strokeWidth={2} dot={false} name="Commercial" />
-                    <Line type="monotone" dataKey="estimated"    stroke={colors.isDark ? "#00c8ff" : "#6C5CE7"} strokeWidth={2} dot={false} name="Current Baseline" />
-                    <Line type="monotone" dataKey="actualSolid"  stroke="#ff6b6b" strokeWidth={2} dot={false} name="Actual" connectNulls={false} />
+                    <Line type="monotone" dataKey="planned" stroke="#999999" strokeWidth={2} dot={false} name="Commercial" />
+                    <Line type="monotone" dataKey="estimated" stroke={colors.isDark ? "#00c8ff" : "#6C5CE7"} strokeWidth={2} dot={false} name="Current Baseline" />
+                    <Line type="monotone" dataKey="actualSolid" stroke="#ff6b6b" strokeWidth={2} dot={false} name="Actual" connectNulls={false} />
                     <Line type="monotone" dataKey="actualDashed" stroke="#ff6b6b" strokeWidth={2} dot={false} strokeDasharray="6 4" legendType="none" connectNulls={false} />
                   </ComposedChart>
                 </ResponsiveContainer>

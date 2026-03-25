@@ -62,7 +62,7 @@ const projects: ComparisonProject[] = [
     cpi: 1.12,
     ev: '€31.5M',
     weeklyRatio: '€950k/week',
-    weeklyChange: '-1.5%',
+    weeklyChange: '1.5%',
     ppc: 65,
     estimatedFinalCost: 67.2,
     plannedBudget: 60,

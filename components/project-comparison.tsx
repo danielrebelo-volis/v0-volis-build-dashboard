@@ -1,139 +1,99 @@
 'use client'
 
 import { useState } from 'react'
-import { ChevronDown } from 'lucide-react'
+import { ChevronDown, MapPin, User, Calendar, Banknote, Activity } from 'lucide-react'
 import { ComposedChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts'
 import { useChartColors } from '@/hooks/use-chart-colors'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-  DropdownMenuCheckboxItem,
-} from "@/components/ui/dropdown-menu"
-import { Button } from "@/components/ui/button"
+
+// ─── Data Model ────────────────────────────────────────────────────────────────
 
 interface ComparisonProject {
   id: string
   name: string
   location: string
+  typology: string
+  pm: string
+  deadline: string
+  contractValue: number   // M€
+  status: 'ongoing' | 'finished'
+  // Schedule
+  delayDays: number
   spi: number
+  accumulatedProduction: number  // M€
+  expectedProduction: number     // M€
+  // Cost
+  ciPlanned: number              // %
+  ciAdjusted: number             // %
+  ciAnalytical: number           // %
+  budgetVariance: number         // M€ (negative = under, positive = over)
   cpi: number
+  // Activity
+  ppc: number   // 0–100
+  tmr: number   // 0–100
+  // Legacy fields kept for S-curves
   ev: string
   weeklyRatio: string
   weeklyChange: string
-  ppc: number
   estimatedFinalCost: number
   plannedBudget: number
   estimatedDeadline: string
   initialDeadline: string
-  delay: number
-  industrialCost: number
   completion: number
 }
 
-// Data from project-list.tsx and overview page
 const projects: ComparisonProject[] = [
   {
-    id: 'PRJ-001',
-    name: 'Metro Tower',
-    location: 'Lisbon, Portugal',
-    spi: 1.15,
-    cpi: 0.88,
-    ev: '€24.1M',
-    weeklyRatio: '€1.1M/week',
-    weeklyChange: '+6.8%',
-    ppc: 92,
-    estimatedFinalCost: 42.5,
-    plannedBudget: 50,
-    estimatedDeadline: 'February 28, 2025',
-    initialDeadline: 'March 10, 2025',
-    delay: -35,
-    industrialCost: 95,
-    completion: 68,
+    id: 'PRJ-001', name: 'Metro Tower', location: 'Lisbon, Portugal',
+    typology: 'Urban Infrastructure', pm: 'Ana Ferreira', deadline: '2025-03-10', contractValue: 50, status: 'ongoing',
+    delayDays: -14, spi: 1.15, accumulatedProduction: 24.1, expectedProduction: 30.1,
+    ciPlanned: 82, ciAdjusted: 90, ciAnalytical: 84, budgetVariance: -4.2, cpi: 1.09,
+    ppc: 92, tmr: 87,
+    ev: '€24.1M', weeklyRatio: '€1.1M/week', weeklyChange: '+6.8%',
+    estimatedFinalCost: 45.8, plannedBudget: 50, estimatedDeadline: 'Feb 24, 2025', initialDeadline: 'Mar 10, 2025', completion: 68,
   },
   {
-    id: 'PRJ-002',
-    name: 'Harbor Bridge',
-    location: 'Dubai',
-    spi: 0.88,
-    cpi: 1.12,
-    ev: '€31.5M',
-    weeklyRatio: '€950k/week',
-    weeklyChange: '-1.5%',
-    ppc: 65,
-    estimatedFinalCost: 67.2,
-    plannedBudget: 60,
-    estimatedDeadline: 'April 18, 2025',
-    initialDeadline: 'March 30, 2025',
-    delay: 20,
-    industrialCost: 73,
-    completion: 42,
+    id: 'PRJ-002', name: 'Harbor Bridge', location: 'Porto, Portugal',
+    typology: 'Road Infrastructure', pm: 'Carlos Mendes', deadline: '2025-03-30', contractValue: 60, status: 'ongoing',
+    delayDays: 20, spi: 0.88, accumulatedProduction: 31.5, expectedProduction: 39.4,
+    ciPlanned: 78, ciAdjusted: 97, ciAnalytical: 91, budgetVariance: 7.2, cpi: 0.89,
+    ppc: 65, tmr: 58,
+    ev: '€31.5M', weeklyRatio: '€950k/week', weeklyChange: '-1.5%',
+    estimatedFinalCost: 67.2, plannedBudget: 60, estimatedDeadline: 'Apr 18, 2025', initialDeadline: 'Mar 30, 2025', completion: 42,
   },
   {
-    id: 'PRJ-003',
-    name: 'Skyline Plaza',
-    location: 'London',
-    spi: 0.85,
-    cpi: 0.92,
-    ev: '€28.7M',
-    weeklyRatio: '€880k/week',
-    weeklyChange: '-3.5%',
-    ppc: 78,
-    estimatedFinalCost: 52.0,
-    plannedBudget: 47.5,
-    estimatedDeadline: 'April 15, 2025',
-    initialDeadline: 'March 25, 2025',
-    delay: 32,
-    industrialCost: 94,
-    completion: 85,
+    id: 'PRJ-003', name: 'Skyline Plaza', location: 'Madrid, Spain',
+    typology: 'Civil Construction', pm: 'Sofia Ramos', deadline: '2025-03-25', contractValue: 47.5, status: 'ongoing',
+    delayDays: 32, spi: 0.85, accumulatedProduction: 28.7, expectedProduction: 35.9,
+    ciPlanned: 88, ciAdjusted: 94, ciAnalytical: 88, budgetVariance: 4.5, cpi: 0.92,
+    ppc: 78, tmr: 71,
+    ev: '€28.7M', weeklyRatio: '€880k/week', weeklyChange: '-3.5%',
+    estimatedFinalCost: 52.0, plannedBudget: 47.5, estimatedDeadline: 'Apr 26, 2025', initialDeadline: 'Mar 25, 2025', completion: 85,
   },
   {
-    id: 'PRJ-004',
-    name: 'Industrial Park',
-    location: 'São Paulo, Brazil',
-    spi: 1.08,
-    cpi: 0.95,
-    ev: '€18.5M',
-    weeklyRatio: '€750k/week',
-    weeklyChange: '+5.1%',
-    ppc: 88,
-    estimatedFinalCost: 38.2,
-    plannedBudget: 40,
-    estimatedDeadline: 'March 5, 2025',
-    initialDeadline: 'March 20, 2025',
-    delay: -30,
-    industrialCost: 70,
-    completion: 31,
+    id: 'PRJ-004', name: 'Industrial Park', location: 'Setúbal, Portugal',
+    typology: 'Industrial', pm: 'Miguel Costa', deadline: '2025-03-20', contractValue: 40, status: 'ongoing',
+    delayDays: -30, spi: 1.08, accumulatedProduction: 18.5, expectedProduction: 23.1,
+    ciPlanned: 75, ciAdjusted: 70, ciAnalytical: 65, budgetVariance: -1.8, cpi: 1.05,
+    ppc: 88, tmr: 83,
+    ev: '€18.5M', weeklyRatio: '€750k/week', weeklyChange: '+5.1%',
+    estimatedFinalCost: 38.2, plannedBudget: 40, estimatedDeadline: 'Mar 5, 2025', initialDeadline: 'Mar 20, 2025', completion: 31,
   },
   {
-    id: 'PRJ-005',
-    name: 'Riverside Homes',
-    location: 'Toronto, Canada',
-    spi: 0.92,
-    cpi: 1.05,
-    ev: '€15.2M',
-    weeklyRatio: '€620k/week',
-    weeklyChange: '-2.3%',
-    ppc: 71,
-    estimatedFinalCost: 48.5,
-    plannedBudget: 45,
-    estimatedDeadline: 'April 22, 2025',
-    initialDeadline: 'April 5, 2025',
-    delay: 28,
-    industrialCost: 78,
-    completion: 56,
+    id: 'PRJ-005', name: 'Riverside Homes', location: 'Maputo, Mozambique',
+    typology: 'Hydraulic Infrastructure', pm: 'Laura Nunes', deadline: '2025-04-05', contractValue: 45, status: 'ongoing',
+    delayDays: 28, spi: 0.92, accumulatedProduction: 15.2, expectedProduction: 19.0,
+    ciPlanned: 80, ciAdjusted: 78, ciAnalytical: 72, budgetVariance: 3.5, cpi: 0.96,
+    ppc: 71, tmr: 64,
+    ev: '€15.2M', weeklyRatio: '€620k/week', weeklyChange: '-2.3%',
+    estimatedFinalCost: 48.5, plannedBudget: 45, estimatedDeadline: 'Apr 22, 2025', initialDeadline: 'Apr 5, 2025', completion: 56,
   },
 ]
 
-type WeekPoint = { week: string; planned: number; estimated: number; actualSolid: number | null; actualDashed: number | null }
-type CostPoint = { week: string; planned: number; estimated: number; actualSolid: number | null; actualDashed: number | null }
+// ─── S-Curve Data ─────────────────────────────────────────────────────────────
 
-// Per-project s-curve data — each project has distinct curves
-// actualSolid = confirmed data (W1–W8), actualDashed = forecast segment (W8–W9)
-const sCurveDataByProject: Record<string, { progress: WeekPoint[]; cost: CostPoint[] }> = {
+type CurvePoint = { week: string; planned: number; estimated: number; actualSolid: number | null; actualDashed: number | null }
+
+const sCurveDataByProject: Record<string, { progress: CurvePoint[]; cost: CurvePoint[] }> = {
   'PRJ-001': {
     progress: [
       { week: 'W1', planned: 6, estimated: 5, actualSolid: 4, actualDashed: null },
@@ -256,109 +216,139 @@ const sCurveDataByProject: Record<string, { progress: WeekPoint[]; cost: CostPoi
   },
 }
 
+// ─── Helpers ──────────────────────────────────────────────────────────────────
 
-
-type IndicatorType = 'weekly-evolution' | 'real-earned-value' | 'cpi' | 'spi' | 'ppc' | 'estimated-cost' | 'estimated-deadline'
-
-function IndicatorCard({
-  type,
-  project
-}: {
-  type: IndicatorType
-  project: ComparisonProject
-}) {
-  const colors = useChartColors()
-  const calculateDays = (estimatedDate: string, initialDate: string) => {
-    const estimated = new Date(estimatedDate)
-    const initial = new Date(initialDate)
-    const days = Math.round((estimated - initial) / (1000 * 60 * 60 * 24))
-    return days
-  }
-
-  const costDifference = ((project.estimatedFinalCost - project.plannedBudget) / project.plannedBudget) * 100
-  const days = calculateDays(project.estimatedDeadline, project.initialDeadline)
-
-  switch (type) {
-    case 'weekly-evolution': {
-      const progressData = sCurveDataByProject[project.id]?.progress ?? sCurveDataByProject['PRJ-001'].progress
-      return (
-        <div className="glass-card rounded-lg p-4">
-          <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3">Weekly Evolution</h4>
-          <div className="flex items-baseline gap-2 mb-3">
-            <span className="text-2xl font-bold text-foreground">{project.weeklyChange}</span>
-            <span className="text-xs text-muted-foreground">this week</span>
-          </div>
-          <div className="h-20">
-            <ResponsiveContainer width="100%" height="100%">
-              <ComposedChart data={progressData}>
-                <CartesianGrid strokeDasharray="3 3" stroke={colors.grid} />
-                <XAxis dataKey="week" tick={{ fontSize: 8, fill: colors.tickFill }} />
-                <YAxis hide />
-                <Line type="monotone" dataKey="actualSolid" stroke={colors.isDark ? "#00c8ff" : "#6C5CE7"} strokeWidth={1.5} dot={false} connectNulls={false} />
-              </ComposedChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-      )
-    }
-    case 'real-earned-value':
-      return (
-        <div className="glass-card rounded-lg p-4">
-          <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3">Accumulated Production</h4>
-          <div className="text-2xl font-bold text-foreground mb-1">{project.ev}</div>
-          <div className="text-xs text-muted-foreground">Weekly Production: {project.weeklyRatio}</div>
-        </div>
-      )
-    case 'cpi':
-      return (
-        <div className="glass-card rounded-lg p-4">
-          <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3">CPI</h4>
-          <div className="text-2xl font-bold text-foreground">{project.cpi.toFixed(2)}</div>
-          <div className="text-xs text-muted-foreground mt-2">
-            {project.cpi > 1 ? '✓ Under Budget' : '⚠ Over Budget'}
-          </div>
-        </div>
-      )
-    case 'spi':
-      return (
-        <div className="glass-card rounded-lg p-4">
-          <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3">SPI</h4>
-          <div className="text-2xl font-bold text-foreground">{project.spi.toFixed(2)}</div>
-          <div className="text-xs text-muted-foreground mt-2">
-            {project.spi > 1 ? '✓ Ahead Schedule' : '⚠ Behind Schedule'}
-          </div>
-        </div>
-      )
-    case 'ppc':
-      return (
-        <div className="glass-card rounded-lg p-4">
-          <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3">PPC</h4>
-          <div className="text-2xl font-bold text-foreground">{project.ppc}%</div>
-          <div className="text-xs text-muted-foreground mt-2">Plan Performance Compliance</div>
-        </div>
-      )
-    case 'estimated-cost':
-      return (
-        <div className="glass-card rounded-lg p-4">
-          <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3">Estimated Final Cost</h4>
-          <div className="text-2xl font-bold text-foreground">€{project.estimatedFinalCost.toFixed(1)}M</div>
-          <div className={`text-xs mt-2 ${costDifference > 0 ? 'text-red-500' : 'text-green-500'}`}>
-            {costDifference > 0 ? '+' : ''}{costDifference.toFixed(1)}% vs planned
-          </div>
-        </div>
-      )
-    case 'estimated-deadline':
-      return (
-        <div className="glass-card rounded-lg p-4">
-          <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3">Estimated Deadline</h4>
-          <div className="text-sm font-bold text-foreground">{project.estimatedDeadline}</div>
-          <div className={`text-xs mt-2 ${days < 0 ? 'text-green-500' : 'text-red-500'}`}>
-            {days < 0 ? '' : '+'}{days} days {days < 0 ? 'ahead' : 'behind'}
-          </div>
-        </div>
-      )
-  }
+function icColor(v: number) {
+  if (v < 85) return '#16a34a'
+  if (v < 95) return '#d97706'
+  return '#dc2626'
 }
+function spiColor(v: number) { return v >= 1 ? '#16a34a' : v >= 0.9 ? '#d97706' : '#dc2626' }
+function cpiColor(v: number) { return v >= 1 ? '#16a34a' : v >= 0.9 ? '#d97706' : '#dc2626' }
+function ppcColor(v: number) { return v >= 80 ? '#16a34a' : v >= 65 ? '#d97706' : '#dc2626' }
+
+function StatRow({ label, value, sub, color }: { label: string; value: string; sub?: string; color?: string }) {
+  return (
+    <div className="flex items-center justify-between py-2 border-b border-border/20 last:border-0">
+      <span className="text-xs text-muted-foreground">{label}</span>
+      <div className="text-right">
+        <span className="text-sm font-semibold" style={color ? { color } : undefined}>{value}</span>
+        {sub && <div className="text-[10px] text-muted-foreground">{sub}</div>}
+      </div>
+    </div>
+  )
+}
+
+// ─── Project Info Card ────────────────────────────────────────────────────────
+
+function ProjectInfoCard({ project }: { project: ComparisonProject }) {
+  const statusColor = project.status === 'ongoing' ? '#16a34a' : '#6b7280'
+  return (
+    <div className="glass-card rounded-lg p-4 mb-4">
+      <div className="grid grid-cols-2 gap-x-4 gap-y-1.5">
+        <div className="flex items-center gap-2">
+          <Activity className="w-3 h-3 text-muted-foreground shrink-0" />
+          <span className="text-[11px] text-muted-foreground">Typology</span>
+          <span className="text-[11px] font-medium text-foreground ml-auto">{project.typology}</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <User className="w-3 h-3 text-muted-foreground shrink-0" />
+          <span className="text-[11px] text-muted-foreground">PM</span>
+          <span className="text-[11px] font-medium text-foreground ml-auto">{project.pm}</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <Calendar className="w-3 h-3 text-muted-foreground shrink-0" />
+          <span className="text-[11px] text-muted-foreground">Deadline</span>
+          <span className="text-[11px] font-medium text-foreground ml-auto">{project.deadline}</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <Banknote className="w-3 h-3 text-muted-foreground shrink-0" />
+          <span className="text-[11px] text-muted-foreground">Contract</span>
+          <span className="text-[11px] font-medium text-foreground ml-auto">€{project.contractValue}M</span>
+        </div>
+        <div className="flex items-center gap-2 col-span-2">
+          <MapPin className="w-3 h-3 text-muted-foreground shrink-0" />
+          <span className="text-[11px] text-muted-foreground">Status</span>
+          <span className="text-[11px] font-semibold ml-auto capitalize" style={{ color: statusColor }}>{project.status}</span>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// ─── Indicator Sections ───────────────────────────────────────────────────────
+
+function ScheduleSection({ project, maxWeek }: { project: ComparisonProject; maxWeek: number }) {
+  const prodPct = Math.round((project.accumulatedProduction / project.expectedProduction) * 100)
+  return (
+    <div className="glass-card rounded-lg p-4 space-y-0">
+      <h4 className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/70 mb-1">Schedule</h4>
+      <StatRow
+        label="Delay"
+        value={`${project.delayDays > 0 ? '+' : ''}${project.delayDays} days`}
+        color={project.delayDays <= 0 ? '#16a34a' : project.delayDays < 15 ? '#d97706' : '#dc2626'}
+      />
+      <StatRow
+        label="SPI"
+        value={project.spi.toFixed(2)}
+        sub={project.spi >= 1 ? 'Ahead of schedule' : 'Behind schedule'}
+        color={spiColor(project.spi)}
+      />
+      <StatRow
+        label="Accumulated Production"
+        value={`€${project.accumulatedProduction.toFixed(1)}M`}
+        sub={`${prodPct}% of expected (€${project.expectedProduction.toFixed(1)}M)`}
+        color={prodPct >= 90 ? '#16a34a' : prodPct >= 75 ? '#d97706' : '#dc2626'}
+      />
+    </div>
+  )
+}
+
+function CostSection({ project }: { project: ComparisonProject }) {
+  const varColor = project.budgetVariance <= 0 ? '#16a34a' : project.budgetVariance < 3 ? '#d97706' : '#dc2626'
+  return (
+    <div className="glass-card rounded-lg p-4 space-y-0">
+      <h4 className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/70 mb-1">Cost</h4>
+      <StatRow label="CI Planned" value={`${project.ciPlanned}%`} color={icColor(project.ciPlanned)} />
+      <StatRow label="CI Adjusted" value={`${project.ciAdjusted}%`} color={icColor(project.ciAdjusted)} />
+      <StatRow label="CI Analytical" value={`${project.ciAnalytical}%`} color={icColor(project.ciAnalytical)} />
+      <StatRow
+        label="Budget Variance"
+        value={`${project.budgetVariance > 0 ? '+' : ''}€${project.budgetVariance.toFixed(1)}M`}
+        sub={project.budgetVariance <= 0 ? 'Under budget' : 'Over budget'}
+        color={varColor}
+      />
+      <StatRow
+        label="CPI"
+        value={project.cpi.toFixed(2)}
+        sub={project.cpi >= 1 ? 'Under budget' : 'Over budget'}
+        color={cpiColor(project.cpi)}
+      />
+    </div>
+  )
+}
+
+function ActivitySection({ project }: { project: ComparisonProject }) {
+  return (
+    <div className="glass-card rounded-lg p-4 space-y-0">
+      <h4 className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/70 mb-1">Activity Progress</h4>
+      <StatRow
+        label="PPC — Plan Percent Complete"
+        value={`${project.ppc}%`}
+        sub="% of planned tasks completed"
+        color={ppcColor(project.ppc)}
+      />
+      <StatRow
+        label="TMR — Tasks Made Ready"
+        value={`${project.tmr}%`}
+        sub="% of tasks prepared for execution"
+        color={ppcColor(project.tmr)}
+      />
+    </div>
+  )
+}
+
+// ─── S-Curve Charts ───────────────────────────────────────────────────────────
 
 const ACTIVITIES = [
   { value: 'all', label: 'All Activities' },
@@ -375,297 +365,225 @@ const OWNERS = [
   { value: 'all', label: 'All Owners' },
   { value: 'owner1', label: 'Mota-Engil' },
   { value: 'owner2', label: 'Subcontractor 1' },
-  { value: 'owner3', label: 'Subcontractor 2' },
 ]
 const COST_TYPES = [
   { value: 'all', label: 'All Cost Types' },
   { value: 'labour', label: 'Labour' },
   { value: 'materials', label: 'Materials' },
   { value: 'equipment', label: 'Equipment' },
-  { value: 'indirect', label: 'Indirect Costs' },
-  { value: 'subcontracted', label: 'Subcontracted' },
+  { value: 'indirect', label: 'Indirect' },
 ]
+const costTypeMultipliers: Record<string, number> = { all: 1, labour: 0.38, materials: 0.25, equipment: 0.16, indirect: 0.11 }
 
-// Cost type multipliers — each type shifts the curve up or down relative to total
-const costTypeMultipliers: Record<string, number> = {
-  all: 1.0,
-  labour: 0.38,
-  materials: 0.25,
-  equipment: 0.16,
-  indirect: 0.11,
-  subcontracted: 0.10,
-}
-
-function FilterSelect({
-  value,
-  onChange,
-  options,
-  placeholder,
-}: {
-  value: string
-  onChange: (v: string) => void
-  options: { value: string; label: string }[]
-  placeholder: string
-}) {
+function FilterSelect({ value, onChange, options }: { value: string; onChange: (v: string) => void; options: { value: string; label: string }[] }) {
   return (
-    <select
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      className="text-xs h-7 px-2 rounded-md border border-border/50 bg-secondary text-foreground focus:outline-none focus:ring-1 focus:ring-ring"
-    >
-      {options.map((o) => (
-        <option key={o.value} value={o.value}>{o.label}</option>
-      ))}
+    <select value={value} onChange={e => onChange(e.target.value)}
+      className="text-xs h-7 px-2 rounded-md border border-border/50 bg-secondary text-foreground focus:outline-none focus:ring-1 focus:ring-ring">
+      {options.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
     </select>
   )
 }
 
-function ComparisonSide({
-  side,
-  selectedProject,
-  onProjectChange,
-  selectedIndicators,
-}: {
-  side: 'left' | 'right'
-  selectedProject: ComparisonProject
-  onProjectChange: (project: ComparisonProject) => void
-  selectedIndicators: IndicatorType[]
-}) {
-  const [showDropdown, setShowDropdown] = useState(false)
-  // Progress filters
+function SCurves({ project, maxWeek }: { project: ComparisonProject; maxWeek: number }) {
+  const colors = useChartColors()
   const [progressActivity, setProgressActivity] = useState('all')
   const [progressWorkfront, setProgressWorkfront] = useState('all')
   const [progressOwner, setProgressOwner] = useState('all')
-  // Cost filters
   const [costActivity, setCostActivity] = useState('all')
   const [costWorkfront, setCostWorkfront] = useState('all')
   const [costType, setCostType] = useState('all')
-  const colors = useChartColors()
+
+  const base = sCurveDataByProject[project.id] ?? sCurveDataByProject['PRJ-001']
+  const WEEKS = ['W1','W2','W3','W4','W5','W6','W7','W8','W9']
+  const sliceIdx = maxWeek // 1-based, W1=1..W9=9
+  const slicedProgress = base.progress.slice(0, sliceIdx)
+  const slicedCost = base.cost.slice(0, sliceIdx)
+
+  const actualColor = '#00b894'
+  const filtered = (progressActivity !== 'all' || progressWorkfront !== 'all' || progressOwner !== 'all')
+    ? slicedProgress.map(d => {
+        const f = 0.82 + (progressActivity.charCodeAt(progressActivity.length - 1) % 10) * 0.018
+        return { ...d, actualSolid: d.actualSolid != null ? +(d.actualSolid * f).toFixed(1) : null, actualDashed: d.actualDashed != null ? +(d.actualDashed * f).toFixed(1) : null, estimated: +(d.estimated * (f + 0.05)).toFixed(1) }
+      })
+    : slicedProgress
+
+  const ctMul = costTypeMultipliers[costType] ?? 1
+  const costFiltered = (costActivity !== 'all' || costWorkfront !== 'all' || costType !== 'all')
+    ? slicedCost.map(d => {
+        const scale = ctMul * (costActivity !== 'all' ? 0.88 : 1) * (costWorkfront !== 'all' ? 0.93 : 1)
+        return { ...d, planned: +(d.planned * scale).toFixed(2), estimated: +(d.estimated * scale).toFixed(2), actualSolid: d.actualSolid != null ? +(d.actualSolid * scale).toFixed(2) : null, actualDashed: d.actualDashed != null ? +(d.actualDashed * scale).toFixed(2) : null }
+      })
+    : slicedCost
+
+  const baselineColor = colors.isDark ? '#00c8ff' : '#6C5CE7'
+  const legendProgress = [{ value: 'Commercial', type: 'line' as const, color: '#999' }, { value: 'Current Baseline', type: 'line' as const, color: baselineColor }, { value: 'Actual', type: 'line' as const, color: actualColor }]
+  const legendCost = [{ value: 'Commercial', type: 'line' as const, color: '#999' }, { value: 'Current Baseline', type: 'line' as const, color: baselineColor }, { value: 'Actual', type: 'line' as const, color: '#ff6b6b' }]
 
   return (
-    <div className="flex-1">
-      {/* Project Dropdown */}
-      <div className="relative mb-6">
+    <>
+      <div className="mb-6">
+        <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Progress S-Curve</h3>
+        <div className="flex flex-wrap gap-2 mb-3">
+          <FilterSelect value={progressActivity} onChange={setProgressActivity} options={ACTIVITIES} />
+          <FilterSelect value={progressWorkfront} onChange={setProgressWorkfront} options={WORKFRONTS} />
+          <FilterSelect value={progressOwner} onChange={setProgressOwner} options={OWNERS} />
+        </div>
+        <div className="h-44 glass-card rounded-lg p-2">
+          <ResponsiveContainer width="100%" height="100%">
+            <ComposedChart data={filtered}>
+              <CartesianGrid strokeDasharray="3 3" stroke={colors.grid} />
+              <XAxis dataKey="week" tick={{ fontSize: 10, fill: colors.tickFill }} />
+              <YAxis tick={{ fontSize: 10, fill: colors.tickFill }} />
+              <Tooltip contentStyle={{ backgroundColor: colors.tooltipBg, border: colors.tooltipBorder }} />
+              <Legend wrapperStyle={{ paddingTop: 8 }} iconType="line" payload={legendProgress} />
+              <Line type="monotone" dataKey="planned" stroke="#999" strokeWidth={2} dot={false} name="Commercial" />
+              <Line type="monotone" dataKey="estimated" stroke={baselineColor} strokeWidth={2} dot={false} name="Current Baseline" />
+              <Line type="monotone" dataKey="actualSolid" stroke={actualColor} strokeWidth={2} dot={false} name="Actual" connectNulls={false} />
+              <Line type="monotone" dataKey="actualDashed" stroke={actualColor} strokeWidth={2} dot={false} strokeDasharray="6 4" legendType="none" connectNulls={false} />
+            </ComposedChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
+      <div className="mb-6">
+        <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Cost S-Curve</h3>
+        <div className="flex flex-wrap gap-2 mb-3">
+          <FilterSelect value={costActivity} onChange={setCostActivity} options={ACTIVITIES} />
+          <FilterSelect value={costWorkfront} onChange={setCostWorkfront} options={WORKFRONTS} />
+          <FilterSelect value={costType} onChange={setCostType} options={COST_TYPES} />
+        </div>
+        <div className="h-44 glass-card rounded-lg p-2">
+          <ResponsiveContainer width="100%" height="100%">
+            <ComposedChart data={costFiltered}>
+              <CartesianGrid strokeDasharray="3 3" stroke={colors.grid} />
+              <XAxis dataKey="week" tick={{ fontSize: 10, fill: colors.tickFill }} />
+              <YAxis tick={{ fontSize: 10, fill: colors.tickFill }} tickFormatter={v => `€${v}M`} />
+              <Tooltip contentStyle={{ backgroundColor: colors.tooltipBg, border: colors.tooltipBorder }} formatter={(v: number) => `€${v.toFixed(1)}M`} />
+              <Legend wrapperStyle={{ paddingTop: 8 }} iconType="line" payload={legendCost} />
+              <Line type="monotone" dataKey="planned" stroke="#999" strokeWidth={2} dot={false} name="Commercial" />
+              <Line type="monotone" dataKey="estimated" stroke={baselineColor} strokeWidth={2} dot={false} name="Current Baseline" />
+              <Line type="monotone" dataKey="actualSolid" stroke="#ff6b6b" strokeWidth={2} dot={false} name="Actual" connectNulls={false} />
+              <Line type="monotone" dataKey="actualDashed" stroke="#ff6b6b" strokeWidth={2} dot={false} strokeDasharray="6 4" legendType="none" connectNulls={false} />
+            </ComposedChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+    </>
+  )
+}
+
+// ─── Comparison Side ──────────────────────────────────────────────────────────
+
+type TabType = 'schedule' | 'cost' | 'activity'
+
+function ComparisonSide({
+  selectedProject,
+  onProjectChange,
+  activeTab,
+  maxWeek,
+}: {
+  selectedProject: ComparisonProject
+  onProjectChange: (p: ComparisonProject) => void
+  activeTab: TabType
+  maxWeek: number
+}) {
+  const [showDropdown, setShowDropdown] = useState(false)
+
+  return (
+    <div className="flex-1 min-w-0">
+      {/* Project selector */}
+      <div className="relative mb-4">
         <button
           onClick={() => setShowDropdown(!showDropdown)}
-          className="w-full flex items-center justify-between px-4 py-3 border border-foreground rounded-lg hover:bg-secondary/20 transition-colors"
+          className="w-full flex items-center justify-between px-4 py-3 border border-foreground/20 rounded-lg hover:bg-secondary/20 transition-colors"
         >
           <div className="text-left">
             <div className="text-sm font-semibold text-foreground">{selectedProject.name}</div>
             <div className="text-xs text-muted-foreground">{selectedProject.location}</div>
           </div>
-          <ChevronDown className="w-4 h-4 text-foreground transition-transform" style={{
-            transform: showDropdown ? 'rotate(180deg)' : 'rotate(0deg)',
-          }} />
+          <ChevronDown className={`w-4 h-4 text-foreground transition-transform ${showDropdown ? 'rotate-180' : ''}`} />
         </button>
-
         {showDropdown && (
-          <div className="absolute top-full left-0 right-0 mt-2 border border-foreground rounded-lg bg-background z-50">
-            {projects.map((project) => (
-              <button
-                key={project.id}
-                onClick={() => {
-                  onProjectChange(project)
-                  setShowDropdown(false)
-                }}
-                className="w-full text-left px-4 py-2.5 hover:bg-secondary/30 transition-colors border-b border-border/30 last:border-b-0"
-              >
-                <div className="text-sm font-medium text-foreground">{project.name}</div>
-                <div className="text-xs text-muted-foreground">{project.location}</div>
+          <div className="absolute top-full left-0 right-0 mt-2 border border-border/40 rounded-lg bg-background z-50 shadow-lg">
+            {projects.map(p => (
+              <button key={p.id} onClick={() => { onProjectChange(p); setShowDropdown(false) }}
+                className="w-full text-left px-4 py-2.5 hover:bg-secondary/30 transition-colors border-b border-border/20 last:border-b-0">
+                <div className="text-sm font-medium text-foreground">{p.name}</div>
+                <div className="text-xs text-muted-foreground">{p.location}</div>
               </button>
             ))}
           </div>
         )}
       </div>
 
-      {/* S-Curves - Progress and Cost */}
-      {(() => {
-        const base = sCurveDataByProject[selectedProject.id] ?? sCurveDataByProject['PRJ-001']
-        const actualColor = colors.isDark ? "#00ff88" : "#00b894"
+      {/* Project info card */}
+      <ProjectInfoCard project={selectedProject} />
 
-        // Apply progress filters — scale actual values slightly when filtered
-        const progressFiltered = (progressActivity !== 'all' || progressWorkfront !== 'all' || progressOwner !== 'all')
-          ? base.progress.map(d => {
-            const f = 0.82 + (progressActivity.charCodeAt(progressActivity.length - 1) % 10) * 0.018
-            return {
-              ...d,
-              actualSolid: d.actualSolid != null ? parseFloat((d.actualSolid * f).toFixed(1)) : null,
-              actualDashed: d.actualDashed != null ? parseFloat((d.actualDashed * f).toFixed(1)) : null,
-              estimated: parseFloat((d.estimated * (f + 0.05)).toFixed(1)),
-            }
-          })
-          : base.progress
+      {/* S-curves */}
+      <SCurves project={selectedProject} maxWeek={maxWeek} />
 
-        // Apply cost filters — cost type scales the whole curve by its share
-        const ctMultiplier = costTypeMultipliers[costType] ?? 1
-        const costFiltered = (costActivity !== 'all' || costWorkfront !== 'all' || costType !== 'all')
-          ? base.cost.map(d => {
-            const af = costActivity !== 'all' ? 0.88 : 1
-            const wf = costWorkfront !== 'all' ? 0.93 : 1
-            const scale = ctMultiplier * af * wf
-            return {
-              ...d,
-              planned: parseFloat((d.planned * scale).toFixed(2)),
-              estimated: parseFloat((d.estimated * scale).toFixed(2)),
-              actualSolid: d.actualSolid != null ? parseFloat((d.actualSolid * scale).toFixed(2)) : null,
-              actualDashed: d.actualDashed != null ? parseFloat((d.actualDashed * scale).toFixed(2)) : null,
-            }
-          })
-          : base.cost
-
-        const progressLegend = [
-          { value: 'Commercial', type: 'line' as const, color: '#999999' },
-          { value: 'Current Baseline', type: 'line' as const, color: colors.isDark ? "#00c8ff" : "#6C5CE7" },
-          { value: 'Actual', type: 'line' as const, color: actualColor },
-        ]
-        const costLegend = [
-          { value: 'Commercial', type: 'line' as const, color: '#999999' },
-          { value: 'Current Baseline', type: 'line' as const, color: colors.isDark ? "#00c8ff" : "#6C5CE7" },
-          { value: 'Actual', type: 'line' as const, color: '#ff6b6b' },
-        ]
-
-        return (
-          <>
-            {/* Progress S-Curve */}
-            <div className="mb-8">
-              <div className="flex items-center justify-between mb-2">
-                <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Progress S-Curve</h3>
-              </div>
-              <div className="flex flex-wrap gap-2 mb-3">
-                <FilterSelect value={progressActivity} onChange={setProgressActivity} options={ACTIVITIES} placeholder="Activity" />
-                <FilterSelect value={progressWorkfront} onChange={setProgressWorkfront} options={WORKFRONTS} placeholder="Workfront" />
-                <FilterSelect value={progressOwner} onChange={setProgressOwner} options={OWNERS} placeholder="Owner" />
-              </div>
-              <div className="h-44 glass-card rounded-lg p-2">
-                <ResponsiveContainer width="100%" height="100%">
-                  <ComposedChart data={progressFiltered}>
-                    <CartesianGrid strokeDasharray="3 3" stroke={colors.grid} />
-                    <XAxis dataKey="week" tick={{ fontSize: 10, fill: colors.tickFill }} />
-                    <YAxis tick={{ fontSize: 10, fill: colors.tickFill }} />
-                    <Tooltip contentStyle={{ backgroundColor: colors.tooltipBg, border: colors.tooltipBorder }} />
-                    <Legend wrapperStyle={{ paddingTop: '8px' }} iconType="line" payload={progressLegend} />
-                    <Line type="monotone" dataKey="planned" stroke="#999999" strokeWidth={2} dot={false} name="Commercial" />
-                    <Line type="monotone" dataKey="estimated" stroke={colors.isDark ? "#00c8ff" : "#6C5CE7"} strokeWidth={2} dot={false} name="Current Baseline" />
-                    <Line type="monotone" dataKey="actualSolid" stroke={actualColor} strokeWidth={2} dot={false} name="Actual" connectNulls={false} />
-                    <Line type="monotone" dataKey="actualDashed" stroke={actualColor} strokeWidth={2} dot={false} strokeDasharray="6 4" legendType="none" connectNulls={false} />
-                  </ComposedChart>
-                </ResponsiveContainer>
-              </div>
-            </div>
-
-            {/* Cost S-Curve */}
-            <div className="mb-8">
-              <div className="flex items-center justify-between mb-2">
-                <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Cost S-Curve</h3>
-              </div>
-              <div className="flex flex-wrap gap-2 mb-3">
-                <FilterSelect value={costActivity} onChange={setCostActivity} options={ACTIVITIES} placeholder="Activity" />
-                <FilterSelect value={costWorkfront} onChange={setCostWorkfront} options={WORKFRONTS} placeholder="Workfront" />
-                <FilterSelect value={costType} onChange={setCostType} options={COST_TYPES} placeholder="Cost Type" />
-              </div>
-              <div className="h-44 glass-card rounded-lg p-2">
-                <ResponsiveContainer width="100%" height="100%">
-                  <ComposedChart data={costFiltered}>
-                    <CartesianGrid strokeDasharray="3 3" stroke={colors.grid} />
-                    <XAxis dataKey="week" tick={{ fontSize: 10, fill: colors.tickFill }} />
-                    <YAxis tick={{ fontSize: 10, fill: colors.tickFill }} tickFormatter={(v) => `€${v}M`} />
-                    <Tooltip contentStyle={{ backgroundColor: colors.tooltipBg, border: colors.tooltipBorder }} formatter={(v: number) => `€${v.toFixed(1)}M`} />
-                    <Legend wrapperStyle={{ paddingTop: '8px' }} iconType="line" payload={costLegend} />
-                    <Line type="monotone" dataKey="planned" stroke="#999999" strokeWidth={2} dot={false} name="Commercial" />
-                    <Line type="monotone" dataKey="estimated" stroke={colors.isDark ? "#00c8ff" : "#6C5CE7"} strokeWidth={2} dot={false} name="Current Baseline" />
-                    <Line type="monotone" dataKey="actualSolid" stroke="#ff6b6b" strokeWidth={2} dot={false} name="Actual" connectNulls={false} />
-                    <Line type="monotone" dataKey="actualDashed" stroke="#ff6b6b" strokeWidth={2} dot={false} strokeDasharray="6 4" legendType="none" connectNulls={false} />
-                  </ComposedChart>
-                </ResponsiveContainer>
-              </div>
-            </div>
-          </>
-        )
-      })()}
-
-      {/* Selected Indicators */}
-      {selectedIndicators.length > 0 && (
-        <div className="grid grid-cols-1 gap-3">
-          {selectedIndicators.map((indicator) => (
-            <IndicatorCard key={indicator} type={indicator} project={selectedProject} />
-          ))}
-        </div>
-      )}
+      {/* Tab indicator sections */}
+      {activeTab === 'schedule' && <ScheduleSection project={selectedProject} maxWeek={maxWeek} />}
+      {activeTab === 'cost' && <CostSection project={selectedProject} />}
+      {activeTab === 'activity' && <ActivitySection project={selectedProject} />}
     </div>
   )
 }
 
+// ─── Root ─────────────────────────────────────────────────────────────────────
+
+const TABS: { value: TabType; label: string }[] = [
+  { value: 'schedule', label: 'Schedule' },
+  { value: 'cost', label: 'Cost' },
+  { value: 'activity', label: 'Activity Progress' },
+]
+
 export function ProjectComparison() {
   const [leftProject, setLeftProject] = useState<ComparisonProject>(projects[0])
   const [rightProject, setRightProject] = useState<ComparisonProject>(projects[1])
-  const [selectedIndicators, setSelectedIndicators] = useState<IndicatorType[]>([])
-
-  const indicatorOptions: { value: IndicatorType; label: string }[] = [
-    { value: 'weekly-evolution', label: 'Weekly Evolution' },
-    { value: 'real-earned-value', label: 'Accumulated Production' },
-    { value: 'cpi', label: 'CPI' },
-    { value: 'spi', label: 'SPI' },
-    { value: 'ppc', label: 'PPC' },
-    { value: 'estimated-cost', label: 'Estimated Final Cost' },
-    { value: 'estimated-deadline', label: 'Estimated Deadline' },
-  ]
-
-  const toggleIndicator = (indicator: IndicatorType) => {
-    setSelectedIndicators((prev) =>
-      prev.includes(indicator)
-        ? prev.filter((i) => i !== indicator)
-        : [...prev, indicator]
-    )
-  }
+  const [activeTab, setActiveTab] = useState<TabType>('schedule')
+  const [maxWeek, setMaxWeek] = useState<number>(9)
 
   return (
-    <div className="min-h-screen bg-background grid-background">
-      {/* Header */}
-      <div className="border-b border-border/50 px-6 py-4">
-        <h1 className="text-xl font-semibold text-foreground">Project Comparison</h1>
-        <p className="text-xs text-muted-foreground mt-1">Side-by-side performance analysis</p>
-      </div>
-
-      {/* Main Content */}
-      <div className="p-6">
-        {/* Indicator Selection */}
-        <div className="mb-8 flex justify-center">
-          <DropdownMenu>
-            <DropdownMenuTrigger className="bg-white text-card" asChild>
-              <Button variant="outline" className="gap-2 text-muted-foreground bg-transparent">
-                Choose indicator
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="center" className="w-56">
-              <DropdownMenuLabel>Select Indicators</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              {indicatorOptions.map((option) => (
-                <DropdownMenuCheckboxItem
-                  key={option.value}
-                  checked={selectedIndicators.includes(option.value)}
-                  onCheckedChange={() => toggleIndicator(option.value)}
-                >
-                  {option.label}
-                </DropdownMenuCheckboxItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
+    <div className="min-h-screen bg-background">
+      {/* Page header */}
+      <div className="border-b border-border/50 px-6 py-4 flex items-center justify-between">
+        <div>
+          <h1 className="text-xl font-semibold text-foreground">Project Comparison</h1>
+          <p className="text-xs text-muted-foreground mt-0.5">Side-by-side performance analysis</p>
         </div>
 
-        {/* Comparison Sides */}
+        {/* Week filter */}
+        <div className="flex items-center gap-2">
+          <span className="text-xs text-muted-foreground">Compare up to</span>
+          <div className="flex items-center rounded-md border border-border/40 bg-background p-0.5 text-xs font-medium">
+            {[1,2,3,4,5,6,7,8,9].map(w => (
+              <button key={w} onClick={() => setMaxWeek(w)}
+                className={`w-7 h-6 rounded flex items-center justify-center transition-all ${maxWeek === w ? 'bg-foreground text-background' : 'text-muted-foreground hover:text-foreground'}`}>
+                W{w}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="p-6">
+        {/* Indicator tab selector */}
+        <div className="flex justify-center mb-8">
+          <div className="flex items-center rounded-lg border border-border/40 bg-background p-1 gap-1">
+            {TABS.map(tab => (
+              <button key={tab.value} onClick={() => setActiveTab(tab.value)}
+                className={`px-4 py-1.5 rounded-md text-sm font-medium transition-all ${activeTab === tab.value ? 'bg-foreground text-background' : 'text-muted-foreground hover:text-foreground'}`}>
+                {tab.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Two-column comparison */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          <ComparisonSide
-            side="left"
-            selectedProject={leftProject}
-            onProjectChange={setLeftProject}
-            selectedIndicators={selectedIndicators}
-          />
-          <ComparisonSide
-            side="right"
-            selectedProject={rightProject}
-            onProjectChange={setRightProject}
-            selectedIndicators={selectedIndicators}
-          />
+          <ComparisonSide selectedProject={leftProject} onProjectChange={setLeftProject} activeTab={activeTab} maxWeek={maxWeek} />
+          <ComparisonSide selectedProject={rightProject} onProjectChange={setRightProject} activeTab={activeTab} maxWeek={maxWeek} />
         </div>
       </div>
     </div>

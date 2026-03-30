@@ -16,31 +16,30 @@ interface TrendColumnProps {
 function TrendColumn({ projects, direction }: TrendColumnProps) {
   const isUp = direction === "up"
   const colorClass = isUp ? "text-success" : "text-destructive"
-  const barClass = isUp ? "bg-success" : "bg-destructive"
   const Icon = isUp ? TrendingUp : TrendingDown
   const label = isUp ? "Uptrend" : "Downtrend"
 
   return (
     <div className="flex-1 min-w-0">
-      <div className={`flex items-center gap-1.5 mb-2`}>
-        <Icon className={`w-3.5 h-3.5 ${colorClass}`} />
-        <span className={`text-xs font-semibold uppercase tracking-wide ${colorClass}`}>{label}</span>
+      <div className="flex items-center gap-1 mb-2">
+        <Icon className={`w-3 h-3 ${colorClass}`} />
+        <span className={`text-[10px] font-semibold uppercase tracking-wide ${colorClass}`}>{label}</span>
       </div>
-      <div className="space-y-2">
+      <div className="space-y-1.5">
         {projects.map((project) => (
-          <div key={project.id} className="group cursor-pointer">
-            <div className="flex items-center justify-between mb-0.5">
-              <p className="text-xs text-foreground truncate pr-1 hover:text-accent transition-colors">{project.name}</p>
-              <span className={`text-xs font-mono font-semibold shrink-0 ${colorClass}`}>
-                {isUp ? "+" : "-"}{project.delta}%
-              </span>
+          <div key={project.id} className="flex items-center justify-between gap-1">
+            <div className="min-w-0">
+              <p className="text-xs text-foreground truncate leading-tight">{project.name}</p>
+              <div className="h-0.5 bg-secondary/40 rounded-full mt-0.5 overflow-hidden">
+                <div
+                  className={`h-full ${isUp ? "bg-success" : "bg-destructive"} rounded-full`}
+                  style={{ width: `${Math.min(project.delta * 4, 100)}%` }}
+                />
+              </div>
             </div>
-            <div className="h-1 bg-secondary/50 rounded-full overflow-hidden">
-              <div
-                className={`h-full ${barClass} transition-all duration-300`}
-                style={{ width: `${Math.min(project.delta * 4, 100)}%` }}
-              />
-            </div>
+            <span className={`text-xs font-mono font-semibold shrink-0 ${colorClass}`}>
+              {isUp ? "+" : "-"}{project.delta}%
+            </span>
           </div>
         ))}
       </div>
@@ -78,35 +77,37 @@ export function TrendsSection() {
   ]
 
   return (
-    <div className="glass-card rounded-lg p-4 flex flex-col overflow-y-auto h-full">
-      <h2 className="text-sm font-medium text-foreground mb-0.5">Uptrends / Downtrends</h2>
-      <p className="text-xs text-muted-foreground mb-4">Actual production vs. last approved baselines</p>
+    <div className="glass-card rounded-lg px-4 py-3 flex flex-col h-full overflow-y-auto">
+      <div className="mb-3">
+        <h2 className="text-sm font-semibold text-foreground leading-tight">Uptrends / Downtrends</h2>
+        <p className="text-[10px] text-muted-foreground leading-tight mt-0.5">Actual production vs. last approved baselines</p>
+      </div>
 
-      <div className="flex-1 flex flex-col gap-5 overflow-y-auto">
+      <div className="flex flex-col justify-between flex-1 gap-4">
         {/* Schedule Segment */}
         <div>
-          <div className="flex items-center gap-2 mb-3">
-            <div className="h-px flex-1 bg-border/40" />
-            <span className="text-xs font-semibold uppercase tracking-widest text-muted-foreground px-1">Schedule</span>
-            <div className="h-px flex-1 bg-border/40" />
+          <div className="flex items-center gap-2 mb-2">
+            <div className="h-px flex-1 bg-border/30" />
+            <span className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">Schedule</span>
+            <div className="h-px flex-1 bg-border/30" />
           </div>
-          <div className="flex gap-4">
+          <div className="flex gap-3">
             <TrendColumn projects={scheduleUptrends} direction="up" />
-            <div className="w-px bg-border/30 shrink-0" />
+            <div className="w-px bg-border/20 shrink-0" />
             <TrendColumn projects={scheduleDowntrends} direction="down" />
           </div>
         </div>
 
         {/* Costs Segment */}
         <div>
-          <div className="flex items-center gap-2 mb-3">
-            <div className="h-px flex-1 bg-border/40" />
-            <span className="text-xs font-semibold uppercase tracking-widest text-muted-foreground px-1">Costs</span>
-            <div className="h-px flex-1 bg-border/40" />
+          <div className="flex items-center gap-2 mb-2">
+            <div className="h-px flex-1 bg-border/30" />
+            <span className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">Costs</span>
+            <div className="h-px flex-1 bg-border/30" />
           </div>
-          <div className="flex gap-4">
+          <div className="flex gap-3">
             <TrendColumn projects={costUptrends} direction="up" />
-            <div className="w-px bg-border/30 shrink-0" />
+            <div className="w-px bg-border/20 shrink-0" />
             <TrendColumn projects={costDowntrends} direction="down" />
           </div>
         </div>

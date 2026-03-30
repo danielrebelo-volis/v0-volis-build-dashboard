@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { DashboardHeader } from '@/components/dashboard-header'
 import { ArrowLeft, Download, TrendingUp } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -27,6 +27,20 @@ type EconRow = {
   weeklyCosts: { week: string; labour: number; materials: number; subcontracted: number }[]
 }
 
+// Shared demo weekly cost data (same for all rows — prototype)
+const DEMO_WEEKLY_COSTS = [
+  { week: 'W6', labour: 0.18, materials: 0.14, subcontracted: 0.07 },
+  { week: 'W7', labour: 0.20, materials: 0.13, subcontracted: 0.06 },
+  { week: 'W8', labour: 0.17, materials: 0.15, subcontracted: 0.08 },
+  { week: 'W9', labour: 0.19, materials: 0.12, subcontracted: 0.07 },
+]
+
+const COST_NATURE_COLORS = [
+  { key: 'labour',        label: 'Labour',        color: '#a0a0a0' },
+  { key: 'materials',     label: 'Materials',     color: '#00c8ff' },
+  { key: 'subcontracted', label: 'Subcontracted', color: '#ff6b6b' },
+]
+
 function EconomicTableRow({
   row,
   economicValue,
@@ -38,17 +52,40 @@ function EconomicTableRow({
   icColor: (ic: number) => string
   chartColors: ReturnType<typeof useChartColors>
 }) {
-  const [popoverOpen, setPopoverOpen] = useState(false)
+  const [open, setOpen] = useState(false)
+  const ref = useRef<HTMLTableCellElement>(null)
+
+  // Close on outside click
+  useEffect(() => {
+    if (!open) return
+    function handler(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false)
+    }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [open])
+
+  // Max value across all weeks for Y scale
+  const maxVal = Math.max(...DEMO_WEEKLY_COSTS.flatMap(w => [w.labour, w.materials, w.subcontracted]))
+  const chartH = 100
+  const chartW = 264
+  const barGroupW = chartW / DEMO_WEEKLY_COSTS.length
+  const barW = 10
+  const barGap = 2
+  const paddingLeft = 36
+  const paddingBottom = 20
+  const innerH = chartH - paddingBottom
+  const innerW = chartW - paddingLeft
 
   return (
-    <tr className="border-b border-border/30 hover:bg-secondary/20 relative">
+    <tr className="border-b border-border/30 hover:bg-secondary/20">
       <td className="py-3 text-foreground font-medium">{row.activity}</td>
       <td className="py-3 text-right text-foreground">€{economicValue.toFixed(1)}M</td>
       <td className="py-3 text-right">
         <span className={`text-xs px-2 py-0.5 rounded-full ${
-          row.status === 'Finished'    ? 'bg-[#16a34a]/15 text-[#16a34a]' :
-          row.status === 'Ongoing'     ? 'bg-accent/20 text-accent' :
-                                         'bg-muted/30 text-muted-foreground'
+          row.status === 'Finished' ? 'bg-[#16a34a]/15 text-[#16a34a]' :
+          row.status === 'Ongoing'  ? 'bg-accent/20 text-accent' :
+                                      'bg-muted/30 text-muted-foreground'
         }`}>{row.status}</span>
       </td>
       <td className="py-3 text-right text-foreground">{row.completeness}%</td>
@@ -56,45 +93,73 @@ function EconomicTableRow({
       <td className={`py-3 text-right font-semibold ${icColor(row.commercialIC)}`}>{row.commercialIC}%</td>
       <td className={`py-3 text-right font-semibold ${icColor(row.projectedIC)}`}>{row.projectedIC}%</td>
       <td className={`py-3 text-right font-semibold ${icColor(row.currentIC)}`}>{row.currentIC}%</td>
-      {/* Three-dot popover */}
-      <td className="py-3 text-right relative">
+
+      {/* Three-dot — click to toggle */}
+      <td ref={ref} className="py-3 text-right relative">
         <button
-          onMouseEnter={() => setPopoverOpen(true)}
-          onMouseLeave={() => setPopoverOpen(false)}
-          className="p-1 rounded hover:bg-secondary/50 text-muted-foreground transition-colors"
-          aria-label="View weekly costs"
+          onClick={() => setOpen(v => !v)}
+          className={`p-1 rounded transition-colors ${open ? 'bg-secondary/60 text-foreground' : 'hover:bg-secondary/40 text-muted-foreground'}`}
+          aria-label="Weekly cost breakdown"
         >
           <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
             <circle cx="4" cy="10" r="1.5" /><circle cx="10" cy="10" r="1.5" /><circle cx="16" cy="10" r="1.5" />
           </svg>
         </button>
-        {popoverOpen && (
-          <div
-            onMouseEnter={() => setPopoverOpen(true)}
-            onMouseLeave={() => setPopoverOpen(false)}
-            className="absolute right-0 bottom-full mb-2 z-50 w-72 bg-background border border-border/50 rounded-lg shadow-xl p-3"
-          >
-            <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-2">
+
+        {open && (
+          <div className="absolute right-0 bottom-full mb-2 z-50 bg-background border border-border/50 rounded-lg shadow-xl p-4"
+               style={{ width: chartW + paddingLeft + 8 }}>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-3">
               Weekly Costs by Nature — Last 4 Weeks
             </p>
-            <ResponsiveContainer width="100%" height={120}>
-              <BarChart data={row.weeklyCosts} barSize={8} barGap={2}>
-                <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} />
-                <XAxis dataKey="week" stroke={chartColors.axis} tick={{ fontSize: 10 }} />
-                <YAxis stroke={chartColors.axis} tick={{ fontSize: 10 }} tickFormatter={(v) => `${v}M`} />
-                <Tooltip
-                  contentStyle={{ backgroundColor: chartColors.tooltipBg, border: chartColors.tooltipBorder, fontSize: 11 }}
-                  formatter={(v: number) => `€${v.toFixed(2)}M`}
-                />
-                <Bar dataKey="labour"       name="Labour"       fill="#999999" />
-                <Bar dataKey="materials"    name="Materials"    fill="#00c8ff" />
-                <Bar dataKey="subcontracted" name="Subcontracted" fill="#ff6b6b" />
-              </BarChart>
-            </ResponsiveContainer>
+
+            {/* SVG bar chart — fixed size, no ResizeObserver issues */}
+            <svg width={chartW} height={chartH} className="overflow-visible">
+              {/* Y grid lines */}
+              {[0, 0.25, 0.5, 0.75, 1].map(t => {
+                const y = innerH - t * innerH
+                return (
+                  <g key={t}>
+                    <line x1={paddingLeft} y1={y} x2={chartW} y2={y}
+                      stroke={chartColors.grid} strokeWidth={0.5} strokeDasharray="3 3" />
+                    <text x={paddingLeft - 4} y={y + 3} textAnchor="end"
+                      fontSize={8} fill={chartColors.axis}>
+                      {(t * maxVal).toFixed(2)}
+                    </text>
+                  </g>
+                )
+              })}
+
+              {/* Bars */}
+              {DEMO_WEEKLY_COSTS.map((week, wi) => {
+                const groupX = paddingLeft + wi * (innerW / DEMO_WEEKLY_COSTS.length) + (innerW / DEMO_WEEKLY_COSTS.length - (barW + barGap) * 3) / 2
+                return (
+                  <g key={week.week}>
+                    {COST_NATURE_COLORS.map((nat, ni) => {
+                      const val = week[nat.key as keyof typeof week] as number
+                      const bh  = (val / maxVal) * innerH
+                      const bx  = groupX + ni * (barW + barGap)
+                      const by  = innerH - bh
+                      return (
+                        <rect key={nat.key} x={bx} y={by} width={barW} height={bh}
+                          fill={nat.color} rx={2} opacity={0.9} />
+                      )
+                    })}
+                    {/* X label */}
+                    <text x={groupX + ((barW + barGap) * 3) / 2 - barGap} y={innerH + 14}
+                      textAnchor="middle" fontSize={9} fill={chartColors.axis}>
+                      {week.week}
+                    </text>
+                  </g>
+                )
+              })}
+            </svg>
+
+            {/* Legend */}
             <div className="flex items-center gap-3 mt-2">
-              {[{ label:'Labour', color:'#999999' },{ label:'Materials', color:'#00c8ff' },{ label:'Subcontracted', color:'#ff6b6b' }].map(l => (
-                <div key={l.label} className="flex items-center gap-1">
-                  <div className="w-2 h-2 rounded-sm" style={{ backgroundColor: l.color }} />
+              {COST_NATURE_COLORS.map(l => (
+                <div key={l.key} className="flex items-center gap-1">
+                  <div className="w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: l.color }} />
                   <span className="text-[10px] text-muted-foreground">{l.label}</span>
                 </div>
               ))}

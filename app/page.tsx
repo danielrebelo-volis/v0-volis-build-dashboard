@@ -6,33 +6,30 @@ import { EVMMatrix } from "@/components/evm-matrix"
 import { MetricsSidebar } from "@/components/metrics-sidebar"
 import { ProjectList } from "@/components/project-list"
 import { TrendsSection } from "@/components/trends-section"
-import { Filter, Download, RefreshCw, GitCompare, Check } from "lucide-react"
+import { Download, RefreshCw, GitCompare, Globe, Map, ChevronDown, Check } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
-type FilterType = 'typology' | 'region' | 'week' | null
-type FilterValue = string | null
+const REGIONS = ["Europa", "Africa", "Asia", "LatAm"] as const
+type Region = typeof REGIONS[number]
 
 export default function Dashboard() {
-  const [filterType, setFilterType] = useState<FilterType>(null)
-  const [filterValue, setFilterValue] = useState<FilterValue>(null)
+  const [status, setStatus] = useState<"ongoing" | "finished">("ongoing")
+  const [selectedWeek, setSelectedWeek] = useState<number | null>(null)
+  const [selectedRegion, setSelectedRegion] = useState<Region | null>(null)
+  const [mapView, setMapView] = useState(false)
+  const [filterType, setFilterType] = useState<'typology' | null>(null)
+  const [filterValue, setFilterValue] = useState<string | null>(null)
 
-  const handleFilterSelect = (type: FilterType, value: string) => {
+  const handleFilterSelect = (type: 'typology' | null, value: string | null) => {
     setFilterType(type)
     setFilterValue(value)
-  }
-
-  const clearFilters = () => {
-    setFilterType(null)
-    setFilterValue(null)
   }
 
   return (
@@ -87,62 +84,74 @@ export default function Dashboard() {
                 </div>
               </div>
 
-              {/* Filters Button - Top Right */}
-              <div className="absolute top-4 right-4 z-10">
+              {/* Controls — top right */}
+              <div className="absolute top-3 right-3 z-10 flex items-center gap-2">
+
+                {/* Status toggle */}
+                <div className="flex items-center rounded-md border border-border/40 bg-background/60 backdrop-blur p-0.5 text-xs font-medium">
+                  {(["ongoing", "finished"] as const).map((s) => (
+                    <button
+                      key={s}
+                      onClick={() => setStatus(s)}
+                      className={`px-2.5 py-1 rounded capitalize transition-all ${status === s ? "bg-foreground text-background" : "text-muted-foreground hover:text-foreground"}`}
+                    >
+                      {s}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Week selector */}
+                <div className="flex items-center rounded-md border border-border/40 bg-background/60 backdrop-blur p-0.5 text-xs font-medium">
+                  <span className="px-2 text-muted-foreground">W</span>
+                  {[1, 2, 3, 4].map((w) => (
+                    <button
+                      key={w}
+                      onClick={() => setSelectedWeek(selectedWeek === w ? null : w)}
+                      className={`w-6 h-6 rounded flex items-center justify-center transition-all ${selectedWeek === w ? "bg-foreground text-background" : "text-muted-foreground hover:text-foreground"}`}
+                    >
+                      {w}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Region dropdown */}
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button size="sm" className="gap-2 bg-foreground text-background hover:bg-foreground/90">
-                      <Filter className="w-4 h-4" />
-                      <span className="hidden sm:inline">Filters</span>
-                    </Button>
+                    <button className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-md border border-border/40 bg-background/60 backdrop-blur text-xs font-medium text-muted-foreground hover:text-foreground transition-all">
+                      <span>{selectedRegion ?? "Regioes"}</span>
+                      <ChevronDown className="w-3 h-3" />
+                    </button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-56">
-                    <DropdownMenuLabel>Filter by Region</DropdownMenuLabel>
-                    <DropdownMenuItem onClick={() => handleFilterSelect('region', 'north')} className="flex items-center justify-between">
-                      <span>North</span>
-                      {filterType === 'region' && filterValue === 'north' && <Check className="w-4 h-4 text-accent" />}
+                  <DropdownMenuContent align="end" className="w-36">
+                    <DropdownMenuItem onClick={() => setSelectedRegion(null)} className="flex items-center justify-between text-xs">
+                      <span>Todas</span>
+                      {selectedRegion === null && <Check className="w-3 h-3 text-accent" />}
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => handleFilterSelect('region', 'south')} className="flex items-center justify-between">
-                      <span>South</span>
-                      {filterType === 'region' && filterValue === 'south' && <Check className="w-4 h-4 text-accent" />}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => handleFilterSelect('region', 'east')} className="flex items-center justify-between">
-                      <span>East</span>
-                      {filterType === 'region' && filterValue === 'east' && <Check className="w-4 h-4 text-accent" />}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => handleFilterSelect('region', 'west')} className="flex items-center justify-between">
-                      <span>West</span>
-                      {filterType === 'region' && filterValue === 'west' && <Check className="w-4 h-4 text-accent" />}
-                    </DropdownMenuItem>
-
-                    <DropdownMenuSeparator />
-                    <DropdownMenuLabel>Filter by Week</DropdownMenuLabel>
-                    <DropdownMenuItem onClick={() => handleFilterSelect('week', 'week-1')} className="flex items-center justify-between">
-                      <span>Week 1</span>
-                      {filterType === 'week' && filterValue === 'week-1' && <Check className="w-4 h-4 text-accent" />}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => handleFilterSelect('week', 'week-2')} className="flex items-center justify-between">
-                      <span>Week 2</span>
-                      {filterType === 'week' && filterValue === 'week-2' && <Check className="w-4 h-4 text-accent" />}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => handleFilterSelect('week', 'week-3')} className="flex items-center justify-between">
-                      <span>Week 3</span>
-                      {filterType === 'week' && filterValue === 'week-3' && <Check className="w-4 h-4 text-accent" />}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => handleFilterSelect('week', 'week-4')} className="flex items-center justify-between">
-                      <span>Week 4</span>
-                      {filterType === 'week' && filterValue === 'week-4' && <Check className="w-4 h-4 text-accent" />}
-                    </DropdownMenuItem>
-
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={clearFilters}>
-                      Clear Filters
-                    </DropdownMenuItem>
+                    {REGIONS.map((r) => (
+                      <DropdownMenuItem key={r} onClick={() => setSelectedRegion(r)} className="flex items-center justify-between text-xs">
+                        <span>{r}</span>
+                        {selectedRegion === r && <Check className="w-3 h-3 text-accent" />}
+                      </DropdownMenuItem>
+                    ))}
                   </DropdownMenuContent>
                 </DropdownMenu>
+
+                {/* Map view toggle */}
+                <button
+                  onClick={() => setMapView(!mapView)}
+                  className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-md border text-xs font-medium transition-all ${mapView ? "border-accent bg-accent/10 text-accent" : "border-border/40 bg-background/60 backdrop-blur text-muted-foreground hover:text-foreground"}`}
+                >
+                  {mapView ? <Globe className="w-3.5 h-3.5" /> : <Map className="w-3.5 h-3.5" />}
+                  <span className="hidden sm:inline">{mapView ? "Mapa" : "Matriz"}</span>
+                </button>
               </div>
 
-              <EVMMatrix filterType={filterType} filterValue={filterValue} />
+              <EVMMatrix
+                selectedStatus={status}
+                selectedWeek={selectedWeek}
+                selectedRegion={selectedRegion}
+                selectedCategory={filterValue as any ?? "all"}
+              />
             </div>
 
             {/* Typology Legend Card - Below Matrix */}

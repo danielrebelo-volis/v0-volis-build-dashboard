@@ -44,7 +44,7 @@ function EconomicTableRow({
     <tr className="border-b border-border/30 hover:bg-secondary/20 relative">
       <td className="py-3 text-foreground font-medium">{row.activity}</td>
       <td className="py-3 text-right text-foreground">€{economicValue.toFixed(1)}M</td>
-      <td className="py-3">
+      <td className="py-3 text-right">
         <span className={`text-xs px-2 py-0.5 rounded-full ${
           row.status === 'Finished'    ? 'bg-[#16a34a]/15 text-[#16a34a]' :
           row.status === 'Ongoing'     ? 'bg-accent/20 text-accent' :
@@ -737,7 +737,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                         <tr key={idx} className="border-b border-border/30 hover:bg-secondary/20">
                           <td className="py-3 text-foreground font-medium">{activity.name}</td>
                           <td className="py-3 text-right text-foreground">€{activity.value.toFixed(1)}M</td>
-                          <td className="py-3">
+                          <td className="py-3 text-right">
                             <span className={`text-xs px-2 py-0.5 rounded-full ${
                               activity.status === 'Finished'    ? 'bg-[#16a34a]/15 text-[#16a34a]' :
                               activity.status === 'Ongoing'     ? 'bg-accent/20 text-accent' :
@@ -746,7 +746,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                               {activity.status}
                             </span>
                           </td>
-                          <td className="py-3 text-muted-foreground text-xs">{activity.metric}</td>
+                          <td className="py-3 text-right text-muted-foreground text-xs">{activity.metric}</td>
                           <td className="py-3 text-right text-foreground">{activity.total_planned_qty.toLocaleString()}</td>
                           <td className="py-3 text-right text-foreground">{activity.executed_qty.toLocaleString()}</td>
                           <td className="py-3 text-right text-muted-foreground">{plannedPct}%</td>
@@ -820,8 +820,8 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                 <p className="text-xs text-muted-foreground mb-2">Required Weekly Advance</p>
                 <p className="text-2xl font-bold text-foreground">2.0%</p>
               </div>
-              <div className="glass-card rounded-lg p-3 border border-border/50">
-                <p className="text-xs text-muted-foreground mb-2">AI Forecast Deadline</p>
+  <div className="glass-card rounded-lg p-3 border border-border/50">
+                  <p className="text-xs text-muted-foreground mb-2">Forecast Deadline</p>
                 <p className="text-2xl font-bold text-success">January 15, 2026</p>
               </div>
             </div>
@@ -882,7 +882,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                         <tr key={idx} className="border-b border-border/30 hover:bg-secondary/20">
                           <td className="py-3 text-foreground font-medium">{activity.name}</td>
                           <td className="py-3 text-right text-foreground">€{activity.value.toFixed(1)}M</td>
-                          <td className="py-3">
+                          <td className="py-3 text-right">
                             <span className={`text-xs px-2 py-0.5 rounded-full ${
                               activity.status === 'Finished'    ? 'bg-[#16a34a]/15 text-[#16a34a]' :
                               activity.status === 'Ongoing'     ? 'bg-accent/20 text-accent' :
@@ -891,7 +891,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                               {activity.status}
                             </span>
                           </td>
-                          <td className="py-3 text-muted-foreground text-xs">{activity.metric}</td>
+                          <td className="py-3 text-right text-muted-foreground text-xs">{activity.metric}</td>
                           <td className="py-3 text-right text-foreground">{activity.total_planned_qty.toLocaleString()}</td>
                           <td className="py-3 text-right text-foreground">{activity.executed_qty.toLocaleString()}</td>
                           <td className="py-3 text-right text-muted-foreground">{plannedPct}%</td>

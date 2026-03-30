@@ -38,24 +38,18 @@ export function ProjectKPISection({
         <div className="flex items-center gap-1 text-sm">
           <p className="text-2xl font-bold text-foreground">{location}</p>
         </div>
-        <div className="mt-3 pt-3 border-t border-border/30">
-          <p className="text-xs text-muted-foreground">Part of €2.5B portfolio</p>
-        </div>
       </div>
 
-      {/* AI Forecasted End Date */}
+      {/* Forecasted End Date */}
       <div className="glass-card rounded-lg p-4 border border-border/50">
         <div className="flex items-start justify-between mb-3">
           <div>
-            <p className="text-xs text-muted-foreground uppercase tracking-wide">AI Forecast</p>
+            <p className="text-xs text-muted-foreground uppercase tracking-wide">Forecast</p>
             <p className="text-sm font-semibold text-foreground mt-0.5">Completion Date</p>
           </div>
           <Calendar className="w-4 h-4 text-cyan" />
         </div>
         <div className="text-2xl font-bold text-destructive">{forecastedEndDate}</div>
-        <div className="mt-3 pt-3 border-t border-border/30">
-          <p className="text-xs text-muted-foreground">Based on historical trends & current velocity</p>
-        </div>
       </div>
 
       {/* Deadline Date */}
@@ -68,9 +62,6 @@ export function ProjectKPISection({
           <Calendar className="w-4 h-4 text-warning" />
         </div>
         <div className="text-2xl font-bold text-foreground">{deadlineDate}</div>
-        <div className="mt-3 pt-3 border-t border-border/30">
-          <p className="text-xs text-muted-foreground">Original contract deadline</p>
-        </div>
       </div>
     </div>
   )

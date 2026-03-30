@@ -50,12 +50,10 @@ export default function ProjectDeepDive({ params }: { params: { id: string } }) 
               </Button>
             </Link>
             <div>
+              <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-0.5">Executive Project Report</p>
               <h1 className="text-3xl font-bold text-foreground tracking-tight">
                 {projectData.name}
               </h1>
-              <p className="text-sm text-muted-foreground mt-1">
-                {projectData.location} • Part of {projectData.portfolio} portfolio
-              </p>
             </div>
           </div>
 
@@ -81,44 +79,88 @@ export default function ProjectDeepDive({ params }: { params: { id: string } }) 
           />
         </div>
 
-        {/* Project Info Card */}
-        <div className="mb-8 glass-card rounded-lg p-6">
-          <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-6">Budget & Schedule Variance</h3>
-          <div className="grid grid-cols-3 lg:grid-cols-3 gap-6">
-            {/* Budget Variance */}
+        {/* Economic Overview */}
+        <div className="mb-6 glass-card rounded-lg p-6">
+          <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-5">Economic Overview</h3>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+            {/* Project Budget */}
             <div>
-              <div className="flex items-center gap-2 mb-2">
-                <TrendingDown className="w-4 h-4 text-warning" />
-                <p className="text-xs text-muted-foreground">Budget Variance</p>
+              <div className="flex items-center gap-2 mb-1.5">
+                <Euro className="w-3.5 h-3.5 text-muted-foreground" />
+                <p className="text-xs text-muted-foreground">Project Budget</p>
               </div>
-              <div className="flex items-baseline gap-2">
-                <p className="text-2xl font-bold text-warning">€1.67M</p>
-                <p className="text-xs text-muted-foreground">over commercial budget</p>
-              </div>
+              <p className="text-2xl font-bold text-foreground">€24.5M</p>
             </div>
-
-            {/* Industrial Cost */}
+            {/* Commercial IC */}
             <div>
-              <div className="flex items-center gap-2 mb-2">
-                <Euro className="w-4 h-4 text-warning" />
-                <p className="text-xs text-muted-foreground">Industrial Cost</p>
+              <div className="flex items-center gap-2 mb-1.5">
+                <TrendingDown className="w-3.5 h-3.5 text-muted-foreground" />
+                <p className="text-xs text-muted-foreground">Commercial IC</p>
+              </div>
+              <p className="text-2xl font-bold text-foreground">80.0%</p>
+            </div>
+            {/* Projected IC */}
+            <div>
+              <div className="flex items-center gap-2 mb-1.5">
+                <TrendingDown className="w-3.5 h-3.5 text-warning" />
+                <p className="text-xs text-muted-foreground">Projected IC</p>
+              </div>
+              <p className="text-2xl font-bold text-warning">92.4%</p>
+            </div>
+            {/* Current IC */}
+            <div>
+              <div className="flex items-center gap-2 mb-1.5">
+                <Euro className="w-3.5 h-3.5 text-warning" />
+                <p className="text-xs text-muted-foreground">Current IC</p>
               </div>
               <div className="flex items-baseline gap-2">
                 <p className="text-2xl font-bold text-warning">90.0%</p>
-                <p className="text-xs text-muted-foreground">vs commercial CI (80.0%)</p>
               </div>
+              <p className="text-[11px] text-muted-foreground mt-0.5">
+                Analytical IC: <span className="font-medium">84.2%</span>
+              </p>
             </div>
+          </div>
+        </div>
 
+        {/* Progress Overview */}
+        <div className="mb-8 glass-card rounded-lg p-6">
+          <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-5">Progress Overview</h3>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+            {/* Planned Completion */}
+            <div>
+              <div className="flex items-center gap-2 mb-1.5">
+                <Calendar className="w-3.5 h-3.5 text-muted-foreground" />
+                <p className="text-xs text-muted-foreground">Planned Completion</p>
+              </div>
+              <p className="text-2xl font-bold text-foreground">72.0%</p>
+            </div>
+            {/* Current Completion */}
+            <div>
+              <div className="flex items-center gap-2 mb-1.5">
+                <Calendar className="w-3.5 h-3.5 text-success" />
+                <p className="text-xs text-muted-foreground">Current Completion</p>
+              </div>
+              <p className="text-2xl font-bold text-success">68.0%</p>
+            </div>
+            {/* Accumulated Production */}
+            <div>
+              <div className="flex items-center gap-2 mb-1.5">
+                <Euro className="w-3.5 h-3.5 text-muted-foreground" />
+                <p className="text-xs text-muted-foreground">Accumulated Production</p>
+              </div>
+              <p className="text-2xl font-bold text-foreground">€16.66M</p>
+            </div>
             {/* Schedule Variance */}
             <div>
-              <div className="flex items-center gap-2 mb-2">
-                <Calendar className="w-4 h-4 text-success" />
+              <div className="flex items-center gap-2 mb-1.5">
+                <Calendar className="w-3.5 h-3.5 text-success" />
                 <p className="text-xs text-muted-foreground">Schedule Variance</p>
               </div>
               <div className="flex items-baseline gap-2">
                 <p className="text-2xl font-bold text-success">+35 days</p>
-                <p className="text-xs text-muted-foreground">ahead of schedule</p>
               </div>
+              <p className="text-[11px] text-muted-foreground mt-0.5">ahead of schedule</p>
             </div>
           </div>
         </div>
@@ -144,11 +186,11 @@ export default function ProjectDeepDive({ params }: { params: { id: string } }) 
 
         {/* Other Indicators Section */}
         <OtherIndicators
-          weeklyProgress={2.4}
-          priorWeekProgress={2.2}
+          avgWeeklyProgress={2.4}
           requiredWeeklyProgress={2.0}
-          earnedValue={16660000}
-          totalBudget={24500000}
+          avgWeeklyCosts={0.38}
+          requiredWeeklyCosts={0.42}
+          dataQuality={87}
         />
 
         {/* Details & Status */}

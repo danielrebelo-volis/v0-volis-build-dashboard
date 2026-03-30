@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
+import { ComposableMap, Geographies, Geography, Marker } from "react-simple-maps"
 import { useChartColors } from '@/hooks/use-chart-colors'
 
 interface Project {
@@ -17,6 +18,7 @@ interface Project {
   region: "Europa" | "Africa" | "Asia" | "LatAm"
   status: "ongoing" | "finished"
   week: "week-1" | "week-2" | "week-3" | "week-4"
+  coordinates: [number, number] // [lng, lat]
   weekData: {
     "week-1": { delay: number; industrialCost: number }
     "week-2": { delay: number; industrialCost: number }
@@ -26,23 +28,23 @@ interface Project {
 }
 
 const projects: Project[] = [
-  { id: "PRJ-001", name: "Metro Tower", delay: -35, industrialCost: 107, analyticalIndustrialCost: 98, budget: "€24.5M", budgetValue: 24.5, trend: "up", category: "Civil Construction", region: "Europa", status: "ongoing", week: "week-1", weekData: { "week-1": { delay: -35, industrialCost: 107 }, "week-2": { delay: -30, industrialCost: 104 }, "week-3": { delay: -25, industrialCost: 101 }, "week-4": { delay: -20, industrialCost: 98 } } },
-  { id: "PRJ-011", name: "Urban Renewal Center", delay: -5, industrialCost: 103, analyticalIndustrialCost: 95, budget: "€67.3M", budgetValue: 67.3, trend: "up", category: "Road Infrastructure", region: "Europa", status: "ongoing", week: "week-2", weekData: { "week-1": { delay: -15, industrialCost: 105 }, "week-2": { delay: -20, industrialCost: 108 }, "week-3": { delay: -25, industrialCost: 110 }, "week-4": { delay: -30, industrialCost: 112 } } },
-  { id: "PRJ-015", name: "Airport Runway", delay: -22, industrialCost: 105, analyticalIndustrialCost: 97, budget: "€234.5M", budgetValue: 234.5, trend: "up", category: "Airport Infrastructure", region: "Africa", status: "ongoing", week: "week-1", weekData: { "week-1": { delay: -25, industrialCost: 113 }, "week-2": { delay: -28, industrialCost: 115 }, "week-3": { delay: -30, industrialCost: 116 }, "week-4": { delay: -35, industrialCost: 118 } } },
-  { id: "PRJ-020", name: "Solar Farm", delay: -40, industrialCost: 101, analyticalIndustrialCost: 94, budget: "€145.2M", budgetValue: 145.2, trend: "up", category: "Power (Energy)", region: "Africa", status: "ongoing", week: "week-4", weekData: { "week-1": { delay: -35, industrialCost: 104 }, "week-2": { delay: -38, industrialCost: 105 }, "week-3": { delay: -40, industrialCost: 106 }, "week-4": { delay: -42, industrialCost: 107 } } },
-  { id: "PRJ-003", name: "Skyline Plaza", delay: 32, industrialCost: 104, analyticalIndustrialCost: 96, budget: "€156M", budgetValue: 156, trend: "stable", category: "Civil Construction", region: "Asia", status: "ongoing", week: "week-1", weekData: { "week-1": { delay: 28, industrialCost: 108 }, "week-2": { delay: 31, industrialCost: 109 }, "week-3": { delay: 35, industrialCost: 111 }, "week-4": { delay: 38, industrialCost: 113 } } },
-  { id: "PRJ-012", name: "Rail Network Expansion", delay: 18, industrialCost: 102, analyticalIndustrialCost: 94, budget: "€280M", budgetValue: 280, trend: "down", category: "Railway Infrastructure", region: "Europa", status: "ongoing", week: "week-1", weekData: { "week-1": { delay: 15, industrialCost: 101 }, "week-2": { delay: 18, industrialCost: 102 }, "week-3": { delay: 22, industrialCost: 104 }, "week-4": { delay: 25, industrialCost: 106 } } },
-  { id: "PRJ-013", name: "Dam Construction", delay: 25, industrialCost: 106, analyticalIndustrialCost: 98, budget: "€520M", budgetValue: 520, trend: "stable", category: "Hydraulic Infrastructure", region: "LatAm", status: "ongoing", week: "week-2", weekData: { "week-1": { delay: 20, industrialCost: 109 }, "week-2": { delay: 25, industrialCost: 112 }, "week-3": { delay: 28, industrialCost: 114 }, "week-4": { delay: 32, industrialCost: 115 } } },
-  { id: "PRJ-019", name: "Oil Platform Construction", delay: 40, industrialCost: 99, analyticalIndustrialCost: 91, budget: "€687.2M", budgetValue: 687.2, trend: "stable", category: "Oil&Gas", region: "Africa", status: "ongoing", week: "week-1", weekData: { "week-1": { delay: 32, industrialCost: 105 }, "week-2": { delay: 35, industrialCost: 106 }, "week-3": { delay: 38, industrialCost: 108 }, "week-4": { delay: 40, industrialCost: 109 } } },
-  { id: "PRJ-004", name: "Industrial Park", delay: -30, industrialCost: 86, analyticalIndustrialCost: 79, budget: "€42.8M", budgetValue: 42.8, trend: "up", category: "Mining", region: "LatAm", status: "ongoing", week: "week-3", weekData: { "week-1": { delay: -25, industrialCost: 88 }, "week-2": { delay: -28, industrialCost: 87 }, "week-3": { delay: -30, industrialCost: 86 }, "week-4": { delay: -35, industrialCost: 84 } } },
-  { id: "PRJ-006", name: "Tech Campus", delay: -38, industrialCost: 95, analyticalIndustrialCost: 87, budget: "€210M", budgetValue: 210, trend: "stable", category: "Urban Infrastructure", region: "Asia", status: "ongoing", week: "week-4", weekData: { "week-1": { delay: -35, industrialCost: 97 }, "week-2": { delay: -38, industrialCost: 96 }, "week-3": { delay: -40, industrialCost: 95 }, "week-4": { delay: -42, industrialCost: 93 } } },
-  { id: "PRJ-009", name: "Data Center", delay: -15, industrialCost: 91, analyticalIndustrialCost: 84, budget: "€78.5M", budgetValue: 78.5, trend: "down", category: "Port Infrastructure", region: "Europa", status: "finished", week: "week-4", weekData: { "week-1": { delay: -12, industrialCost: 94 }, "week-2": { delay: -14, industrialCost: 92 }, "week-3": { delay: -16, industrialCost: 91 }, "week-4": { delay: -18, industrialCost: 90 } } },
-  { id: "PRJ-007", name: "Highway 12 Ext", delay: -25, industrialCost: 84, analyticalIndustrialCost: 77, budget: "€340M", budgetValue: 340, trend: "down", category: "Road Infrastructure", region: "Europa", status: "ongoing", week: "week-1", weekData: { "week-1": { delay: -20, industrialCost: 86 }, "week-2": { delay: -23, industrialCost: 85 }, "week-3": { delay: -26, industrialCost: 84 }, "week-4": { delay: -28, industrialCost: 83 } } },
-  { id: "PRJ-002", name: "Harbor Bridge", delay: 20, industrialCost: 89, analyticalIndustrialCost: 82, budget: "€89.2M", budgetValue: 89.2, trend: "down", category: "Port Infrastructure", region: "Europa", status: "ongoing", week: "week-2", weekData: { "week-1": { delay: 18, industrialCost: 87 }, "week-2": { delay: 20, industrialCost: 89 }, "week-3": { delay: 22, industrialCost: 91 }, "week-4": { delay: 25, industrialCost: 93 } } },
-  { id: "PRJ-005", name: "Riverside Homes", delay: 28, industrialCost: 94, analyticalIndustrialCost: 86, budget: "€18.3M", budgetValue: 18.3, trend: "down", category: "Urban Infrastructure", region: "LatAm", status: "finished", week: "week-2", weekData: { "week-1": { delay: 25, industrialCost: 92 }, "week-2": { delay: 28, industrialCost: 94 }, "week-3": { delay: 30, industrialCost: 95 }, "week-4": { delay: 32, industrialCost: 96 } } },
-  { id: "PRJ-008", name: "Green Valley", delay: 38, industrialCost: 88, analyticalIndustrialCost: 81, budget: "€32.1M", budgetValue: 32.1, trend: "up", category: "Hydraulic Infrastructure", region: "Asia", status: "ongoing", week: "week-3", weekData: { "week-1": { delay: 35, industrialCost: 90 }, "week-2": { delay: 37, industrialCost: 89 }, "week-3": { delay: 38, industrialCost: 88 }, "week-4": { delay: 40, industrialCost: 86 } } },
-  { id: "PRJ-016", name: "Terminal Building", delay: 12, industrialCost: 93, analyticalIndustrialCost: 85, budget: "€189.2M", budgetValue: 189.2, trend: "stable", category: "Airport Infrastructure", region: "Asia", status: "ongoing", week: "week-2", weekData: { "week-1": { delay: 10, industrialCost: 91 }, "week-2": { delay: 12, industrialCost: 93 }, "week-3": { delay: 14, industrialCost: 94 }, "week-4": { delay: 16, industrialCost: 95 } } },
-  { id: "PRJ-021", name: "Bridge Rehabilitation", delay: 8, industrialCost: 90, analyticalIndustrialCost: 83, budget: "€67.8M", budgetValue: 67.8, trend: "stable", category: "Other Works", region: "LatAm", status: "finished", week: "week-1", weekData: { "week-1": { delay: 5, industrialCost: 88 }, "week-2": { delay: 8, industrialCost: 90 }, "week-3": { delay: 10, industrialCost: 92 }, "week-4": { delay: 12, industrialCost: 93 } } },
+  { id: "PRJ-001", name: "Metro Tower", delay: -35, industrialCost: 107, analyticalIndustrialCost: 98, budget: "€24.5M", budgetValue: 24.5, trend: "up", category: "Civil Construction", region: "Europa", status: "ongoing", week: "week-1", coordinates: [2.3, 48.9], weekData: { "week-1": { delay: -35, industrialCost: 107 }, "week-2": { delay: -30, industrialCost: 104 }, "week-3": { delay: -25, industrialCost: 101 }, "week-4": { delay: -20, industrialCost: 98 } } },
+  { id: "PRJ-011", name: "Urban Renewal Center", delay: -5, industrialCost: 103, analyticalIndustrialCost: 95, budget: "€67.3M", budgetValue: 67.3, trend: "up", category: "Road Infrastructure", region: "Europa", status: "ongoing", week: "week-2", coordinates: [-3.7, 40.4], weekData: { "week-1": { delay: -15, industrialCost: 105 }, "week-2": { delay: -20, industrialCost: 108 }, "week-3": { delay: -25, industrialCost: 110 }, "week-4": { delay: -30, industrialCost: 112 } } },
+  { id: "PRJ-015", name: "Airport Runway", delay: -22, industrialCost: 105, analyticalIndustrialCost: 97, budget: "€234.5M", budgetValue: 234.5, trend: "up", category: "Airport Infrastructure", region: "Africa", status: "ongoing", week: "week-1", coordinates: [3.4, 6.5], weekData: { "week-1": { delay: -25, industrialCost: 113 }, "week-2": { delay: -28, industrialCost: 115 }, "week-3": { delay: -30, industrialCost: 116 }, "week-4": { delay: -35, industrialCost: 118 } } },
+  { id: "PRJ-020", name: "Solar Farm", delay: -40, industrialCost: 101, analyticalIndustrialCost: 94, budget: "€145.2M", budgetValue: 145.2, trend: "up", category: "Power (Energy)", region: "Africa", status: "ongoing", week: "week-4", coordinates: [28.2, -26.2], weekData: { "week-1": { delay: -35, industrialCost: 104 }, "week-2": { delay: -38, industrialCost: 105 }, "week-3": { delay: -40, industrialCost: 106 }, "week-4": { delay: -42, industrialCost: 107 } } },
+  { id: "PRJ-003", name: "Skyline Plaza", delay: 32, industrialCost: 104, analyticalIndustrialCost: 96, budget: "€156M", budgetValue: 156, trend: "stable", category: "Civil Construction", region: "Asia", status: "ongoing", week: "week-1", coordinates: [121.5, 31.2], weekData: { "week-1": { delay: 28, industrialCost: 108 }, "week-2": { delay: 31, industrialCost: 109 }, "week-3": { delay: 35, industrialCost: 111 }, "week-4": { delay: 38, industrialCost: 113 } } },
+  { id: "PRJ-012", name: "Rail Network Expansion", delay: 18, industrialCost: 102, analyticalIndustrialCost: 94, budget: "€280M", budgetValue: 280, trend: "down", category: "Railway Infrastructure", region: "Europa", status: "ongoing", week: "week-1", coordinates: [13.4, 52.5], weekData: { "week-1": { delay: 15, industrialCost: 101 }, "week-2": { delay: 18, industrialCost: 102 }, "week-3": { delay: 22, industrialCost: 104 }, "week-4": { delay: 25, industrialCost: 106 } } },
+  { id: "PRJ-013", name: "Dam Construction", delay: 25, industrialCost: 106, analyticalIndustrialCost: 98, budget: "€520M", budgetValue: 520, trend: "stable", category: "Hydraulic Infrastructure", region: "LatAm", status: "ongoing", week: "week-2", coordinates: [-46.6, -23.5], weekData: { "week-1": { delay: 20, industrialCost: 109 }, "week-2": { delay: 25, industrialCost: 112 }, "week-3": { delay: 28, industrialCost: 114 }, "week-4": { delay: 32, industrialCost: 115 } } },
+  { id: "PRJ-019", name: "Oil Platform Construction", delay: 40, industrialCost: 99, analyticalIndustrialCost: 91, budget: "€687.2M", budgetValue: 687.2, trend: "stable", category: "Oil&Gas", region: "Africa", status: "ongoing", week: "week-1", coordinates: [7.5, 4.5], weekData: { "week-1": { delay: 32, industrialCost: 105 }, "week-2": { delay: 35, industrialCost: 106 }, "week-3": { delay: 38, industrialCost: 108 }, "week-4": { delay: 40, industrialCost: 109 } } },
+  { id: "PRJ-004", name: "Industrial Park", delay: -30, industrialCost: 86, analyticalIndustrialCost: 79, budget: "€42.8M", budgetValue: 42.8, trend: "up", category: "Mining", region: "LatAm", status: "ongoing", week: "week-3", coordinates: [-68.1, -16.5], weekData: { "week-1": { delay: -25, industrialCost: 88 }, "week-2": { delay: -28, industrialCost: 87 }, "week-3": { delay: -30, industrialCost: 86 }, "week-4": { delay: -35, industrialCost: 84 } } },
+  { id: "PRJ-006", name: "Tech Campus", delay: -38, industrialCost: 95, analyticalIndustrialCost: 87, budget: "€210M", budgetValue: 210, trend: "stable", category: "Urban Infrastructure", region: "Asia", status: "ongoing", week: "week-4", coordinates: [103.8, 1.3], weekData: { "week-1": { delay: -35, industrialCost: 97 }, "week-2": { delay: -38, industrialCost: 96 }, "week-3": { delay: -40, industrialCost: 95 }, "week-4": { delay: -42, industrialCost: 93 } } },
+  { id: "PRJ-009", name: "Data Center", delay: -15, industrialCost: 91, analyticalIndustrialCost: 84, budget: "€78.5M", budgetValue: 78.5, trend: "down", category: "Port Infrastructure", region: "Europa", status: "finished", week: "week-4", coordinates: [-9.1, 38.7], weekData: { "week-1": { delay: -12, industrialCost: 94 }, "week-2": { delay: -14, industrialCost: 92 }, "week-3": { delay: -16, industrialCost: 91 }, "week-4": { delay: -18, industrialCost: 90 } } },
+  { id: "PRJ-007", name: "Highway 12 Ext", delay: -25, industrialCost: 84, analyticalIndustrialCost: 77, budget: "€340M", budgetValue: 340, trend: "down", category: "Road Infrastructure", region: "Europa", status: "ongoing", week: "week-1", coordinates: [-8.6, 41.1], weekData: { "week-1": { delay: -20, industrialCost: 86 }, "week-2": { delay: -23, industrialCost: 85 }, "week-3": { delay: -26, industrialCost: 84 }, "week-4": { delay: -28, industrialCost: 83 } } },
+  { id: "PRJ-002", name: "Harbor Bridge", delay: 20, industrialCost: 89, analyticalIndustrialCost: 82, budget: "€89.2M", budgetValue: 89.2, trend: "down", category: "Port Infrastructure", region: "Europa", status: "ongoing", week: "week-2", coordinates: [4.9, 52.4], weekData: { "week-1": { delay: 18, industrialCost: 87 }, "week-2": { delay: 20, industrialCost: 89 }, "week-3": { delay: 22, industrialCost: 91 }, "week-4": { delay: 25, industrialCost: 93 } } },
+  { id: "PRJ-005", name: "Riverside Homes", delay: 28, industrialCost: 94, analyticalIndustrialCost: 86, budget: "€18.3M", budgetValue: 18.3, trend: "down", category: "Urban Infrastructure", region: "LatAm", status: "finished", week: "week-2", coordinates: [-58.4, -34.6], weekData: { "week-1": { delay: 25, industrialCost: 92 }, "week-2": { delay: 28, industrialCost: 94 }, "week-3": { delay: 30, industrialCost: 95 }, "week-4": { delay: 32, industrialCost: 96 } } },
+  { id: "PRJ-008", name: "Green Valley", delay: 38, industrialCost: 88, analyticalIndustrialCost: 81, budget: "€32.1M", budgetValue: 32.1, trend: "up", category: "Hydraulic Infrastructure", region: "Asia", status: "ongoing", week: "week-3", coordinates: [77.2, 28.6], weekData: { "week-1": { delay: 35, industrialCost: 90 }, "week-2": { delay: 37, industrialCost: 89 }, "week-3": { delay: 38, industrialCost: 88 }, "week-4": { delay: 40, industrialCost: 86 } } },
+  { id: "PRJ-016", name: "Terminal Building", delay: 12, industrialCost: 93, analyticalIndustrialCost: 85, budget: "€189.2M", budgetValue: 189.2, trend: "stable", category: "Airport Infrastructure", region: "Asia", status: "ongoing", week: "week-2", coordinates: [139.7, 35.7], weekData: { "week-1": { delay: 10, industrialCost: 91 }, "week-2": { delay: 12, industrialCost: 93 }, "week-3": { delay: 14, industrialCost: 94 }, "week-4": { delay: 16, industrialCost: 95 } } },
+  { id: "PRJ-021", name: "Bridge Rehabilitation", delay: 8, industrialCost: 90, analyticalIndustrialCost: 83, budget: "€67.8M", budgetValue: 67.8, trend: "stable", category: "Other Works", region: "LatAm", status: "finished", week: "week-1", coordinates: [-70.7, -33.5], weekData: { "week-1": { delay: 5, industrialCost: 88 }, "week-2": { delay: 8, industrialCost: 90 }, "week-3": { delay: 10, industrialCost: 92 }, "week-4": { delay: 12, industrialCost: 93 } } },
 ]
 
 const categoryColors: Record<Project["category"], string> = {
@@ -59,12 +61,14 @@ const categoryColors: Record<Project["category"], string> = {
   "Other Works": "#64748b"
 }
 
-// Y scale: 80–120, reference line at 100
 const Y_MIN = 80
 const Y_MAX = 120
-const Y_REF = 100 // 100% = midpoint
+const Y_REF = 100
+
+const GEO_URL = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json"
 
 interface EVMMatrixProps {
+  view?: "matrix" | "map"
   filterType?: 'typology' | 'region' | 'week' | 'status' | null
   filterValue?: string | null
   selectedStatus?: "ongoing" | "finished"
@@ -74,6 +78,7 @@ interface EVMMatrixProps {
 }
 
 export function EVMMatrix({
+  view = "matrix",
   filterType,
   filterValue,
   selectedStatus = "ongoing",
@@ -98,7 +103,8 @@ export function EVMMatrix({
     .filter(p => selectedRegion ? p.region === selectedRegion : true)
     .filter(p => selectedCategory === "all" ? true : p.category === selectedCategory)
     .map(getProjectData)
-    .filter(p => p.industrialCost >= Y_MIN && p.industrialCost <= Y_MAX)
+
+  const matrixProjects = filteredProjects.filter(p => p.industrialCost >= Y_MIN && p.industrialCost <= Y_MAX)
 
   const mapToPosition = (delay: number, industrialCost: number) => {
     const x = ((delay + 50) / 100) * 100
@@ -113,12 +119,170 @@ export function EVMMatrix({
     return 8 + Math.pow(Math.max(0, Math.min(1, normalized)), 0.5) * 22
   }
 
-  // Reference line Y position: (100 - 80) / (120 - 80) = 50%
   const refLineY = ((Y_REF - Y_MIN) / (Y_MAX - Y_MIN)) * 100
 
+  const HoverTooltip = ({ project, side }: { project: Project; side: "left" | "right" }) => {
+    const color = categoryColors[project.category]
+    return (
+      <div
+        className="absolute z-50 w-52 glass-card rounded-xl p-3 pointer-events-none shadow-xl border border-white/10"
+        style={{
+          top: "50%",
+          transform: "translateY(-50%)",
+          ...(side === "right"
+            ? { left: `calc(${getBubbleSize(project.budgetValue) / 2}px + 10px)` }
+            : { right: `calc(${getBubbleSize(project.budgetValue) / 2}px + 10px)` }),
+        }}
+      >
+        <div className="flex items-center gap-2 mb-3 pb-2 border-b border-white/10">
+          <div className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: color, boxShadow: `0 0 6px ${color}` }} />
+          <div>
+            <div className="font-semibold text-sm text-foreground leading-tight">{project.name}</div>
+            <div className="text-[10px] text-muted-foreground">{project.id} · {project.category}</div>
+          </div>
+        </div>
+        <div className="space-y-2">
+          <div className="flex justify-between items-center">
+            <span className="text-[11px] text-muted-foreground">Adj. Industrial Cost</span>
+            <span className={`text-[12px] font-bold font-mono ${project.industrialCost > 100 ? "text-red-400" : "text-emerald-400"}`}>
+              {project.industrialCost.toFixed(1)}%
+            </span>
+          </div>
+          <div className="flex justify-between items-center">
+            <span className="text-[11px] text-muted-foreground">Analytical IC</span>
+            <span className="text-[12px] font-bold font-mono text-blue-400">
+              {project.analyticalIndustrialCost.toFixed(1)}%
+            </span>
+          </div>
+          <div className="h-px bg-white/8 my-1" />
+          <div className="flex justify-between items-center">
+            <span className="text-[11px] text-muted-foreground">Schedule Delay</span>
+            <span className={`text-[12px] font-bold font-mono ${project.delay < 0 ? "text-emerald-400" : "text-red-400"}`}>
+              {project.delay > 0 ? "+" : ""}{project.delay.toFixed(1)}%
+            </span>
+          </div>
+          <div className="flex justify-between items-center">
+            <span className="text-[11px] text-muted-foreground">Budget</span>
+            <span className="text-[12px] font-semibold font-mono text-foreground">{project.budget}</span>
+          </div>
+          <div className="flex justify-between items-center">
+            <span className="text-[11px] text-muted-foreground">Region</span>
+            <span className="text-[11px] text-muted-foreground/80">{project.region}</span>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // ── WORLD MAP VIEW ──────────────────────────────────────────────
+  if (view === "map") {
+    return (
+      <div className="relative w-full h-full flex flex-col" data-matrix="true">
+        <ComposableMap
+          projectionConfig={{ scale: 147, center: [10, 10] }}
+          style={{ width: "100%", height: "100%" }}
+        >
+          <Geographies geography={GEO_URL}>
+            {({ geographies }) =>
+              geographies.map((geo) => (
+                <Geography
+                  key={geo.rsmKey}
+                  geography={geo}
+                  fill="rgba(255,255,255,0.04)"
+                  stroke="rgba(255,255,255,0.12)"
+                  strokeWidth={0.4}
+                  style={{
+                    default: { outline: "none" },
+                    hover: { outline: "none", fill: "rgba(255,255,255,0.07)" },
+                    pressed: { outline: "none" },
+                  }}
+                />
+              ))
+            }
+          </Geographies>
+
+          {filteredProjects.map((project) => {
+            const isHovered = hoveredProject?.id === project.id
+            const color = categoryColors[project.category]
+            const r = Math.max(4, getBubbleSize(project.budgetValue) * 0.35)
+
+            return (
+              <Marker key={project.id} coordinates={project.coordinates}>
+                {/* Glow */}
+                <circle
+                  r={r + 6}
+                  fill={`${color}25`}
+                  style={{ pointerEvents: "none" }}
+                />
+                {/* Bubble */}
+                <circle
+                  r={isHovered ? r + 2 : r}
+                  fill={color}
+                  fillOpacity={0.85}
+                  stroke={isHovered ? "white" : color}
+                  strokeWidth={isHovered ? 1.5 : 0.5}
+                  style={{ cursor: "pointer", filter: `drop-shadow(0 0 ${isHovered ? 8 : 4}px ${color}80)`, transition: "all 0.2s" }}
+                  onMouseEnter={(e) => {
+                    const rect = (e.target as SVGElement).closest('[data-matrix]')?.getBoundingClientRect()
+                    const x = e.clientX - (rect?.left ?? 0)
+                    const width = rect?.width ?? 800
+                    setHoverSide(x < width / 2 ? "right" : "left")
+                    setHoveredProject(project)
+                  }}
+                  onMouseLeave={() => setHoveredProject(null)}
+                />
+                {/* Label */}
+                {isHovered && (
+                  <text
+                    y={-(r + 8)}
+                    textAnchor="middle"
+                    style={{ fontSize: 9, fill: "white", fontWeight: 600, pointerEvents: "none" }}
+                  >
+                    {project.name}
+                  </text>
+                )}
+              </Marker>
+            )
+          })}
+        </ComposableMap>
+
+        {/* Hover tooltip — rendered as HTML overlay for the map */}
+        {hoveredProject && (
+          <div className="absolute bottom-4 right-4 z-50 pointer-events-none">
+            <div className="w-52 glass-card rounded-xl p-3 shadow-xl border border-white/10">
+              <div className="flex items-center gap-2 mb-3 pb-2 border-b border-white/10">
+                <div className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: categoryColors[hoveredProject.category], boxShadow: `0 0 6px ${categoryColors[hoveredProject.category]}` }} />
+                <div>
+                  <div className="font-semibold text-sm text-foreground leading-tight">{hoveredProject.name}</div>
+                  <div className="text-[10px] text-muted-foreground">{hoveredProject.id} · {hoveredProject.region}</div>
+                </div>
+              </div>
+              <div className="space-y-1.5">
+                <div className="flex justify-between items-center">
+                  <span className="text-[11px] text-muted-foreground">Adj. Industrial Cost</span>
+                  <span className={`text-[12px] font-bold font-mono ${hoveredProject.industrialCost > 100 ? "text-red-400" : "text-emerald-400"}`}>{hoveredProject.industrialCost.toFixed(1)}%</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-[11px] text-muted-foreground">Analytical IC</span>
+                  <span className="text-[12px] font-bold font-mono text-blue-400">{hoveredProject.analyticalIndustrialCost.toFixed(1)}%</span>
+                </div>
+                <div className="h-px bg-white/8" />
+                <div className="flex justify-between items-center">
+                  <span className="text-[11px] text-muted-foreground">Budget</span>
+                  <span className="text-[12px] font-semibold font-mono text-foreground">{hoveredProject.budget}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    )
+  }
+
+  // ── MATRIX VIEW ─────────────────────────────────────────────────
   return (
     <div className="relative w-full h-full flex items-center justify-center" data-matrix="true">
-      <div className="relative w-[calc(100%-80px)] h-[calc(100%-80px)]" suppressHydrationWarning>
+      <div className="relative w-[calc(100%-80px)] h-[calc(100%-60px)]" suppressHydrationWarning>
 
         {/* Background */}
         <div className="absolute inset-0 rounded-lg border border-white/10 bg-gradient-to-br from-background/50 to-background/30 backdrop-blur-sm">
@@ -129,21 +293,13 @@ export function EVMMatrix({
               </pattern>
             </defs>
             <rect width="100" height="100" fill="url(#grid)" />
-            {/* Reference line at 100% (midpoint) */}
             <line x1="0" y1={100 - refLineY} x2="100" y2={100 - refLineY} stroke="#f97316" strokeWidth="0.4" strokeDasharray="2,2" opacity="0.9" />
-            {/* Center vertical line at 0% delay */}
             <line x1="50" y1="0" x2="50" y2="100" stroke="#888888" strokeWidth="0.4" strokeDasharray="2,5" opacity="0.4" />
-            {/* Quadrant shading */}
             <rect x="0" y="0" width="50" height={100 - refLineY} fill="rgba(34,197,94,0.03)" />
             <rect x="50" y="0" width="50" height={100 - refLineY} fill="rgba(255,152,0,0.03)" />
             <rect x="0" y={100 - refLineY} width="50" height={refLineY} fill="rgba(34,197,94,0.02)" />
             <rect x="50" y={100 - refLineY} width="50" height={refLineY} fill="rgba(255,152,0,0.02)" />
           </svg>
-        </div>
-
-        {/* Matrix title — top left inside chart */}
-        <div className="absolute top-3 left-3 z-10 pointer-events-none">
-          <span className="text-[10px] font-semibold text-muted-foreground/70 tracking-widest uppercase">Matriz de Projetos</span>
         </div>
 
         {/* Quadrant Labels */}
@@ -172,7 +328,7 @@ export function EVMMatrix({
         </div>
 
         {/* Data Points */}
-        {filteredProjects.map((project) => {
+        {matrixProjects.map((project) => {
           const pos = mapToPosition(project.delay, project.industrialCost)
           const isHovered = hoveredProject?.id === project.id
           const color = categoryColors[project.category]
@@ -209,7 +365,6 @@ export function EVMMatrix({
                   filter: isHovered ? "blur(8px)" : "blur(4px)",
                 }}
               />
-
               {/* Bubble */}
               <Link href={`/project/${project.id}`}>
                 <div
@@ -224,66 +379,15 @@ export function EVMMatrix({
                 />
               </Link>
 
-              {/* Hover tooltip — opens to the right or left of the bubble */}
-              {isHovered && (
-                <div
-                  className="absolute z-50 w-52 glass-card rounded-xl p-3 pointer-events-none shadow-xl border border-white/10"
-                  style={{
-                    top: "50%",
-                    transform: "translateY(-50%)",
-                    ...(hoverSide === "right"
-                      ? { left: `calc(${size / 2}px + 10px)` }
-                      : { right: `calc(${size / 2}px + 10px)` }),
-                  }}
-                >
-                  {/* Header */}
-                  <div className="flex items-center gap-2 mb-3 pb-2 border-b border-white/10">
-                    <div className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: color, boxShadow: `0 0 6px ${color}` }} />
-                    <div>
-                      <div className="font-semibold text-sm text-foreground leading-tight">{project.name}</div>
-                      <div className="text-[10px] text-muted-foreground">{project.id} · {project.category}</div>
-                    </div>
-                  </div>
-
-                  {/* KPIs */}
-                  <div className="space-y-2">
-                    <div className="flex justify-between items-center">
-                      <span className="text-[11px] text-muted-foreground">Adj. Industrial Cost</span>
-                      <span className={`text-[12px] font-bold font-mono ${project.industrialCost > 100 ? "text-red-400" : "text-emerald-400"}`}>
-                        {project.industrialCost.toFixed(1)}%
-                      </span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-[11px] text-muted-foreground">Analytical IC</span>
-                      <span className="text-[12px] font-bold font-mono text-blue-400">
-                        {project.analyticalIndustrialCost.toFixed(1)}%
-                      </span>
-                    </div>
-                    <div className="h-px bg-white/8 my-1" />
-                    <div className="flex justify-between items-center">
-                      <span className="text-[11px] text-muted-foreground">Schedule Delay</span>
-                      <span className={`text-[12px] font-bold font-mono ${project.delay < 0 ? "text-emerald-400" : "text-red-400"}`}>
-                        {project.delay > 0 ? "+" : ""}{project.delay.toFixed(1)}%
-                      </span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-[11px] text-muted-foreground">Budget</span>
-                      <span className="text-[12px] font-semibold font-mono text-foreground">{project.budget}</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-[11px] text-muted-foreground">Region</span>
-                      <span className="text-[11px] text-muted-foreground/80">{project.region}</span>
-                    </div>
-                  </div>
-                </div>
-              )}
+              {/* Hover tooltip */}
+              {isHovered && <HoverTooltip project={project} side={hoverSide} />}
             </div>
           )
         })}
       </div>
 
       {/* Y-Axis labels */}
-      <div className="absolute left-5 top-1/2 -translate-y-1/2 flex flex-col justify-between h-[calc(100%-80px)]">
+      <div className="absolute left-5 top-1/2 -translate-y-1/2 flex flex-col justify-between h-[calc(100%-60px)]">
         {[120, 115, 110, 105, 100, 95, 90, 85, 80].map(v => (
           <div key={v} className="flex items-center gap-1">
             <span className={`text-[10px] font-mono ${v === 100 ? "text-orange-400 font-bold" : "text-muted-foreground"}`}>{v}%</span>
@@ -297,7 +401,7 @@ export function EVMMatrix({
       </div>
 
       {/* X-Axis */}
-      <div className="absolute bottom-5 left-10 right-10 flex justify-between">
+      <div className="absolute bottom-3 left-10 right-10 flex justify-between">
         <span className="text-[10px] text-muted-foreground font-mono">-50%</span>
         <span className="text-[10px] text-muted-foreground font-mono">-25%</span>
         <span className="text-[10px] text-success font-mono font-semibold">0%</span>

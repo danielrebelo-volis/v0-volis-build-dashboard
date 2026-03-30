@@ -6,7 +6,7 @@ import { EVMMatrix } from "@/components/evm-matrix"
 import { MetricsSidebar } from "@/components/metrics-sidebar"
 import { ProjectList } from "@/components/project-list"
 import { TrendsSection } from "@/components/trends-section"
-import { Download, RefreshCw, GitCompare, Globe, Map, ChevronDown, Check } from "lucide-react"
+import { Download, RefreshCw, GitCompare, Globe, ChevronDown, Check } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import {
@@ -73,85 +73,87 @@ export default function Dashboard() {
 
           {/* EVM Matrix - Central Focus */}
           <div className="col-span-12 lg:col-span-7 flex flex-col gap-4">
-            <div className="glass-card rounded-lg p-4 relative" style={{ height: 'calc(100svh - 14rem)' }}>
-              <div className="absolute top-4 left-4 z-10">
+            <div className="glass-card rounded-lg relative flex flex-col" style={{ height: 'calc(100svh - 14rem)' }}>
+
+              {/* Card header — title + view toggle on the left, filters on the right */}
+              <div className="flex items-center justify-between px-4 pt-3 pb-2 shrink-0 border-b border-border/20">
+                <div className="flex items-center gap-3">
+                  <div>
+                    <span className="text-sm font-semibold text-foreground tracking-tight">Matriz de Projetos</span>
+                  </div>
+                  <button
+                    onClick={() => setMapView(!mapView)}
+                    className="flex items-center gap-1.5 px-2.5 py-1 rounded-md border border-border/40 bg-background/40 text-xs font-medium text-muted-foreground hover:text-foreground hover:border-border/70 transition-all"
+                  >
+                    <Globe className="w-3 h-3" />
+                    <span>{mapView ? "Ver Vista Matriz" : "Ver Mapa Mundial"}</span>
+                  </button>
+                </div>
+
+                {/* Controls */}
                 <div className="flex items-center gap-2">
-                  {filterType && filterValue && (
-                    <span className="ml-2 text-xs bg-accent/20 text-accent px-2 py-1 rounded">
-                      {filterType}: {filterValue}
-                    </span>
-                  )}
-                </div>
-              </div>
-
-              {/* Controls — top right */}
-              <div className="absolute top-3 right-3 z-10 flex items-center gap-2">
-
-                {/* Status toggle */}
-                <div className="flex items-center rounded-md border border-border/40 bg-background/60 backdrop-blur p-0.5 text-xs font-medium">
-                  {(["ongoing", "finished"] as const).map((s) => (
-                    <button
-                      key={s}
-                      onClick={() => setStatus(s)}
-                      className={`px-2.5 py-1 rounded capitalize transition-all ${status === s ? "bg-foreground text-background" : "text-muted-foreground hover:text-foreground"}`}
-                    >
-                      {s}
-                    </button>
-                  ))}
-                </div>
-
-                {/* Week selector */}
-                <div className="flex items-center rounded-md border border-border/40 bg-background/60 backdrop-blur p-0.5 text-xs font-medium">
-                  <span className="px-2 text-muted-foreground">W</span>
-                  {[1, 2, 3, 4].map((w) => (
-                    <button
-                      key={w}
-                      onClick={() => setSelectedWeek(selectedWeek === w ? null : w)}
-                      className={`w-6 h-6 rounded flex items-center justify-center transition-all ${selectedWeek === w ? "bg-foreground text-background" : "text-muted-foreground hover:text-foreground"}`}
-                    >
-                      {w}
-                    </button>
-                  ))}
-                </div>
-
-                {/* Region dropdown */}
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <button className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-md border border-border/40 bg-background/60 backdrop-blur text-xs font-medium text-muted-foreground hover:text-foreground transition-all">
-                      <span>{selectedRegion ?? "Regioes"}</span>
-                      <ChevronDown className="w-3 h-3" />
-                    </button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-36">
-                    <DropdownMenuItem onClick={() => setSelectedRegion(null)} className="flex items-center justify-between text-xs">
-                      <span>Todas</span>
-                      {selectedRegion === null && <Check className="w-3 h-3 text-accent" />}
-                    </DropdownMenuItem>
-                    {REGIONS.map((r) => (
-                      <DropdownMenuItem key={r} onClick={() => setSelectedRegion(r)} className="flex items-center justify-between text-xs">
-                        <span>{r}</span>
-                        {selectedRegion === r && <Check className="w-3 h-3 text-accent" />}
-                      </DropdownMenuItem>
+                  {/* Status toggle */}
+                  <div className="flex items-center rounded-md border border-border/40 bg-background/60 backdrop-blur p-0.5 text-xs font-medium">
+                    {(["ongoing", "finished"] as const).map((s) => (
+                      <button
+                        key={s}
+                        onClick={() => setStatus(s)}
+                        className={`px-2.5 py-1 rounded capitalize transition-all ${status === s ? "bg-foreground text-background" : "text-muted-foreground hover:text-foreground"}`}
+                      >
+                        {s}
+                      </button>
                     ))}
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                  </div>
 
-                {/* Map view toggle */}
-                <button
-                  onClick={() => setMapView(!mapView)}
-                  className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-md border text-xs font-medium transition-all ${mapView ? "border-accent bg-accent/10 text-accent" : "border-border/40 bg-background/60 backdrop-blur text-muted-foreground hover:text-foreground"}`}
-                >
-                  {mapView ? <Globe className="w-3.5 h-3.5" /> : <Map className="w-3.5 h-3.5" />}
-                  <span className="hidden sm:inline">{mapView ? "Mapa" : "Matriz"}</span>
-                </button>
+                  {/* Week selector */}
+                  <div className="flex items-center rounded-md border border-border/40 bg-background/60 backdrop-blur p-0.5 text-xs font-medium">
+                    <span className="px-2 text-muted-foreground">W</span>
+                    {[1, 2, 3, 4].map((w) => (
+                      <button
+                        key={w}
+                        onClick={() => setSelectedWeek(selectedWeek === w ? null : w)}
+                        className={`w-6 h-6 rounded flex items-center justify-center transition-all ${selectedWeek === w ? "bg-foreground text-background" : "text-muted-foreground hover:text-foreground"}`}
+                      >
+                        {w}
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Region dropdown */}
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <button className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-md border border-border/40 bg-background/60 backdrop-blur text-xs font-medium text-muted-foreground hover:text-foreground transition-all">
+                        <span>{selectedRegion ?? "Regioes"}</span>
+                        <ChevronDown className="w-3 h-3" />
+                      </button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-36">
+                      <DropdownMenuItem onClick={() => setSelectedRegion(null)} className="flex items-center justify-between text-xs">
+                        <span>Todas</span>
+                        {selectedRegion === null && <Check className="w-3 h-3 text-accent" />}
+                      </DropdownMenuItem>
+                      {REGIONS.map((r) => (
+                        <DropdownMenuItem key={r} onClick={() => setSelectedRegion(r)} className="flex items-center justify-between text-xs">
+                          <span>{r}</span>
+                          {selectedRegion === r && <Check className="w-3 h-3 text-accent" />}
+                        </DropdownMenuItem>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
               </div>
 
-              <EVMMatrix
-                selectedStatus={status}
-                selectedWeek={selectedWeek}
-                selectedRegion={selectedRegion}
-                selectedCategory={filterValue as any ?? "all"}
-              />
+              {/* Chart area — grows to fill remaining card height */}
+              <div className="flex-1 min-h-0 relative">
+                <EVMMatrix
+                  view={mapView ? "map" : "matrix"}
+                  selectedStatus={status}
+                  selectedWeek={selectedWeek}
+                  selectedRegion={selectedRegion}
+                  selectedCategory={filterValue as any ?? "all"}
+                />
+              </div>
+            
             </div>
 
             {/* Typology Legend Card - Below Matrix */}

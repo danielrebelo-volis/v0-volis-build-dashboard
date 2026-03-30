@@ -76,7 +76,7 @@ export function MetricsSidebar() {
       />
 
       {/* Quick Stats */}
-      <div className="glass-card rounded-lg p-4 mt-4">
+      <div className="glass-card rounded-lg p-4 mt-4" style={{ paddingBottom: '262px' }}>
         <h3 className="text-xs text-muted-foreground uppercase tracking-wider mb-3">Performance Overview</h3>
 
         <div className="space-y-3">

@@ -78,7 +78,7 @@ export function TrendsSection() {
   ]
 
   return (
-    <div className="glass-card rounded-lg p-4 h-full flex flex-col min-h-0 overflow-y-auto">
+    <div className="glass-card rounded-lg p-4 flex flex-col overflow-y-auto" style={{ height: 'calc(100svh - 14rem)' }}>
       <h2 className="text-sm font-medium text-foreground mb-0.5">Uptrends / Downtrends</h2>
       <p className="text-xs text-muted-foreground mb-4">Actual production vs. last approved baselines</p>
 

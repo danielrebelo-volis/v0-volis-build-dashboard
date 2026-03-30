@@ -177,7 +177,7 @@ export function EVMMatrix({
   // ── WORLD MAP VIEW ──────────────────────────────────────────────
   if (view === "map") {
     return (
-      <div className="relative w-full h-full flex flex-col" data-matrix="true">
+      <div className="relative w-full h-full flex flex-col" data-matrix="true" style={{ background: "#e8eef4", borderRadius: "inherit" }}>
         <ComposableMap
           projectionConfig={{ scale: 147, center: [10, 10] }}
           style={{ width: "100%", height: "100%" }}
@@ -188,12 +188,12 @@ export function EVMMatrix({
                 <Geography
                   key={geo.rsmKey}
                   geography={geo}
-                  fill="rgba(255,255,255,0.04)"
-                  stroke="rgba(255,255,255,0.12)"
-                  strokeWidth={0.4}
+                  fill="#d1d5db"
+                  stroke="#9ca3af"
+                  strokeWidth={0.3}
                   style={{
                     default: { outline: "none" },
-                    hover: { outline: "none", fill: "rgba(255,255,255,0.07)" },
+                    hover: { outline: "none", fill: "#b0b7c3" },
                     pressed: { outline: "none" },
                   }}
                 />

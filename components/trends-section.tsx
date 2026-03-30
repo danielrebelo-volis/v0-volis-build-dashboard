@@ -24,9 +24,9 @@ function TrendColumn({ projects, direction }: TrendColumnProps) {
   const maxDelta = Math.max(...projects.map((p) => p.delta))
 
   return (
-    <div className="flex-1 min-w-0">
+    <div className="flex-1 min-w-0 flex flex-col min-h-0">
       {/* Column header */}
-      <div className={`flex items-center gap-1 mb-2 px-2 py-1 rounded-md border ${bgHighlight} ${borderColor}`}>
+      <div className={`flex items-center gap-1 mb-2 px-2 py-1 rounded-md border shrink-0 ${bgHighlight} ${borderColor}`}>
         <Icon className={`w-3 h-3 ${colorClass} shrink-0`} />
         <span className={`text-[9px] font-bold uppercase tracking-widest ${colorClass}`}>{label}</span>
       </div>

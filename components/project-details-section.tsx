@@ -45,68 +45,6 @@ export function ProjectDetailsSection({
           </div>
         </div>
       </div>
-
-      {/* Grid of Metrics */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {/* Budget Status */}
-        <div className="glass-card rounded-lg p-4 border border-border/50">
-          <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center gap-2">
-              <DollarSign className="w-4 h-4 text-cyan" />
-              <span className="text-xs text-muted-foreground uppercase tracking-wide">Production Status</span>
-            </div>
-            <span className={`text-xs font-medium ${percentageSpent > 95 ? 'text-orange-400' : 'text-green-400'}`}>
-              {percentageSpent.toFixed(1)}%
-            </span>
-          </div>
-          <div className="space-y-2">
-            <div className="h-1.5 bg-secondary rounded-full overflow-hidden">
-              <div
-                className="h-full bg-cyan"
-                style={{ width: `${percentageSpent}%` }}
-              />
-            </div>
-            <div className="flex justify-between text-xs text-muted-foreground">
-              <span>€{(projectSpent / 1000000).toFixed(1)}M spent</span>
-              <span>€{(budgetRemaining / 1000000).toFixed(1)}M remaining</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Task Completion */}
-        <div className="glass-card rounded-lg p-4 border border-border/50">
-          <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-success" />
-              <span className="text-xs text-muted-foreground uppercase tracking-wide">Tasks Complete</span>
-            </div>
-            <span className="text-xs font-medium text-green-400">{taskCompletion}%</span>
-          </div>
-          <div className="space-y-2">
-            <div className="h-1.5 bg-secondary rounded-full overflow-hidden">
-              <div
-                className="h-full bg-success"
-                style={{ width: `${taskCompletion}%` }}
-              />
-            </div>
-            <div className="flex justify-between text-xs text-muted-foreground">
-              <span>{Math.round(taskCompletion)}% done</span>
-              <span>{Math.round(100 - taskCompletion)} remaining</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Team Size */}
-        <div className="glass-card rounded-lg p-4 border border-border/50">
-          <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center gap-2">
-              <Users className="w-4 h-4 text-cyan" />
-              <span className="text-xs text-muted-foreground uppercase tracking-wide">Team Size</span>
-            </div>
-          </div>
-          <div className="text-2xl font-bold text-foreground mb-2">{teamSize} members</div>
-        </div>
-      </div>
     </div>
   )
 }

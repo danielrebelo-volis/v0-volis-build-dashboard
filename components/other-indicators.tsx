@@ -1,89 +1,94 @@
-import { TrendingUp, Target, DollarSign } from 'lucide-react'
+import { TrendingUp, Target, DollarSign, AlertTriangle, BarChart2 } from 'lucide-react'
 
 interface OtherIndicatorsProps {
-  weeklyProgress: number
-  priorWeekProgress: number
-  requiredWeeklyProgress: number
-  earnedValue: number
-  totalBudget?: number
+  avgWeeklyProgress?: number
+  requiredWeeklyProgress?: number
+  avgWeeklyCosts?: number          // €M per week
+  requiredWeeklyCosts?: number     // €M per week to hit projected IC
+  dataQuality?: number             // 0–100 % of reports present (100 = no missing)
+}
+
+function IndicatorCard({
+  icon: Icon,
+  label,
+  value,
+  sub,
+  valueColor = 'text-foreground',
+}: {
+  icon: React.ElementType
+  label: string
+  value: string
+  sub?: string
+  valueColor?: string
+}) {
+  return (
+    <div className="glass-card rounded-lg p-5">
+      <div className="flex items-center gap-2 mb-3">
+        <Icon className="w-4 h-4 text-muted-foreground shrink-0" />
+        <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider leading-tight">{label}</p>
+      </div>
+      <p className={`text-2xl font-bold mb-1 ${valueColor}`}>{value}</p>
+      {sub && <p className="text-[11px] text-muted-foreground">{sub}</p>}
+    </div>
+  )
 }
 
 export function OtherIndicators({
-  weeklyProgress,
-  priorWeekProgress,
-  requiredWeeklyProgress,
-  earnedValue,
-  totalBudget = 24500000,
+  avgWeeklyProgress = 2.4,
+  requiredWeeklyProgress = 2.0,
+  avgWeeklyCosts = 0.38,
+  requiredWeeklyCosts = 0.42,
+  dataQuality = 87,
 }: OtherIndicatorsProps) {
-  const progressTrend = weeklyProgress - priorWeekProgress
-  const progressTrendPercent = ((progressTrend / priorWeekProgress) * 100).toFixed(1)
-  const isPositiveTrend = progressTrend >= 0
+  const progressOnTrack = avgWeeklyProgress >= requiredWeeklyProgress
+  const costsOnTrack = avgWeeklyCosts <= requiredWeeklyCosts
+  const qualityColor = dataQuality >= 90 ? 'text-success' : dataQuality >= 70 ? 'text-warning' : 'text-destructive'
 
   return (
     <div className="mb-8">
       <h2 className="text-lg font-semibold text-foreground mb-4">Other Indicators</h2>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Weekly Average Progress */}
-        <div className="glass-card rounded-lg p-6">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-2">
-              <TrendingUp className="w-4 h-4 text-cyan" />
-              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
-                Weekly Avg Progress
-              </p>
-            </div>
-          </div>
-          <div className="mb-4">
-            <p className="text-3xl font-bold text-foreground">{weeklyProgress.toFixed(1)}%</p>
-          </div>
-          <div className={`flex items-center gap-1.5 text-xs ${isPositiveTrend ? 'text-success' : 'text-destructive'}`}>
-            <span className={`flex items-center gap-1 ${isPositiveTrend ? 'text-success' : 'text-destructive'}`}>
-              {isPositiveTrend ? '↑' : '↓'} {Math.abs(parseFloat(progressTrendPercent))}%
-            </span>
-            <span className="text-muted-foreground">vs prior week</span>
-          </div>
-          <p className="text-xs text-muted-foreground mt-2">Prior week: {priorWeekProgress.toFixed(1)}%</p>
-        </div>
+      <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
 
-        {/* Weekly Progress Needed for Deadline */}
-        <div className="glass-card rounded-lg p-6">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-2">
-              <Target className="w-4 h-4 text-cyan" />
-              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
-                Required Weekly Progress
-              </p>
-            </div>
-          </div>
-          <div className="mb-4">
-            <p className="text-3xl font-bold text-foreground">{requiredWeeklyProgress.toFixed(1)}%</p>
-          </div>
-          <div className="flex items-center gap-1.5 text-xs">
-            <span className={weeklyProgress >= requiredWeeklyProgress ? 'text-success' : 'text-warning'}>
-              {weeklyProgress >= requiredWeeklyProgress ? '✓ On track' : '⚠ Behind target'}
-            </span>
-          </div>
-          <p className="text-xs text-muted-foreground mt-2">To finish on initial deadline</p>
-        </div>
+        <IndicatorCard
+          icon={TrendingUp}
+          label="Avg Weekly Progress"
+          value={`${avgWeeklyProgress.toFixed(1)}%`}
+          sub="Average per week to date"
+          valueColor={progressOnTrack ? 'text-success' : 'text-warning'}
+        />
 
-        {/* Accumulated Production */}
-        <div className="glass-card rounded-lg p-6">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-2">
-              <DollarSign className="w-4 h-4 text-cyan" />
-              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
-                Accumulated Production
-              </p>
-            </div>
-          </div>
-          <div className="mb-4">
-            <p className="text-3xl font-bold text-foreground">€{(earnedValue / 1000000).toFixed(2)}M</p>
-          </div>
-          <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-            <span>Completed activities value</span>
-          </div>
-          <p className="text-xs text-muted-foreground mt-2">Out of €{(totalBudget / 1000000).toFixed(1)}M contract value</p>
-        </div>
+        <IndicatorCard
+          icon={Target}
+          label="Required Weekly Progress"
+          value={`${requiredWeeklyProgress.toFixed(1)}%`}
+          sub={progressOnTrack ? 'Current pace sufficient' : 'Increase pace to meet deadline'}
+          valueColor={progressOnTrack ? 'text-foreground' : 'text-warning'}
+        />
+
+        <IndicatorCard
+          icon={DollarSign}
+          label="Avg Weekly Costs"
+          value={`€${avgWeeklyCosts.toFixed(2)}M`}
+          sub="Average cost per week to date"
+          valueColor={costsOnTrack ? 'text-success' : 'text-warning'}
+        />
+
+        <IndicatorCard
+          icon={BarChart2}
+          label="Required Weekly Costs"
+          value={`€${requiredWeeklyCosts.toFixed(2)}M`}
+          sub="To achieve projected IC"
+          valueColor="text-foreground"
+        />
+
+        <IndicatorCard
+          icon={AlertTriangle}
+          label="Data Quality"
+          value={`${dataQuality}%`}
+          sub={`${100 - dataQuality}% of reports missing`}
+          valueColor={qualityColor}
+        />
+
       </div>
     </div>
   )

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { DashboardHeader } from '@/components/dashboard-header'
 import { ArrowLeft, Download, TrendingUp } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -14,6 +14,162 @@ import {
 import Link from 'next/link'
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts'
 import { useChartColors } from '@/hooks/use-chart-colors'
+
+// ─── Economic Table Row with hover popover ────────────────────────────────────
+type EconRow = {
+  activity: string
+  status: string
+  completeness: number
+  currentCost: number
+  commercialIC: number
+  projectedIC: number
+  currentIC: number
+  weeklyCosts: { week: string; labour: number; materials: number; subcontracted: number }[]
+}
+
+// Shared demo weekly cost data (same for all rows — prototype)
+const DEMO_WEEKLY_COSTS = [
+  { week: 'W6', labour: 0.18, materials: 0.14, subcontracted: 0.07 },
+  { week: 'W7', labour: 0.20, materials: 0.13, subcontracted: 0.06 },
+  { week: 'W8', labour: 0.17, materials: 0.15, subcontracted: 0.08 },
+  { week: 'W9', labour: 0.19, materials: 0.12, subcontracted: 0.07 },
+]
+
+const COST_NATURE_COLORS = [
+  { key: 'labour',        label: 'Labour',        color: '#a0a0a0' },
+  { key: 'materials',     label: 'Materials',     color: '#00c8ff' },
+  { key: 'subcontracted', label: 'Subcontracted', color: '#ff6b6b' },
+]
+
+function EconomicTableRow({
+  row,
+  economicValue,
+  icColor,
+  chartColors,
+}: {
+  row: EconRow
+  economicValue: number
+  icColor: (ic: number) => string
+  chartColors: ReturnType<typeof useChartColors>
+}) {
+  const [open, setOpen] = useState(false)
+  const ref = useRef<HTMLTableCellElement>(null)
+
+  // Close on outside click
+  useEffect(() => {
+    if (!open) return
+    function handler(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false)
+    }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [open])
+
+  // Max value across all weeks for Y scale
+  const maxVal = Math.max(...DEMO_WEEKLY_COSTS.flatMap(w => [w.labour, w.materials, w.subcontracted]))
+  const chartH = 100
+  const chartW = 264
+  const barGroupW = chartW / DEMO_WEEKLY_COSTS.length
+  const barW = 10
+  const barGap = 2
+  const paddingLeft = 36
+  const paddingBottom = 20
+  const innerH = chartH - paddingBottom
+  const innerW = chartW - paddingLeft
+
+  return (
+    <tr className="border-b border-border/30 hover:bg-secondary/20">
+      <td className="py-3 text-foreground font-medium">{row.activity}</td>
+      <td className="py-3 text-right text-foreground">€{economicValue.toFixed(1)}M</td>
+      <td className="py-3 text-right">
+        <span className={`text-xs px-2 py-0.5 rounded-full ${
+          row.status === 'Finished' ? 'bg-[#16a34a]/15 text-[#16a34a]' :
+          row.status === 'Ongoing'  ? 'bg-accent/20 text-accent' :
+                                      'bg-muted/30 text-muted-foreground'
+        }`}>{row.status}</span>
+      </td>
+      <td className="py-3 text-right text-foreground">{row.completeness}%</td>
+      <td className="py-3 text-right text-foreground">€{row.currentCost.toFixed(2)}M</td>
+      <td className={`py-3 text-right font-semibold ${icColor(row.commercialIC)}`}>{row.commercialIC}%</td>
+      <td className={`py-3 text-right font-semibold ${icColor(row.projectedIC)}`}>{row.projectedIC}%</td>
+      <td className={`py-3 text-right font-semibold ${icColor(row.currentIC)}`}>{row.currentIC}%</td>
+
+      {/* Three-dot — click to toggle */}
+      <td ref={ref} className="py-3 text-right relative">
+        <button
+          onClick={() => setOpen(v => !v)}
+          className={`p-1 rounded transition-colors ${open ? 'bg-secondary/60 text-foreground' : 'hover:bg-secondary/40 text-muted-foreground'}`}
+          aria-label="Weekly cost breakdown"
+        >
+          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+            <circle cx="4" cy="10" r="1.5" /><circle cx="10" cy="10" r="1.5" /><circle cx="16" cy="10" r="1.5" />
+          </svg>
+        </button>
+
+        {open && (
+          <div className="absolute right-0 bottom-full mb-2 z-50 bg-background border border-border/50 rounded-lg shadow-xl p-4"
+               style={{ width: chartW + paddingLeft + 8 }}>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-3">
+              Weekly Costs by Nature — Last 4 Weeks
+            </p>
+
+            {/* SVG bar chart — fixed size, no ResizeObserver issues */}
+            <svg width={chartW} height={chartH} className="overflow-visible">
+              {/* Y grid lines */}
+              {[0, 0.25, 0.5, 0.75, 1].map(t => {
+                const y = innerH - t * innerH
+                return (
+                  <g key={t}>
+                    <line x1={paddingLeft} y1={y} x2={chartW} y2={y}
+                      stroke={chartColors.grid} strokeWidth={0.5} strokeDasharray="3 3" />
+                    <text x={paddingLeft - 4} y={y + 3} textAnchor="end"
+                      fontSize={8} fill={chartColors.axis}>
+                      {(t * maxVal).toFixed(2)}
+                    </text>
+                  </g>
+                )
+              })}
+
+              {/* Bars */}
+              {DEMO_WEEKLY_COSTS.map((week, wi) => {
+                const groupX = paddingLeft + wi * (innerW / DEMO_WEEKLY_COSTS.length) + (innerW / DEMO_WEEKLY_COSTS.length - (barW + barGap) * 3) / 2
+                return (
+                  <g key={week.week}>
+                    {COST_NATURE_COLORS.map((nat, ni) => {
+                      const val = week[nat.key as keyof typeof week] as number
+                      const bh  = (val / maxVal) * innerH
+                      const bx  = groupX + ni * (barW + barGap)
+                      const by  = innerH - bh
+                      return (
+                        <rect key={nat.key} x={bx} y={by} width={barW} height={bh}
+                          fill={nat.color} rx={2} opacity={0.9} />
+                      )
+                    })}
+                    {/* X label */}
+                    <text x={groupX + ((barW + barGap) * 3) / 2 - barGap} y={innerH + 14}
+                      textAnchor="middle" fontSize={9} fill={chartColors.axis}>
+                      {week.week}
+                    </text>
+                  </g>
+                )
+              })}
+            </svg>
+
+            {/* Legend */}
+            <div className="flex items-center gap-3 mt-2">
+              {COST_NATURE_COLORS.map(l => (
+                <div key={l.key} className="flex items-center gap-1">
+                  <div className="w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: l.color }} />
+                  <span className="text-[10px] text-muted-foreground">{l.label}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </td>
+    </tr>
+  )
+}
 
 export default function ProjectOverview({ params }: { params: { id: string } }) {
   const chartColors = useChartColors()
@@ -110,28 +266,54 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
     }))
   }
 
+  // float_weeks sourced from schedule table (same formula: 2 - Math.floor(idx/2))
   const activities = [
-    { name: 'Site Preparation', value: 2.1, total_planned: '1000 m³', planned: '900 m³', executed: '850 m³', expected_completeness: (900 / 1000).toFixed(2), actual_completeness: 85, earnedValue: 1.785, status: 'Ongoing', estimated_execution: '750 m³', actual_execution: '650 m³', forecast_deadline: '15/03/2024' },
-    { name: 'Foundation Work', value: 5.2, total_planned: '2000 m³', planned: '1400 m³', executed: '1200 m³', expected_completeness: (1400 / 2000).toFixed(2), actual_completeness: 60, earnedValue: 3.12, status: 'Ongoing', estimated_execution: '1100 m³', actual_execution: '900 m³', forecast_deadline: '20/04/2024' },
-    { name: 'Structure Assembly', value: 8.5, total_planned: '150 units', planned: '110 units', executed: '90 units', expected_completeness: (110 / 150).toFixed(2), actual_completeness: 60, earnedValue: 5.1, status: 'Ongoing', estimated_execution: '80 units', actual_execution: '65 units', forecast_deadline: '10/05/2024' },
-    { name: 'Mechanical Systems', value: 4.3, total_planned: '45 systems', planned: '10 units', executed: '0 units', expected_completeness: (10 / 45).toFixed(2), actual_completeness: 0, earnedValue: 0, status: 'Not Started', estimated_execution: '5 units', actual_execution: '0 units', forecast_deadline: '15/06/2024' },
-    { name: 'Finishing Works', value: 4.4, total_planned: '50 areas', planned: '10 areas', executed: '5 areas', expected_completeness: (10 / 50).toFixed(2), actual_completeness: 10, earnedValue: 0.44, status: 'Not Started', estimated_execution: '8 areas', actual_execution: '3 areas', forecast_deadline: '20/06/2024' },
-    { name: 'Electrical Installation', value: 3.8, total_planned: '120 circuits', planned: '80 circuits', executed: '65 circuits', expected_completeness: (80 / 120).toFixed(2), actual_completeness: 54, earnedValue: 2.052, status: 'Ongoing', estimated_execution: '70 circuits', actual_execution: '55 circuits', forecast_deadline: '25/05/2024' },
-    { name: 'Plumbing Systems', value: 2.9, total_planned: '85 connections', planned: '60 connections', executed: '55 connections', expected_completeness: (60 / 85).toFixed(2), actual_completeness: 65, earnedValue: 1.885, status: 'Ongoing', estimated_execution: '58 connections', actual_execution: '48 connections', forecast_deadline: '22/05/2024' },
-    { name: 'HVAC Installation', value: 6.7, total_planned: '35 units', planned: '25 units', executed: '18 units', expected_completeness: (25 / 35).toFixed(2), actual_completeness: 51, earnedValue: 3.417, status: 'Ongoing', estimated_execution: '20 units', actual_execution: '15 units', forecast_deadline: '30/05/2024' },
-    { name: 'Exterior Cladding', value: 3.2, total_planned: '800 m²', planned: '500 m²', executed: '420 m²', expected_completeness: (500 / 800).toFixed(2), actual_completeness: 53, earnedValue: 1.696, status: 'Ongoing', estimated_execution: '450 m²', actual_execution: '380 m²', forecast_deadline: '28/05/2024' },
-    { name: 'Interior Partitions', value: 2.6, total_planned: '650 m²', planned: '400 m²', executed: '350 m²', expected_completeness: (400 / 650).toFixed(2), actual_completeness: 54, earnedValue: 1.404, status: 'Ongoing', estimated_execution: '375 m²', actual_execution: '320 m²', forecast_deadline: '26/05/2024' },
-    { name: 'Roofing Works', value: 4.1, total_planned: '1200 m²', planned: '1000 m²', executed: '950 m²', expected_completeness: (1000 / 1200).toFixed(2), actual_completeness: 79, earnedValue: 3.239, status: 'Ongoing', estimated_execution: '980 m²', actual_execution: '870 m²', forecast_deadline: '18/05/2024' },
-    { name: 'Flooring Installation', value: 1.9, total_planned: '900 m²', planned: '300 m²', executed: '180 m²', expected_completeness: (300 / 900).toFixed(2), actual_completeness: 20, earnedValue: 0.38, status: 'Not Started', estimated_execution: '250 m²', actual_execution: '150 m��', forecast_deadline: '10/07/2024' },
-    { name: 'Painting & Decoration', value: 1.5, total_planned: '1100 m²', planned: '200 m²', executed: '50 m²', expected_completeness: (200 / 1100).toFixed(2), actual_completeness: 5, earnedValue: 0.075, status: 'Not Started', estimated_execution: '150 m²', actual_execution: '40 m²', forecast_deadline: '15/07/2024' },
+    { name: 'Site Preparation',      value: 2.1, metric: 'm³',         total_planned_qty: 1000, planned_qty: 900,  executed_qty: 850,  expected_completeness: (900/1000).toFixed(2),   actual_completeness: 85, earnedValue: 1.785, status: 'Ongoing',     forecast_deadline: '15/03/2024', float_weeks: 2 },
+    { name: 'Foundation Work',        value: 5.2, metric: 'm³',         total_planned_qty: 2000, planned_qty: 1400, executed_qty: 1200, expected_completeness: (1400/2000).toFixed(2), actual_completeness: 60, earnedValue: 3.12,  status: 'Ongoing',     forecast_deadline: '20/04/2024', float_weeks: 2 },
+    { name: 'Structure Assembly',     value: 8.5, metric: 'units',      total_planned_qty: 150,  planned_qty: 110,  executed_qty: 90,   expected_completeness: (110/150).toFixed(2),   actual_completeness: 60, earnedValue: 5.10,  status: 'Ongoing',     forecast_deadline: '10/05/2024', float_weeks: 1 },
+    { name: 'Mechanical Systems',     value: 4.3, metric: 'systems',    total_planned_qty: 45,   planned_qty: 10,   executed_qty: 0,    expected_completeness: (10/45).toFixed(2),     actual_completeness: 0,  earnedValue: 0,     status: 'Not Started', forecast_deadline: '15/06/2024', float_weeks: 1 },
+    { name: 'Finishing Works',        value: 4.4, metric: 'areas',      total_planned_qty: 50,   planned_qty: 10,   executed_qty: 5,    expected_completeness: (10/50).toFixed(2),     actual_completeness: 10, earnedValue: 0.44,  status: 'Not Started', forecast_deadline: '20/06/2024', float_weeks: 1 },
+    { name: 'Electrical Installation',value: 3.8, metric: 'circuits',   total_planned_qty: 120,  planned_qty: 80,   executed_qty: 65,   expected_completeness: (80/120).toFixed(2),    actual_completeness: 54, earnedValue: 2.052, status: 'Ongoing',     forecast_deadline: '25/05/2024', float_weeks: 0 },
+    { name: 'Plumbing Systems',       value: 2.9, metric: 'connections',total_planned_qty: 85,   planned_qty: 60,   executed_qty: 55,   expected_completeness: (60/85).toFixed(2),     actual_completeness: 65, earnedValue: 1.885, status: 'Ongoing',     forecast_deadline: '22/05/2024', float_weeks: 0 },
+    { name: 'HVAC Installation',      value: 6.7, metric: 'units',      total_planned_qty: 35,   planned_qty: 25,   executed_qty: 18,   expected_completeness: (25/35).toFixed(2),     actual_completeness: 51, earnedValue: 3.417, status: 'Ongoing',     forecast_deadline: '30/05/2024', float_weeks: 0 },
+    { name: 'Exterior Cladding',      value: 3.2, metric: 'm²',         total_planned_qty: 800,  planned_qty: 500,  executed_qty: 420,  expected_completeness: (500/800).toFixed(2),   actual_completeness: 53, earnedValue: 1.696, status: 'Ongoing',     forecast_deadline: '28/05/2024', float_weeks: 1 },
+    { name: 'Interior Partitions',    value: 2.6, metric: 'm²',         total_planned_qty: 650,  planned_qty: 400,  executed_qty: 350,  expected_completeness: (400/650).toFixed(2),   actual_completeness: 54, earnedValue: 1.404, status: 'Ongoing',     forecast_deadline: '26/05/2024', float_weeks: 1 },
+    { name: 'Roofing Works',          value: 4.1, metric: 'm²',         total_planned_qty: 1200, planned_qty: 1000, executed_qty: 950,  expected_completeness: (1000/1200).toFixed(2), actual_completeness: 79, earnedValue: 3.239, status: 'Ongoing',     forecast_deadline: '18/05/2024', float_weeks: 2 },
+    { name: 'Flooring Installation',  value: 1.9, metric: 'm²',         total_planned_qty: 900,  planned_qty: 300,  executed_qty: 180,  expected_completeness: (300/900).toFixed(2),   actual_completeness: 20, earnedValue: 0.38,  status: 'Not Started', forecast_deadline: '10/07/2024', float_weeks: 3 },
+    { name: 'Painting & Decoration',  value: 1.5, metric: 'm²',         total_planned_qty: 1100, planned_qty: 200,  executed_qty: 50,   expected_completeness: (200/1100).toFixed(2),  actual_completeness: 5,  earnedValue: 0.075, status: 'Not Started', forecast_deadline: '15/07/2024', float_weeks: 3 },
   ]
 
-  const economicTable = activities.map(activity => ({
-    activity: activity.name,
-    completeness: activity.actual_completeness,
-    baseline: activity.value * (activity.actual_completeness / 100),
-    actual: activity.value * (activity.actual_completeness / 100) * 1.08,
-  }))
+  const weeklyNatureCosts: Record<string, { week: string; labour: number; materials: number; subcontracted: number }[]> = {
+    'Site Preparation':       [{ week:'W6', labour:0.08, materials:0.05, subcontracted:0.02 },{ week:'W7', labour:0.07, materials:0.06, subcontracted:0.03 },{ week:'W8', labour:0.09, materials:0.04, subcontracted:0.02 },{ week:'W9', labour:0.06, materials:0.05, subcontracted:0.01 }],
+    'Foundation Work':        [{ week:'W6', labour:0.18, materials:0.14, subcontracted:0.07 },{ week:'W7', labour:0.20, materials:0.13, subcontracted:0.06 },{ week:'W8', labour:0.17, materials:0.15, subcontracted:0.08 },{ week:'W9', labour:0.19, materials:0.12, subcontracted:0.07 }],
+    'Structure Assembly':     [{ week:'W6', labour:0.25, materials:0.19, subcontracted:0.10 },{ week:'W7', labour:0.22, materials:0.21, subcontracted:0.11 },{ week:'W8', labour:0.26, materials:0.18, subcontracted:0.09 },{ week:'W9', labour:0.24, materials:0.20, subcontracted:0.10 }],
+    'Mechanical Systems':     [{ week:'W6', labour:0.10, materials:0.08, subcontracted:0.12 },{ week:'W7', labour:0.11, materials:0.09, subcontracted:0.13 },{ week:'W8', labour:0.09, materials:0.10, subcontracted:0.11 },{ week:'W9', labour:0.12, materials:0.07, subcontracted:0.14 }],
+    'Finishing Works':        [{ week:'W6', labour:0.07, materials:0.06, subcontracted:0.04 },{ week:'W7', labour:0.08, materials:0.05, subcontracted:0.03 },{ week:'W8', labour:0.06, materials:0.07, subcontracted:0.05 },{ week:'W9', labour:0.09, materials:0.04, subcontracted:0.03 }],
+    'Electrical Installation':[{ week:'W6', labour:0.14, materials:0.09, subcontracted:0.08 },{ week:'W7', labour:0.13, materials:0.10, subcontracted:0.09 },{ week:'W8', labour:0.15, materials:0.08, subcontracted:0.07 },{ week:'W9', labour:0.12, materials:0.11, subcontracted:0.08 }],
+    'Plumbing Systems':       [{ week:'W6', labour:0.11, materials:0.07, subcontracted:0.05 },{ week:'W7', labour:0.10, materials:0.08, subcontracted:0.06 },{ week:'W8', labour:0.12, materials:0.06, subcontracted:0.04 },{ week:'W9', labour:0.09, materials:0.09, subcontracted:0.05 }],
+    'HVAC Installation':      [{ week:'W6', labour:0.20, materials:0.16, subcontracted:0.14 },{ week:'W7', labour:0.22, materials:0.15, subcontracted:0.13 },{ week:'W8', labour:0.19, materials:0.17, subcontracted:0.15 },{ week:'W9', labour:0.21, materials:0.14, subcontracted:0.12 }],
+    'Exterior Cladding':      [{ week:'W6', labour:0.09, materials:0.12, subcontracted:0.06 },{ week:'W7', labour:0.10, materials:0.11, subcontracted:0.07 },{ week:'W8', labour:0.08, materials:0.13, subcontracted:0.05 },{ week:'W9', labour:0.11, materials:0.10, subcontracted:0.06 }],
+    'Interior Partitions':    [{ week:'W6', labour:0.08, materials:0.06, subcontracted:0.04 },{ week:'W7', labour:0.07, materials:0.07, subcontracted:0.05 },{ week:'W8', labour:0.09, materials:0.05, subcontracted:0.03 },{ week:'W9', labour:0.08, materials:0.08, subcontracted:0.04 }],
+    'Roofing Works':          [{ week:'W6', labour:0.13, materials:0.10, subcontracted:0.07 },{ week:'W7', labour:0.14, materials:0.09, subcontracted:0.08 },{ week:'W8', labour:0.12, materials:0.11, subcontracted:0.06 },{ week:'W9', labour:0.15, materials:0.08, subcontracted:0.07 }],
+    'Flooring Installation':  [{ week:'W6', labour:0.06, materials:0.09, subcontracted:0.03 },{ week:'W7', labour:0.07, materials:0.08, subcontracted:0.04 },{ week:'W8', labour:0.05, materials:0.10, subcontracted:0.02 },{ week:'W9', labour:0.08, materials:0.07, subcontracted:0.03 }],
+    'Painting & Decoration':  [{ week:'W6', labour:0.04, materials:0.03, subcontracted:0.02 },{ week:'W7', labour:0.05, materials:0.02, subcontracted:0.01 },{ week:'W8', labour:0.03, materials:0.04, subcontracted:0.02 },{ week:'W9', labour:0.06, materials:0.02, subcontracted:0.01 }],
+  }
+
+  const economicTable = activities.map(activity => {
+    const commercialIC = 80 + Math.random() * 5
+    const projectedIC  = commercialIC + 5 + Math.random() * 8
+    const currentIC    = commercialIC + 3 + Math.random() * 6
+    return {
+      activity:      activity.name,
+      status:        activity.status,
+      completeness:  activity.actual_completeness,
+      currentCost:   activity.value * (activity.actual_completeness / 100) * 1.08,
+      commercialIC:  parseFloat(commercialIC.toFixed(1)),
+      projectedIC:   parseFloat(projectedIC.toFixed(1)),
+      currentIC:     parseFloat(currentIC.toFixed(1)),
+      weeklyCosts:   weeklyNatureCosts[activity.name] ?? [],
+    }
+  })
 
   const costBreakdownData = [
     { category: 'Labour (MDO)', planned: 12.5, estimated: 12.8, actual: 13.2 },
@@ -186,6 +368,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
           aValue = a.earnedValue
           bValue = b.earnedValue
           break
+
       }
 
       return sortDirection === 'asc' ? aValue - bValue : bValue - aValue
@@ -588,46 +771,56 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b border-border/50">
-                      <th className="text-left text-xs text-muted-foreground font-semibold py-2">Activity</th>
-                      <th
-                        className="text-left text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors"
-                        onClick={() => handleSort('value')}
-                      >
-                        Value (€M) {sortBy === 'value' && (sortDirection === 'asc' ? '↑' : '↓')}
+                      <th className="text-left text-xs text-muted-foreground font-semibold py-2 min-w-[140px]">Activity</th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleSort('value')}>
+                        Econ. Value (€M) {sortBy === 'value' && (sortDirection === 'asc' ? '↑' : '↓')}
                       </th>
-                      <th className="text-left text-xs text-muted-foreground font-semibold py-2">Total execution planned</th>
-                      <th className="text-left text-xs text-muted-foreground font-semibold py-2">Estimated execution</th>
-                      <th className="text-left text-xs text-muted-foreground font-semibold py-2">Actual execution</th>
-                      <th
-                        className="text-left text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors"
-                        onClick={() => handleSort('earnedValue')}
-                      >
-                        Accum. Production (€M) {sortBy === 'earnedValue' && (sortDirection === 'asc' ? '↑' : '↓')}
-                      </th>
-                      <th className="text-left text-xs text-muted-foreground font-semibold py-2">Forecast Deadline</th>
                       <th className="text-left text-xs text-muted-foreground font-semibold py-2">Status</th>
+                      <th className="text-left text-xs text-muted-foreground font-semibold py-2">Metric</th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Total Planned</th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Total Actual</th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleSort('plannedProgress')}>
+                        Planned % {sortBy === 'plannedProgress' && (sortDirection === 'asc' ? '↑' : '↓')}
+                      </th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleSort('actualProgress')}>
+                        Actual % {sortBy === 'actualProgress' && (sortDirection === 'asc' ? '↑' : '↓')}
+                      </th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleSort('accumulatedProduction')}>
+                        Accum. Prod. (€M) {sortBy === 'accumulatedProduction' && (sortDirection === 'asc' ? '↑' : '↓')}
+                      </th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Float (w)</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {getSortedActivities().map((activity, idx) => (
-                      <tr key={idx} className="border-b border-border/30 hover:bg-secondary/20">
-                        <td className="py-3 text-foreground">{activity.name}</td>
-                        <td className="py-3 text-foreground">€{activity.value.toFixed(1)}M</td>
-                        <td className="py-3 text-muted-foreground">{activity.total_planned}</td>
-                        <td className="py-3 text-foreground">{activity.expected_completeness * 100}%</td>
-                        <td className="py-3 text-foreground">{activity.actual_completeness}%</td>
-                        <td className="py-3 text-foreground">€{activity.earnedValue.toFixed(2)}M</td>
-                        <td className="py-3 text-foreground">{activity.forecast_deadline}</td>
-                        <td className="py-3">
-                          <span className={`text-xs px-2 py-1 rounded ${activity.status === 'Finished' ? 'bg-success/20 text-success' :
-                            activity.status === 'Ongoing' ? 'bg-accent/20 text-accent' :
-                              'bg-muted/30 text-muted-foreground'
+                    {getSortedActivities().map((activity, idx) => {
+                      const plannedPct = Math.round(parseFloat(activity.expected_completeness) * 100)
+                      const actualPct  = activity.actual_completeness
+                      const delta      = actualPct - plannedPct
+                      const progressColor = delta >= 0 ? 'text-[#16a34a]' : delta >= -5 ? 'text-[#d97706]' : 'text-[#dc2626]'
+                      const floatColor    = activity.float_weeks === 0 ? 'text-[#dc2626]' : activity.float_weeks === 1 ? 'text-[#d97706]' : 'text-[#16a34a]'
+                      return (
+                        <tr key={idx} className="border-b border-border/30 hover:bg-secondary/20">
+                          <td className="py-3 text-foreground font-medium">{activity.name}</td>
+                          <td className="py-3 text-right text-foreground">€{activity.value.toFixed(1)}M</td>
+                          <td className="py-3 text-right">
+                            <span className={`text-xs px-2 py-0.5 rounded-full ${
+                              activity.status === 'Finished'    ? 'bg-[#16a34a]/15 text-[#16a34a]' :
+                              activity.status === 'Ongoing'     ? 'bg-accent/20 text-accent' :
+                                                                  'bg-muted/30 text-muted-foreground'
                             }`}>
-                            {activity.status}
-                          </span>
-                        </td>
-                      </tr>
-                    ))}
+                              {activity.status}
+                            </span>
+                          </td>
+                          <td className="py-3 text-right text-muted-foreground text-xs">{activity.metric}</td>
+                          <td className="py-3 text-right text-foreground">{activity.total_planned_qty.toLocaleString()}</td>
+                          <td className="py-3 text-right text-foreground">{activity.executed_qty.toLocaleString()}</td>
+                          <td className="py-3 text-right text-muted-foreground">{plannedPct}%</td>
+                          <td className={`py-3 text-right font-semibold ${progressColor}`}>{actualPct}%</td>
+                          <td className="py-3 text-right text-foreground">€{activity.earnedValue.toFixed(2)}M</td>
+                          <td className={`py-3 text-right font-semibold ${floatColor}`}>{activity.float_weeks}w</td>
+                        </tr>
+                      )
+                    })}
                   </tbody>
                 </table>
               </div>
@@ -692,8 +885,8 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                 <p className="text-xs text-muted-foreground mb-2">Required Weekly Advance</p>
                 <p className="text-2xl font-bold text-foreground">2.0%</p>
               </div>
-              <div className="glass-card rounded-lg p-3 border border-border/50">
-                <p className="text-xs text-muted-foreground mb-2">AI Forecast Deadline</p>
+  <div className="glass-card rounded-lg p-3 border border-border/50">
+                  <p className="text-xs text-muted-foreground mb-2">Forecast Deadline</p>
                 <p className="text-2xl font-bold text-success">January 15, 2026</p>
               </div>
             </div>
@@ -718,51 +911,61 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
 
             {/* Activity Table */}
             <div className="glass-card rounded-lg p-4 border border-border/50 mb-8">
-              <h3 className="text-sm font-semibold text-foreground mb-4">Activity Table</h3>
+              <h3 className="text-sm font-semibold text-foreground mb-4 text-left">Activity Table</h3>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b border-border/50">
-                      <th className="text-left text-xs text-muted-foreground font-semibold py-2">Activity</th>
-                      <th
-                        className="text-left text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors"
-                        onClick={() => handleSort('value')}
-                      >
-                        Value (€M) {sortBy === 'value' && (sortDirection === 'asc' ? '↑' : '↓')}
+                      <th className="text-left text-xs text-muted-foreground font-semibold py-2 min-w-[140px]">Activity</th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleSort('value')}>
+                        Econ. Value (€M) {sortBy === 'value' && (sortDirection === 'asc' ? '↑' : '↓')}
                       </th>
-                      <th className="text-left text-xs text-muted-foreground font-semibold py-2">Total execution planned</th>
-                      <th className="text-left text-xs text-muted-foreground font-semibold py-2">Estimated execution</th>
-                      <th className="text-left text-xs text-muted-foreground font-semibold py-2">Actual execution</th>
-                      <th
-                        className="text-left text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors"
-                        onClick={() => handleSort('earnedValue')}
-                      >
-                        Accum. Production (€M) {sortBy === 'earnedValue' && (sortDirection === 'asc' ? '↑' : '↓')}
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Status</th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Metric</th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Total Planned</th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Total Actual</th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleSort('plannedProgress')}>
+                        Planned % {sortBy === 'plannedProgress' && (sortDirection === 'asc' ? '↑' : '↓')}
                       </th>
-                      <th className="text-left text-xs text-muted-foreground font-semibold py-2">Forecast Deadline</th>
-                      <th className="text-left text-xs text-muted-foreground font-semibold py-2">Status</th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleSort('actualProgress')}>
+                        Actual % {sortBy === 'actualProgress' && (sortDirection === 'asc' ? '↑' : '↓')}
+                      </th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleSort('accumulatedProduction')}>
+                        Accum. Prod. (€M) {sortBy === 'accumulatedProduction' && (sortDirection === 'asc' ? '↑' : '↓')}
+                      </th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Float (w)</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {getSortedActivities().map((activity, idx) => (
-                      <tr key={idx} className="border-b border-border/30 hover:bg-secondary/20">
-                        <td className="py-3 text-foreground">{activity.name}</td>
-                        <td className="py-3 text-foreground">€{activity.value.toFixed(1)}M</td>
-                        <td className="py-3 text-muted-foreground">{activity.total_planned}</td>
-                        <td className="py-3 text-foreground">{activity.expected_completeness * 100}%</td>
-                        <td className="py-3 text-foreground">{activity.actual_completeness}%</td>
-                        <td className="py-3 text-foreground">€{activity.earnedValue.toFixed(2)}M</td>
-                        <td className="py-3 text-foreground">{activity.forecast_deadline}</td>
-                        <td className="py-3">
-                          <span className={`text-xs px-2 py-1 rounded ${activity.status === 'Finished' ? 'bg-success/20 text-success' :
-                            activity.status === 'Ongoing' ? 'bg-accent/20 text-accent' :
-                              'bg-muted/30 text-muted-foreground'
+                    {getSortedActivities().map((activity, idx) => {
+                      const plannedPct = Math.round(parseFloat(activity.expected_completeness) * 100)
+                      const actualPct  = activity.actual_completeness
+                      const delta      = actualPct - plannedPct
+                      const progressColor = delta >= 0 ? 'text-[#16a34a]' : delta >= -5 ? 'text-[#d97706]' : 'text-[#dc2626]'
+                      const floatColor    = activity.float_weeks === 0 ? 'text-[#dc2626]' : activity.float_weeks === 1 ? 'text-[#d97706]' : 'text-[#16a34a]'
+                      return (
+                        <tr key={idx} className="border-b border-border/30 hover:bg-secondary/20">
+                          <td className="py-3 text-foreground font-medium">{activity.name}</td>
+                          <td className="py-3 text-right text-foreground">€{activity.value.toFixed(1)}M</td>
+                          <td className="py-3 text-right">
+                            <span className={`text-xs px-2 py-0.5 rounded-full ${
+                              activity.status === 'Finished'    ? 'bg-[#16a34a]/15 text-[#16a34a]' :
+                              activity.status === 'Ongoing'     ? 'bg-accent/20 text-accent' :
+                                                                  'bg-muted/30 text-muted-foreground'
                             }`}>
-                            {activity.status}
-                          </span>
-                        </td>
-                      </tr>
-                    ))}
+                              {activity.status}
+                            </span>
+                          </td>
+                          <td className="py-3 text-right text-muted-foreground text-xs">{activity.metric}</td>
+                          <td className="py-3 text-right text-foreground">{activity.total_planned_qty.toLocaleString()}</td>
+                          <td className="py-3 text-right text-foreground">{activity.executed_qty.toLocaleString()}</td>
+                          <td className="py-3 text-right text-muted-foreground">{plannedPct}%</td>
+                          <td className={`py-3 text-right font-semibold ${progressColor}`}>{actualPct}%</td>
+                          <td className="py-3 text-right text-foreground">€{activity.earnedValue.toFixed(2)}M</td>
+                          <td className={`py-3 text-right font-semibold ${floatColor}`}>{activity.float_weeks}w</td>
+                        </tr>
+                      )
+                    })}
                   </tbody>
                 </table>
               </div>
@@ -804,54 +1007,45 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
             </div>
 
             {/* Economic Summary Table */}
-            <div className="glass-card rounded-lg p-4 border border-border/50 gap-6 mb-8">
-              <h3 className="text-sm font-semibold text-foreground mb-4">Economic Summary Table</h3>
+            <div className="glass-card rounded-lg p-4 border border-border/50 mb-8">
+              <h3 className="text-sm font-semibold text-foreground mb-4 text-left">Economic Summary Table</h3>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b border-border/50">
-                      <th className="text-left text-xs text-muted-foreground font-semibold py-2">Activity</th>
-                      <th
-                        className="text-center text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors"
-                        onClick={() => handleEconomicSort('baselineCost')}
-                      >
-                        Baseline Cost<br />(for progress %) {economicSortBy === 'baselineCost' && (economicSortDirection === 'asc' ? '↑' : '↓')}
+                      <th className="text-left text-xs text-muted-foreground font-semibold py-2 min-w-[140px]">Activity</th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleEconomicSort('actualCost')}>
+                        Econ. Value (€M) {economicSortBy === 'actualCost' && (economicSortDirection === 'asc' ? '↑' : '↓')}
                       </th>
-                      <th
-                        className="text-center text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors"
-                        onClick={() => handleEconomicSort('actualCost')}
-                      >
-                        Actual Cost<br />(for progress %) {economicSortBy === 'actualCost' && (economicSortDirection === 'asc' ? '↑' : '↓')}
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Status</th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleEconomicSort('baselineCost')}>
+                        Current Progress {economicSortBy === 'baselineCost' && (economicSortDirection === 'asc' ? '↑' : '↓')}
                       </th>
-                      <th
-                        className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors"
-                        onClick={() => handleEconomicSort('totalBaseline')}
-                      >
-                        Total Baseline {economicSortBy === 'totalBaseline' && (economicSortDirection === 'asc' ? '↑' : '↓')}
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Current Cost (€M)</th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Commercial IC</th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleEconomicSort('totalEstimated')}>
+                        Projected IC {economicSortBy === 'totalEstimated' && (economicSortDirection === 'asc' ? '↑' : '↓')}
                       </th>
-                      <th
-                        className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors"
-                        onClick={() => handleEconomicSort('totalEstimated')}
-                      >
-                        Total Estimated {economicSortBy === 'totalEstimated' && (economicSortDirection === 'asc' ? '↑' : '↓')}
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleEconomicSort('totalBaseline')}>
+                        Current IC {economicSortBy === 'totalBaseline' && (economicSortDirection === 'asc' ? '↑' : '↓')}
                       </th>
-                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Float</th>
+                      <th className="w-8" />
                     </tr>
                   </thead>
                   <tbody>
                     {getSortedEconomicTable().map((row, idx) => {
-                      const totalBaseline = row.baseline / (row.completeness / 100);
-                      const totalEstimated = row.actual / (row.completeness / 100) * 1.05;
-                      const floatWeeks = 2 - Math.floor(idx / 2);
+                      const activity = activities.find(a => a.name === row.activity)
+                      const economicValue = activity?.value ?? 0
+                      const icColor = (ic: number) =>
+                        ic < 85 ? 'text-[#16a34a]' : ic < 95 ? 'text-[#d97706]' : 'text-[#dc2626]'
                       return (
-                        <tr key={idx} className="border-b border-border/30 hover:bg-secondary/20">
-                          <td className="py-3 text-foreground">{row.activity}</td>
-                          <td className="py-3 text-center text-foreground">€{row.baseline.toFixed(2)}M ({row.completeness}%)</td>
-                          <td className="py-3 text-center text-foreground">€{row.actual.toFixed(2)}M ({row.completeness}%)</td>
-                          <td className="py-3 text-right text-foreground">€{totalBaseline.toFixed(1)}M</td>
-                          <td className="py-3 text-right text-foreground">€{totalEstimated.toFixed(1)}M</td>
-                          <td className={`py-3 text-right font-semibold ${floatWeeks === 0 ? 'text-destructive' : 'text-foreground'}`}>{floatWeeks}w</td>
-                        </tr>
+                        <EconomicTableRow
+                          key={idx}
+                          row={row}
+                          economicValue={economicValue}
+                          icColor={icColor}
+                          chartColors={chartColors}
+                        />
                       );
                     })}
                   </tbody>
@@ -1183,48 +1377,39 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b border-border/50">
-                      <th className="text-left text-xs text-muted-foreground font-semibold py-2">Activity</th>
-                      <th
-                        className="text-center text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors"
-                        onClick={() => handleEconomicSort('baselineCost')}
-                      >
-                        Baseline Cost<br />(for progress %) {economicSortBy === 'baselineCost' && (economicSortDirection === 'asc' ? '↑' : '↓')}
+                      <th className="text-left text-xs text-muted-foreground font-semibold py-2 min-w-[140px]">Activity</th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleEconomicSort('actualCost')}>
+                        Econ. Value (€M) {economicSortBy === 'actualCost' && (economicSortDirection === 'asc' ? '↑' : '↓')}
                       </th>
-                      <th
-                        className="text-center text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors"
-                        onClick={() => handleEconomicSort('actualCost')}
-                      >
-                        Actual Cost<br />(for progress %) {economicSortBy === 'actualCost' && (economicSortDirection === 'asc' ? '↑' : '↓')}
+                      <th className="text-left text-xs text-muted-foreground font-semibold py-2">Status</th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleEconomicSort('baselineCost')}>
+                        Current Progress {economicSortBy === 'baselineCost' && (economicSortDirection === 'asc' ? '↑' : '↓')}
                       </th>
-                      <th
-                        className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors"
-                        onClick={() => handleEconomicSort('totalBaseline')}
-                      >
-                        Total Baseline {economicSortBy === 'totalBaseline' && (economicSortDirection === 'asc' ? '↑' : '↓')}
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Current Cost (€M)</th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Commercial IC</th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleEconomicSort('totalEstimated')}>
+                        Projected IC {economicSortBy === 'totalEstimated' && (economicSortDirection === 'asc' ? '↑' : '↓')}
                       </th>
-                      <th
-                        className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors"
-                        onClick={() => handleEconomicSort('totalEstimated')}
-                      >
-                        Total Estimated {economicSortBy === 'totalEstimated' && (economicSortDirection === 'asc' ? '↑' : '↓')}
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleEconomicSort('totalBaseline')}>
+                        Current IC {economicSortBy === 'totalBaseline' && (economicSortDirection === 'asc' ? '↑' : '↓')}
                       </th>
-                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Float</th>
+                      <th className="w-8" />
                     </tr>
                   </thead>
                   <tbody>
                     {getSortedEconomicTable().map((row, idx) => {
-                      const totalBaseline = row.baseline / (row.completeness / 100);
-                      const totalEstimated = row.actual / (row.completeness / 100) * 1.05;
-                      const floatWeeks = 2 - Math.floor(idx / 2);
+                      const activity = activities.find(a => a.name === row.activity)
+                      const economicValue = activity?.value ?? 0
+                      const icColor = (ic: number) =>
+                        ic < 85 ? 'text-[#16a34a]' : ic < 95 ? 'text-[#d97706]' : 'text-[#dc2626]'
                       return (
-                        <tr key={idx} className="border-b border-border/30 hover:bg-secondary/20">
-                          <td className="py-3 text-foreground">{row.activity}</td>
-                          <td className="py-3 text-center text-foreground">€{row.baseline.toFixed(2)}M ({row.completeness}%)</td>
-                          <td className="py-3 text-center text-foreground">€{row.actual.toFixed(2)}M ({row.completeness}%)</td>
-                          <td className="py-3 text-right text-foreground">€{totalBaseline.toFixed(1)}M</td>
-                          <td className="py-3 text-right text-foreground">€{totalEstimated.toFixed(1)}M</td>
-                          <td className={`py-3 text-right font-semibold ${floatWeeks === 0 ? 'text-destructive' : 'text-foreground'}`}>{floatWeeks}w</td>
-                        </tr>
+                        <EconomicTableRow
+                          key={idx}
+                          row={row}
+                          economicValue={economicValue}
+                          icColor={icColor}
+                          chartColors={chartColors}
+                        />
                       );
                     })}
                   </tbody>

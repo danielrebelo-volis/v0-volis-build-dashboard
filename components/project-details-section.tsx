@@ -45,7 +45,6 @@ export function ProjectDetailsSection({
           </div>
         </div>
       </div>
-
     </div>
   )
 }

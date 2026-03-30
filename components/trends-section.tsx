@@ -1,120 +1,145 @@
 "use client"
 
-import { TrendingUp, TrendingDown } from "lucide-react"
+import { useState } from "react"
+import { TrendingUp, TrendingDown, ChevronDown } from "lucide-react"
 
 interface TrendProject {
   id: string
   name: string
-  costTrend: number
-  scheduleTrend: number
+  delta: number
+}
+
+interface TrendColumnProps {
+  projects: TrendProject[]
+  direction: "up" | "down"
+}
+
+function TrendColumn({ projects, direction }: TrendColumnProps) {
+  const isUp = direction === "up"
+  const colorClass = isUp ? "text-emerald-500" : "text-destructive"
+  const barColor = isUp ? "bg-emerald-500/70" : "bg-destructive/70"
+  const bgHighlight = isUp ? "bg-emerald-500/5" : "bg-destructive/5"
+  const borderColor = isUp ? "border-emerald-500/20" : "border-destructive/20"
+  const Icon = isUp ? TrendingUp : TrendingDown
+  const label = isUp ? "Uptrend" : "Downtrend"
+  const maxDelta = Math.max(...projects.map((p) => p.delta))
+
+  return (
+    <div className="flex-1 min-w-0 flex flex-col min-h-0">
+      {/* Column header */}
+      <div className={`flex items-center gap-1 px-2 py-1 rounded-md border shrink-0 ${bgHighlight} ${borderColor}`}>
+        <Icon className={`w-3 h-3 ${colorClass} shrink-0`} />
+        <span className={`text-[9px] font-bold uppercase tracking-widest ${colorClass}`}>{label}</span>
+      </div>
+      {/* Rows */}
+      <div className="flex flex-col justify-around flex-1 min-h-0 pt-1">
+        {projects.map((project) => {
+          const barWidth = (project.delta / maxDelta) * 100
+          return (
+            <div key={project.id}>
+              <div className="flex items-center justify-between mb-0.5">
+                <span className="text-[11px] text-foreground/80 leading-tight truncate font-medium">{project.name}</span>
+                <span className={`text-[11px] font-mono font-bold shrink-0 ml-1 ${colorClass}`}>
+                  {isUp ? "+" : "-"}{project.delta}%
+                </span>
+              </div>
+              <div className="h-[3px] bg-border/20 rounded-full overflow-hidden">
+                <div
+                  className={`h-full ${barColor} rounded-full transition-all`}
+                  style={{ width: `${barWidth}%` }}
+                />
+              </div>
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
+interface SegmentProps {
+  label: string
+  uptrends: TrendProject[]
+  downtrends: TrendProject[]
+  defaultOpen?: boolean
+}
+
+function Segment({ label, uptrends, downtrends, defaultOpen = false }: SegmentProps) {
+  const [open, setOpen] = useState(defaultOpen)
+
+  return (
+    <div className={`border border-border/25 rounded-lg overflow-hidden flex flex-col flex-1 min-h-0 ${open ? "" : "shrink-0"}`}>
+      {/* Collapsed header — always visible */}
+      <button
+        onClick={() => setOpen((v) => !v)}
+        className="w-full flex items-center justify-between px-3 py-2.5 hover:bg-muted/30 transition-colors shrink-0"
+      >
+        <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-foreground/70">{label}</span>
+        <ChevronDown
+          className={`w-3.5 h-3.5 text-muted-foreground transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+        />
+      </button>
+
+      {/* Expandable content — grows to fill available height when open */}
+      {open && (
+        <div className="px-3 pb-3 pt-1 flex gap-2 border-t border-border/15 flex-1 min-h-0">
+          <TrendColumn projects={uptrends} direction="up" />
+          <div className="w-px bg-border/20 shrink-0 mx-0.5" />
+          <TrendColumn projects={downtrends} direction="down" />
+        </div>
+      )}
+    </div>
+  )
 }
 
 export function TrendsSection() {
-  // Mock data for projects with uptrends
-  const uptrends: TrendProject[] = [
-    { id: "1", name: "Harbor Bridge", costTrend: 12.5, scheduleTrend: 8.3 },
-    { id: "2", name: "Tech Campus", costTrend: 9.7, scheduleTrend: 11.2 },
-    { id: "3", name: "Metro Tower", costTrend: 7.4, scheduleTrend: 6.8 },
-  ]
-
-  // Mock data for projects with downtrends
-  const downtrends: TrendProject[] = [
-    { id: "4", name: "Riverside Homes", costTrend: 15.3, scheduleTrend: 9.5 },
-    { id: "5", name: "Industrial Park", costTrend: 11.2, scheduleTrend: 7.8 },
-    { id: "6", name: "Skyline Plaza", costTrend: 8.6, scheduleTrend: 5.2 },
-  ]
-
   return (
-    <div className="glass-card rounded-lg p-4 h-full flex flex-col">
-      <h2 className="text-sm font-medium text-foreground mb-6">Uptrends / Downtrends</h2>
-      <p className="text-xs text-muted-foreground mb-4">(Actual production vs. last approved baselines)</p>
+    <div className="glass-card rounded-xl px-4 pt-3 pb-4 flex flex-col h-full overflow-y-auto">
 
-      <div className="flex-1 overflow-y-auto space-y-6">
-        {/* Uptrends Section */}
+      {/* Header */}
+      <div className="flex items-start justify-between mb-4">
         <div>
-          <div className="flex items-center gap-2 mb-3">
-            <TrendingUp className="w-4 h-4 text-success" />
-            <h3 className="text-xs font-semibold text-foreground uppercase tracking-wide">Best Uptrends</h3>
+          <div className="flex items-center gap-2">
+            <div className="w-1 h-4 rounded-full bg-accent shrink-0" />
+            <h2 className="text-sm font-bold text-foreground leading-tight">Uptrends / Downtrends</h2>
           </div>
-          <div className="space-y-2">
-            {uptrends.map((project) => (
-              <div key={project.id} className="group cursor-pointer">
-                <div className="flex items-center justify-between mb-1">
-                  <p className="text-xs text-foreground truncate hover:text-accent transition-colors">{project.name}</p>
-                </div>
-                <div className="flex gap-2">
-                  <div className="flex-1">
-                    <div className="flex items-center justify-between mb-0.5">
-                      <span className="text-xs text-muted-foreground">Cost</span>
-                      <span className="text-xs font-semibold text-success">{project.costTrend}%</span>
-                    </div>
-                    <div className="h-1.5 bg-secondary/50 rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-success transition-all duration-300"
-                        style={{ width: `${Math.min(project.costTrend * 3, 100)}%` }}
-                      />
-                    </div>
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center justify-between mb-0.5">
-                      <span className="text-xs text-muted-foreground">Schedule</span>
-                      <span className="text-xs font-semibold text-success">{project.scheduleTrend}%</span>
-                    </div>
-                    <div className="h-1.5 bg-secondary/50 rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-success transition-all duration-300"
-                        style={{ width: `${Math.min(project.scheduleTrend * 3, 100)}%` }}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+          <p className="text-[10px] text-muted-foreground/60 leading-tight mt-0.5 ml-3">
+            Actual production vs. last approved baselines
+          </p>
         </div>
+      </div>
 
-        {/* Downtrends Section */}
-        <div>
-          <div className="flex items-center gap-2 mb-3">
-            <TrendingDown className="w-4 h-4 text-destructive" />
-            <h3 className="text-xs font-semibold text-foreground uppercase tracking-wide">Biggest Downtrends</h3>
-          </div>
-          <div className="space-y-2">
-            {downtrends.map((project) => (
-              <div key={project.id} className="group cursor-pointer">
-                <div className="flex items-center justify-between mb-1">
-                  <p className="text-xs text-foreground truncate hover:text-accent transition-colors">{project.name}</p>
-                </div>
-                <div className="flex gap-2">
-                  <div className="flex-1">
-                    <div className="flex items-center justify-between mb-0.5">
-                      <span className="text-xs text-muted-foreground">Cost</span>
-                      <span className="text-xs font-semibold text-destructive">{project.costTrend}%</span>
-                    </div>
-                    <div className="h-1.5 bg-secondary/50 rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-destructive transition-all duration-300"
-                        style={{ width: `${Math.min(Math.abs(project.costTrend) * 3, 100)}%` }}
-                      />
-                    </div>
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center justify-between mb-0.5">
-                      <span className="text-xs text-muted-foreground">Schedule</span>
-                      <span className="text-xs font-semibold text-destructive">{project.scheduleTrend}%</span>
-                    </div>
-                    <div className="h-1.5 bg-secondary/50 rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-destructive transition-all duration-300"
-                        style={{ width: `${Math.min(Math.abs(project.scheduleTrend) * 3, 100)}%` }}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+      <div className="flex flex-col gap-3 flex-1 min-h-0">
+        <Segment
+          label="Progress"
+          uptrends={[
+            { id: "s1", name: "Harbor Bridge", delta: 11.3 },
+            { id: "s2", name: "Tech Campus", delta: 8.2 },
+            { id: "s3", name: "Metro Tower", delta: 6.8 },
+            { id: "s4", name: "Westside Rail", delta: 4.5 },
+          ]}
+          downtrends={[
+            { id: "s5", name: "Riverside Homes", delta: 12.5 },
+            { id: "s6", name: "Industrial Park", delta: 7.8 },
+            { id: "s7", name: "Skyline Plaza", delta: 5.2 },
+            { id: "s8", name: "Coastal Road", delta: 2.1 },
+          ]}
+        />
+        <Segment
+          label="Costs"
+          uptrends={[
+            { id: "c1", name: "Harbor Bridge", delta: 11.3 },
+            { id: "c2", name: "Tech Campus", delta: 9.7 },
+            { id: "c3", name: "Metro Tower", delta: 7.4 },
+            { id: "c4", name: "Westside Rail", delta: 5.1 },
+          ]}
+          downtrends={[
+            { id: "c5", name: "Riverside Homes", delta: 15.3 },
+            { id: "c6", name: "Industrial Park", delta: 11.2 },
+            { id: "c7", name: "Skyline Plaza", delta: 8.6 },
+            { id: "c8", name: "Coastal Road", delta: 6.4 },
+          ]}
+        />
       </div>
     </div>
   )

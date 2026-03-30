@@ -42,35 +42,15 @@ function Badge({ value, color }: { value: string; color: string }) {
   )
 }
 
-function ProgressBar({ actual, planned }: { actual: number; planned: number }) {
-  const color = progressColor(actual, planned)
-  return (
-    <div className="flex items-center gap-2 min-w-0">
-      <div className="relative flex-1 h-1.5 bg-secondary rounded-full overflow-hidden">
-        {/* Planned marker */}
-        <div
-          className="absolute top-0 h-full w-0.5 bg-border z-10"
-          style={{ left: `${planned}%` }}
-        />
-        {/* Actual fill */}
-        <div
-          className="h-full rounded-full transition-all"
-          style={{ width: `${actual}%`, backgroundColor: color }}
-        />
-      </div>
-      <span className="text-[11px] font-mono shrink-0" style={{ color }}>{actual}%</span>
-    </div>
-  )
-}
-
 const COLUMNS = [
   { label: "Project", span: "col-span-3" },
   { label: "Location", span: "col-span-1" },
   { label: "Planned Prog.", span: "col-span-1" },
-  { label: "Actual Prog.", span: "col-span-2" },
+  { label: "Actual Prog.", span: "col-span-1" },
   { label: "Planned IC", span: "col-span-1" },
   { label: "Adjusted IC", span: "col-span-1" },
   { label: "Analytical IC", span: "col-span-1" },
+  { label: "", span: "col-span-1" },
 ]
 
 function ProjectRow({ name, id, location, plannedProgress, actualProgress, plannedIC, adjustedIC, analyticalIC }: Project) {
@@ -103,9 +83,9 @@ function ProjectRow({ name, id, location, plannedProgress, actualProgress, plann
           <span className="text-[11px] font-mono text-muted-foreground">{plannedProgress}%</span>
         </div>
 
-        {/* Actual Progress bar */}
-        <div className="col-span-2">
-          <ProgressBar actual={actualProgress} planned={plannedProgress} />
+        {/* Actual Progress */}
+        <div className="col-span-1 text-right">
+          <Badge value={`${actualProgress}%`} color={progressColor(actualProgress, plannedProgress)} />
         </div>
 
         {/* Planned IC */}
@@ -122,6 +102,9 @@ function ProjectRow({ name, id, location, plannedProgress, actualProgress, plann
         <div className="col-span-1 text-right">
           <Badge value={`${analyticalIC}%`} color={icColor(analyticalIC)} />
         </div>
+
+        {/* Spacer for grid alignment */}
+        <div className="col-span-1" />
       </div>
     </Link>
   )
@@ -129,15 +112,15 @@ function ProjectRow({ name, id, location, plannedProgress, actualProgress, plann
 
 export function ProjectList() {
   const projects: Project[] = [
-    { name: "Metro Tower",     id: "PRJ-001", location: "Lisboa, PT",    plannedProgress: 75,  actualProgress: 68,  plannedIC: 82,  adjustedIC: 90,  analyticalIC: 85 },
+    { name: "Metro Tower",     id: "PRJ-001", location: "Lisboa, PT",    plannedProgress: 75,  actualProgress: 68,  plannedIC: 82,  adjustedIC: 90,  analyticalIC: 84 },
     { name: "Harbor Bridge",   id: "PRJ-002", location: "Porto, PT",     plannedProgress: 50,  actualProgress: 42,  plannedIC: 78,  adjustedIC: 97,  analyticalIC: 91 },
-    { name: "Skyline Plaza",   id: "PRJ-003", location: "Madrid, ES",    plannedProgress: 80,  actualProgress: 85,  plannedIC: 88,  adjustedIC: 94,  analyticalIC: 89 },
-    { name: "Industrial Park", id: "PRJ-004", location: "Setúbal, PT",   plannedProgress: 35,  actualProgress: 31,  plannedIC: 75,  adjustedIC: 70,  analyticalIC: 66 },
-    { name: "Riverside Homes", id: "PRJ-005", location: "Maputo, MZ",    plannedProgress: 60,  actualProgress: 56,  plannedIC: 80,  adjustedIC: 78,  analyticalIC: 73 },
-    { name: "Tech Campus",     id: "PRJ-006", location: "Luanda, AO",    plannedProgress: 55,  actualProgress: 45,  plannedIC: 83,  adjustedIC: 99,  analyticalIC: 93 },
-    { name: "Highway 12 Ext",  id: "PRJ-007", location: "Braga, PT",     plannedProgress: 70,  actualProgress: 72,  plannedIC: 79,  adjustedIC: 68,  analyticalIC: 63 },
-    { name: "Green Valley",    id: "PRJ-008", location: "Nairobi, KE",   plannedProgress: 55,  actualProgress: 51,  plannedIC: 77,  adjustedIC: 72,  analyticalIC: 68 },
-    { name: "Data Center",     id: "PRJ-009", location: "Singapore, SG", plannedProgress: 45,  actualProgress: 39,  plannedIC: 81,  adjustedIC: 75,  analyticalIC: 71 },
+    { name: "Skyline Plaza",   id: "PRJ-003", location: "Madrid, ES",    plannedProgress: 80,  actualProgress: 85,  plannedIC: 88,  adjustedIC: 94,  analyticalIC: 88 },
+    { name: "Industrial Park", id: "PRJ-004", location: "Setúbal, PT",   plannedProgress: 35,  actualProgress: 31,  plannedIC: 75,  adjustedIC: 70,  analyticalIC: 65 },
+    { name: "Riverside Homes", id: "PRJ-005", location: "Maputo, MZ",    plannedProgress: 60,  actualProgress: 56,  plannedIC: 80,  adjustedIC: 78,  analyticalIC: 72 },
+    { name: "Tech Campus",     id: "PRJ-006", location: "Luanda, AO",    plannedProgress: 55,  actualProgress: 45,  plannedIC: 83,  adjustedIC: 99,  analyticalIC: 92 },
+    { name: "Highway 12 Ext",  id: "PRJ-007", location: "Braga, PT",     plannedProgress: 70,  actualProgress: 72,  plannedIC: 79,  adjustedIC: 68,  analyticalIC: 62 },
+    { name: "Green Valley",    id: "PRJ-008", location: "Nairobi, KE",   plannedProgress: 55,  actualProgress: 51,  plannedIC: 77,  adjustedIC: 72,  analyticalIC: 67 },
+    { name: "Data Center",     id: "PRJ-009", location: "Singapore, SG", plannedProgress: 45,  actualProgress: 39,  plannedIC: 81,  adjustedIC: 75,  analyticalIC: 70 },
   ]
 
   return (
@@ -152,7 +135,7 @@ export function ProjectList() {
       {/* Header row */}
       <div className="grid grid-cols-10 gap-3 px-3 pb-2 border-b border-border/30">
         {COLUMNS.map(({ label, span }) => (
-          <div key={label} className={`${span} text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/60 ${label !== "Project" && label !== "Location" && label !== "Actual Prog." ? "text-right" : ""}`}>
+          <div key={label} className={`${span} text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/60 ${label === "Project" || label === "Location" || label === "" ? "" : "text-right"}`}>
             {label}
           </div>
         ))}

@@ -15,6 +15,97 @@ import Link from 'next/link'
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts'
 import { useChartColors } from '@/hooks/use-chart-colors'
 
+// ─── Economic Table Row with hover popover ────────────────────────────────────
+type EconRow = {
+  activity: string
+  status: string
+  completeness: number
+  currentCost: number
+  commercialIC: number
+  projectedIC: number
+  currentIC: number
+  weeklyCosts: { week: string; labour: number; materials: number; subcontracted: number }[]
+}
+
+function EconomicTableRow({
+  row,
+  economicValue,
+  icColor,
+  chartColors,
+}: {
+  row: EconRow
+  economicValue: number
+  icColor: (ic: number) => string
+  chartColors: ReturnType<typeof useChartColors>
+}) {
+  const [popoverOpen, setPopoverOpen] = useState(false)
+
+  return (
+    <tr className="border-b border-border/30 hover:bg-secondary/20 relative">
+      <td className="py-3 text-foreground font-medium">{row.activity}</td>
+      <td className="py-3 text-right text-foreground">€{economicValue.toFixed(1)}M</td>
+      <td className="py-3">
+        <span className={`text-xs px-2 py-0.5 rounded-full ${
+          row.status === 'Finished'    ? 'bg-[#16a34a]/15 text-[#16a34a]' :
+          row.status === 'Ongoing'     ? 'bg-accent/20 text-accent' :
+                                         'bg-muted/30 text-muted-foreground'
+        }`}>{row.status}</span>
+      </td>
+      <td className="py-3 text-right text-foreground">{row.completeness}%</td>
+      <td className="py-3 text-right text-foreground">€{row.currentCost.toFixed(2)}M</td>
+      <td className={`py-3 text-right font-semibold ${icColor(row.commercialIC)}`}>{row.commercialIC}%</td>
+      <td className={`py-3 text-right font-semibold ${icColor(row.projectedIC)}`}>{row.projectedIC}%</td>
+      <td className={`py-3 text-right font-semibold ${icColor(row.currentIC)}`}>{row.currentIC}%</td>
+      {/* Three-dot popover */}
+      <td className="py-3 text-right relative">
+        <button
+          onMouseEnter={() => setPopoverOpen(true)}
+          onMouseLeave={() => setPopoverOpen(false)}
+          className="p-1 rounded hover:bg-secondary/50 text-muted-foreground transition-colors"
+          aria-label="View weekly costs"
+        >
+          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+            <circle cx="4" cy="10" r="1.5" /><circle cx="10" cy="10" r="1.5" /><circle cx="16" cy="10" r="1.5" />
+          </svg>
+        </button>
+        {popoverOpen && (
+          <div
+            onMouseEnter={() => setPopoverOpen(true)}
+            onMouseLeave={() => setPopoverOpen(false)}
+            className="absolute right-0 bottom-full mb-2 z-50 w-72 bg-background border border-border/50 rounded-lg shadow-xl p-3"
+          >
+            <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-2">
+              Weekly Costs by Nature — Last 4 Weeks
+            </p>
+            <ResponsiveContainer width="100%" height={120}>
+              <BarChart data={row.weeklyCosts} barSize={8} barGap={2}>
+                <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} />
+                <XAxis dataKey="week" stroke={chartColors.axis} tick={{ fontSize: 10 }} />
+                <YAxis stroke={chartColors.axis} tick={{ fontSize: 10 }} tickFormatter={(v) => `${v}M`} />
+                <Tooltip
+                  contentStyle={{ backgroundColor: chartColors.tooltipBg, border: chartColors.tooltipBorder, fontSize: 11 }}
+                  formatter={(v: number) => `€${v.toFixed(2)}M`}
+                />
+                <Bar dataKey="labour"       name="Labour"       fill="#999999" />
+                <Bar dataKey="materials"    name="Materials"    fill="#00c8ff" />
+                <Bar dataKey="subcontracted" name="Subcontracted" fill="#ff6b6b" />
+              </BarChart>
+            </ResponsiveContainer>
+            <div className="flex items-center gap-3 mt-2">
+              {[{ label:'Labour', color:'#999999' },{ label:'Materials', color:'#00c8ff' },{ label:'Subcontracted', color:'#ff6b6b' }].map(l => (
+                <div key={l.label} className="flex items-center gap-1">
+                  <div className="w-2 h-2 rounded-sm" style={{ backgroundColor: l.color }} />
+                  <span className="text-[10px] text-muted-foreground">{l.label}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </td>
+    </tr>
+  )
+}
+
 export default function ProjectOverview({ params }: { params: { id: string } }) {
   const chartColors = useChartColors()
   const [activeTab, setActiveTab] = useState('overview')
@@ -127,12 +218,37 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
     { name: 'Painting & Decoration',  value: 1.5, metric: 'm²',         total_planned_qty: 1100, planned_qty: 200,  executed_qty: 50,   expected_completeness: (200/1100).toFixed(2),  actual_completeness: 5,  earnedValue: 0.075, status: 'Not Started', forecast_deadline: '15/07/2024', float_weeks: 3 },
   ]
 
-  const economicTable = activities.map(activity => ({
-    activity: activity.name,
-    completeness: activity.actual_completeness,
-    baseline: activity.value * (activity.actual_completeness / 100),
-    actual: activity.value * (activity.actual_completeness / 100) * 1.08,
-  }))
+  const weeklyNatureCosts: Record<string, { week: string; labour: number; materials: number; subcontracted: number }[]> = {
+    'Site Preparation':       [{ week:'W6', labour:0.08, materials:0.05, subcontracted:0.02 },{ week:'W7', labour:0.07, materials:0.06, subcontracted:0.03 },{ week:'W8', labour:0.09, materials:0.04, subcontracted:0.02 },{ week:'W9', labour:0.06, materials:0.05, subcontracted:0.01 }],
+    'Foundation Work':        [{ week:'W6', labour:0.18, materials:0.14, subcontracted:0.07 },{ week:'W7', labour:0.20, materials:0.13, subcontracted:0.06 },{ week:'W8', labour:0.17, materials:0.15, subcontracted:0.08 },{ week:'W9', labour:0.19, materials:0.12, subcontracted:0.07 }],
+    'Structure Assembly':     [{ week:'W6', labour:0.25, materials:0.19, subcontracted:0.10 },{ week:'W7', labour:0.22, materials:0.21, subcontracted:0.11 },{ week:'W8', labour:0.26, materials:0.18, subcontracted:0.09 },{ week:'W9', labour:0.24, materials:0.20, subcontracted:0.10 }],
+    'Mechanical Systems':     [{ week:'W6', labour:0.10, materials:0.08, subcontracted:0.12 },{ week:'W7', labour:0.11, materials:0.09, subcontracted:0.13 },{ week:'W8', labour:0.09, materials:0.10, subcontracted:0.11 },{ week:'W9', labour:0.12, materials:0.07, subcontracted:0.14 }],
+    'Finishing Works':        [{ week:'W6', labour:0.07, materials:0.06, subcontracted:0.04 },{ week:'W7', labour:0.08, materials:0.05, subcontracted:0.03 },{ week:'W8', labour:0.06, materials:0.07, subcontracted:0.05 },{ week:'W9', labour:0.09, materials:0.04, subcontracted:0.03 }],
+    'Electrical Installation':[{ week:'W6', labour:0.14, materials:0.09, subcontracted:0.08 },{ week:'W7', labour:0.13, materials:0.10, subcontracted:0.09 },{ week:'W8', labour:0.15, materials:0.08, subcontracted:0.07 },{ week:'W9', labour:0.12, materials:0.11, subcontracted:0.08 }],
+    'Plumbing Systems':       [{ week:'W6', labour:0.11, materials:0.07, subcontracted:0.05 },{ week:'W7', labour:0.10, materials:0.08, subcontracted:0.06 },{ week:'W8', labour:0.12, materials:0.06, subcontracted:0.04 },{ week:'W9', labour:0.09, materials:0.09, subcontracted:0.05 }],
+    'HVAC Installation':      [{ week:'W6', labour:0.20, materials:0.16, subcontracted:0.14 },{ week:'W7', labour:0.22, materials:0.15, subcontracted:0.13 },{ week:'W8', labour:0.19, materials:0.17, subcontracted:0.15 },{ week:'W9', labour:0.21, materials:0.14, subcontracted:0.12 }],
+    'Exterior Cladding':      [{ week:'W6', labour:0.09, materials:0.12, subcontracted:0.06 },{ week:'W7', labour:0.10, materials:0.11, subcontracted:0.07 },{ week:'W8', labour:0.08, materials:0.13, subcontracted:0.05 },{ week:'W9', labour:0.11, materials:0.10, subcontracted:0.06 }],
+    'Interior Partitions':    [{ week:'W6', labour:0.08, materials:0.06, subcontracted:0.04 },{ week:'W7', labour:0.07, materials:0.07, subcontracted:0.05 },{ week:'W8', labour:0.09, materials:0.05, subcontracted:0.03 },{ week:'W9', labour:0.08, materials:0.08, subcontracted:0.04 }],
+    'Roofing Works':          [{ week:'W6', labour:0.13, materials:0.10, subcontracted:0.07 },{ week:'W7', labour:0.14, materials:0.09, subcontracted:0.08 },{ week:'W8', labour:0.12, materials:0.11, subcontracted:0.06 },{ week:'W9', labour:0.15, materials:0.08, subcontracted:0.07 }],
+    'Flooring Installation':  [{ week:'W6', labour:0.06, materials:0.09, subcontracted:0.03 },{ week:'W7', labour:0.07, materials:0.08, subcontracted:0.04 },{ week:'W8', labour:0.05, materials:0.10, subcontracted:0.02 },{ week:'W9', labour:0.08, materials:0.07, subcontracted:0.03 }],
+    'Painting & Decoration':  [{ week:'W6', labour:0.04, materials:0.03, subcontracted:0.02 },{ week:'W7', labour:0.05, materials:0.02, subcontracted:0.01 },{ week:'W8', labour:0.03, materials:0.04, subcontracted:0.02 },{ week:'W9', labour:0.06, materials:0.02, subcontracted:0.01 }],
+  }
+
+  const economicTable = activities.map(activity => {
+    const commercialIC = 80 + Math.random() * 5
+    const projectedIC  = commercialIC + 5 + Math.random() * 8
+    const currentIC    = commercialIC + 3 + Math.random() * 6
+    return {
+      activity:      activity.name,
+      status:        activity.status,
+      completeness:  activity.actual_completeness,
+      currentCost:   activity.value * (activity.actual_completeness / 100) * 1.08,
+      commercialIC:  parseFloat(commercialIC.toFixed(1)),
+      projectedIC:   parseFloat(projectedIC.toFixed(1)),
+      currentIC:     parseFloat(currentIC.toFixed(1)),
+      weeklyCosts:   weeklyNatureCosts[activity.name] ?? [],
+    }
+  })
 
   const costBreakdownData = [
     { category: 'Labour (MDO)', planned: 12.5, estimated: 12.8, actual: 13.2 },
@@ -832,48 +948,39 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b border-border/50">
-                      <th className="text-left text-xs text-muted-foreground font-semibold py-2">Activity</th>
-                      <th
-                        className="text-center text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors"
-                        onClick={() => handleEconomicSort('baselineCost')}
-                      >
-                        Baseline Cost<br />(for progress %) {economicSortBy === 'baselineCost' && (economicSortDirection === 'asc' ? '↑' : '↓')}
+                      <th className="text-left text-xs text-muted-foreground font-semibold py-2 min-w-[140px]">Activity</th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleEconomicSort('actualCost')}>
+                        Econ. Value (€M) {economicSortBy === 'actualCost' && (economicSortDirection === 'asc' ? '↑' : '↓')}
                       </th>
-                      <th
-                        className="text-center text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors"
-                        onClick={() => handleEconomicSort('actualCost')}
-                      >
-                        Actual Cost<br />(for progress %) {economicSortBy === 'actualCost' && (economicSortDirection === 'asc' ? '↑' : '↓')}
+                      <th className="text-left text-xs text-muted-foreground font-semibold py-2">Status</th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleEconomicSort('baselineCost')}>
+                        Current Progress {economicSortBy === 'baselineCost' && (economicSortDirection === 'asc' ? '↑' : '↓')}
                       </th>
-                      <th
-                        className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors"
-                        onClick={() => handleEconomicSort('totalBaseline')}
-                      >
-                        Total Baseline {economicSortBy === 'totalBaseline' && (economicSortDirection === 'asc' ? '↑' : '↓')}
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Current Cost (€M)</th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Commercial IC</th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleEconomicSort('totalEstimated')}>
+                        Projected IC {economicSortBy === 'totalEstimated' && (economicSortDirection === 'asc' ? '↑' : '↓')}
                       </th>
-                      <th
-                        className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors"
-                        onClick={() => handleEconomicSort('totalEstimated')}
-                      >
-                        Total Estimated {economicSortBy === 'totalEstimated' && (economicSortDirection === 'asc' ? '↑' : '↓')}
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleEconomicSort('totalBaseline')}>
+                        Current IC {economicSortBy === 'totalBaseline' && (economicSortDirection === 'asc' ? '↑' : '↓')}
                       </th>
-                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Float</th>
+                      <th className="w-8" />
                     </tr>
                   </thead>
                   <tbody>
                     {getSortedEconomicTable().map((row, idx) => {
-                      const totalBaseline = row.baseline / (row.completeness / 100);
-                      const totalEstimated = row.actual / (row.completeness / 100) * 1.05;
-                      const floatWeeks = 2 - Math.floor(idx / 2);
+                      const activity = activities.find(a => a.name === row.activity)
+                      const economicValue = activity?.value ?? 0
+                      const icColor = (ic: number) =>
+                        ic < 85 ? 'text-[#16a34a]' : ic < 95 ? 'text-[#d97706]' : 'text-[#dc2626]'
                       return (
-                        <tr key={idx} className="border-b border-border/30 hover:bg-secondary/20">
-                          <td className="py-3 text-foreground">{row.activity}</td>
-                          <td className="py-3 text-center text-foreground">€{row.baseline.toFixed(2)}M ({row.completeness}%)</td>
-                          <td className="py-3 text-center text-foreground">€{row.actual.toFixed(2)}M ({row.completeness}%)</td>
-                          <td className="py-3 text-right text-foreground">€{totalBaseline.toFixed(1)}M</td>
-                          <td className="py-3 text-right text-foreground">€{totalEstimated.toFixed(1)}M</td>
-                          <td className={`py-3 text-right font-semibold ${floatWeeks === 0 ? 'text-destructive' : 'text-foreground'}`}>{floatWeeks}w</td>
-                        </tr>
+                        <EconomicTableRow
+                          key={idx}
+                          row={row}
+                          economicValue={economicValue}
+                          icColor={icColor}
+                          chartColors={chartColors}
+                        />
                       );
                     })}
                   </tbody>
@@ -1205,48 +1312,39 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b border-border/50">
-                      <th className="text-left text-xs text-muted-foreground font-semibold py-2">Activity</th>
-                      <th
-                        className="text-center text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors"
-                        onClick={() => handleEconomicSort('baselineCost')}
-                      >
-                        Baseline Cost<br />(for progress %) {economicSortBy === 'baselineCost' && (economicSortDirection === 'asc' ? '↑' : '↓')}
+                      <th className="text-left text-xs text-muted-foreground font-semibold py-2 min-w-[140px]">Activity</th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleEconomicSort('actualCost')}>
+                        Econ. Value (€M) {economicSortBy === 'actualCost' && (economicSortDirection === 'asc' ? '↑' : '↓')}
                       </th>
-                      <th
-                        className="text-center text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors"
-                        onClick={() => handleEconomicSort('actualCost')}
-                      >
-                        Actual Cost<br />(for progress %) {economicSortBy === 'actualCost' && (economicSortDirection === 'asc' ? '↑' : '↓')}
+                      <th className="text-left text-xs text-muted-foreground font-semibold py-2">Status</th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleEconomicSort('baselineCost')}>
+                        Current Progress {economicSortBy === 'baselineCost' && (economicSortDirection === 'asc' ? '↑' : '↓')}
                       </th>
-                      <th
-                        className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors"
-                        onClick={() => handleEconomicSort('totalBaseline')}
-                      >
-                        Total Baseline {economicSortBy === 'totalBaseline' && (economicSortDirection === 'asc' ? '↑' : '↓')}
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Current Cost (€M)</th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Commercial IC</th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleEconomicSort('totalEstimated')}>
+                        Projected IC {economicSortBy === 'totalEstimated' && (economicSortDirection === 'asc' ? '↑' : '↓')}
                       </th>
-                      <th
-                        className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors"
-                        onClick={() => handleEconomicSort('totalEstimated')}
-                      >
-                        Total Estimated {economicSortBy === 'totalEstimated' && (economicSortDirection === 'asc' ? '↑' : '↓')}
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleEconomicSort('totalBaseline')}>
+                        Current IC {economicSortBy === 'totalBaseline' && (economicSortDirection === 'asc' ? '↑' : '↓')}
                       </th>
-                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Float</th>
+                      <th className="w-8" />
                     </tr>
                   </thead>
                   <tbody>
                     {getSortedEconomicTable().map((row, idx) => {
-                      const totalBaseline = row.baseline / (row.completeness / 100);
-                      const totalEstimated = row.actual / (row.completeness / 100) * 1.05;
-                      const floatWeeks = 2 - Math.floor(idx / 2);
+                      const activity = activities.find(a => a.name === row.activity)
+                      const economicValue = activity?.value ?? 0
+                      const icColor = (ic: number) =>
+                        ic < 85 ? 'text-[#16a34a]' : ic < 95 ? 'text-[#d97706]' : 'text-[#dc2626]'
                       return (
-                        <tr key={idx} className="border-b border-border/30 hover:bg-secondary/20">
-                          <td className="py-3 text-foreground">{row.activity}</td>
-                          <td className="py-3 text-center text-foreground">€{row.baseline.toFixed(2)}M ({row.completeness}%)</td>
-                          <td className="py-3 text-center text-foreground">€{row.actual.toFixed(2)}M ({row.completeness}%)</td>
-                          <td className="py-3 text-right text-foreground">€{totalBaseline.toFixed(1)}M</td>
-                          <td className="py-3 text-right text-foreground">€{totalEstimated.toFixed(1)}M</td>
-                          <td className={`py-3 text-right font-semibold ${floatWeeks === 0 ? 'text-destructive' : 'text-foreground'}`}>{floatWeeks}w</td>
-                        </tr>
+                        <EconomicTableRow
+                          key={idx}
+                          row={row}
+                          economicValue={economicValue}
+                          icColor={icColor}
+                          chartColors={chartColors}
+                        />
                       );
                     })}
                   </tbody>

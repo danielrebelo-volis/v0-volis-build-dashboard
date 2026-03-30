@@ -54,21 +54,17 @@ export function MetricsSidebar() {
           <KpiRow
             label="Active Projects"
             value="24"
-            change="+3"
-            trend="up"
             icon={<Building2 className="w-3.5 h-3.5" />}
             accent="#00d4ff"
           />
           <KpiRow
             label="Portfolio Value"
             value="€1.24B"
-            change="+12.4%"
-            trend="up"
             icon={<DollarSign className="w-3.5 h-3.5" />}
             accent="#00ff88"
           />
           <KpiRow
-            label="Pipeline Projects"
+            label="Projects in Pipeline"
             value="11"
             icon={<GitBranch className="w-3.5 h-3.5" />}
             accent="#ffaa00"
@@ -90,15 +86,13 @@ export function MetricsSidebar() {
         <h3 className="text-xs text-muted-foreground uppercase tracking-wider mb-1">Performance Overview</h3>
         <div className="divide-y divide-border/0">
           <KpiRow
-            label="Avg Adjusted Industrial Cost"
+            label="Avg Adjusted IC"
             value="68%"
-            change="+2.1%"
-            trend="down"
             icon={<BarChart2 className="w-3.5 h-3.5" />}
             accent="#ffaa00"
           />
           <KpiRow
-            label="Avg Analytical Industrial Cost"
+            label="Avg Analytical IC"
             value="63%"
             icon={<Activity className="w-3.5 h-3.5" />}
             accent="#00d4ff"
@@ -106,8 +100,6 @@ export function MetricsSidebar() {
           <KpiRow
             label="Avg Project Delay"
             value="21 days"
-            change="-3d"
-            trend="up"
             icon={<Clock className="w-3.5 h-3.5" />}
             accent="#00ff88"
           />

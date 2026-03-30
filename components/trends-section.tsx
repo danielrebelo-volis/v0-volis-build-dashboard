@@ -50,21 +50,21 @@ function TrendColumn({ projects, direction }: TrendColumnProps) {
 
 export function TrendsSection() {
   const scheduleUptrends: TrendProject[] = [
-    { id: "s1", name: "Harbor Bridge", delta: 8.3 },
-    { id: "s2", name: "Tech Campus", delta: 11.2 },
+    { id: "s1", name: "Harbor Bridge", delta: 11.3 },
+    { id: "s2", name: "Tech Campus", delta: 8.2 },
     { id: "s3", name: "Metro Tower", delta: 6.8 },
     { id: "s4", name: "Westside Rail", delta: 4.5 },
   ]
 
   const scheduleDowntrends: TrendProject[] = [
-    { id: "s5", name: "Riverside Homes", delta: 9.5 },
+    { id: "s5", name: "Riverside Homes", delta: 12.5 },
     { id: "s6", name: "Industrial Park", delta: 7.8 },
     { id: "s7", name: "Skyline Plaza", delta: 5.2 },
-    { id: "s8", name: "Coastal Road", delta: 12.1 },
+    { id: "s8", name: "Coastal Road", delta: 2.1 },
   ]
 
   const costUptrends: TrendProject[] = [
-    { id: "c1", name: "Harbor Bridge", delta: 12.5 },
+    { id: "c1", name: "Harbor Bridge", delta: 11.3 },
     { id: "c2", name: "Tech Campus", delta: 9.7 },
     { id: "c3", name: "Metro Tower", delta: 7.4 },
     { id: "c4", name: "Westside Rail", delta: 5.1 },
@@ -78,7 +78,7 @@ export function TrendsSection() {
   ]
 
   return (
-    <div className="glass-card rounded-lg p-4 h-full flex flex-col">
+    <div className="glass-card rounded-lg p-4 min-h-screen flex flex-col">
       <h2 className="text-sm font-medium text-foreground mb-0.5">Uptrends / Downtrends</h2>
       <p className="text-xs text-muted-foreground mb-4">Actual production vs. last approved baselines</p>
 

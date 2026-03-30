@@ -1,6 +1,7 @@
 "use client"
 
-import { TrendingUp, TrendingDown } from "lucide-react"
+import { useState } from "react"
+import { TrendingUp, TrendingDown, ChevronDown } from "lucide-react"
 
 interface TrendProject {
   id: string
@@ -15,27 +16,27 @@ interface TrendColumnProps {
 
 function TrendColumn({ projects, direction }: TrendColumnProps) {
   const isUp = direction === "up"
-  const colorClass = isUp ? "text-emerald-400" : "text-destructive"
-  const barColor = isUp ? "bg-emerald-400/70" : "bg-destructive/70"
-  const bgHighlight = isUp ? "bg-emerald-400/5" : "bg-destructive/5"
-  const borderColor = isUp ? "border-emerald-400/20" : "border-destructive/20"
+  const colorClass = isUp ? "text-emerald-500" : "text-destructive"
+  const barColor = isUp ? "bg-emerald-500/70" : "bg-destructive/70"
+  const bgHighlight = isUp ? "bg-emerald-500/5" : "bg-destructive/5"
+  const borderColor = isUp ? "border-emerald-500/20" : "border-destructive/20"
   const Icon = isUp ? TrendingUp : TrendingDown
   const label = isUp ? "Uptrend" : "Downtrend"
   const maxDelta = Math.max(...projects.map((p) => p.delta))
 
   return (
-    <div className="flex-1 min-w-0 flex flex-col min-h-0">
+    <div className="flex-1 min-w-0 flex flex-col gap-2">
       {/* Column header */}
-      <div className={`flex items-center gap-1 mb-2 px-2 py-1 rounded-md border shrink-0 ${bgHighlight} ${borderColor}`}>
+      <div className={`flex items-center gap-1 px-2 py-1 rounded-md border ${bgHighlight} ${borderColor}`}>
         <Icon className={`w-3 h-3 ${colorClass} shrink-0`} />
         <span className={`text-[9px] font-bold uppercase tracking-widest ${colorClass}`}>{label}</span>
       </div>
       {/* Rows */}
-      <div className="flex flex-col justify-around flex-1 min-h-0">
+      <div className="flex flex-col gap-2.5">
         {projects.map((project) => {
           const barWidth = (project.delta / maxDelta) * 100
           return (
-            <div key={project.id} className="group">
+            <div key={project.id}>
               <div className="flex items-center justify-between mb-0.5">
                 <span className="text-[11px] text-foreground/80 leading-tight truncate font-medium">{project.name}</span>
                 <span className={`text-[11px] font-mono font-bold shrink-0 ml-1 ${colorClass}`}>
@@ -60,21 +61,33 @@ interface SegmentProps {
   label: string
   uptrends: TrendProject[]
   downtrends: TrendProject[]
+  defaultOpen?: boolean
 }
 
-function Segment({ label, uptrends, downtrends }: SegmentProps) {
+function Segment({ label, uptrends, downtrends, defaultOpen = false }: SegmentProps) {
+  const [open, setOpen] = useState(defaultOpen)
+
   return (
-    <div className="flex flex-col flex-1 min-h-0 gap-2">
-      <div className="flex items-center gap-2 shrink-0">
-        <div className="h-px flex-1 bg-border/25" />
-        <span className="text-[9px] font-bold uppercase tracking-[0.18em] text-muted-foreground/60 px-1">{label}</span>
-        <div className="h-px flex-1 bg-border/25" />
-      </div>
-      <div className="flex gap-2 flex-1 min-h-0">
-        <TrendColumn projects={uptrends} direction="up" />
-        <div className="w-px bg-border/20 shrink-0 mx-0.5" />
-        <TrendColumn projects={downtrends} direction="down" />
-      </div>
+    <div className="border border-border/25 rounded-lg overflow-hidden">
+      {/* Collapsed header — always visible */}
+      <button
+        onClick={() => setOpen((v) => !v)}
+        className="w-full flex items-center justify-between px-3 py-2.5 hover:bg-muted/30 transition-colors"
+      >
+        <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-foreground/70">{label}</span>
+        <ChevronDown
+          className={`w-3.5 h-3.5 text-muted-foreground transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+        />
+      </button>
+
+      {/* Expandable content */}
+      {open && (
+        <div className="px-3 pb-3 pt-1 flex gap-2 border-t border-border/15">
+          <TrendColumn projects={uptrends} direction="up" />
+          <div className="w-px bg-border/20 shrink-0 mx-0.5" />
+          <TrendColumn projects={downtrends} direction="down" />
+        </div>
+      )}
     </div>
   )
 }
@@ -84,7 +97,7 @@ export function TrendsSection() {
     <div className="glass-card rounded-xl px-4 pt-3 pb-4 flex flex-col h-full overflow-y-auto">
 
       {/* Header */}
-      <div className="flex items-start justify-between mb-3">
+      <div className="flex items-start justify-between mb-4">
         <div>
           <div className="flex items-center gap-2">
             <div className="w-1 h-4 rounded-full bg-accent shrink-0" />
@@ -96,9 +109,9 @@ export function TrendsSection() {
         </div>
       </div>
 
-      <div className="flex flex-col flex-1 min-h-0 gap-4">
+      <div className="flex flex-col gap-3">
         <Segment
-          label="Schedule"
+          label="Progress"
           uptrends={[
             { id: "s1", name: "Harbor Bridge", delta: 11.3 },
             { id: "s2", name: "Tech Campus", delta: 8.2 },

@@ -20,7 +20,16 @@ const REGIONS = ["Europa", "Africa", "Asia", "LatAm"] as const
 type Region = typeof REGIONS[number]
 
 export default function Dashboard() {
-  const [status, setStatus] = useState<"ongoing" | "finished">("ongoing")
+  const [statuses, setStatuses] = useState<Set<"ongoing" | "finished">>(new Set(["ongoing"]))
+
+  const toggleStatus = (s: "ongoing" | "finished") => {
+    setStatuses(prev => {
+      const next = new Set(prev)
+      if (next.has(s) && next.size > 1) next.delete(s)
+      else next.add(s)
+      return next
+    })
+  }
   const [selectedWeek, setSelectedWeek] = useState<number | null>(null)
   const [selectedRegion, setSelectedRegion] = useState<Region | null>(null)
   const [mapView, setMapView] = useState(false)
@@ -79,51 +88,59 @@ export default function Dashboard() {
               <div className="flex items-center justify-between px-4 pt-3 pb-2 shrink-0 border-b border-border/20">
                 <div className="flex items-center gap-3">
                   <div>
-                    <span className="text-sm font-semibold text-foreground tracking-tight">Matriz de Projetos</span>
+                    <span className="text-sm font-semibold text-foreground tracking-tight">Projects Matrix</span>
                   </div>
                   <button
                     onClick={() => setMapView(!mapView)}
                     className="flex items-center gap-1.5 px-2.5 py-1 rounded-md border border-border/40 bg-background/40 text-xs font-medium text-muted-foreground hover:text-foreground hover:border-border/70 transition-all"
                   >
                     <Globe className="w-3 h-3" />
-                    <span>{mapView ? "Ver Vista Matriz" : "Ver Mapa Mundial"}</span>
+                    <span>{mapView ? "Matrix View" : "World Map View"}</span>
                   </button>
                 </div>
 
                 {/* Controls */}
                 <div className="flex items-center gap-2">
-                  {/* Status toggle */}
+                  {/* Status toggle — multi-select */}
                   <div className="flex items-center rounded-md border border-border/40 bg-background/60 backdrop-blur p-0.5 text-xs font-medium">
                     {(["ongoing", "finished"] as const).map((s) => (
                       <button
                         key={s}
-                        onClick={() => setStatus(s)}
-                        className={`px-2.5 py-1 rounded capitalize transition-all ${status === s ? "bg-foreground text-background" : "text-muted-foreground hover:text-foreground"}`}
+                        onClick={() => toggleStatus(s)}
+                        className={`px-2.5 py-1 rounded capitalize transition-all ${statuses.has(s) ? "bg-foreground text-background" : "text-muted-foreground hover:text-foreground"}`}
                       >
                         {s}
                       </button>
                     ))}
                   </div>
 
-                  {/* Week selector */}
-                  <div className="flex items-center rounded-md border border-border/40 bg-background/60 backdrop-blur p-0.5 text-xs font-medium">
-                    <span className="px-2 text-muted-foreground">W</span>
-                    {[1, 2, 3, 4].map((w) => (
-                      <button
-                        key={w}
-                        onClick={() => setSelectedWeek(selectedWeek === w ? null : w)}
-                        className={`w-6 h-6 rounded flex items-center justify-center transition-all ${selectedWeek === w ? "bg-foreground text-background" : "text-muted-foreground hover:text-foreground"}`}
-                      >
-                        {w}
+                  {/* Week dropdown */}
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <button className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-md border border-border/40 bg-background/60 backdrop-blur text-xs font-medium text-muted-foreground hover:text-foreground transition-all">
+                        <span>{selectedWeek ? `Week ${selectedWeek}` : "Week"}</span>
+                        <ChevronDown className="w-3 h-3" />
                       </button>
-                    ))}
-                  </div>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-28">
+                      <DropdownMenuItem onClick={() => setSelectedWeek(null)} className="flex items-center justify-between text-xs">
+                        <span>All</span>
+                        {selectedWeek === null && <Check className="w-3 h-3 text-accent" />}
+                      </DropdownMenuItem>
+                      {[1, 2, 3, 4].map((w) => (
+                        <DropdownMenuItem key={w} onClick={() => setSelectedWeek(selectedWeek === w ? null : w)} className="flex items-center justify-between text-xs">
+                          <span>Week {w}</span>
+                          {selectedWeek === w && <Check className="w-3 h-3 text-accent" />}
+                        </DropdownMenuItem>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
 
                   {/* Region dropdown */}
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <button className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-md border border-border/40 bg-background/60 backdrop-blur text-xs font-medium text-muted-foreground hover:text-foreground transition-all">
-                        <span>{selectedRegion ?? "Regioes"}</span>
+                        <span>{selectedRegion ?? "Regions"}</span>
                         <ChevronDown className="w-3 h-3" />
                       </button>
                     </DropdownMenuTrigger>
@@ -147,7 +164,7 @@ export default function Dashboard() {
               <div className="flex-1 min-h-0 relative">
                 <EVMMatrix
                   view={mapView ? "map" : "matrix"}
-                  selectedStatus={status}
+                  selectedStatuses={statuses}
                   selectedWeek={selectedWeek}
                   selectedRegion={selectedRegion}
                   selectedCategory={filterValue as any ?? "all"}

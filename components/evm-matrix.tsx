@@ -69,9 +69,7 @@ const GEO_URL = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json"
 
 interface EVMMatrixProps {
   view?: "matrix" | "map"
-  filterType?: 'typology' | 'region' | 'week' | 'status' | null
-  filterValue?: string | null
-  selectedStatus?: "ongoing" | "finished"
+  selectedStatuses?: Set<string>
   selectedWeek?: number | null
   selectedRegion?: string | null
   selectedCategory?: Project["category"] | "all"
@@ -79,13 +77,12 @@ interface EVMMatrixProps {
 
 export function EVMMatrix({
   view = "matrix",
-  filterType,
-  filterValue,
-  selectedStatus = "ongoing",
+  selectedStatuses,
   selectedWeek = null,
   selectedRegion = null,
   selectedCategory = "all",
 }: EVMMatrixProps) {
+  const effectiveStatuses = selectedStatuses ?? new Set(["ongoing"])
   const [hoveredProject, setHoveredProject] = useState<Project | null>(null)
   const [hoverSide, setHoverSide] = useState<"left" | "right">("right")
   const colors = useChartColors()
@@ -99,7 +96,7 @@ export function EVMMatrix({
   }
 
   const filteredProjects = projects
-    .filter(p => p.status === selectedStatus)
+    .filter(p => effectiveStatuses.has(p.status))
     .filter(p => selectedRegion ? p.region === selectedRegion : true)
     .filter(p => selectedCategory === "all" ? true : p.category === selectedCategory)
     .map(getProjectData)

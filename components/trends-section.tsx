@@ -25,14 +25,14 @@ function TrendColumn({ projects, direction }: TrendColumnProps) {
   const maxDelta = Math.max(...projects.map((p) => p.delta))
 
   return (
-    <div className="flex-1 min-w-0 flex flex-col gap-2">
+    <div className="flex-1 min-w-0 flex flex-col min-h-0">
       {/* Column header */}
-      <div className={`flex items-center gap-1 px-2 py-1 rounded-md border ${bgHighlight} ${borderColor}`}>
+      <div className={`flex items-center gap-1 px-2 py-1 rounded-md border shrink-0 ${bgHighlight} ${borderColor}`}>
         <Icon className={`w-3 h-3 ${colorClass} shrink-0`} />
         <span className={`text-[9px] font-bold uppercase tracking-widest ${colorClass}`}>{label}</span>
       </div>
       {/* Rows */}
-      <div className="flex flex-col gap-2.5">
+      <div className="flex flex-col justify-around flex-1 min-h-0 pt-1">
         {projects.map((project) => {
           const barWidth = (project.delta / maxDelta) * 100
           return (
@@ -68,11 +68,11 @@ function Segment({ label, uptrends, downtrends, defaultOpen = false }: SegmentPr
   const [open, setOpen] = useState(defaultOpen)
 
   return (
-    <div className="border border-border/25 rounded-lg overflow-hidden">
+    <div className={`border border-border/25 rounded-lg overflow-hidden flex flex-col flex-1 min-h-0 ${open ? "" : "shrink-0"}`}>
       {/* Collapsed header — always visible */}
       <button
         onClick={() => setOpen((v) => !v)}
-        className="w-full flex items-center justify-between px-3 py-2.5 hover:bg-muted/30 transition-colors"
+        className="w-full flex items-center justify-between px-3 py-2.5 hover:bg-muted/30 transition-colors shrink-0"
       >
         <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-foreground/70">{label}</span>
         <ChevronDown
@@ -80,9 +80,9 @@ function Segment({ label, uptrends, downtrends, defaultOpen = false }: SegmentPr
         />
       </button>
 
-      {/* Expandable content */}
+      {/* Expandable content — grows to fill available height when open */}
       {open && (
-        <div className="px-3 pb-3 pt-1 flex gap-2 border-t border-border/15">
+        <div className="px-3 pb-3 pt-1 flex gap-2 border-t border-border/15 flex-1 min-h-0">
           <TrendColumn projects={uptrends} direction="up" />
           <div className="w-px bg-border/20 shrink-0 mx-0.5" />
           <TrendColumn projects={downtrends} direction="down" />
@@ -109,7 +109,7 @@ export function TrendsSection() {
         </div>
       </div>
 
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-3 flex-1 min-h-0">
         <Segment
           label="Progress"
           uptrends={[

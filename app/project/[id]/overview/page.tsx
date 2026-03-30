@@ -942,8 +942,8 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
             </div>
 
             {/* Economic Summary Table */}
-            <div className="glass-card rounded-lg p-4 border border-border/50 gap-6 mb-8">
-              <h3 className="text-sm font-semibold text-foreground mb-4">Economic Summary Table</h3>
+            <div className="glass-card rounded-lg p-4 border border-border/50 mb-8">
+              <h3 className="text-sm font-semibold text-foreground mb-4 text-left">Economic Summary Table</h3>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
@@ -952,7 +952,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                       <th className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleEconomicSort('actualCost')}>
                         Econ. Value (€M) {economicSortBy === 'actualCost' && (economicSortDirection === 'asc' ? '↑' : '↓')}
                       </th>
-                      <th className="text-left text-xs text-muted-foreground font-semibold py-2">Status</th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Status</th>
                       <th className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleEconomicSort('baselineCost')}>
                         Current Progress {economicSortBy === 'baselineCost' && (economicSortDirection === 'asc' ? '↑' : '↓')}
                       </th>

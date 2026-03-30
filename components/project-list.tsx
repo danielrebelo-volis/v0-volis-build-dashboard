@@ -1,93 +1,126 @@
 "use client"
 
-import { MoreHorizontal, ExternalLink } from "lucide-react"
+import { ExternalLink } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 
-interface ProjectRowProps {
+interface Project {
   name: string
   id: string
-  delay: number // % delay (-50 to +50)
-  industrialCost: number // % of contract value (0-100)
-  completion: number
+  location: string
+  plannedProgress: number   // %
+  actualProgress: number    // %
+  plannedIC: number         // %
+  adjustedIC: number        // %
+  analyticalIC: number      // % — always < adjustedIC
 }
 
-const statusConfig = {
-  "ahead": { label: "Ahead", color: "#00ff88" },
-  "delayed": { label: "Delayed", color: "#ff6b6b" },
+// Colour scale: green < 85%, amber 85–95%, red > 95%
+function icColor(value: number): string {
+  if (value < 85) return "#16a34a"   // green-600
+  if (value <= 95) return "#d97706"  // amber-600
+  return "#dc2626"                   // red-600
 }
 
-function ProjectRow({ name, id, delay, industrialCost, completion }: ProjectRowProps) {
-  // Determine status based on delay: delay < 0 = "Ahead" (green), delay > 0 = "Delayed" (red)
-  const status: "ahead" | "delayed" = delay < 0 ? "ahead" : "delayed"
-  const config = statusConfig[status]
+// Progress deviation: actual vs planned
+// actual >= planned → green, within 10% below → amber, > 10% below → red
+function progressColor(actual: number, planned: number): string {
+  const diff = actual - planned
+  if (diff >= 0) return "#16a34a"
+  if (diff >= -10) return "#d97706"
+  return "#dc2626"
+}
 
+function Badge({ value, color }: { value: string; color: string }) {
+  return (
+    <span
+      className="inline-flex items-center px-1.5 py-0.5 rounded text-[11px] font-semibold tabular-nums"
+      style={{ color, backgroundColor: `${color}18` }}
+    >
+      {value}
+    </span>
+  )
+}
+
+function ProgressBar({ actual, planned }: { actual: number; planned: number }) {
+  const color = progressColor(actual, planned)
+  return (
+    <div className="flex items-center gap-2 min-w-0">
+      <div className="relative flex-1 h-1.5 bg-secondary rounded-full overflow-hidden">
+        {/* Planned marker */}
+        <div
+          className="absolute top-0 h-full w-0.5 bg-border z-10"
+          style={{ left: `${planned}%` }}
+        />
+        {/* Actual fill */}
+        <div
+          className="h-full rounded-full transition-all"
+          style={{ width: `${actual}%`, backgroundColor: color }}
+        />
+      </div>
+      <span className="text-[11px] font-mono shrink-0" style={{ color }}>{actual}%</span>
+    </div>
+  )
+}
+
+const COLUMNS = [
+  { label: "Project", span: "col-span-3" },
+  { label: "Location", span: "col-span-1" },
+  { label: "Planned Prog.", span: "col-span-1" },
+  { label: "Actual Prog.", span: "col-span-2" },
+  { label: "Planned IC", span: "col-span-1" },
+  { label: "Adjusted IC", span: "col-span-1" },
+  { label: "Analytical IC", span: "col-span-1" },
+]
+
+function ProjectRow({ name, id, location, plannedProgress, actualProgress, plannedIC, adjustedIC, analyticalIC }: Project) {
   return (
     <Link href={`/project/${id}`}>
-      <div className="group grid grid-cols-12 items-center gap-4 py-3 px-4 hover:bg-secondary/30 transition-colors rounded-lg cursor-pointer">
-        {/* Project Name Section - 3 columns */}
-        <div className="col-span-3 flex items-center gap-4 min-w-0">
+      <div className="group grid grid-cols-10 items-center gap-3 py-2.5 px-3 hover:bg-secondary/30 transition-colors rounded-lg cursor-pointer">
+
+        {/* Project name */}
+        <div className="col-span-3 flex items-center gap-3 min-w-0">
           <div
-            className="w-2 h-2 rounded-full flex-shrink-0"
-            style={{ backgroundColor: config.color }}
+            className="w-2 h-2 rounded-full shrink-0"
+            style={{ backgroundColor: progressColor(actualProgress, plannedProgress) }}
           />
           <div className="min-w-0">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5">
               <span className="text-sm font-medium text-foreground truncate">{name}</span>
-              <ExternalLink className="w-3 h-3 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" />
+              <ExternalLink className="w-3 h-3 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
             </div>
-            <span className="text-xs text-muted-foreground">{id}</span>
+            <span className="text-[11px] text-muted-foreground">{id}</span>
           </div>
         </div>
 
-        {/* Delay - 2 columns */}
-        <div className="col-span-2 text-right">
-          <span className="text-xs text-muted-foreground block">Delay</span>
-          <span className={`text-sm font-mono ${delay < 0 ? 'text-green-500' : 'text-red-500'}`}>
-            {delay > 0 ? '+' : ''}{delay.toFixed(0)}%
-          </span>
+        {/* Location */}
+        <div className="col-span-1 min-w-0">
+          <span className="text-xs text-muted-foreground truncate block">{location}</span>
         </div>
 
-        {/* Industrial Cost - 2 columns */}
-        <div className="col-span-2 text-right">
-          <span className="text-xs text-muted-foreground block">Industrial Cost</span>
-          <span className={`text-sm font-mono ${industrialCost <= 85 ? 'text-success' : 'text-warning'}`}>
-            {industrialCost.toFixed(0)}%
-          </span>
+        {/* Planned Progress */}
+        <div className="col-span-1 text-right">
+          <span className="text-[11px] font-mono text-muted-foreground">{plannedProgress}%</span>
         </div>
 
-        {/* Progress - 3 columns */}
-        <div className="col-span-3">
-          <div className="flex items-center justify-between mb-1">
-            <span className="text-xs text-muted-foreground">Progress</span>
-            <span className="text-xs font-mono text-foreground">{completion}%</span>
-          </div>
-          <div className="w-full h-1 bg-secondary rounded-full overflow-hidden">
-            <div
-              className="h-full rounded-full transition-all"
-              style={{
-                width: `${completion}%`,
-                backgroundColor: config.color
-              }}
-            />
-          </div>
+        {/* Actual Progress bar */}
+        <div className="col-span-2">
+          <ProgressBar actual={actualProgress} planned={plannedProgress} />
         </div>
 
-        {/* Status & More - 2 columns */}
-        <div className="col-span-2 flex items-center justify-between gap-2">
-          <div
-            className="px-2 py-0.5 rounded text-[10px] font-medium uppercase tracking-wider whitespace-nowrap"
-            style={{
-              backgroundColor: `${config.color}15`,
-              color: config.color
-            }}
-          >
-            {config.label}
-          </div>
+        {/* Planned IC */}
+        <div className="col-span-1 text-right">
+          <span className="text-[11px] font-mono text-muted-foreground">{plannedIC}%</span>
+        </div>
 
-          <Button variant="ghost" size="icon" className="opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0">
-            <MoreHorizontal className="w-4 h-4 text-muted-foreground" />
-          </Button>
+        {/* Adjusted IC */}
+        <div className="col-span-1 text-right">
+          <Badge value={`${adjustedIC}%`} color={icColor(adjustedIC)} />
+        </div>
+
+        {/* Analytical IC */}
+        <div className="col-span-1 text-right">
+          <Badge value={`${analyticalIC}%`} color={icColor(analyticalIC)} />
         </div>
       </div>
     </Link>
@@ -95,32 +128,37 @@ function ProjectRow({ name, id, delay, industrialCost, completion }: ProjectRowP
 }
 
 export function ProjectList() {
-  // Aligned with EVM matrix data - same delay and Industrial Cost values
-  const allProjects: ProjectRowProps[] = [
-    { name: "Metro Tower", id: "PRJ-001", delay: -35, industrialCost: 90, completion: 68 },
-    { name: "Harbor Bridge", id: "PRJ-002", delay: 20, industrialCost: 73, completion: 42 },
-    { name: "Skyline Plaza", id: "PRJ-003", delay: 32, industrialCost: 94, completion: 85 },
-    { name: "Industrial Park", id: "PRJ-004", delay: -30, industrialCost: 70, completion: 31 },
-    { name: "Riverside Homes", id: "PRJ-005", delay: 28, industrialCost: 78, completion: 56 },
-    { name: "Tech Campus", id: "PRJ-006", delay: -38, industrialCost: 79, completion: 45 },
-    { name: "Highway 12 Ext", id: "PRJ-007", delay: -25, industrialCost: 68, completion: 72 },
-    { name: "Green Valley", id: "PRJ-008", delay: 38, industrialCost: 72, completion: 51 },
-    { name: "Data Center", id: "PRJ-009", delay: -15, industrialCost: 75, completion: 39 },
+  const projects: Project[] = [
+    { name: "Metro Tower",     id: "PRJ-001", location: "Lisboa, PT",    plannedProgress: 75,  actualProgress: 68,  plannedIC: 82,  adjustedIC: 90,  analyticalIC: 85 },
+    { name: "Harbor Bridge",   id: "PRJ-002", location: "Porto, PT",     plannedProgress: 50,  actualProgress: 42,  plannedIC: 78,  adjustedIC: 97,  analyticalIC: 91 },
+    { name: "Skyline Plaza",   id: "PRJ-003", location: "Madrid, ES",    plannedProgress: 80,  actualProgress: 85,  plannedIC: 88,  adjustedIC: 94,  analyticalIC: 89 },
+    { name: "Industrial Park", id: "PRJ-004", location: "Setúbal, PT",   plannedProgress: 35,  actualProgress: 31,  plannedIC: 75,  adjustedIC: 70,  analyticalIC: 66 },
+    { name: "Riverside Homes", id: "PRJ-005", location: "Maputo, MZ",    plannedProgress: 60,  actualProgress: 56,  plannedIC: 80,  adjustedIC: 78,  analyticalIC: 73 },
+    { name: "Tech Campus",     id: "PRJ-006", location: "Luanda, AO",    plannedProgress: 55,  actualProgress: 45,  plannedIC: 83,  adjustedIC: 99,  analyticalIC: 93 },
+    { name: "Highway 12 Ext",  id: "PRJ-007", location: "Braga, PT",     plannedProgress: 70,  actualProgress: 72,  plannedIC: 79,  adjustedIC: 68,  analyticalIC: 63 },
+    { name: "Green Valley",    id: "PRJ-008", location: "Nairobi, KE",   plannedProgress: 55,  actualProgress: 51,  plannedIC: 77,  adjustedIC: 72,  analyticalIC: 68 },
+    { name: "Data Center",     id: "PRJ-009", location: "Singapore, SG", plannedProgress: 45,  actualProgress: 39,  plannedIC: 81,  adjustedIC: 75,  analyticalIC: 71 },
   ]
-
-  // Filter: Industrial Cost must always be < 100%
-  const projects = allProjects.filter(project => project.industrialCost < 100)
 
   return (
     <div className="glass-card rounded-lg p-4">
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-sm font-medium text-foreground">Recent Projects</h2>
+      <div className="flex items-center justify-between mb-3">
+        <h2 className="text-sm font-semibold text-foreground">Recent Projects</h2>
         <Button variant="ghost" size="sm" className="text-xs text-muted-foreground hover:text-foreground">
           View All
         </Button>
       </div>
 
-      <div className="space-y-1">
+      {/* Header row */}
+      <div className="grid grid-cols-10 gap-3 px-3 pb-2 border-b border-border/30">
+        {COLUMNS.map(({ label, span }) => (
+          <div key={label} className={`${span} text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/60 ${label !== "Project" && label !== "Location" && label !== "Actual Prog." ? "text-right" : ""}`}>
+            {label}
+          </div>
+        ))}
+      </div>
+
+      <div className="space-y-0.5 mt-1">
         {projects.map((project) => (
           <ProjectRow key={project.id} {...project} />
         ))}

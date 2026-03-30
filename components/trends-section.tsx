@@ -96,7 +96,7 @@ export function TrendsSection() {
         </div>
       </div>
 
-      <div className="flex flex-col justify-between flex-1 gap-4">
+      <div className="flex flex-col justify-evenly flex-1">
         <Segment
           label="Schedule"
           uptrends={[

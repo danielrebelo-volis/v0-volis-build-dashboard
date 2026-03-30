@@ -70,7 +70,7 @@ export function MetricsSidebar() {
             fill={83}
           />
           <KpiBlock
-            label="Pipeline"
+            label="Projects in Pipeline"
             value="11"
             icon={<GitBranch className="w-3 h-3" />}
             fill={40}

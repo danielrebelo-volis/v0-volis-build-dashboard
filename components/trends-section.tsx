@@ -31,7 +31,7 @@ function TrendColumn({ projects, direction }: TrendColumnProps) {
         <span className={`text-[9px] font-bold uppercase tracking-widest ${colorClass}`}>{label}</span>
       </div>
       {/* Rows */}
-      <div className="space-y-1.5">
+      <div className="flex flex-col justify-around flex-1 min-h-0">
         {projects.map((project) => {
           const barWidth = (project.delta / maxDelta) * 100
           return (
@@ -64,13 +64,13 @@ interface SegmentProps {
 
 function Segment({ label, uptrends, downtrends }: SegmentProps) {
   return (
-    <div className="flex flex-col gap-2">
-      <div className="flex items-center gap-2">
+    <div className="flex flex-col flex-1 min-h-0 gap-2">
+      <div className="flex items-center gap-2 shrink-0">
         <div className="h-px flex-1 bg-border/25" />
         <span className="text-[9px] font-bold uppercase tracking-[0.18em] text-muted-foreground/60 px-1">{label}</span>
         <div className="h-px flex-1 bg-border/25" />
       </div>
-      <div className="flex gap-2">
+      <div className="flex gap-2 flex-1 min-h-0">
         <TrendColumn projects={uptrends} direction="up" />
         <div className="w-px bg-border/20 shrink-0 mx-0.5" />
         <TrendColumn projects={downtrends} direction="down" />
@@ -96,7 +96,7 @@ export function TrendsSection() {
         </div>
       </div>
 
-      <div className="flex flex-col gap-6">
+      <div className="flex flex-col flex-1 min-h-0 gap-4">
         <Segment
           label="Schedule"
           uptrends={[

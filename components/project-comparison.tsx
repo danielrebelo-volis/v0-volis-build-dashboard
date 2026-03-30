@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import { ChevronDown, MapPin, User, Calendar, Banknote, Activity } from 'lucide-react'
+import { useState, useRef, useEffect } from 'react'
+import { ChevronDown, MapPin, User, Calendar, Banknote, Activity, Sparkles, Loader2 } from 'lucide-react'
 import { ComposedChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts'
 import { useChartColors } from '@/hooks/use-chart-colors'
 
@@ -472,19 +472,104 @@ function SCurves({ project, maxWeek }: { project: ComparisonProject; maxWeek: nu
   )
 }
 
+// ─── AI Insight Panel ─────────────────────────────────────────────────────────
+
+function AIInsightPanel({ projectA, projectB, activeCategories }: {
+  projectA: ComparisonProject
+  projectB: ComparisonProject
+  activeCategories: string[]
+}) {
+  const [insight, setInsight] = useState<string>('')
+  const [loading, setLoading] = useState(false)
+  const [open, setOpen] = useState(false)
+
+  const fetchInsight = async () => {
+    if (open && insight) { setOpen(false); return }
+    setOpen(true)
+    setLoading(true)
+    setInsight('')
+
+    const res = await fetch('/api/compare-projects', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ projectA, projectB, activeCategories }),
+    })
+
+    const reader = res.body?.getReader()
+    const decoder = new TextDecoder()
+    if (!reader) { setLoading(false); return }
+
+    let buffer = ''
+    while (true) {
+      const { done, value } = await reader.read()
+      if (done) break
+      buffer += decoder.decode(value, { stream: true })
+      const lines = buffer.split('\n')
+      buffer = lines.pop() || ''
+      for (const line of lines) {
+        const trimmed = line.trim()
+        if (trimmed.startsWith('data:')) {
+          const data = trimmed.slice(5).trim()
+          if (data === '[DONE]') continue
+          try {
+            const parsed = JSON.parse(data)
+            if (parsed.type === 'text-delta' && parsed.delta) {
+              setInsight(prev => prev + parsed.delta)
+            }
+          } catch { /* skip */ }
+        }
+      }
+    }
+    setLoading(false)
+  }
+
+  return (
+    <div className="mt-6">
+      <button
+        onClick={fetchInsight}
+        className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg border border-border/40 bg-background hover:bg-secondary/30 transition-colors text-sm font-medium text-foreground"
+      >
+        {loading ? <Loader2 className="w-4 h-4 animate-spin text-muted-foreground" /> : <Sparkles className="w-4 h-4 text-amber-500" />}
+        {loading ? 'Generating insight...' : open && insight ? 'Hide AI Insight' : 'AI Insight — Compare Projects'}
+      </button>
+
+      {open && (
+        <div className="mt-3 glass-card rounded-lg p-4 border border-amber-500/20">
+          <div className="flex items-center gap-2 mb-3">
+            <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+            <span className="text-[10px] font-bold uppercase tracking-widest text-amber-500/80">AI Analysis</span>
+            <span className="text-[10px] text-muted-foreground ml-auto">Comparing {projectA.name} vs {projectB.name}</span>
+          </div>
+          {loading && !insight && (
+            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+              <Loader2 className="w-3 h-3 animate-spin" />
+              <span>Analysing project data...</span>
+            </div>
+          )}
+          {insight && (
+            <p className="text-xs text-foreground/80 leading-relaxed whitespace-pre-wrap">{insight}</p>
+          )}
+        </div>
+      )}
+    </div>
+  )
+}
+
 // ─── Comparison Side ──────────────────────────────────────────────────────────
 
-type TabType = 'schedule' | 'cost' | 'activity'
+type CategoryKey = 'schedule' | 'cost' | 'activity'
 
 function ComparisonSide({
   selectedProject,
+  otherProject,
   onProjectChange,
-  activeTab,
+  activeCategories,
   maxWeek,
 }: {
   selectedProject: ComparisonProject
+  otherProject: ComparisonProject
   onProjectChange: (p: ComparisonProject) => void
-  activeTab: TabType
+  activeCategories: CategoryKey[]
   maxWeek: number
 }) {
   const [showDropdown, setShowDropdown] = useState(false)
@@ -522,26 +607,93 @@ function ComparisonSide({
       {/* S-curves */}
       <SCurves project={selectedProject} maxWeek={maxWeek} />
 
-      {/* Tab indicator sections */}
-      {activeTab === 'schedule' && <ScheduleSection project={selectedProject} maxWeek={maxWeek} />}
-      {activeTab === 'cost' && <CostSection project={selectedProject} />}
-      {activeTab === 'activity' && <ActivitySection project={selectedProject} />}
+      {/* Active category indicator sections */}
+      <div className="space-y-4">
+        {activeCategories.includes('schedule') && <ScheduleSection project={selectedProject} maxWeek={maxWeek} />}
+        {activeCategories.includes('cost') && <CostSection project={selectedProject} />}
+        {activeCategories.includes('activity') && <ActivitySection project={selectedProject} />}
+      </div>
+
+      {/* AI Insight button */}
+      <AIInsightPanel
+        projectA={selectedProject}
+        projectB={otherProject}
+        activeCategories={activeCategories}
+      />
+    </div>
+  )
+}
+
+// ─── Multi-select Category Dropdown ──────────────────────────────────────────
+
+const CATEGORIES: { value: CategoryKey; label: string }[] = [
+  { value: 'schedule', label: 'Schedule' },
+  { value: 'cost', label: 'Cost' },
+  { value: 'activity', label: 'Activity Progress' },
+]
+
+function CategoryDropdown({ selected, onChange }: { selected: CategoryKey[]; onChange: (v: CategoryKey[]) => void }) {
+  const [open, setOpen] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false)
+    }
+    document.addEventListener('mousedown', handleClick)
+    return () => document.removeEventListener('mousedown', handleClick)
+  }, [])
+
+  const toggle = (val: CategoryKey) => {
+    if (selected.includes(val)) {
+      if (selected.length === 1) return // keep at least one
+      onChange(selected.filter(v => v !== val))
+    } else {
+      onChange([...selected, val])
+    }
+  }
+
+  const label = selected.length === 3 ? 'All Indicators' : CATEGORIES.filter(c => selected.includes(c.value)).map(c => c.label).join(', ')
+
+  return (
+    <div className="relative" ref={ref}>
+      <button
+        onClick={() => setOpen(v => !v)}
+        className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-border/40 bg-background text-sm font-medium text-foreground hover:bg-secondary/20 transition-colors"
+      >
+        <span>{label}</span>
+        <ChevronDown className={`w-4 h-4 text-muted-foreground transition-transform ${open ? 'rotate-180' : ''}`} />
+      </button>
+      {open && (
+        <div className="absolute top-full left-0 mt-2 w-52 border border-border/40 rounded-lg bg-background shadow-lg z-50 p-1">
+          {CATEGORIES.map(cat => (
+            <button
+              key={cat.value}
+              onClick={() => toggle(cat.value)}
+              className="w-full flex items-center gap-3 px-3 py-2 rounded-md hover:bg-secondary/30 transition-colors text-sm text-left"
+            >
+              <div className={`w-4 h-4 rounded border flex items-center justify-center shrink-0 transition-colors ${selected.includes(cat.value) ? 'bg-foreground border-foreground' : 'border-border/60'}`}>
+                {selected.includes(cat.value) && (
+                  <svg className="w-2.5 h-2.5 text-background" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                  </svg>
+                )}
+              </div>
+              <span className={selected.includes(cat.value) ? 'text-foreground font-medium' : 'text-muted-foreground'}>{cat.label}</span>
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   )
 }
 
 // ─── Root ─────────────────────────────────────────────────────────────────────
 
-const TABS: { value: TabType; label: string }[] = [
-  { value: 'schedule', label: 'Schedule' },
-  { value: 'cost', label: 'Cost' },
-  { value: 'activity', label: 'Activity Progress' },
-]
-
 export function ProjectComparison() {
   const [leftProject, setLeftProject] = useState<ComparisonProject>(projects[0])
   const [rightProject, setRightProject] = useState<ComparisonProject>(projects[1])
-  const [activeTab, setActiveTab] = useState<TabType>('schedule')
+  const [activeCategories, setActiveCategories] = useState<CategoryKey[]>(['schedule'])
   const [maxWeek, setMaxWeek] = useState<number>(9)
 
   return (
@@ -553,37 +705,42 @@ export function ProjectComparison() {
           <p className="text-xs text-muted-foreground mt-0.5">Side-by-side performance analysis</p>
         </div>
 
-        {/* Week filter */}
-        <div className="flex items-center gap-2">
-          <span className="text-xs text-muted-foreground">Compare up to</span>
-          <div className="flex items-center rounded-md border border-border/40 bg-background p-0.5 text-xs font-medium">
-            {[1,2,3,4,5,6,7,8,9].map(w => (
-              <button key={w} onClick={() => setMaxWeek(w)}
-                className={`w-7 h-6 rounded flex items-center justify-center transition-all ${maxWeek === w ? 'bg-foreground text-background' : 'text-muted-foreground hover:text-foreground'}`}>
-                W{w}
-              </button>
-            ))}
+        <div className="flex items-center gap-4">
+          {/* Indicator multi-select */}
+          <CategoryDropdown selected={activeCategories} onChange={setActiveCategories} />
+
+          {/* Week filter */}
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-muted-foreground">Up to</span>
+            <div className="flex items-center rounded-md border border-border/40 bg-background p-0.5 text-xs font-medium">
+              {[1,2,3,4,5,6,7,8,9].map(w => (
+                <button key={w} onClick={() => setMaxWeek(w)}
+                  className={`w-7 h-6 rounded flex items-center justify-center transition-all ${maxWeek === w ? 'bg-foreground text-background' : 'text-muted-foreground hover:text-foreground'}`}>
+                  W{w}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </div>
 
       <div className="p-6">
-        {/* Indicator tab selector */}
-        <div className="flex justify-center mb-8">
-          <div className="flex items-center rounded-lg border border-border/40 bg-background p-1 gap-1">
-            {TABS.map(tab => (
-              <button key={tab.value} onClick={() => setActiveTab(tab.value)}
-                className={`px-4 py-1.5 rounded-md text-sm font-medium transition-all ${activeTab === tab.value ? 'bg-foreground text-background' : 'text-muted-foreground hover:text-foreground'}`}>
-                {tab.label}
-              </button>
-            ))}
-          </div>
-        </div>
-
         {/* Two-column comparison */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          <ComparisonSide selectedProject={leftProject} onProjectChange={setLeftProject} activeTab={activeTab} maxWeek={maxWeek} />
-          <ComparisonSide selectedProject={rightProject} onProjectChange={setRightProject} activeTab={activeTab} maxWeek={maxWeek} />
+          <ComparisonSide
+            selectedProject={leftProject}
+            otherProject={rightProject}
+            onProjectChange={setLeftProject}
+            activeCategories={activeCategories}
+            maxWeek={maxWeek}
+          />
+          <ComparisonSide
+            selectedProject={rightProject}
+            otherProject={leftProject}
+            onProjectChange={setRightProject}
+            activeCategories={activeCategories}
+            maxWeek={maxWeek}
+          />
         </div>
       </div>
     </div>

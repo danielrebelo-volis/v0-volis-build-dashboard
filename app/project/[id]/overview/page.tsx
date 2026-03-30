@@ -846,7 +846,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
 
             {/* Activity Table */}
             <div className="glass-card rounded-lg p-4 border border-border/50 mb-8">
-              <h3 className="text-sm font-semibold text-foreground mb-4">Activity Table</h3>
+              <h3 className="text-sm font-semibold text-foreground mb-4 text-left">Activity Table</h3>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
@@ -855,8 +855,8 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                       <th className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleSort('value')}>
                         Econ. Value (€M) {sortBy === 'value' && (sortDirection === 'asc' ? '↑' : '↓')}
                       </th>
-                      <th className="text-left text-xs text-muted-foreground font-semibold py-2">Status</th>
-                      <th className="text-left text-xs text-muted-foreground font-semibold py-2">Metric</th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Status</th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Metric</th>
                       <th className="text-right text-xs text-muted-foreground font-semibold py-2">Total Planned</th>
                       <th className="text-right text-xs text-muted-foreground font-semibold py-2">Total Actual</th>
                       <th className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleSort('plannedProgress')}>

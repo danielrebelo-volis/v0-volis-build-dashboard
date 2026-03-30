@@ -67,16 +67,16 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Main Grid Layout */}
-        <div className="grid grid-cols-12 gap-6">
+        {/* Main Grid Layout — constrained to viewport so Recent Projects is below the fold */}
+        <div className="grid grid-cols-12 gap-6 h-[calc(100svh-10rem)]">
           {/* Metrics Sidebar */}
-          <div className="col-span-12 lg:col-span-2">
+          <div className="col-span-12 lg:col-span-2 flex flex-col gap-3 h-full overflow-y-auto">
             <MetricsSidebar />
           </div>
 
           {/* EVM Matrix - Central Focus */}
-          <div className="col-span-12 lg:col-span-7 flex flex-col gap-4">
-            <div className="glass-card rounded-lg p-4 relative w-auto h-11/12">
+          <div className="col-span-12 lg:col-span-7 flex flex-col gap-4 h-full min-h-0">
+            <div className="glass-card rounded-lg p-4 relative flex-1 min-h-0">
               <div className="absolute top-4 left-4 z-10">
                 <div className="flex items-center gap-2">
                   {filterType && filterValue && (
@@ -199,7 +199,7 @@ export default function Dashboard() {
           </div>
 
           {/* Uptrends/Downtrends Section */}
-          <div className="col-span-12 lg:col-span-3">
+          <div className="col-span-12 lg:col-span-3 h-full min-h-0">
             <TrendsSection />
           </div>
 

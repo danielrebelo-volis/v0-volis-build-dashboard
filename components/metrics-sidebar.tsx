@@ -46,7 +46,7 @@ function KpiRow({ label, value, subLabel, subValue, trend, change, icon, accent 
 
 export function MetricsSidebar() {
   return (
-    <div className="space-y-3">
+    <div className="flex flex-col gap-3 h-fit">
       {/* Portfolio Overview */}
       <div className="glass-card rounded-lg p-4">
         <h3 className="text-xs text-muted-foreground uppercase tracking-wider mb-1">Portfolio Overview</h3>

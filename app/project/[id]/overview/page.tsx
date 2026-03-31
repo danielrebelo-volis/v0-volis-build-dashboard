@@ -111,8 +111,8 @@ function EconomicTableRow({
       <td className="py-3 text-right text-foreground">€{economicValue.toFixed(1)}M</td>
       <td className="py-3 text-right">
         <span className={`text-xs px-2 py-0.5 rounded-full ${row.status === 'Finished' ? 'bg-[#16a34a]/15 text-[#16a34a]' :
-            row.status === 'Ongoing' ? 'bg-accent/20 text-accent' :
-              'bg-muted/30 text-muted-foreground'
+          row.status === 'Ongoing' ? 'bg-accent/20 text-accent' :
+            'bg-muted/30 text-muted-foreground'
           }`}>{row.status}</span>
       </td>
       <td className="py-3 text-right text-foreground">{row.completeness}%</td>
@@ -655,7 +655,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
           <div className="flex items-center gap-2">
             <Button
               variant="outline"
-              className="gap-2 border-border/50 text-background hover:bg-foreground/90"
+              className="gap-2 bg-foreground text-background hover:bg-foreground/90"
               onClick={() => setGanttOpen(true)}
             >
               <GanttChartSquare className="w-4 h-4" />
@@ -856,8 +856,8 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                           <td className="py-3 text-right text-foreground">€{activity.value.toFixed(1)}M</td>
                           <td className="py-3 text-right">
                             <span className={`text-xs px-2 py-0.5 rounded-full ${activity.status === 'Finished' ? 'bg-[#16a34a]/15 text-[#16a34a]' :
-                                activity.status === 'Ongoing' ? 'bg-accent/20 text-accent' :
-                                  'bg-muted/30 text-muted-foreground'
+                              activity.status === 'Ongoing' ? 'bg-accent/20 text-accent' :
+                                'bg-muted/30 text-muted-foreground'
                               }`}>
                               {activity.status}
                             </span>
@@ -1003,8 +1003,8 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                           <td className="py-3 text-right text-foreground">€{activity.value.toFixed(1)}M</td>
                           <td className="py-3 text-right">
                             <span className={`text-xs px-2 py-0.5 rounded-full ${activity.status === 'Finished' ? 'bg-[#16a34a]/15 text-[#16a34a]' :
-                                activity.status === 'Ongoing' ? 'bg-accent/20 text-accent' :
-                                  'bg-muted/30 text-muted-foreground'
+                              activity.status === 'Ongoing' ? 'bg-accent/20 text-accent' :
+                                'bg-muted/30 text-muted-foreground'
                               }`}>
                               {activity.status}
                             </span>

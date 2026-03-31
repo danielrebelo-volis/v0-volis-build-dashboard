@@ -90,7 +90,7 @@ export function GanttChartDialog({ open, onOpenChange, projectName }: GanttChart
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-[92vw] w-full max-h-[90vh] flex flex-col p-0 gap-0 overflow-hidden">
+      <DialogContent className="!max-w-[80vw] w-[80vw] max-h-[90vh] flex flex-col p-0 gap-0 overflow-hidden sm:!max-w-[80vw]">
         <DialogHeader className="px-6 pt-5 pb-4 border-b border-border/50 flex-shrink-0">
           <DialogTitle className="text-lg font-semibold text-foreground">
             Project Schedule — {projectName}

@@ -15,11 +15,11 @@ interface Project {
   analyticalIC: number      // % — always < adjustedIC
 }
 
-// Colour scale: green < 85%, amber 85–95%, red > 95%
+// Colour scale: green ≤ 90%, amber 91–100%, red > 100%
 function icColor(value: number): string {
-  if (value < 85) return "#16a34a"   // green-600
-  if (value <= 95) return "#d97706"  // amber-600
-  return "#dc2626"                   // red-600
+  if (value <= 90) return "#16a34a"   // green-600
+  if (value <= 100) return "#d97706"  // amber-600
+  return "#dc2626"                    // red-600
 }
 
 // Progress deviation: actual vs planned
@@ -113,14 +113,14 @@ function ProjectRow({ name, id, location, plannedProgress, actualProgress, plann
 export function ProjectList() {
   const projects: Project[] = [
     { name: "Metro Tower",     id: "PRJ-001", location: "Lisboa, PT",    plannedProgress: 75,  actualProgress: 68,  plannedIC: 82,  adjustedIC: 90,  analyticalIC: 84 },
-    { name: "Harbor Bridge",   id: "PRJ-002", location: "Porto, PT",     plannedProgress: 50,  actualProgress: 42,  plannedIC: 78,  adjustedIC: 97,  analyticalIC: 91 },
-    { name: "Skyline Plaza",   id: "PRJ-003", location: "Madrid, ES",    plannedProgress: 80,  actualProgress: 85,  plannedIC: 88,  adjustedIC: 94,  analyticalIC: 88 },
-    { name: "Industrial Park", id: "PRJ-004", location: "Setúbal, PT",   plannedProgress: 35,  actualProgress: 31,  plannedIC: 75,  adjustedIC: 70,  analyticalIC: 65 },
-    { name: "Riverside Homes", id: "PRJ-005", location: "Maputo, MZ",    plannedProgress: 60,  actualProgress: 56,  plannedIC: 80,  adjustedIC: 78,  analyticalIC: 72 },
-    { name: "Tech Campus",     id: "PRJ-006", location: "Luanda, AO",    plannedProgress: 55,  actualProgress: 45,  plannedIC: 83,  adjustedIC: 99,  analyticalIC: 92 },
-    { name: "Highway 12 Ext",  id: "PRJ-007", location: "Braga, PT",     plannedProgress: 70,  actualProgress: 72,  plannedIC: 79,  adjustedIC: 68,  analyticalIC: 62 },
-    { name: "Green Valley",    id: "PRJ-008", location: "Nairobi, KE",   plannedProgress: 55,  actualProgress: 51,  plannedIC: 77,  adjustedIC: 72,  analyticalIC: 67 },
-    { name: "Data Center",     id: "PRJ-009", location: "Singapore, SG", plannedProgress: 45,  actualProgress: 39,  plannedIC: 81,  adjustedIC: 75,  analyticalIC: 70 },
+    { name: "Harbor Bridge",   id: "PRJ-002", location: "Porto, PT",     plannedProgress: 50,  actualProgress: 42,  plannedIC: 80,  adjustedIC: 97,  analyticalIC: 91 },
+    { name: "Skyline Plaza",   id: "PRJ-003", location: "Madrid, ES",    plannedProgress: 80,  actualProgress: 85,  plannedIC: 83,  adjustedIC: 94,  analyticalIC: 88 },
+    { name: "Industrial Park", id: "PRJ-004", location: "Setúbal, PT",   plannedProgress: 35,  actualProgress: 31,  plannedIC: 81,  adjustedIC: 85,  analyticalIC: 82 },
+    { name: "Riverside Homes", id: "PRJ-005", location: "Maputo, MZ",    plannedProgress: 60,  actualProgress: 56,  plannedIC: 80,  adjustedIC: 88,  analyticalIC: 83 },
+    { name: "Tech Campus",     id: "PRJ-006", location: "Luanda, AO",    plannedProgress: 55,  actualProgress: 45,  plannedIC: 83,  adjustedIC: 102, analyticalIC: 96 },
+    { name: "Highway 12 Ext",  id: "PRJ-007", location: "Braga, PT",     plannedProgress: 70,  actualProgress: 72,  plannedIC: 80,  adjustedIC: 83,  analyticalIC: 80 },
+    { name: "Green Valley",    id: "PRJ-008", location: "Nairobi, KE",   plannedProgress: 55,  actualProgress: 51,  plannedIC: 80,  adjustedIC: 87,  analyticalIC: 82 },
+    { name: "Data Center",     id: "PRJ-009", location: "Singapore, SG", plannedProgress: 45,  actualProgress: 39,  plannedIC: 81,  adjustedIC: 105, analyticalIC: 98 },
   ]
 
   return (

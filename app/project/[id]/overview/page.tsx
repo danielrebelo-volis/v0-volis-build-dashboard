@@ -1010,7 +1010,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
             <h2 className="text-lg font-semibold text-foreground mb-4 mt-8">Economic Control</h2>
 
             {/* Weekly Cost KPIs */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
               <div className="glass-card rounded-lg p-5 border border-border/50">
                 <div className="flex items-center gap-2 mb-3">
                   <span className="text-muted-foreground text-sm font-normal">$</span>
@@ -1026,6 +1026,14 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                 </div>
                 <p className="text-3xl font-bold text-foreground">€0.42M</p>
                 <p className="text-sm text-muted-foreground mt-2">To achieve projected IC</p>
+              </div>
+              <div className="glass-card rounded-lg p-5 border border-border/50">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-muted-foreground text-sm font-normal">€</span>
+                  <p className="text-[11px] text-muted-foreground uppercase tracking-widest font-semibold">Accumulated Production</p>
+                </div>
+                <p className="text-3xl font-bold text-success">€16.66M</p>
+                <p className="text-sm text-muted-foreground mt-2">68% of €24.5M contract value</p>
               </div>
             </div>
 
@@ -1344,7 +1352,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
         {activeTab === 'economic' && (
           <>
             {/* Weekly Cost KPIs */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
               <div className="glass-card rounded-lg p-5 border border-border/50">
                 <div className="flex items-center gap-2 mb-3">
                   <span className="text-muted-foreground text-sm font-normal">$</span>
@@ -1360,6 +1368,14 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                 </div>
                 <p className="text-4xl font-bold text-foreground">€0.42M</p>
                 <p className="text-sm text-muted-foreground mt-2">To achieve projected IC</p>
+              </div>
+              <div className="glass-card rounded-lg p-5 border border-border/50">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-muted-foreground text-sm font-normal">€</span>
+                  <p className="text-[11px] text-muted-foreground uppercase tracking-widest font-semibold">Accumulated Production</p>
+                </div>
+                <p className="text-4xl font-bold text-success">€16.66M</p>
+                <p className="text-sm text-muted-foreground mt-2">68% of €24.5M contract value</p>
               </div>
             </div>
 

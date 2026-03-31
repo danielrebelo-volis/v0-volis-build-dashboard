@@ -655,7 +655,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
           <div className="flex items-center gap-2">
             <Button
               variant="outline"
-              className="gap-2 bg-foreground text-background hover:bg-foreground/90"
+              className="gap-2 bg-foreground text-background hover:text-foreground mb-4"
               onClick={() => setGanttOpen(true)}
             >
               <GanttChartSquare className="w-4 h-4" />

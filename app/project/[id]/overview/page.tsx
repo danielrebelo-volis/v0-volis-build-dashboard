@@ -2,8 +2,9 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { DashboardHeader } from '@/components/dashboard-header'
-import { ArrowLeft, Download, TrendingUp, ChevronDown } from 'lucide-react'
+import { ArrowLeft, Download, TrendingUp, ChevronDown, GanttChartSquare } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { GanttChartDialog } from '@/components/gantt-chart-dialog'
 import {
   Select,
   SelectContent,
@@ -200,6 +201,7 @@ function EconomicTableRow({
 
 export default function ProjectOverview({ params }: { params: { id: string } }) {
   const chartColors = useChartColors()
+  const [ganttOpen, setGanttOpen] = useState(false)
   const [activeTab, setActiveTab] = useState('overview')
   const [selectedActivity, setSelectedActivity] = useState('all')
   const [selectedWorkfront, setSelectedWorkfront] = useState('all')
@@ -651,11 +653,30 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
             <h1 className="text-3xl font-bold text-foreground">Project Overview - {project.name}</h1>
             <p className="text-sm text-muted-foreground mt-2">{project.city}, {project.country} | {project.typology}</p>
           </div>
-          <Button className="gap-2 bg-foreground text-background hover:bg-foreground/90">
-            <Download className="w-4 h-4" />
-            Download Report
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              className="gap-2 border-border/50 text-foreground hover:bg-secondary"
+              onClick={() => setGanttOpen(true)}
+            >
+              <GanttChartSquare className="w-4 h-4" />
+              Gantt Chart
+            </Button>
+            <Button
+              disabled
+              className="gap-2 bg-foreground text-background hover:bg-foreground/90 disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              <Download className="w-4 h-4" />
+              Download Report
+            </Button>
+          </div>
         </div>
+
+        <GanttChartDialog
+          open={ganttOpen}
+          onOpenChange={setGanttOpen}
+          projectName={project.name}
+        />
 
         {/* Tab Navigation */}
         <div className="flex gap-8 border-b border-border/50 mb-8">

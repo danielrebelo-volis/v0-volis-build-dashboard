@@ -4,6 +4,20 @@ import { useState } from "react"
 import Link from "next/link"
 import { ComposableMap, Geographies, Geography, Marker } from "react-simple-maps"
 import { useChartColors } from '@/hooks/use-chart-colors'
+import {
+  Route,
+  Train,
+  Waves,
+  Anchor,
+  Plane,
+  Building2,
+  HardHat,
+  Pickaxe,
+  Flame,
+  Zap,
+  Wrench,
+  type LucideIcon,
+} from "lucide-react"
 
 interface Project {
   id: string
@@ -46,6 +60,20 @@ const projects: Project[] = [
   { id: "PRJ-016", name: "Terminal Building",        delay:  12, industrialCost:  93, analyticalIndustrialCost: 85, budget: "€189.2M", budgetValue: 189.2, trend: "stable", category: "Airport Infrastructure",   region: "Asia",   status: "ongoing",  week: "week-2", coordinates: [139.7, 35.7],  weekData: { "week-1": { delay: 10,  industrialCost:  91 }, "week-2": { delay: 12,  industrialCost:  93 }, "week-3": { delay: 14,  industrialCost:  94 }, "week-4": { delay: 16,  industrialCost:  95 } } },
   { id: "PRJ-021", name: "Bridge Rehabilitation",    delay:   8, industrialCost:  90, analyticalIndustrialCost: 83, budget: "€67.8M",  budgetValue: 67.8,  trend: "stable", category: "Other Works",              region: "LatAm",  status: "finished", week: "week-1", coordinates: [-70.7,-33.5],  weekData: { "week-1": { delay: 5,   industrialCost:  88 }, "week-2": { delay: 8,   industrialCost:  90 }, "week-3": { delay: 10,  industrialCost:  91 }, "week-4": { delay: 12,  industrialCost:  92 } } },
 ]
+
+const categoryIcons: Record<Project["category"], LucideIcon> = {
+  "Road Infrastructure":      Route,
+  "Railway Infrastructure":   Train,
+  "Hydraulic Infrastructure": Waves,
+  "Port Infrastructure":      Anchor,
+  "Airport Infrastructure":   Plane,
+  "Urban Infrastructure":     Building2,
+  "Civil Construction":       HardHat,
+  "Mining":                   Pickaxe,
+  "Oil&Gas":                  Flame,
+  "Power (Energy)":           Zap,
+  "Other Works":              Wrench,
+}
 
 const categoryColors: Record<Project["category"], string> = {
   "Road Infrastructure": "#166534",
@@ -113,13 +141,14 @@ export function EVMMatrix({
     const minB = 18.3
     const maxB = 687.2
     const normalized = (budgetValue - minB) / (maxB - minB)
-    return 8 + Math.pow(Math.max(0, Math.min(1, normalized)), 0.5) * 22
+    return 20 + Math.pow(Math.max(0, Math.min(1, normalized)), 0.5) * 22
   }
 
   const refLineY = ((Y_REF - Y_MIN) / (Y_MAX - Y_MIN)) * 100
 
   const HoverTooltip = ({ project, side }: { project: Project; side: "left" | "right" }) => {
     const color = categoryColors[project.category]
+    const Icon = categoryIcons[project.category]
     return (
       <div
         className="absolute z-50 w-52 glass-card rounded-xl p-3 pointer-events-none shadow-xl border border-white/10"
@@ -132,7 +161,9 @@ export function EVMMatrix({
         }}
       >
         <div className="flex items-center gap-2 mb-3 pb-2 border-b border-white/10">
-          <div className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: color, boxShadow: `0 0 6px ${color}` }} />
+          <div className="w-6 h-6 rounded-full shrink-0 flex items-center justify-center" style={{ backgroundColor: `${color}25`, border: `1px solid ${color}60` }}>
+            <Icon size={12} style={{ color }} />
+          </div>
           <div>
             <div className="font-semibold text-sm text-foreground leading-tight">{project.name}</div>
             <div className="text-[10px] text-muted-foreground">{project.id} · {project.category}</div>
@@ -247,13 +278,21 @@ export function EVMMatrix({
         {hoveredProject && (
           <div className="absolute bottom-4 right-4 z-50 pointer-events-none">
             <div className="w-52 glass-card rounded-xl p-3 shadow-xl border border-white/10">
-              <div className="flex items-center gap-2 mb-3 pb-2 border-b border-white/10">
-                <div className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: categoryColors[hoveredProject.category], boxShadow: `0 0 6px ${categoryColors[hoveredProject.category]}` }} />
-                <div>
-                  <div className="font-semibold text-sm text-foreground leading-tight">{hoveredProject.name}</div>
-                  <div className="text-[10px] text-muted-foreground">{hoveredProject.id} · {hoveredProject.region}</div>
-                </div>
-              </div>
+              {(() => {
+                const MapIcon = categoryIcons[hoveredProject.category]
+                const mapColor = categoryColors[hoveredProject.category]
+                return (
+                  <div className="flex items-center gap-2 mb-3 pb-2 border-b border-white/10">
+                    <div className="w-6 h-6 rounded-full shrink-0 flex items-center justify-center" style={{ backgroundColor: `${mapColor}25`, border: `1px solid ${mapColor}60` }}>
+                      <MapIcon size={12} style={{ color: mapColor }} />
+                    </div>
+                    <div>
+                      <div className="font-semibold text-sm text-foreground leading-tight">{hoveredProject.name}</div>
+                      <div className="text-[10px] text-muted-foreground">{hoveredProject.id} · {hoveredProject.region}</div>
+                    </div>
+                  </div>
+                )
+              })()}
               <div className="space-y-1.5">
                 <div className="flex justify-between items-center">
                   <span className="text-[11px] text-muted-foreground">Adj. Industrial Cost</span>
@@ -330,6 +369,8 @@ export function EVMMatrix({
           const isHovered = hoveredProject?.id === project.id
           const color = categoryColors[project.category]
           const size = getBubbleSize(project.budgetValue)
+          const Icon = categoryIcons[project.category]
+          const iconSize = Math.max(10, Math.round(size * 0.42))
 
           return (
             <div
@@ -365,15 +406,17 @@ export function EVMMatrix({
               {/* Bubble */}
               <Link href={`/project/${project.id}`}>
                 <div
-                  className="relative rounded-full border-2 transition-all duration-300"
+                  className="relative rounded-full border-2 transition-all duration-300 flex items-center justify-center"
                   style={{
                     width: size,
                     height: size,
                     backgroundColor: color,
-                    borderColor: isHovered ? "white" : color,
+                    borderColor: isHovered ? "white" : `${color}cc`,
                     boxShadow: `0 0 ${isHovered ? 20 : 8}px ${color}80`,
                   }}
-                />
+                >
+                  <Icon size={iconSize} color="white" style={{ pointerEvents: "none", opacity: 0.92, flexShrink: 0 }} strokeWidth={1.8} />
+                </div>
               </Link>
 
               {/* Hover tooltip */}

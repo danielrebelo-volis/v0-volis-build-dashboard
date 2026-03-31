@@ -1,44 +1,7 @@
 'use client'
 
-import { useState } from 'react'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 import { useChartColors } from '@/hooks/use-chart-colors'
-import { ChevronDown } from 'lucide-react'
-
-const BASELINE_OPTIONS = [
-  { value: 'last', label: 'Last Imported Baseline' },
-  { value: 'sep25', label: 'Baseline X September 2025' },
-  { value: 'may25', label: 'Baseline X May 2025' },
-]
-
-function BaselineFilter({
-  value,
-  onChange,
-}: {
-  value: string
-  onChange: (v: string) => void
-}) {
-  const selected = BASELINE_OPTIONS.find((o) => o.value === value)
-  return (
-    <div className="flex items-center gap-2">
-      <span className="text-[11px] text-muted-foreground uppercase tracking-wide">Current Baseline:</span>
-      <div className="relative">
-        <select
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          className="appearance-none pl-2.5 pr-7 py-1 text-xs font-medium rounded-md border border-border/50 bg-secondary text-foreground cursor-pointer focus:outline-none focus:ring-1 focus:ring-cyan"
-        >
-          {BASELINE_OPTIONS.map((o) => (
-            <option key={o.value} value={o.value}>
-              {o.label}
-            </option>
-          ))}
-        </select>
-        <ChevronDown className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 w-3 h-3 text-muted-foreground" />
-      </div>
-    </div>
-  )
-}
 
 const progressData = [
   { week: 1, planned: 5, forecast: 4, actual: 3, actualSolid: 3, actualDashed: null },
@@ -54,18 +17,12 @@ const progressData = [
 
 export function SProgressCurve() {
   const colors = useChartColors()
-  const [baseline, setBaseline] = useState('last')
 
   return (
     <div className="glass-card rounded-lg p-4 border border-border/50">
       <div className="mb-4">
-        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
-          <div>
-            <h3 className="text-sm font-semibold text-foreground">Progress S-Curve</h3>
-            <p className="text-xs text-muted-foreground mt-1">Commercial vs. Forecast vs. Actual completion</p>
-          </div>
-          <BaselineFilter value={baseline} onChange={setBaseline} />
-        </div>
+        <h3 className="text-sm font-semibold text-foreground">Progress S-Curve</h3>
+        <p className="text-xs text-muted-foreground mt-1">Commercial vs. Forecast vs. Actual completion</p>
       </div>
       <ResponsiveContainer width="100%" height={250}>
         <LineChart data={progressData} margin={{ top: 5, right: 30, left: 0, bottom: 5 }}>
@@ -136,7 +93,6 @@ export function SProgressCurve() {
 
 export function SCostCurve() {
   const colors = useChartColors()
-  const [baseline, setBaseline] = useState('last')
 
   const costData = [
     { week: 1, baseline: 3.2, currentBaseline: 3.0, actualSolid: 3.3, actualDashed: null },
@@ -153,13 +109,8 @@ export function SCostCurve() {
   return (
     <div className="glass-card rounded-lg p-4 border border-border/50">
       <div className="mb-4">
-        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
-          <div>
-            <h3 className="text-sm font-semibold text-foreground">Economic S-Curve</h3>
-            <p className="text-xs text-muted-foreground mt-1">Commercial vs. Actual expenditure</p>
-          </div>
-          <BaselineFilter value={baseline} onChange={setBaseline} />
-        </div>
+        <h3 className="text-sm font-semibold text-foreground">Economic S-Curve</h3>
+        <p className="text-xs text-muted-foreground mt-1">Commercial vs. Actual expenditure</p>
       </div>
       <ResponsiveContainer width="100%" height={250}>
         <LineChart data={costData} margin={{ top: 5, right: 30, left: 0, bottom: 5 }}>

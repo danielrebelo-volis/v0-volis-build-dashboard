@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { DashboardHeader } from '@/components/dashboard-header'
-import { ArrowLeft, Download, TrendingUp } from 'lucide-react'
+import { ArrowLeft, Download, TrendingUp, ChevronDown } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   Select,
@@ -14,6 +14,33 @@ import {
 import Link from 'next/link'
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts'
 import { useChartColors } from '@/hooks/use-chart-colors'
+
+// ─── Baseline Filter ──────────────────────────────────────────────────────────
+const BASELINE_OPTIONS = [
+  { value: 'last',  label: 'Last Imported Baseline' },
+  { value: 'sep25', label: 'Baseline X September 2025' },
+  { value: 'may25', label: 'Baseline X May 2025' },
+]
+
+function BaselineFilter({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  return (
+    <div className="flex items-center gap-2">
+      <span className="text-[11px] text-muted-foreground uppercase tracking-wide whitespace-nowrap">Current Baseline:</span>
+      <div className="relative">
+        <select
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className="appearance-none pl-2.5 pr-7 py-1 text-xs font-medium rounded-md border border-border/50 bg-secondary text-foreground cursor-pointer focus:outline-none focus:ring-1 focus:ring-cyan"
+        >
+          {BASELINE_OPTIONS.map((o) => (
+            <option key={o.value} value={o.value}>{o.label}</option>
+          ))}
+        </select>
+        <ChevronDown className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 w-3 h-3 text-muted-foreground" />
+      </div>
+    </div>
+  )
+}
 
 // ─── Economic Table Row with hover popover ────────────────────────────────────
 type EconRow = {
@@ -183,6 +210,8 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc')
   const [economicSortBy, setEconomicSortBy] = useState<'baselineCost' | 'actualCost' | 'totalBaseline' | 'totalEstimated' | null>(null)
   const [economicSortDirection, setEconomicSortDirection] = useState<'asc' | 'desc'>('desc')
+  const [progressBaseline, setProgressBaseline] = useState('last')
+  const [economicBaseline, setEconomicBaseline] = useState('last')
 
   // Data Quality Tab State
   const [dailyReportViewBy, setDailyReportViewBy] = useState('7days')
@@ -686,7 +715,10 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
 
             {/* Production S-Curve */}
             <div className="glass-card rounded-lg p-4 mb-6 border border-border/50">
-              <h3 className="text-sm font-semibold text-foreground mb-4">Production S-Curve</h3>
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-4">
+                <h3 className="text-sm font-semibold text-foreground">Production S-Curve</h3>
+                <BaselineFilter value={progressBaseline} onChange={setProgressBaseline} />
+              </div>
               <ResponsiveContainer width="100%" height={300}>
                 <LineChart data={getFilteredProgressData()}>
                   <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} />
@@ -893,7 +925,10 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
 
             {/* Production S-Curve */}
             <div className="glass-card rounded-lg p-4 mb-6 border border-border/50">
-              <h3 className="text-sm font-semibold text-foreground mb-4">Production S-Curve</h3>
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-4">
+                <h3 className="text-sm font-semibold text-foreground">Production S-Curve</h3>
+                <BaselineFilter value={progressBaseline} onChange={setProgressBaseline} />
+              </div>
               <ResponsiveContainer width="100%" height={300}>
                 <LineChart data={progressData}>
                   <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} />
@@ -990,7 +1025,10 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
 
             {/* Cost S-Curve */}
             <div className="glass-card rounded-lg p-4 mb-6 border border-border/50">
-              <h3 className="text-sm font-semibold text-foreground mb-4">Economic S-Curve</h3>
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-4">
+                <h3 className="text-sm font-semibold text-foreground">Economic S-Curve</h3>
+                <BaselineFilter value={economicBaseline} onChange={setEconomicBaseline} />
+              </div>
               <ResponsiveContainer width="100%" height={300}>
                 <LineChart data={costData}>
                   <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} />
@@ -1322,7 +1360,10 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
               </div>
 
               <div className="glass-card rounded-lg p-4 border border-border/50">
-                <h3 className="text-sm font-semibold text-foreground mb-4">Economic S-Curve</h3>
+                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-4">
+                  <h3 className="text-sm font-semibold text-foreground">Economic S-Curve</h3>
+                  <BaselineFilter value={economicBaseline} onChange={setEconomicBaseline} />
+                </div>
                 <ResponsiveContainer width="100%" height={350}>
                   <LineChart data={getFilteredCostData()}>
                     <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} />

@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { DashboardHeader } from '@/components/dashboard-header'
-import { ArrowLeft, Download, TrendingUp } from 'lucide-react'
+import { ArrowLeft, Download, TrendingUp, ChevronDown } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   Select,
@@ -14,6 +14,33 @@ import {
 import Link from 'next/link'
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts'
 import { useChartColors } from '@/hooks/use-chart-colors'
+
+// ─── Baseline Filter ──────────────────────────────────────────────────────────
+const BASELINE_OPTIONS = [
+  { value: 'last',  label: 'Last Imported Baseline' },
+  { value: 'sep25', label: 'Baseline X September 2025' },
+  { value: 'may25', label: 'Baseline X May 2025' },
+]
+
+function BaselineFilter({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  return (
+    <div className="flex items-center gap-2">
+      <span className="text-[11px] text-muted-foreground uppercase tracking-wide whitespace-nowrap">Current Baseline:</span>
+      <div className="relative">
+        <select
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className="appearance-none pl-2.5 pr-7 py-1 text-xs font-medium rounded-md border border-border/50 bg-secondary text-foreground cursor-pointer focus:outline-none focus:ring-1 focus:ring-cyan"
+        >
+          {BASELINE_OPTIONS.map((o) => (
+            <option key={o.value} value={o.value}>{o.label}</option>
+          ))}
+        </select>
+        <ChevronDown className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 w-3 h-3 text-muted-foreground" />
+      </div>
+    </div>
+  )
+}
 
 // ─── Economic Table Row with hover popover ────────────────────────────────────
 type EconRow = {
@@ -183,6 +210,8 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc')
   const [economicSortBy, setEconomicSortBy] = useState<'baselineCost' | 'actualCost' | 'totalBaseline' | 'totalEstimated' | null>(null)
   const [economicSortDirection, setEconomicSortDirection] = useState<'asc' | 'desc'>('desc')
+  const [progressBaseline, setProgressBaseline] = useState('last')
+  const [economicBaseline, setEconomicBaseline] = useState('last')
 
   // Data Quality Tab State
   const [dailyReportViewBy, setDailyReportViewBy] = useState('7days')
@@ -686,7 +715,10 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
 
             {/* Production S-Curve */}
             <div className="glass-card rounded-lg p-4 mb-6 border border-border/50">
-              <h3 className="text-sm font-semibold text-foreground mb-4">Production S-Curve</h3>
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-4">
+                <h3 className="text-sm font-semibold text-foreground">Production S-Curve</h3>
+                <BaselineFilter value={progressBaseline} onChange={setProgressBaseline} />
+              </div>
               <ResponsiveContainer width="100%" height={300}>
                 <LineChart data={getFilteredProgressData()}>
                   <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} />
@@ -893,7 +925,10 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
 
             {/* Production S-Curve */}
             <div className="glass-card rounded-lg p-4 mb-6 border border-border/50">
-              <h3 className="text-sm font-semibold text-foreground mb-4">Production S-Curve</h3>
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-4">
+                <h3 className="text-sm font-semibold text-foreground">Production S-Curve</h3>
+                <BaselineFilter value={progressBaseline} onChange={setProgressBaseline} />
+              </div>
               <ResponsiveContainer width="100%" height={300}>
                 <LineChart data={progressData}>
                   <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} />
@@ -974,23 +1009,76 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
             {/* Economic Control Section */}
             <h2 className="text-lg font-semibold text-foreground mb-4 mt-8">Economic Control</h2>
 
-            {/* Economic Control KPIs */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-              <div className="glass-card rounded-lg p-4 border border-border/50">
-                <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">Industrial Cost (CI)</p>
-                <p className="text-3xl font-bold text-warning">90.0%</p>
-                <p className="text-xs text-muted-foreground mt-2">Commercial CI: 80.0%</p>
+            {/* Weekly Cost KPIs */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+              <div className="glass-card rounded-lg p-5 border border-border/50">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-muted-foreground text-sm font-normal">$</span>
+                  <p className="text-[11px] text-muted-foreground uppercase tracking-widest font-semibold">Avg Weekly Costs</p>
+                </div>
+                <p className="text-3xl font-bold text-success">€0.38M</p>
+                <p className="text-sm text-muted-foreground mt-2">Average cost per week to date</p>
               </div>
-              <div className="glass-card rounded-lg p-4 border border-border/50">
-                <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">Accumulated Production</p>
+              <div className="glass-card rounded-lg p-5 border border-border/50">
+                <div className="flex items-center gap-2 mb-3">
+                  <TrendingUp className="w-4 h-4 text-muted-foreground" />
+                  <p className="text-[11px] text-muted-foreground uppercase tracking-widest font-semibold">Required Weekly Costs</p>
+                </div>
+                <p className="text-3xl font-bold text-foreground">€0.42M</p>
+                <p className="text-sm text-muted-foreground mt-2">To achieve projected IC</p>
+              </div>
+              <div className="glass-card rounded-lg p-5 border border-border/50">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-muted-foreground text-sm font-normal">€</span>
+                  <p className="text-[11px] text-muted-foreground uppercase tracking-widest font-semibold">Accumulated Production</p>
+                </div>
                 <p className="text-3xl font-bold text-success">€16.66M</p>
-                <p className="text-xs text-muted-foreground mt-2">Of €24.5M contract value</p>
+                <p className="text-sm text-muted-foreground mt-2">68% of €24.5M contract value</p>
+              </div>
+            </div>
+
+            {/* Economic Overview bar */}
+            <div className="glass-card rounded-lg p-4 border border-border/50 mb-6">
+              <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-semibold mb-4">Economic Overview</p>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-4 divide-x-0 sm:divide-x divide-border/30">
+                <div className="sm:pl-0">
+                  <div className="flex items-center gap-1.5 mb-1.5">
+                    <span className="text-xs text-muted-foreground">€</span>
+                    <span className="text-[11px] text-muted-foreground">Project Budget</span>
+                  </div>
+                  <p className="text-xl font-bold text-foreground">€24.5M</p>
+                </div>
+                <div className="sm:pl-6">
+                  <div className="flex items-center gap-1.5 mb-1.5">
+                    <TrendingUp className="w-3 h-3 text-muted-foreground" />
+                    <span className="text-[11px] text-muted-foreground">Commercial IC</span>
+                  </div>
+                  <p className="text-xl font-bold text-foreground">80.0%</p>
+                </div>
+                <div className="sm:pl-6">
+                  <div className="flex items-center gap-1.5 mb-1.5">
+                    <TrendingUp className="w-3 h-3 text-warning" />
+                    <span className="text-[11px] text-muted-foreground">Projected IC</span>
+                  </div>
+                  <p className="text-xl font-bold text-warning">92.4%</p>
+                </div>
+                <div className="sm:pl-6">
+                  <div className="flex items-center gap-1.5 mb-1.5">
+                    <span className="text-xs text-warning">€</span>
+                    <span className="text-[11px] text-muted-foreground">Current IC</span>
+                  </div>
+                  <p className="text-xl font-bold text-warning">90.0%</p>
+                  <p className="text-[11px] text-muted-foreground mt-0.5">Analytical IC: 84.2%</p>
+                </div>
               </div>
             </div>
 
             {/* Cost S-Curve */}
             <div className="glass-card rounded-lg p-4 mb-6 border border-border/50">
-              <h3 className="text-sm font-semibold text-foreground mb-4">Economic S-Curve</h3>
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-4">
+                <h3 className="text-sm font-semibold text-foreground">Economic S-Curve</h3>
+                <BaselineFilter value={economicBaseline} onChange={setEconomicBaseline} />
+              </div>
               <ResponsiveContainer width="100%" height={300}>
                 <LineChart data={costData}>
                   <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} />
@@ -1263,19 +1351,66 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
         {/* Economic Tab */}
         {activeTab === 'economic' && (
           <>
-            {/* Top Section - Financial Health KPIs */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-              <div className="glass-card rounded-lg p-6 border border-border/50">
-                <p className="text-xs text-muted-foreground uppercase tracking-wide mb-4">Industrial Cost (CI)</p>
-                <p className="text-4xl font-bold text-warning">90.0%</p>
-                <p className="text-xs text-muted-foreground mt-2">Commercial CI: 80.0% — CPI: 0.89</p>
+            {/* Weekly Cost KPIs */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+              <div className="glass-card rounded-lg p-5 border border-border/50">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-muted-foreground text-sm font-normal">$</span>
+                  <p className="text-[11px] text-muted-foreground uppercase tracking-widest font-semibold">Avg Weekly Costs</p>
+                </div>
+                <p className="text-4xl font-bold text-success">€0.38M</p>
+                <p className="text-sm text-muted-foreground mt-2">Average cost per week to date</p>
               </div>
+              <div className="glass-card rounded-lg p-5 border border-border/50">
+                <div className="flex items-center gap-2 mb-3">
+                  <TrendingUp className="w-4 h-4 text-muted-foreground" />
+                  <p className="text-[11px] text-muted-foreground uppercase tracking-widest font-semibold">Required Weekly Costs</p>
+                </div>
+                <p className="text-4xl font-bold text-foreground">€0.42M</p>
+                <p className="text-sm text-muted-foreground mt-2">To achieve projected IC</p>
+              </div>
+              <div className="glass-card rounded-lg p-5 border border-border/50">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-muted-foreground text-sm font-normal">€</span>
+                  <p className="text-[11px] text-muted-foreground uppercase tracking-widest font-semibold">Accumulated Production</p>
+                </div>
+                <p className="text-4xl font-bold text-success">€16.66M</p>
+                <p className="text-sm text-muted-foreground mt-2">68% of €24.5M contract value</p>
+              </div>
+            </div>
 
-              <div className="glass-card rounded-lg p-6 border border-border/50">
-                <p className="text-xs text-muted-foreground uppercase tracking-wide mb-4">Accumulated Production</p>
-                <div>
-                  <p className="text-4xl font-bold text-success">€16.66M</p>
-                  <p className="text-xs text-muted-foreground mt-2">68% of €24.5M contract value</p>
+            {/* Economic Overview bar */}
+            <div className="glass-card rounded-lg p-4 border border-border/50 mb-8">
+              <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-semibold mb-4">Economic Overview</p>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-4 divide-x-0 sm:divide-x divide-border/30">
+                <div className="sm:pl-0">
+                  <div className="flex items-center gap-1.5 mb-1.5">
+                    <span className="text-xs text-muted-foreground">€</span>
+                    <span className="text-[11px] text-muted-foreground">Project Budget</span>
+                  </div>
+                  <p className="text-2xl font-bold text-foreground">€24.5M</p>
+                </div>
+                <div className="sm:pl-6">
+                  <div className="flex items-center gap-1.5 mb-1.5">
+                    <TrendingUp className="w-3 h-3 text-muted-foreground" />
+                    <span className="text-[11px] text-muted-foreground">Commercial IC</span>
+                  </div>
+                  <p className="text-2xl font-bold text-foreground">80.0%</p>
+                </div>
+                <div className="sm:pl-6">
+                  <div className="flex items-center gap-1.5 mb-1.5">
+                    <TrendingUp className="w-3 h-3 text-warning" />
+                    <span className="text-[11px] text-muted-foreground">Projected IC</span>
+                  </div>
+                  <p className="text-2xl font-bold text-warning">92.4%</p>
+                </div>
+                <div className="sm:pl-6">
+                  <div className="flex items-center gap-1.5 mb-1.5">
+                    <span className="text-xs text-warning">€</span>
+                    <span className="text-[11px] text-muted-foreground">Current IC</span>
+                  </div>
+                  <p className="text-2xl font-bold text-warning">90.0%</p>
+                  <p className="text-[11px] text-muted-foreground mt-0.5">Analytical IC: 84.2%</p>
                 </div>
               </div>
             </div>
@@ -1322,7 +1457,10 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
               </div>
 
               <div className="glass-card rounded-lg p-4 border border-border/50">
-                <h3 className="text-sm font-semibold text-foreground mb-4">Economic S-Curve</h3>
+                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-4">
+                  <h3 className="text-sm font-semibold text-foreground">Economic S-Curve</h3>
+                  <BaselineFilter value={economicBaseline} onChange={setEconomicBaseline} />
+                </div>
                 <ResponsiveContainer width="100%" height={350}>
                   <LineChart data={getFilteredCostData()}>
                     <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} />

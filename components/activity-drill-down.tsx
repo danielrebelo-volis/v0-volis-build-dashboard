@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
-import { X } from 'lucide-react'
+import { X, Euro, TrendingUp, TrendingDown, AlertTriangle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useChartColors } from '@/hooks/use-chart-colors'
 
@@ -161,23 +161,48 @@ export function ActivityDrillDown({ isOpen, onClose }: ActivityDrillDownProps) {
           {/* Activity Details */}
           {selectedActivity && (
             <div className="glass-card rounded-lg p-4 border border-border/50">
-              <h3 className="text-sm font-semibold text-foreground mb-3">Activity {selectedActivity} Details</h3>
+              <h3 className="text-sm font-semibold text-foreground mb-4">Activity {selectedActivity} — Cost Overview</h3>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                <div>
-                  <p className="text-xs text-muted-foreground mb-1">Status</p>
-                  <p className="text-sm font-medium text-foreground">On Track</p>
+                {/* Budgeted Cost */}
+                <div className="glass-card rounded-lg p-3 border border-border/40">
+                  <div className="flex items-center gap-1.5 mb-2">
+                    <Euro className="w-3.5 h-3.5 text-muted-foreground" />
+                    <p className="text-[11px] text-muted-foreground uppercase tracking-wide">Budgeted Cost</p>
+                  </div>
+                  <p className="text-xl font-bold text-foreground">€{(1.2 + selectedActivity * 0.4).toFixed(1)}M</p>
+                  <p className="text-[11px] text-muted-foreground mt-0.5">BAC</p>
                 </div>
-                <div>
-                  <p className="text-xs text-muted-foreground mb-1">Progress</p>
-                  <p className="text-sm font-medium text-foreground">{85 - selectedActivity * 5}%</p>
+
+                {/* Actual Cost */}
+                <div className="glass-card rounded-lg p-3 border border-border/40">
+                  <div className="flex items-center gap-1.5 mb-2">
+                    <TrendingUp className="w-3.5 h-3.5 text-warning" />
+                    <p className="text-[11px] text-muted-foreground uppercase tracking-wide">Actual Cost</p>
+                  </div>
+                  <p className="text-xl font-bold text-warning">€{(1.1 + selectedActivity * 0.46).toFixed(1)}M</p>
+                  <p className="text-[11px] text-muted-foreground mt-0.5">to date</p>
                 </div>
-                <div>
-                  <p className="text-xs text-muted-foreground mb-1">Schedule Variance</p>
-                  <p className="text-sm font-medium text-success">+{selectedActivity * 2}%</p>
+
+                {/* Cost Variance */}
+                <div className="glass-card rounded-lg p-3 border border-border/40">
+                  <div className="flex items-center gap-1.5 mb-2">
+                    <TrendingDown className="w-3.5 h-3.5 text-destructive" />
+                    <p className="text-[11px] text-muted-foreground uppercase tracking-wide">Cost Variance</p>
+                  </div>
+                  <p className="text-xl font-bold text-destructive">-€{(selectedActivity * 0.06).toFixed(2)}M</p>
+                  <p className="text-[11px] text-muted-foreground mt-0.5">over budget</p>
                 </div>
-                <div>
-                  <p className="text-xs text-muted-foreground mb-1">Resources Allocated</p>
-                  <p className="text-sm font-medium text-foreground">{8 + selectedActivity} engineers</p>
+
+                {/* Projected IC */}
+                <div className="glass-card rounded-lg p-3 border border-border/40">
+                  <div className="flex items-center gap-1.5 mb-2">
+                    <AlertTriangle className="w-3.5 h-3.5 text-warning" />
+                    <p className="text-[11px] text-muted-foreground uppercase tracking-wide">Projected IC</p>
+                  </div>
+                  <p className="text-xl font-bold text-warning">{88 + selectedActivity * 2}%</p>
+                  <p className="text-[11px] text-muted-foreground mt-0.5">
+                    Commercial: <span className="font-medium">{80 + selectedActivity}%</span>
+                  </p>
                 </div>
               </div>
             </div>

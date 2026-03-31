@@ -6,7 +6,7 @@ import { EVMMatrix } from "@/components/evm-matrix"
 import { MetricsSidebar } from "@/components/metrics-sidebar"
 import { ProjectList } from "@/components/project-list"
 import { TrendsSection } from "@/components/trends-section"
-import { Download, RefreshCw, GitCompare, Globe, ChevronDown, Check } from "lucide-react"
+import { Download, RefreshCw, GitCompare, Globe, ChevronDown, Check, Route, Train, Waves, Anchor, Plane, Building2, HardHat, Pickaxe, Flame, Zap, Wrench, type LucideIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import {
@@ -174,56 +174,71 @@ export default function Dashboard() {
             </div>
 
             {/* Typology Legend Card - Below Matrix */}
-            <div className="glass-card rounded-md px-3 py-2 border border-border/30 backdrop-blur-sm">
-              <div className="flex items-center gap-2">
-                <span className="text-[9px] font-semibold text-muted-foreground tracking-wide uppercase">Typology</span>
-                <div className="flex items-center gap-2 flex-wrap max-w-full">
-                  {(["all", "Road Infrastructure", "Railway Infrastructure", "Hydraulic Infrastructure", "Port Infrastructure", "Airport Infrastructure", "Urban Infrastructure", "Civil Construction", "Mining", "Oil&Gas", "Power (Energy)", "Other Works"] as const).map((cat) => {
-                    const categoryColors: Record<string, string> = {
-                      "Road Infrastructure": "#166534",
-                      "Railway Infrastructure": "#fbbf24",
-                      "Hydraulic Infrastructure": "#d4d4d8",
-                      "Port Infrastructure": "#dc2626",
-                      "Airport Infrastructure": "#9333ea",
-                      "Urban Infrastructure": "#06b6d4",
-                      "Civil Construction": "#00ff88",
-                      "Mining": "#f59e0b",
-                      "Oil&Gas": "#8b5cf6",
-                      "Power (Energy)": "#ec4899",
-                      "Other Works": "#64748b"
-                    }
-                    return (
-                      <button
-                        key={cat}
-                        onClick={() => handleFilterSelect(cat === 'all' ? null : 'typology', cat === 'all' ? null : cat)}
-                        className={`flex items-center gap-1 text-[10px] transition-all whitespace-nowrap ${filterType === 'typology' && filterValue === cat || (cat === 'all' && !filterType)
-                          ? "text-foreground font-medium"
-                          : "text-muted-foreground/60 hover:text-foreground/80"
-                          }`}
-                      >
-                        {cat !== "all" ? (
-                          <>
-                            <div
-                              className="w-1.5 h-1.5 rounded-full"
-                              style={{
-                                backgroundColor: categoryColors[cat],
-                                boxShadow: (filterType === 'typology' && filterValue === cat) ? `0 0 6px ${categoryColors[cat]}80` : 'none'
-                              }}
-                            />
+            {(() => {
+              const categoryColors: Record<string, string> = {
+                "Road Infrastructure":      "#166534",
+                "Railway Infrastructure":   "#fbbf24",
+                "Hydraulic Infrastructure": "#d4d4d8",
+                "Port Infrastructure":      "#dc2626",
+                "Airport Infrastructure":   "#9333ea",
+                "Urban Infrastructure":     "#06b6d4",
+                "Civil Construction":       "#00ff88",
+                "Mining":                   "#f59e0b",
+                "Oil&Gas":                  "#8b5cf6",
+                "Power (Energy)":           "#ec4899",
+                "Other Works":              "#64748b",
+              }
+              const categoryIcons: Record<string, LucideIcon> = {
+                "Road Infrastructure":      Route,
+                "Railway Infrastructure":   Train,
+                "Hydraulic Infrastructure": Waves,
+                "Port Infrastructure":      Anchor,
+                "Airport Infrastructure":   Plane,
+                "Urban Infrastructure":     Building2,
+                "Civil Construction":       HardHat,
+                "Mining":                   Pickaxe,
+                "Oil&Gas":                  Flame,
+                "Power (Energy)":           Zap,
+                "Other Works":              Wrench,
+              }
+              const categories = ["all", "Road Infrastructure", "Railway Infrastructure", "Hydraulic Infrastructure", "Port Infrastructure", "Airport Infrastructure", "Urban Infrastructure", "Civil Construction", "Mining", "Oil&Gas", "Power (Energy)", "Other Works"] as const
+              return (
+                <div className="glass-card rounded-md px-3 py-2 border border-border/30 backdrop-blur-sm">
+                  <div className="flex items-center gap-2">
+                    <span className="text-[9px] font-semibold text-muted-foreground tracking-wide uppercase shrink-0">Typology</span>
+                    <div className="flex items-center gap-2 flex-wrap max-w-full">
+                      {categories.map((cat) => {
+                        const isActive = filterType === 'typology' && filterValue === cat || (cat === 'all' && !filterType)
+                        const color = cat !== "all" ? categoryColors[cat] : undefined
+                        const Icon = cat !== "all" ? categoryIcons[cat] : null
+                        return (
+                          <button
+                            key={cat}
+                            onClick={() => handleFilterSelect(cat === 'all' ? null : 'typology', cat === 'all' ? null : cat)}
+                            className={`flex items-center gap-1 text-[10px] transition-all whitespace-nowrap ${isActive ? "text-foreground font-medium" : "text-muted-foreground/60 hover:text-foreground/80"}`}
+                          >
+                            {Icon && color ? (
+                              <span
+                                className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-sm shrink-0"
+                                style={{
+                                  color,
+                                  filter: isActive ? `drop-shadow(0 0 3px ${color}90)` : undefined,
+                                }}
+                              >
+                                <Icon size={11} strokeWidth={2} />
+                              </span>
+                            ) : (
+                              <div className="w-1.5 h-1.5 rounded-full border border-muted-foreground/50 shrink-0" />
+                            )}
                             <span>{cat}</span>
-                          </>
-                        ) : (
-                          <>
-                            <div className="w-1.5 h-1.5 rounded-full border border-muted-foreground/50" />
-                            <span>All</span>
-                          </>
-                        )}
-                      </button>
-                    )
-                  })}
+                          </button>
+                        )
+                      })}
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
+              )
+            })()}
           </div>
 
           {/* Uptrends/Downtrends Section */}

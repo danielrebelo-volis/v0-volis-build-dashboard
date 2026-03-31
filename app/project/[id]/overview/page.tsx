@@ -18,7 +18,7 @@ import { useChartColors } from '@/hooks/use-chart-colors'
 
 // ─── Baseline Filter ──────────────────────────────────────────────────────────
 const BASELINE_OPTIONS = [
-  { value: 'last',  label: 'Last Imported Baseline' },
+  { value: 'last', label: 'Last Imported Baseline' },
   { value: 'sep25', label: 'Baseline X September 2025' },
   { value: 'may25', label: 'Baseline X May 2025' },
 ]
@@ -64,8 +64,8 @@ const DEMO_WEEKLY_COSTS = [
 ]
 
 const COST_NATURE_COLORS = [
-  { key: 'labour',        label: 'Labour',        color: '#a0a0a0' },
-  { key: 'materials',     label: 'Materials',     color: '#00c8ff' },
+  { key: 'labour', label: 'Labour', color: '#a0a0a0' },
+  { key: 'materials', label: 'Materials', color: '#00c8ff' },
   { key: 'subcontracted', label: 'Subcontracted', color: '#ff6b6b' },
 ]
 
@@ -110,11 +110,10 @@ function EconomicTableRow({
       <td className="py-3 text-foreground font-medium">{row.activity}</td>
       <td className="py-3 text-right text-foreground">€{economicValue.toFixed(1)}M</td>
       <td className="py-3 text-right">
-        <span className={`text-xs px-2 py-0.5 rounded-full ${
-          row.status === 'Finished' ? 'bg-[#16a34a]/15 text-[#16a34a]' :
-          row.status === 'Ongoing'  ? 'bg-accent/20 text-accent' :
-                                      'bg-muted/30 text-muted-foreground'
-        }`}>{row.status}</span>
+        <span className={`text-xs px-2 py-0.5 rounded-full ${row.status === 'Finished' ? 'bg-[#16a34a]/15 text-[#16a34a]' :
+            row.status === 'Ongoing' ? 'bg-accent/20 text-accent' :
+              'bg-muted/30 text-muted-foreground'
+          }`}>{row.status}</span>
       </td>
       <td className="py-3 text-right text-foreground">{row.completeness}%</td>
       <td className="py-3 text-right text-foreground">€{row.currentCost.toFixed(2)}M</td>
@@ -136,7 +135,7 @@ function EconomicTableRow({
 
         {open && (
           <div className="absolute right-0 bottom-full mb-2 z-50 bg-background border border-border/50 rounded-lg shadow-xl p-4"
-               style={{ width: chartW + paddingLeft + 8 }}>
+            style={{ width: chartW + paddingLeft + 8 }}>
             <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-3">
               Weekly Costs by Nature — Last 4 Weeks
             </p>
@@ -165,9 +164,9 @@ function EconomicTableRow({
                   <g key={week.week}>
                     {COST_NATURE_COLORS.map((nat, ni) => {
                       const val = week[nat.key as keyof typeof week] as number
-                      const bh  = (val / maxVal) * innerH
-                      const bx  = groupX + ni * (barW + barGap)
-                      const by  = innerH - bh
+                      const bh = (val / maxVal) * innerH
+                      const bx = groupX + ni * (barW + barGap)
+                      const by = innerH - bh
                       return (
                         <rect key={nat.key} x={bx} y={by} width={barW} height={bh}
                           fill={nat.color} rx={2} opacity={0.9} />
@@ -234,20 +233,20 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
   }
 
   const progressData = [
-    { week: '1', planned: 5, estimated: 4, actual: 3,    actualSolid: 3,    actualDashed: null },
-    { week: '2', planned: 10, estimated: 8, actual: 5,   actualSolid: 5,    actualDashed: null },
-    { week: '3', planned: 15, estimated: 14, actual: 8,  actualSolid: 8,    actualDashed: null },
-    { week: '4', planned: 20, estimated: 18, actual: 12, actualSolid: 12,   actualDashed: null },
-    { week: '5', planned: 28, estimated: 26, actual: 18, actualSolid: 18,   actualDashed: null },
-    { week: '6', planned: 36, estimated: 34, actual: 25, actualSolid: 25,   actualDashed: null },
-    { week: '7', planned: 45, estimated: 42, actual: 34, actualSolid: 34,   actualDashed: null },
-    { week: '8', planned: 55, estimated: 51, actual: 45, actualSolid: 45,   actualDashed: 45  },
-    { week: '9', planned: 65, estimated: 60, actual: 50, actualSolid: null, actualDashed: 50  },
+    { week: '1', planned: 5, estimated: 4, actual: 3, actualSolid: 3, actualDashed: null },
+    { week: '2', planned: 10, estimated: 8, actual: 5, actualSolid: 5, actualDashed: null },
+    { week: '3', planned: 15, estimated: 14, actual: 8, actualSolid: 8, actualDashed: null },
+    { week: '4', planned: 20, estimated: 18, actual: 12, actualSolid: 12, actualDashed: null },
+    { week: '5', planned: 28, estimated: 26, actual: 18, actualSolid: 18, actualDashed: null },
+    { week: '6', planned: 36, estimated: 34, actual: 25, actualSolid: 25, actualDashed: null },
+    { week: '7', planned: 45, estimated: 42, actual: 34, actualSolid: 34, actualDashed: null },
+    { week: '8', planned: 55, estimated: 51, actual: 45, actualSolid: 45, actualDashed: 45 },
+    { week: '9', planned: 65, estimated: 60, actual: 50, actualSolid: null, actualDashed: 50 },
   ]
 
   const costData = [
-    { week: '1', baseline: 3.2, currentBaseline: 3.0, actualSolid: 3.3,  actualDashed: null },
-    { week: '2', baseline: 6.1, currentBaseline: 5.8, actualSolid: 7.0,  actualDashed: null },
+    { week: '1', baseline: 3.2, currentBaseline: 3.0, actualSolid: 3.3, actualDashed: null },
+    { week: '2', baseline: 6.1, currentBaseline: 5.8, actualSolid: 7.0, actualDashed: null },
     { week: '3', baseline: 9.2, currentBaseline: 8.8, actualSolid: 10.3, actualDashed: null },
     { week: '4', baseline: 12.4, currentBaseline: 12.0, actualSolid: 14.1, actualDashed: null },
     { week: '5', baseline: 15.1, currentBaseline: 14.8, actualSolid: 18.0, actualDashed: null },
@@ -290,59 +289,59 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
     if (scale === 1) return costData
     return costData.map(d => ({
       ...d,
-      baseline:        parseFloat((d.baseline        * scale).toFixed(2)),
+      baseline: parseFloat((d.baseline * scale).toFixed(2)),
       currentBaseline: parseFloat((d.currentBaseline * scale).toFixed(2)),
-      actualSolid:     d.actualSolid  != null ? parseFloat((d.actualSolid  * scale).toFixed(2)) : null,
-      actualDashed:    d.actualDashed != null ? parseFloat((d.actualDashed * scale).toFixed(2)) : null,
+      actualSolid: d.actualSolid != null ? parseFloat((d.actualSolid * scale).toFixed(2)) : null,
+      actualDashed: d.actualDashed != null ? parseFloat((d.actualDashed * scale).toFixed(2)) : null,
     }))
   }
 
   // float_weeks sourced from schedule table (same formula: 2 - Math.floor(idx/2))
   const activities = [
-    { name: 'Site Preparation',      value: 2.1, metric: 'm³',         total_planned_qty: 1000, planned_qty: 900,  executed_qty: 850,  expected_completeness: (900/1000).toFixed(2),   actual_completeness: 85, earnedValue: 1.785, status: 'Ongoing',     forecast_deadline: '15/03/2024', float_weeks: 2 },
-    { name: 'Foundation Work',        value: 5.2, metric: 'm³',         total_planned_qty: 2000, planned_qty: 1400, executed_qty: 1200, expected_completeness: (1400/2000).toFixed(2), actual_completeness: 60, earnedValue: 3.12,  status: 'Ongoing',     forecast_deadline: '20/04/2024', float_weeks: 2 },
-    { name: 'Structure Assembly',     value: 8.5, metric: 'units',      total_planned_qty: 150,  planned_qty: 110,  executed_qty: 90,   expected_completeness: (110/150).toFixed(2),   actual_completeness: 60, earnedValue: 5.10,  status: 'Ongoing',     forecast_deadline: '10/05/2024', float_weeks: 1 },
-    { name: 'Mechanical Systems',     value: 4.3, metric: 'systems',    total_planned_qty: 45,   planned_qty: 10,   executed_qty: 0,    expected_completeness: (10/45).toFixed(2),     actual_completeness: 0,  earnedValue: 0,     status: 'Not Started', forecast_deadline: '15/06/2024', float_weeks: 1 },
-    { name: 'Finishing Works',        value: 4.4, metric: 'areas',      total_planned_qty: 50,   planned_qty: 10,   executed_qty: 5,    expected_completeness: (10/50).toFixed(2),     actual_completeness: 10, earnedValue: 0.44,  status: 'Not Started', forecast_deadline: '20/06/2024', float_weeks: 1 },
-    { name: 'Electrical Installation',value: 3.8, metric: 'circuits',   total_planned_qty: 120,  planned_qty: 80,   executed_qty: 65,   expected_completeness: (80/120).toFixed(2),    actual_completeness: 54, earnedValue: 2.052, status: 'Ongoing',     forecast_deadline: '25/05/2024', float_weeks: 0 },
-    { name: 'Plumbing Systems',       value: 2.9, metric: 'connections',total_planned_qty: 85,   planned_qty: 60,   executed_qty: 55,   expected_completeness: (60/85).toFixed(2),     actual_completeness: 65, earnedValue: 1.885, status: 'Ongoing',     forecast_deadline: '22/05/2024', float_weeks: 0 },
-    { name: 'HVAC Installation',      value: 6.7, metric: 'units',      total_planned_qty: 35,   planned_qty: 25,   executed_qty: 18,   expected_completeness: (25/35).toFixed(2),     actual_completeness: 51, earnedValue: 3.417, status: 'Ongoing',     forecast_deadline: '30/05/2024', float_weeks: 0 },
-    { name: 'Exterior Cladding',      value: 3.2, metric: 'm²',         total_planned_qty: 800,  planned_qty: 500,  executed_qty: 420,  expected_completeness: (500/800).toFixed(2),   actual_completeness: 53, earnedValue: 1.696, status: 'Ongoing',     forecast_deadline: '28/05/2024', float_weeks: 1 },
-    { name: 'Interior Partitions',    value: 2.6, metric: 'm²',         total_planned_qty: 650,  planned_qty: 400,  executed_qty: 350,  expected_completeness: (400/650).toFixed(2),   actual_completeness: 54, earnedValue: 1.404, status: 'Ongoing',     forecast_deadline: '26/05/2024', float_weeks: 1 },
-    { name: 'Roofing Works',          value: 4.1, metric: 'm²',         total_planned_qty: 1200, planned_qty: 1000, executed_qty: 950,  expected_completeness: (1000/1200).toFixed(2), actual_completeness: 79, earnedValue: 3.239, status: 'Ongoing',     forecast_deadline: '18/05/2024', float_weeks: 2 },
-    { name: 'Flooring Installation',  value: 1.9, metric: 'm²',         total_planned_qty: 900,  planned_qty: 300,  executed_qty: 180,  expected_completeness: (300/900).toFixed(2),   actual_completeness: 20, earnedValue: 0.38,  status: 'Not Started', forecast_deadline: '10/07/2024', float_weeks: 3 },
-    { name: 'Painting & Decoration',  value: 1.5, metric: 'm²',         total_planned_qty: 1100, planned_qty: 200,  executed_qty: 50,   expected_completeness: (200/1100).toFixed(2),  actual_completeness: 5,  earnedValue: 0.075, status: 'Not Started', forecast_deadline: '15/07/2024', float_weeks: 3 },
+    { name: 'Site Preparation', value: 2.1, metric: 'm³', total_planned_qty: 1000, planned_qty: 900, executed_qty: 850, expected_completeness: (900 / 1000).toFixed(2), actual_completeness: 85, earnedValue: 1.785, status: 'Ongoing', forecast_deadline: '15/03/2024', float_weeks: 2 },
+    { name: 'Foundation Work', value: 5.2, metric: 'm³', total_planned_qty: 2000, planned_qty: 1400, executed_qty: 1200, expected_completeness: (1400 / 2000).toFixed(2), actual_completeness: 60, earnedValue: 3.12, status: 'Ongoing', forecast_deadline: '20/04/2024', float_weeks: 2 },
+    { name: 'Structure Assembly', value: 8.5, metric: 'units', total_planned_qty: 150, planned_qty: 110, executed_qty: 90, expected_completeness: (110 / 150).toFixed(2), actual_completeness: 60, earnedValue: 5.10, status: 'Ongoing', forecast_deadline: '10/05/2024', float_weeks: 1 },
+    { name: 'Mechanical Systems', value: 4.3, metric: 'systems', total_planned_qty: 45, planned_qty: 10, executed_qty: 0, expected_completeness: (10 / 45).toFixed(2), actual_completeness: 0, earnedValue: 0, status: 'Not Started', forecast_deadline: '15/06/2024', float_weeks: 1 },
+    { name: 'Finishing Works', value: 4.4, metric: 'areas', total_planned_qty: 50, planned_qty: 10, executed_qty: 5, expected_completeness: (10 / 50).toFixed(2), actual_completeness: 10, earnedValue: 0.44, status: 'Not Started', forecast_deadline: '20/06/2024', float_weeks: 1 },
+    { name: 'Electrical Installation', value: 3.8, metric: 'circuits', total_planned_qty: 120, planned_qty: 80, executed_qty: 65, expected_completeness: (80 / 120).toFixed(2), actual_completeness: 54, earnedValue: 2.052, status: 'Ongoing', forecast_deadline: '25/05/2024', float_weeks: 0 },
+    { name: 'Plumbing Systems', value: 2.9, metric: 'connections', total_planned_qty: 85, planned_qty: 60, executed_qty: 55, expected_completeness: (60 / 85).toFixed(2), actual_completeness: 65, earnedValue: 1.885, status: 'Ongoing', forecast_deadline: '22/05/2024', float_weeks: 0 },
+    { name: 'HVAC Installation', value: 6.7, metric: 'units', total_planned_qty: 35, planned_qty: 25, executed_qty: 18, expected_completeness: (25 / 35).toFixed(2), actual_completeness: 51, earnedValue: 3.417, status: 'Ongoing', forecast_deadline: '30/05/2024', float_weeks: 0 },
+    { name: 'Exterior Cladding', value: 3.2, metric: 'm²', total_planned_qty: 800, planned_qty: 500, executed_qty: 420, expected_completeness: (500 / 800).toFixed(2), actual_completeness: 53, earnedValue: 1.696, status: 'Ongoing', forecast_deadline: '28/05/2024', float_weeks: 1 },
+    { name: 'Interior Partitions', value: 2.6, metric: 'm²', total_planned_qty: 650, planned_qty: 400, executed_qty: 350, expected_completeness: (400 / 650).toFixed(2), actual_completeness: 54, earnedValue: 1.404, status: 'Ongoing', forecast_deadline: '26/05/2024', float_weeks: 1 },
+    { name: 'Roofing Works', value: 4.1, metric: 'm²', total_planned_qty: 1200, planned_qty: 1000, executed_qty: 950, expected_completeness: (1000 / 1200).toFixed(2), actual_completeness: 79, earnedValue: 3.239, status: 'Ongoing', forecast_deadline: '18/05/2024', float_weeks: 2 },
+    { name: 'Flooring Installation', value: 1.9, metric: 'm²', total_planned_qty: 900, planned_qty: 300, executed_qty: 180, expected_completeness: (300 / 900).toFixed(2), actual_completeness: 20, earnedValue: 0.38, status: 'Not Started', forecast_deadline: '10/07/2024', float_weeks: 3 },
+    { name: 'Painting & Decoration', value: 1.5, metric: 'm²', total_planned_qty: 1100, planned_qty: 200, executed_qty: 50, expected_completeness: (200 / 1100).toFixed(2), actual_completeness: 5, earnedValue: 0.075, status: 'Not Started', forecast_deadline: '15/07/2024', float_weeks: 3 },
   ]
 
   const weeklyNatureCosts: Record<string, { week: string; labour: number; materials: number; subcontracted: number }[]> = {
-    'Site Preparation':       [{ week:'W6', labour:0.08, materials:0.05, subcontracted:0.02 },{ week:'W7', labour:0.07, materials:0.06, subcontracted:0.03 },{ week:'W8', labour:0.09, materials:0.04, subcontracted:0.02 },{ week:'W9', labour:0.06, materials:0.05, subcontracted:0.01 }],
-    'Foundation Work':        [{ week:'W6', labour:0.18, materials:0.14, subcontracted:0.07 },{ week:'W7', labour:0.20, materials:0.13, subcontracted:0.06 },{ week:'W8', labour:0.17, materials:0.15, subcontracted:0.08 },{ week:'W9', labour:0.19, materials:0.12, subcontracted:0.07 }],
-    'Structure Assembly':     [{ week:'W6', labour:0.25, materials:0.19, subcontracted:0.10 },{ week:'W7', labour:0.22, materials:0.21, subcontracted:0.11 },{ week:'W8', labour:0.26, materials:0.18, subcontracted:0.09 },{ week:'W9', labour:0.24, materials:0.20, subcontracted:0.10 }],
-    'Mechanical Systems':     [{ week:'W6', labour:0.10, materials:0.08, subcontracted:0.12 },{ week:'W7', labour:0.11, materials:0.09, subcontracted:0.13 },{ week:'W8', labour:0.09, materials:0.10, subcontracted:0.11 },{ week:'W9', labour:0.12, materials:0.07, subcontracted:0.14 }],
-    'Finishing Works':        [{ week:'W6', labour:0.07, materials:0.06, subcontracted:0.04 },{ week:'W7', labour:0.08, materials:0.05, subcontracted:0.03 },{ week:'W8', labour:0.06, materials:0.07, subcontracted:0.05 },{ week:'W9', labour:0.09, materials:0.04, subcontracted:0.03 }],
-    'Electrical Installation':[{ week:'W6', labour:0.14, materials:0.09, subcontracted:0.08 },{ week:'W7', labour:0.13, materials:0.10, subcontracted:0.09 },{ week:'W8', labour:0.15, materials:0.08, subcontracted:0.07 },{ week:'W9', labour:0.12, materials:0.11, subcontracted:0.08 }],
-    'Plumbing Systems':       [{ week:'W6', labour:0.11, materials:0.07, subcontracted:0.05 },{ week:'W7', labour:0.10, materials:0.08, subcontracted:0.06 },{ week:'W8', labour:0.12, materials:0.06, subcontracted:0.04 },{ week:'W9', labour:0.09, materials:0.09, subcontracted:0.05 }],
-    'HVAC Installation':      [{ week:'W6', labour:0.20, materials:0.16, subcontracted:0.14 },{ week:'W7', labour:0.22, materials:0.15, subcontracted:0.13 },{ week:'W8', labour:0.19, materials:0.17, subcontracted:0.15 },{ week:'W9', labour:0.21, materials:0.14, subcontracted:0.12 }],
-    'Exterior Cladding':      [{ week:'W6', labour:0.09, materials:0.12, subcontracted:0.06 },{ week:'W7', labour:0.10, materials:0.11, subcontracted:0.07 },{ week:'W8', labour:0.08, materials:0.13, subcontracted:0.05 },{ week:'W9', labour:0.11, materials:0.10, subcontracted:0.06 }],
-    'Interior Partitions':    [{ week:'W6', labour:0.08, materials:0.06, subcontracted:0.04 },{ week:'W7', labour:0.07, materials:0.07, subcontracted:0.05 },{ week:'W8', labour:0.09, materials:0.05, subcontracted:0.03 },{ week:'W9', labour:0.08, materials:0.08, subcontracted:0.04 }],
-    'Roofing Works':          [{ week:'W6', labour:0.13, materials:0.10, subcontracted:0.07 },{ week:'W7', labour:0.14, materials:0.09, subcontracted:0.08 },{ week:'W8', labour:0.12, materials:0.11, subcontracted:0.06 },{ week:'W9', labour:0.15, materials:0.08, subcontracted:0.07 }],
-    'Flooring Installation':  [{ week:'W6', labour:0.06, materials:0.09, subcontracted:0.03 },{ week:'W7', labour:0.07, materials:0.08, subcontracted:0.04 },{ week:'W8', labour:0.05, materials:0.10, subcontracted:0.02 },{ week:'W9', labour:0.08, materials:0.07, subcontracted:0.03 }],
-    'Painting & Decoration':  [{ week:'W6', labour:0.04, materials:0.03, subcontracted:0.02 },{ week:'W7', labour:0.05, materials:0.02, subcontracted:0.01 },{ week:'W8', labour:0.03, materials:0.04, subcontracted:0.02 },{ week:'W9', labour:0.06, materials:0.02, subcontracted:0.01 }],
+    'Site Preparation': [{ week: 'W6', labour: 0.08, materials: 0.05, subcontracted: 0.02 }, { week: 'W7', labour: 0.07, materials: 0.06, subcontracted: 0.03 }, { week: 'W8', labour: 0.09, materials: 0.04, subcontracted: 0.02 }, { week: 'W9', labour: 0.06, materials: 0.05, subcontracted: 0.01 }],
+    'Foundation Work': [{ week: 'W6', labour: 0.18, materials: 0.14, subcontracted: 0.07 }, { week: 'W7', labour: 0.20, materials: 0.13, subcontracted: 0.06 }, { week: 'W8', labour: 0.17, materials: 0.15, subcontracted: 0.08 }, { week: 'W9', labour: 0.19, materials: 0.12, subcontracted: 0.07 }],
+    'Structure Assembly': [{ week: 'W6', labour: 0.25, materials: 0.19, subcontracted: 0.10 }, { week: 'W7', labour: 0.22, materials: 0.21, subcontracted: 0.11 }, { week: 'W8', labour: 0.26, materials: 0.18, subcontracted: 0.09 }, { week: 'W9', labour: 0.24, materials: 0.20, subcontracted: 0.10 }],
+    'Mechanical Systems': [{ week: 'W6', labour: 0.10, materials: 0.08, subcontracted: 0.12 }, { week: 'W7', labour: 0.11, materials: 0.09, subcontracted: 0.13 }, { week: 'W8', labour: 0.09, materials: 0.10, subcontracted: 0.11 }, { week: 'W9', labour: 0.12, materials: 0.07, subcontracted: 0.14 }],
+    'Finishing Works': [{ week: 'W6', labour: 0.07, materials: 0.06, subcontracted: 0.04 }, { week: 'W7', labour: 0.08, materials: 0.05, subcontracted: 0.03 }, { week: 'W8', labour: 0.06, materials: 0.07, subcontracted: 0.05 }, { week: 'W9', labour: 0.09, materials: 0.04, subcontracted: 0.03 }],
+    'Electrical Installation': [{ week: 'W6', labour: 0.14, materials: 0.09, subcontracted: 0.08 }, { week: 'W7', labour: 0.13, materials: 0.10, subcontracted: 0.09 }, { week: 'W8', labour: 0.15, materials: 0.08, subcontracted: 0.07 }, { week: 'W9', labour: 0.12, materials: 0.11, subcontracted: 0.08 }],
+    'Plumbing Systems': [{ week: 'W6', labour: 0.11, materials: 0.07, subcontracted: 0.05 }, { week: 'W7', labour: 0.10, materials: 0.08, subcontracted: 0.06 }, { week: 'W8', labour: 0.12, materials: 0.06, subcontracted: 0.04 }, { week: 'W9', labour: 0.09, materials: 0.09, subcontracted: 0.05 }],
+    'HVAC Installation': [{ week: 'W6', labour: 0.20, materials: 0.16, subcontracted: 0.14 }, { week: 'W7', labour: 0.22, materials: 0.15, subcontracted: 0.13 }, { week: 'W8', labour: 0.19, materials: 0.17, subcontracted: 0.15 }, { week: 'W9', labour: 0.21, materials: 0.14, subcontracted: 0.12 }],
+    'Exterior Cladding': [{ week: 'W6', labour: 0.09, materials: 0.12, subcontracted: 0.06 }, { week: 'W7', labour: 0.10, materials: 0.11, subcontracted: 0.07 }, { week: 'W8', labour: 0.08, materials: 0.13, subcontracted: 0.05 }, { week: 'W9', labour: 0.11, materials: 0.10, subcontracted: 0.06 }],
+    'Interior Partitions': [{ week: 'W6', labour: 0.08, materials: 0.06, subcontracted: 0.04 }, { week: 'W7', labour: 0.07, materials: 0.07, subcontracted: 0.05 }, { week: 'W8', labour: 0.09, materials: 0.05, subcontracted: 0.03 }, { week: 'W9', labour: 0.08, materials: 0.08, subcontracted: 0.04 }],
+    'Roofing Works': [{ week: 'W6', labour: 0.13, materials: 0.10, subcontracted: 0.07 }, { week: 'W7', labour: 0.14, materials: 0.09, subcontracted: 0.08 }, { week: 'W8', labour: 0.12, materials: 0.11, subcontracted: 0.06 }, { week: 'W9', labour: 0.15, materials: 0.08, subcontracted: 0.07 }],
+    'Flooring Installation': [{ week: 'W6', labour: 0.06, materials: 0.09, subcontracted: 0.03 }, { week: 'W7', labour: 0.07, materials: 0.08, subcontracted: 0.04 }, { week: 'W8', labour: 0.05, materials: 0.10, subcontracted: 0.02 }, { week: 'W9', labour: 0.08, materials: 0.07, subcontracted: 0.03 }],
+    'Painting & Decoration': [{ week: 'W6', labour: 0.04, materials: 0.03, subcontracted: 0.02 }, { week: 'W7', labour: 0.05, materials: 0.02, subcontracted: 0.01 }, { week: 'W8', labour: 0.03, materials: 0.04, subcontracted: 0.02 }, { week: 'W9', labour: 0.06, materials: 0.02, subcontracted: 0.01 }],
   }
 
   const economicTable = activities.map(activity => {
     const commercialIC = 80 + Math.random() * 5
-    const projectedIC  = commercialIC + 5 + Math.random() * 8
-    const currentIC    = commercialIC + 3 + Math.random() * 6
+    const projectedIC = commercialIC + 5 + Math.random() * 8
+    const currentIC = commercialIC + 3 + Math.random() * 6
     return {
-      activity:      activity.name,
-      status:        activity.status,
-      completeness:  activity.actual_completeness,
-      currentCost:   activity.value * (activity.actual_completeness / 100) * 1.08,
-      commercialIC:  parseFloat(commercialIC.toFixed(1)),
-      projectedIC:   parseFloat(projectedIC.toFixed(1)),
-      currentIC:     parseFloat(currentIC.toFixed(1)),
-      weeklyCosts:   weeklyNatureCosts[activity.name] ?? [],
+      activity: activity.name,
+      status: activity.status,
+      completeness: activity.actual_completeness,
+      currentCost: activity.value * (activity.actual_completeness / 100) * 1.08,
+      commercialIC: parseFloat(commercialIC.toFixed(1)),
+      projectedIC: parseFloat(projectedIC.toFixed(1)),
+      currentIC: parseFloat(currentIC.toFixed(1)),
+      weeklyCosts: weeklyNatureCosts[activity.name] ?? [],
     }
   })
 
@@ -656,7 +655,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
           <div className="flex items-center gap-2">
             <Button
               variant="outline"
-              className="gap-2 border-border/50 text-foreground hover:bg-secondary"
+              className="gap-2 border-border/50 text-background hover:bg-foreground/90"
               onClick={() => setGanttOpen(true)}
             >
               <GanttChartSquare className="w-4 h-4" />
@@ -847,20 +846,19 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                   <tbody>
                     {getSortedActivities().map((activity, idx) => {
                       const plannedPct = Math.round(parseFloat(activity.expected_completeness) * 100)
-                      const actualPct  = activity.actual_completeness
-                      const delta      = actualPct - plannedPct
+                      const actualPct = activity.actual_completeness
+                      const delta = actualPct - plannedPct
                       const progressColor = delta >= 0 ? 'text-[#16a34a]' : delta >= -5 ? 'text-[#d97706]' : 'text-[#dc2626]'
-                      const floatColor    = activity.float_weeks === 0 ? 'text-[#dc2626]' : activity.float_weeks === 1 ? 'text-[#d97706]' : 'text-[#16a34a]'
+                      const floatColor = activity.float_weeks === 0 ? 'text-[#dc2626]' : activity.float_weeks === 1 ? 'text-[#d97706]' : 'text-[#16a34a]'
                       return (
                         <tr key={idx} className="border-b border-border/30 hover:bg-secondary/20">
                           <td className="py-3 text-foreground font-medium">{activity.name}</td>
                           <td className="py-3 text-right text-foreground">€{activity.value.toFixed(1)}M</td>
                           <td className="py-3 text-right">
-                            <span className={`text-xs px-2 py-0.5 rounded-full ${
-                              activity.status === 'Finished'    ? 'bg-[#16a34a]/15 text-[#16a34a]' :
-                              activity.status === 'Ongoing'     ? 'bg-accent/20 text-accent' :
-                                                                  'bg-muted/30 text-muted-foreground'
-                            }`}>
+                            <span className={`text-xs px-2 py-0.5 rounded-full ${activity.status === 'Finished' ? 'bg-[#16a34a]/15 text-[#16a34a]' :
+                                activity.status === 'Ongoing' ? 'bg-accent/20 text-accent' :
+                                  'bg-muted/30 text-muted-foreground'
+                              }`}>
                               {activity.status}
                             </span>
                           </td>
@@ -938,8 +936,8 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                 <p className="text-xs text-muted-foreground mb-2">Required Weekly Advance</p>
                 <p className="text-2xl font-bold text-foreground">2.0%</p>
               </div>
-  <div className="glass-card rounded-lg p-3 border border-border/50">
-                  <p className="text-xs text-muted-foreground mb-2">Forecast Deadline</p>
+              <div className="glass-card rounded-lg p-3 border border-border/50">
+                <p className="text-xs text-muted-foreground mb-2">Forecast Deadline</p>
                 <p className="text-2xl font-bold text-success">January 15, 2026</p>
               </div>
             </div>
@@ -995,20 +993,19 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                   <tbody>
                     {getSortedActivities().map((activity, idx) => {
                       const plannedPct = Math.round(parseFloat(activity.expected_completeness) * 100)
-                      const actualPct  = activity.actual_completeness
-                      const delta      = actualPct - plannedPct
+                      const actualPct = activity.actual_completeness
+                      const delta = actualPct - plannedPct
                       const progressColor = delta >= 0 ? 'text-[#16a34a]' : delta >= -5 ? 'text-[#d97706]' : 'text-[#dc2626]'
-                      const floatColor    = activity.float_weeks === 0 ? 'text-[#dc2626]' : activity.float_weeks === 1 ? 'text-[#d97706]' : 'text-[#16a34a]'
+                      const floatColor = activity.float_weeks === 0 ? 'text-[#dc2626]' : activity.float_weeks === 1 ? 'text-[#d97706]' : 'text-[#16a34a]'
                       return (
                         <tr key={idx} className="border-b border-border/30 hover:bg-secondary/20">
                           <td className="py-3 text-foreground font-medium">{activity.name}</td>
                           <td className="py-3 text-right text-foreground">€{activity.value.toFixed(1)}M</td>
                           <td className="py-3 text-right">
-                            <span className={`text-xs px-2 py-0.5 rounded-full ${
-                              activity.status === 'Finished'    ? 'bg-[#16a34a]/15 text-[#16a34a]' :
-                              activity.status === 'Ongoing'     ? 'bg-accent/20 text-accent' :
-                                                                  'bg-muted/30 text-muted-foreground'
-                            }`}>
+                            <span className={`text-xs px-2 py-0.5 rounded-full ${activity.status === 'Finished' ? 'bg-[#16a34a]/15 text-[#16a34a]' :
+                                activity.status === 'Ongoing' ? 'bg-accent/20 text-accent' :
+                                  'bg-muted/30 text-muted-foreground'
+                              }`}>
                               {activity.status}
                             </span>
                           </td>

@@ -407,15 +407,19 @@ export function EVMMatrix({
               <div
                 className="absolute pointer-events-none"
                 style={{
-                  bottom: `calc(100% + 3px)`,
+                  bottom: `calc(100% + 4px)`,
                   left: "50%",
                   transform: "translateX(-50%)",
                   whiteSpace: "nowrap",
                 }}
               >
                 <span
-                  className="text-[8px] font-medium tracking-tight leading-none"
-                  style={{ color, textShadow: "0 1px 3px rgba(0,0,0,0.8)" }}
+                  className="text-[8px] font-semibold leading-none px-1 py-0.5 rounded"
+                  style={{
+                    backgroundColor: "rgba(0,0,0,0.55)",
+                    color: "#ffffff",
+                    backdropFilter: "blur(2px)",
+                  }}
                 >
                   {project.name}
                 </span>

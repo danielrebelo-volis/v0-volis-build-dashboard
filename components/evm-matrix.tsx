@@ -141,7 +141,7 @@ export function EVMMatrix({
     const minB = 18.3
     const maxB = 687.2
     const normalized = (budgetValue - minB) / (maxB - minB)
-    return 20 + Math.pow(Math.max(0, Math.min(1, normalized)), 0.5) * 22
+    return (20 + Math.pow(Math.max(0, Math.min(1, normalized)), 0.5) * 22) * 0.9
   }
 
   const refLineY = ((Y_REF - Y_MIN) / (Y_MAX - Y_MIN)) * 100
@@ -403,6 +403,24 @@ export function EVMMatrix({
                   filter: isHovered ? "blur(8px)" : "blur(4px)",
                 }}
               />
+              {/* Project name label */}
+              <div
+                className="absolute pointer-events-none"
+                style={{
+                  bottom: `calc(100% + 3px)`,
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                <span
+                  className="text-[8px] font-medium tracking-tight leading-none"
+                  style={{ color, textShadow: "0 1px 3px rgba(0,0,0,0.8)" }}
+                >
+                  {project.name}
+                </span>
+              </div>
+
               {/* Bubble */}
               <Link href={`/project/${project.id}`}>
                 <div

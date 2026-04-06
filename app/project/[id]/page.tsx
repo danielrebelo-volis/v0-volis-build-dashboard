@@ -107,11 +107,11 @@ export default function ProjectDeepDive({ params }: { params: { id: string } }) 
               </div>
               <p className="text-2xl font-bold text-foreground">92.4%</p>
             </div>
-            {/* Current IC */}
+            {/* Adjusted IC */}
             <div>
               <div className="flex items-center gap-2 mb-1.5">
                 <TrendingDown className="w-3.5 h-3.5 text-muted-foreground" />
-                <p className="text-xs text-muted-foreground">Current IC</p>
+                <p className="text-xs text-muted-foreground">Adjusted IC</p>
               </div>
               <p className="text-2xl font-bold text-foreground">90.0%</p>
             </div>

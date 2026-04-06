@@ -1085,7 +1085,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                 <div className="sm:pl-6">
                   <div className="flex items-center gap-1.5 mb-1.5">
                     <TrendingUp className="w-3 h-3 text-muted-foreground" />
-                    <span className="text-[11px] text-muted-foreground">Current IC</span>
+                    <span className="text-[11px] text-muted-foreground">Adjusted IC</span>
                   </div>
                   <p className="text-xl font-bold text-foreground">90.0%</p>
                 </div>
@@ -1141,7 +1141,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                         Projected IC {economicSortBy === 'totalEstimated' && (economicSortDirection === 'asc' ? '↑' : '↓')}
                       </th>
                       <th className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleEconomicSort('totalBaseline')}>
-                        Current IC {economicSortBy === 'totalBaseline' && (economicSortDirection === 'asc' ? '↑' : '↓')}
+                        Adjusted IC {economicSortBy === 'totalBaseline' && (economicSortDirection === 'asc' ? '↑' : '↓')}
                       </th>
                       <th className="w-8" />
                     </tr>
@@ -1430,7 +1430,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                 <div className="sm:pl-6">
                   <div className="flex items-center gap-1.5 mb-1.5">
                     <TrendingUp className="w-3 h-3 text-muted-foreground" />
-                    <span className="text-[11px] text-muted-foreground">Current IC</span>
+                    <span className="text-[11px] text-muted-foreground">Adjusted IC</span>
                   </div>
                   <p className="text-2xl font-bold text-foreground">90.0%</p>
                 </div>
@@ -1558,7 +1558,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                         Projected IC {economicSortBy === 'totalEstimated' && (economicSortDirection === 'asc' ? '↑' : '↓')}
                       </th>
                       <th className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleEconomicSort('totalBaseline')}>
-                        Current IC {economicSortBy === 'totalBaseline' && (economicSortDirection === 'asc' ? '↑' : '↓')}
+                        Adjusted IC {economicSortBy === 'totalBaseline' && (economicSortDirection === 'asc' ? '↑' : '↓')}
                       </th>
                       <th className="w-8" />
                     </tr>

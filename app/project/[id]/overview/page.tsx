@@ -72,12 +72,10 @@ const COST_NATURE_COLORS = [
 function EconomicTableRow({
   row,
   economicValue,
-  icColor,
   chartColors,
 }: {
   row: EconRow
   economicValue: number
-  icColor: (ic: number) => string
   chartColors: ReturnType<typeof useChartColors>
 }) {
   const [open, setOpen] = useState(false)
@@ -105,6 +103,10 @@ function EconomicTableRow({
   const innerH = chartH - paddingBottom
   const innerW = chartW - paddingLeft
 
+  const isNotStarted = row.status === 'Not Started'
+  const displayCompleteness = isNotStarted ? 0 : row.completeness
+  const displayCost = isNotStarted ? 0 : row.currentCost
+
   return (
     <tr className="border-b border-border/30 hover:bg-secondary/20">
       <td className="py-3 text-foreground font-medium">{row.activity}</td>
@@ -115,11 +117,11 @@ function EconomicTableRow({
             'bg-muted/30 text-muted-foreground'
           }`}>{row.status}</span>
       </td>
-      <td className="py-3 text-right text-foreground">{row.completeness}%</td>
-      <td className="py-3 text-right text-foreground">€{row.currentCost.toFixed(2)}M</td>
-      <td className={`py-3 text-right font-semibold ${icColor(row.commercialIC)}`}>{row.commercialIC}%</td>
-      <td className={`py-3 text-right font-semibold ${icColor(row.projectedIC)}`}>{row.projectedIC}%</td>
-      <td className={`py-3 text-right font-semibold ${icColor(row.currentIC)}`}>{row.currentIC}%</td>
+      <td className="py-3 text-right text-foreground">{displayCompleteness}%</td>
+      <td className="py-3 text-right text-foreground">€{displayCost.toFixed(2)}M</td>
+      <td className="py-3 text-right text-foreground">{row.commercialIC}%</td>
+      <td className="py-3 text-right text-foreground">{row.projectedIC}%</td>
+      <td className="py-3 text-right text-foreground">{row.currentIC}%</td>
 
       {/* Three-dot — click to toggle */}
       <td ref={ref} className="py-3 text-right relative">
@@ -1148,14 +1150,11 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                     {getSortedEconomicTable().map((row, idx) => {
                       const activity = activities.find(a => a.name === row.activity)
                       const economicValue = activity?.value ?? 0
-                      const icColor = (ic: number) =>
-                        ic < 85 ? 'text-[#16a34a]' : ic < 95 ? 'text-[#d97706]' : 'text-[#dc2626]'
                       return (
                         <EconomicTableRow
                           key={idx}
                           row={row}
                           economicValue={economicValue}
-                          icColor={icColor}
                           chartColors={chartColors}
                         />
                       );
@@ -1568,14 +1567,11 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                     {getSortedEconomicTable().map((row, idx) => {
                       const activity = activities.find(a => a.name === row.activity)
                       const economicValue = activity?.value ?? 0
-                      const icColor = (ic: number) =>
-                        ic < 85 ? 'text-[#16a34a]' : ic < 95 ? 'text-[#d97706]' : 'text-[#dc2626]'
                       return (
                         <EconomicTableRow
                           key={idx}
                           row={row}
                           economicValue={economicValue}
-                          icColor={icColor}
                           chartColors={chartColors}
                         />
                       );

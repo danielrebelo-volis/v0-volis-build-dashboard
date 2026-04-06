@@ -18,32 +18,6 @@ interface Project {
   analyticalIC: number      // % — always < adjustedIC
 }
 
-// Colour scale: green ≤ 90%, amber 91–100%, red > 100%
-function icColor(value: number): string {
-  if (value <= 90) return "#16a34a"   // green-600
-  if (value <= 100) return "#d97706"  // amber-600
-  return "#dc2626"                    // red-600
-}
-
-// Progress deviation: actual vs planned
-// actual >= planned → green, within 10% below → amber, > 10% below → red
-function progressColor(actual: number, planned: number): string {
-  const diff = actual - planned
-  if (diff >= 0) return "#16a34a"
-  if (diff >= -10) return "#d97706"
-  return "#dc2626"
-}
-
-function Badge({ value, color }: { value: string; color: string }) {
-  return (
-    <span
-      className="inline-flex items-center px-1.5 py-0.5 rounded text-[11px] font-semibold tabular-nums"
-      style={{ color, backgroundColor: `${color}18` }}
-    >
-      {value}
-    </span>
-  )
-}
 
 const COLUMNS = [
   { label: "Project", span: "col-span-2" },
@@ -92,7 +66,7 @@ function ProjectRow({ name, id, location, deadline, contractValue, currentCosts,
 
         {/* Current Costs */}
         <div className="col-span-1 text-right">
-          <Badge value={`${currentCosts.toFixed(1)} M€`} color={currentCosts > contractValue ? "#dc2626" : currentCosts > contractValue * 0.9 ? "#d97706" : "#16a34a"} />
+          <span className="text-[11px] font-mono text-foreground">{currentCosts.toFixed(1)} M€</span>
         </div>
 
         {/* Planned Progress */}
@@ -102,7 +76,7 @@ function ProjectRow({ name, id, location, deadline, contractValue, currentCosts,
 
         {/* Actual Progress */}
         <div className="col-span-1 text-right">
-          <Badge value={`${actualProgress}%`} color={progressColor(actualProgress, plannedProgress)} />
+          <span className="text-[11px] font-mono text-foreground">{actualProgress}%</span>
         </div>
 
         {/* Planned IC */}
@@ -112,12 +86,12 @@ function ProjectRow({ name, id, location, deadline, contractValue, currentCosts,
 
         {/* Adjusted IC */}
         <div className="col-span-1 text-right">
-          <Badge value={`${adjustedIC}%`} color={icColor(adjustedIC)} />
+          <span className="text-[11px] font-mono text-foreground">{adjustedIC}%</span>
         </div>
 
         {/* Analytical IC */}
         <div className="col-span-1 text-right">
-          <Badge value={`${analyticalIC}%`} color={icColor(analyticalIC)} />
+          <span className="text-[11px] font-mono text-foreground">{analyticalIC}%</span>
         </div>
 
         {/* Spacer for grid alignment */}

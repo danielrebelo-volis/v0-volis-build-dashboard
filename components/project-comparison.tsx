@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import { ChevronDown, MapPin, User, Calendar, Banknote, Activity, Sparkles, Loader2 } from 'lucide-react'
+import { ChevronDown, MapPin, User, Calendar, Banknote, Activity, Sparkles, Loader2, Plus } from 'lucide-react'
 import { ComposedChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts'
 import { useChartColors } from '@/hooks/use-chart-colors'
 
@@ -218,15 +218,6 @@ const sCurveDataByProject: Record<string, { progress: CurvePoint[]; cost: CurveP
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-function icColor(v: number) {
-  if (v < 85) return '#16a34a'
-  if (v < 95) return '#d97706'
-  return '#dc2626'
-}
-function spiColor(v: number) { return v >= 1 ? '#16a34a' : v >= 0.9 ? '#d97706' : '#dc2626' }
-function cpiColor(v: number) { return v >= 1 ? '#16a34a' : v >= 0.9 ? '#d97706' : '#dc2626' }
-function ppcColor(v: number) { return v >= 80 ? '#16a34a' : v >= 65 ? '#d97706' : '#dc2626' }
-
 function StatRow({ label, value, sub, color }: { label: string; value: string; sub?: string; color?: string }) {
   return (
     <div className="flex items-center justify-between py-2 border-b border-border/20 last:border-0">
@@ -286,43 +277,37 @@ function ScheduleSection({ project, maxWeek }: { project: ComparisonProject; max
       <StatRow
         label="Delay"
         value={`${project.delayDays > 0 ? '+' : ''}${project.delayDays} days`}
-        color={project.delayDays <= 0 ? '#16a34a' : project.delayDays < 15 ? '#d97706' : '#dc2626'}
       />
       <StatRow
         label="SPI"
         value={project.spi.toFixed(2)}
         sub={project.spi >= 1 ? 'Ahead of schedule' : 'Behind schedule'}
-        color={spiColor(project.spi)}
       />
       <StatRow
         label="Accumulated Production"
         value={`€${project.accumulatedProduction.toFixed(1)}M`}
         sub={`${prodPct}% of expected (€${project.expectedProduction.toFixed(1)}M)`}
-        color={prodPct >= 90 ? '#16a34a' : prodPct >= 75 ? '#d97706' : '#dc2626'}
       />
     </div>
   )
 }
 
 function CostSection({ project }: { project: ComparisonProject }) {
-  const varColor = project.budgetVariance <= 0 ? '#16a34a' : project.budgetVariance < 3 ? '#d97706' : '#dc2626'
   return (
     <div className="glass-card rounded-lg p-4 space-y-0">
       <h4 className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/70 mb-1">Cost</h4>
-      <StatRow label="CI Planned" value={`${project.ciPlanned}%`} color={icColor(project.ciPlanned)} />
-      <StatRow label="CI Adjusted" value={`${project.ciAdjusted}%`} color={icColor(project.ciAdjusted)} />
-      <StatRow label="CI Analytical" value={`${project.ciAnalytical}%`} color={icColor(project.ciAnalytical)} />
+      <StatRow label="CI Planned" value={`${project.ciPlanned}%`} />
+      <StatRow label="CI Adjusted" value={`${project.ciAdjusted}%`} />
+      <StatRow label="CI Analytical" value={`${project.ciAnalytical}%`} />
       <StatRow
         label="Budget Variance"
         value={`${project.budgetVariance > 0 ? '+' : ''}€${project.budgetVariance.toFixed(1)}M`}
         sub={project.budgetVariance <= 0 ? 'Under budget' : 'Over budget'}
-        color={varColor}
       />
       <StatRow
         label="CPI"
         value={project.cpi.toFixed(2)}
         sub={project.cpi >= 1 ? 'Under budget' : 'Over budget'}
-        color={cpiColor(project.cpi)}
       />
     </div>
   )
@@ -336,13 +321,11 @@ function ActivitySection({ project }: { project: ComparisonProject }) {
         label="PPC — Plan Percent Complete"
         value={`${project.ppc}%`}
         sub="% of planned tasks completed"
-        color={ppcColor(project.ppc)}
       />
       <StatRow
         label="TMR — Tasks Made Ready"
         value={`${project.tmr}%`}
         sub="% of tasks prepared for execution"
-        color={ppcColor(project.tmr)}
       />
     </div>
   )
@@ -613,13 +596,6 @@ function ComparisonSide({
         {activeCategories.includes('cost') && <CostSection project={selectedProject} />}
         {activeCategories.includes('activity') && <ActivitySection project={selectedProject} />}
       </div>
-
-      {/* AI Insight button */}
-      <AIInsightPanel
-        projectA={selectedProject}
-        projectB={otherProject}
-        activeCategories={activeCategories}
-      />
     </div>
   )
 }
@@ -706,6 +682,15 @@ export function ProjectComparison() {
         </div>
 
         <div className="flex items-center gap-4">
+          {/* Add Project button */}
+          <button
+            disabled
+            className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-border/40 bg-background text-sm font-medium text-muted-foreground cursor-not-allowed opacity-60"
+          >
+            <Plus className="w-4 h-4" />
+            Add Project
+          </button>
+
           {/* Indicator multi-select */}
           <CategoryDropdown selected={activeCategories} onChange={setActiveCategories} />
 
@@ -740,6 +725,15 @@ export function ProjectComparison() {
             onProjectChange={setRightProject}
             activeCategories={activeCategories}
             maxWeek={maxWeek}
+          />
+        </div>
+
+        {/* Full-width AI Comparison button */}
+        <div className="mt-8">
+          <AIInsightPanel
+            projectA={leftProject}
+            projectB={rightProject}
+            activeCategories={activeCategories}
           />
         </div>
       </div>

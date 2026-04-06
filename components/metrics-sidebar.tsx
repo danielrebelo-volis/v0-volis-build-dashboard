@@ -74,10 +74,9 @@ export function MetricsSidebar() {
             fill={94}
           />
           <KpiBlock
-            label="Annual Goal"
-            value="€320M"
-            sub="Achieved"
-            subValue="€274M"
+            label="Projected Yearly Production"
+            value="1.50B"
+            sub="Still not achieved"
             fill={86}
           />
         </div>

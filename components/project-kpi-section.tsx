@@ -49,7 +49,7 @@ export function ProjectKPISection({
           </div>
           <Calendar className="w-4 h-4 text-cyan" />
         </div>
-        <div className="text-2xl font-bold text-destructive">{forecastedEndDate}</div>
+        <div className="text-2xl font-bold text-foreground">{forecastedEndDate}</div>
       </div>
 
       {/* Deadline Date */}
@@ -59,7 +59,7 @@ export function ProjectKPISection({
             <p className="text-xs text-muted-foreground uppercase tracking-wide">Contract</p>
             <p className="text-sm font-semibold text-foreground mt-0.5">Deadline Date</p>
           </div>
-          <Calendar className="w-4 h-4 text-warning" />
+          <Calendar className="w-4 h-4 text-muted-foreground" />
         </div>
         <div className="text-2xl font-bold text-foreground">{deadlineDate}</div>
       </div>

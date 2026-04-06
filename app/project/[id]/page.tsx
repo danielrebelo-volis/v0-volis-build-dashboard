@@ -82,7 +82,7 @@ export default function ProjectDeepDive({ params }: { params: { id: string } }) 
         {/* Economic Overview */}
         <div className="mb-6 glass-card rounded-lg p-6">
           <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-5">Economic Overview</h3>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 lg:grid-cols-5 gap-6">
             {/* Project Budget */}
             <div>
               <div className="flex items-center gap-2 mb-1.5">
@@ -102,23 +102,26 @@ export default function ProjectDeepDive({ params }: { params: { id: string } }) 
             {/* Projected IC */}
             <div>
               <div className="flex items-center gap-2 mb-1.5">
-                <TrendingDown className="w-3.5 h-3.5 text-warning" />
+                <TrendingDown className="w-3.5 h-3.5 text-muted-foreground" />
                 <p className="text-xs text-muted-foreground">Projected IC</p>
               </div>
-              <p className="text-2xl font-bold text-warning">92.4%</p>
+              <p className="text-2xl font-bold text-foreground">92.4%</p>
             </div>
-            {/* Current IC */}
+            {/* Adjusted IC */}
             <div>
               <div className="flex items-center gap-2 mb-1.5">
-                <Euro className="w-3.5 h-3.5 text-warning" />
-                <p className="text-xs text-muted-foreground">Current IC</p>
+                <TrendingDown className="w-3.5 h-3.5 text-muted-foreground" />
+                <p className="text-xs text-muted-foreground">Adjusted IC</p>
               </div>
-              <div className="flex items-baseline gap-2">
-                <p className="text-2xl font-bold text-warning">90.0%</p>
+              <p className="text-2xl font-bold text-foreground">90.0%</p>
+            </div>
+            {/* Analytical IC */}
+            <div>
+              <div className="flex items-center gap-2 mb-1.5">
+                <TrendingDown className="w-3.5 h-3.5 text-muted-foreground" />
+                <p className="text-xs text-muted-foreground">Analytical IC</p>
               </div>
-              <p className="text-[11px] text-muted-foreground mt-0.5">
-                Analytical IC: <span className="font-medium">84.2%</span>
-              </p>
+              <p className="text-2xl font-bold text-foreground">84.2%</p>
             </div>
           </div>
         </div>
@@ -138,10 +141,10 @@ export default function ProjectDeepDive({ params }: { params: { id: string } }) 
             {/* Current Completion */}
             <div>
               <div className="flex items-center gap-2 mb-1.5">
-                <Calendar className="w-3.5 h-3.5 text-success" />
+                <Calendar className="w-3.5 h-3.5 text-muted-foreground" />
                 <p className="text-xs text-muted-foreground">Current Completion</p>
               </div>
-              <p className="text-2xl font-bold text-success">68.0%</p>
+              <p className="text-2xl font-bold text-foreground">68.0%</p>
             </div>
             {/* Accumulated Production */}
             <div>
@@ -154,12 +157,10 @@ export default function ProjectDeepDive({ params }: { params: { id: string } }) 
             {/* Schedule Variance */}
             <div>
               <div className="flex items-center gap-2 mb-1.5">
-                <Calendar className="w-3.5 h-3.5 text-success" />
+                <Calendar className="w-3.5 h-3.5 text-muted-foreground" />
                 <p className="text-xs text-muted-foreground">Schedule Variance</p>
               </div>
-              <div className="flex items-baseline gap-2">
-                <p className="text-2xl font-bold text-success">+35 days</p>
-              </div>
+              <p className="text-2xl font-bold text-foreground">+35 days</p>
               <p className="text-[11px] text-muted-foreground mt-0.5">ahead of schedule</p>
             </div>
           </div>

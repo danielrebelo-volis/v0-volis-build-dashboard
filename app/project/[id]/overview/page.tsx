@@ -72,12 +72,10 @@ const COST_NATURE_COLORS = [
 function EconomicTableRow({
   row,
   economicValue,
-  icColor,
   chartColors,
 }: {
   row: EconRow
   economicValue: number
-  icColor: (ic: number) => string
   chartColors: ReturnType<typeof useChartColors>
 }) {
   const [open, setOpen] = useState(false)
@@ -105,6 +103,10 @@ function EconomicTableRow({
   const innerH = chartH - paddingBottom
   const innerW = chartW - paddingLeft
 
+  const isNotStarted = row.status === 'Not Started'
+  const displayCompleteness = isNotStarted ? 0 : row.completeness
+  const displayCost = isNotStarted ? 0 : row.currentCost
+
   return (
     <tr className="border-b border-border/30 hover:bg-secondary/20">
       <td className="py-3 text-foreground font-medium">{row.activity}</td>
@@ -115,11 +117,11 @@ function EconomicTableRow({
             'bg-muted/30 text-muted-foreground'
           }`}>{row.status}</span>
       </td>
-      <td className="py-3 text-right text-foreground">{row.completeness}%</td>
-      <td className="py-3 text-right text-foreground">€{row.currentCost.toFixed(2)}M</td>
-      <td className={`py-3 text-right font-semibold ${icColor(row.commercialIC)}`}>{row.commercialIC}%</td>
-      <td className={`py-3 text-right font-semibold ${icColor(row.projectedIC)}`}>{row.projectedIC}%</td>
-      <td className={`py-3 text-right font-semibold ${icColor(row.currentIC)}`}>{row.currentIC}%</td>
+      <td className="py-3 text-right text-foreground">{displayCompleteness}%</td>
+      <td className="py-3 text-right text-foreground">€{displayCost.toFixed(2)}M</td>
+      <td className="py-3 text-right text-foreground">{row.commercialIC}%</td>
+      <td className="py-3 text-right text-foreground">{row.projectedIC}%</td>
+      <td className="py-3 text-right text-foreground">{row.currentIC}%</td>
 
       {/* Three-dot — click to toggle */}
       <td ref={ref} className="py-3 text-right relative">
@@ -213,6 +215,8 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
   const [economicSortDirection, setEconomicSortDirection] = useState<'asc' | 'desc'>('desc')
   const [progressBaseline, setProgressBaseline] = useState('last')
   const [economicBaseline, setEconomicBaseline] = useState('last')
+  const [natureChartActivity, setNatureChartActivity] = useState('Site Preparation')
+  const [natureChartWeeks, setNatureChartWeeks] = useState<'5' | '10' | 'all'>('5')
 
   // Data Quality Tab State
   const [dailyReportViewBy, setDailyReportViewBy] = useState('7days')
@@ -313,20 +317,20 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
     { name: 'Painting & Decoration', value: 1.5, metric: 'm²', total_planned_qty: 1100, planned_qty: 200, executed_qty: 50, expected_completeness: (200 / 1100).toFixed(2), actual_completeness: 5, earnedValue: 0.075, status: 'Not Started', forecast_deadline: '15/07/2024', float_weeks: 3 },
   ]
 
-  const weeklyNatureCosts: Record<string, { week: string; labour: number; materials: number; subcontracted: number }[]> = {
-    'Site Preparation': [{ week: 'W6', labour: 0.08, materials: 0.05, subcontracted: 0.02 }, { week: 'W7', labour: 0.07, materials: 0.06, subcontracted: 0.03 }, { week: 'W8', labour: 0.09, materials: 0.04, subcontracted: 0.02 }, { week: 'W9', labour: 0.06, materials: 0.05, subcontracted: 0.01 }],
-    'Foundation Work': [{ week: 'W6', labour: 0.18, materials: 0.14, subcontracted: 0.07 }, { week: 'W7', labour: 0.20, materials: 0.13, subcontracted: 0.06 }, { week: 'W8', labour: 0.17, materials: 0.15, subcontracted: 0.08 }, { week: 'W9', labour: 0.19, materials: 0.12, subcontracted: 0.07 }],
-    'Structure Assembly': [{ week: 'W6', labour: 0.25, materials: 0.19, subcontracted: 0.10 }, { week: 'W7', labour: 0.22, materials: 0.21, subcontracted: 0.11 }, { week: 'W8', labour: 0.26, materials: 0.18, subcontracted: 0.09 }, { week: 'W9', labour: 0.24, materials: 0.20, subcontracted: 0.10 }],
-    'Mechanical Systems': [{ week: 'W6', labour: 0.10, materials: 0.08, subcontracted: 0.12 }, { week: 'W7', labour: 0.11, materials: 0.09, subcontracted: 0.13 }, { week: 'W8', labour: 0.09, materials: 0.10, subcontracted: 0.11 }, { week: 'W9', labour: 0.12, materials: 0.07, subcontracted: 0.14 }],
-    'Finishing Works': [{ week: 'W6', labour: 0.07, materials: 0.06, subcontracted: 0.04 }, { week: 'W7', labour: 0.08, materials: 0.05, subcontracted: 0.03 }, { week: 'W8', labour: 0.06, materials: 0.07, subcontracted: 0.05 }, { week: 'W9', labour: 0.09, materials: 0.04, subcontracted: 0.03 }],
-    'Electrical Installation': [{ week: 'W6', labour: 0.14, materials: 0.09, subcontracted: 0.08 }, { week: 'W7', labour: 0.13, materials: 0.10, subcontracted: 0.09 }, { week: 'W8', labour: 0.15, materials: 0.08, subcontracted: 0.07 }, { week: 'W9', labour: 0.12, materials: 0.11, subcontracted: 0.08 }],
-    'Plumbing Systems': [{ week: 'W6', labour: 0.11, materials: 0.07, subcontracted: 0.05 }, { week: 'W7', labour: 0.10, materials: 0.08, subcontracted: 0.06 }, { week: 'W8', labour: 0.12, materials: 0.06, subcontracted: 0.04 }, { week: 'W9', labour: 0.09, materials: 0.09, subcontracted: 0.05 }],
-    'HVAC Installation': [{ week: 'W6', labour: 0.20, materials: 0.16, subcontracted: 0.14 }, { week: 'W7', labour: 0.22, materials: 0.15, subcontracted: 0.13 }, { week: 'W8', labour: 0.19, materials: 0.17, subcontracted: 0.15 }, { week: 'W9', labour: 0.21, materials: 0.14, subcontracted: 0.12 }],
-    'Exterior Cladding': [{ week: 'W6', labour: 0.09, materials: 0.12, subcontracted: 0.06 }, { week: 'W7', labour: 0.10, materials: 0.11, subcontracted: 0.07 }, { week: 'W8', labour: 0.08, materials: 0.13, subcontracted: 0.05 }, { week: 'W9', labour: 0.11, materials: 0.10, subcontracted: 0.06 }],
-    'Interior Partitions': [{ week: 'W6', labour: 0.08, materials: 0.06, subcontracted: 0.04 }, { week: 'W7', labour: 0.07, materials: 0.07, subcontracted: 0.05 }, { week: 'W8', labour: 0.09, materials: 0.05, subcontracted: 0.03 }, { week: 'W9', labour: 0.08, materials: 0.08, subcontracted: 0.04 }],
-    'Roofing Works': [{ week: 'W6', labour: 0.13, materials: 0.10, subcontracted: 0.07 }, { week: 'W7', labour: 0.14, materials: 0.09, subcontracted: 0.08 }, { week: 'W8', labour: 0.12, materials: 0.11, subcontracted: 0.06 }, { week: 'W9', labour: 0.15, materials: 0.08, subcontracted: 0.07 }],
-    'Flooring Installation': [{ week: 'W6', labour: 0.06, materials: 0.09, subcontracted: 0.03 }, { week: 'W7', labour: 0.07, materials: 0.08, subcontracted: 0.04 }, { week: 'W8', labour: 0.05, materials: 0.10, subcontracted: 0.02 }, { week: 'W9', labour: 0.08, materials: 0.07, subcontracted: 0.03 }],
-    'Painting & Decoration': [{ week: 'W6', labour: 0.04, materials: 0.03, subcontracted: 0.02 }, { week: 'W7', labour: 0.05, materials: 0.02, subcontracted: 0.01 }, { week: 'W8', labour: 0.03, materials: 0.04, subcontracted: 0.02 }, { week: 'W9', labour: 0.06, materials: 0.02, subcontracted: 0.01 }],
+  const weeklyNatureCosts: Record<string, { week: string; labour: number; materials: number; equipment: number; subcontracted: number }[]> = {
+    'Site Preparation':      [{ week:'W1', labour:0.04, materials:0.03, equipment:0.03, subcontracted:0.01 },{ week:'W2', labour:0.05, materials:0.04, equipment:0.02, subcontracted:0.01 },{ week:'W3', labour:0.06, materials:0.04, equipment:0.03, subcontracted:0.01 },{ week:'W4', labour:0.07, materials:0.05, equipment:0.03, subcontracted:0.02 },{ week:'W5', labour:0.07, materials:0.05, equipment:0.04, subcontracted:0.02 },{ week:'W6', labour:0.08, materials:0.05, equipment:0.04, subcontracted:0.02 },{ week:'W7', labour:0.07, materials:0.06, equipment:0.03, subcontracted:0.03 },{ week:'W8', labour:0.09, materials:0.04, equipment:0.04, subcontracted:0.02 },{ week:'W9', labour:0.06, materials:0.05, equipment:0.03, subcontracted:0.01 }],
+    'Foundation Work':       [{ week:'W1', labour:0.09, materials:0.07, equipment:0.06, subcontracted:0.03 },{ week:'W2', labour:0.11, materials:0.09, equipment:0.07, subcontracted:0.04 },{ week:'W3', labour:0.13, materials:0.10, equipment:0.08, subcontracted:0.05 },{ week:'W4', labour:0.15, materials:0.12, equipment:0.09, subcontracted:0.06 },{ week:'W5', labour:0.16, materials:0.13, equipment:0.09, subcontracted:0.06 },{ week:'W6', labour:0.18, materials:0.14, equipment:0.10, subcontracted:0.07 },{ week:'W7', labour:0.20, materials:0.13, equipment:0.09, subcontracted:0.06 },{ week:'W8', labour:0.17, materials:0.15, equipment:0.10, subcontracted:0.08 },{ week:'W9', labour:0.19, materials:0.12, equipment:0.09, subcontracted:0.07 }],
+    'Structure Assembly':    [{ week:'W1', labour:0.12, materials:0.09, equipment:0.06, subcontracted:0.05 },{ week:'W2', labour:0.15, materials:0.12, equipment:0.07, subcontracted:0.06 },{ week:'W3', labour:0.18, materials:0.14, equipment:0.08, subcontracted:0.07 },{ week:'W4', labour:0.21, materials:0.16, equipment:0.09, subcontracted:0.09 },{ week:'W5', labour:0.23, materials:0.18, equipment:0.09, subcontracted:0.09 },{ week:'W6', labour:0.25, materials:0.19, equipment:0.10, subcontracted:0.10 },{ week:'W7', labour:0.22, materials:0.21, equipment:0.09, subcontracted:0.11 },{ week:'W8', labour:0.26, materials:0.18, equipment:0.10, subcontracted:0.09 },{ week:'W9', labour:0.24, materials:0.20, equipment:0.10, subcontracted:0.10 }],
+    'Mechanical Systems':    [{ week:'W1', labour:0.05, materials:0.04, equipment:0.03, subcontracted:0.06 },{ week:'W2', labour:0.06, materials:0.05, equipment:0.04, subcontracted:0.07 },{ week:'W3', labour:0.07, materials:0.06, equipment:0.04, subcontracted:0.08 },{ week:'W4', labour:0.08, materials:0.07, equipment:0.05, subcontracted:0.09 },{ week:'W5', labour:0.09, materials:0.07, equipment:0.05, subcontracted:0.10 },{ week:'W6', labour:0.10, materials:0.08, equipment:0.05, subcontracted:0.12 },{ week:'W7', labour:0.11, materials:0.09, equipment:0.06, subcontracted:0.13 },{ week:'W8', labour:0.09, materials:0.10, equipment:0.05, subcontracted:0.11 },{ week:'W9', labour:0.12, materials:0.07, equipment:0.06, subcontracted:0.14 }],
+    'Finishing Works':       [{ week:'W1', labour:0.03, materials:0.02, equipment:0.01, subcontracted:0.01 },{ week:'W2', labour:0.04, materials:0.03, equipment:0.02, subcontracted:0.02 },{ week:'W3', labour:0.05, materials:0.04, equipment:0.02, subcontracted:0.02 },{ week:'W4', labour:0.06, materials:0.05, equipment:0.02, subcontracted:0.03 },{ week:'W5', labour:0.06, materials:0.05, equipment:0.03, subcontracted:0.03 },{ week:'W6', labour:0.07, materials:0.06, equipment:0.03, subcontracted:0.04 },{ week:'W7', labour:0.08, materials:0.05, equipment:0.03, subcontracted:0.03 },{ week:'W8', labour:0.06, materials:0.07, equipment:0.03, subcontracted:0.05 },{ week:'W9', labour:0.09, materials:0.04, equipment:0.03, subcontracted:0.03 }],
+    'Electrical Installation':[{ week:'W1', labour:0.07, materials:0.04, equipment:0.03, subcontracted:0.04 },{ week:'W2', labour:0.08, materials:0.05, equipment:0.04, subcontracted:0.05 },{ week:'W3', labour:0.10, materials:0.06, equipment:0.04, subcontracted:0.06 },{ week:'W4', labour:0.11, materials:0.07, equipment:0.05, subcontracted:0.07 },{ week:'W5', labour:0.12, materials:0.08, equipment:0.05, subcontracted:0.07 },{ week:'W6', labour:0.14, materials:0.09, equipment:0.05, subcontracted:0.08 },{ week:'W7', labour:0.13, materials:0.10, equipment:0.06, subcontracted:0.09 },{ week:'W8', labour:0.15, materials:0.08, equipment:0.06, subcontracted:0.07 },{ week:'W9', labour:0.12, materials:0.11, equipment:0.05, subcontracted:0.08 }],
+    'Plumbing Systems':      [{ week:'W1', labour:0.05, materials:0.03, equipment:0.02, subcontracted:0.02 },{ week:'W2', labour:0.06, materials:0.04, equipment:0.03, subcontracted:0.03 },{ week:'W3', labour:0.07, materials:0.05, equipment:0.03, subcontracted:0.04 },{ week:'W4', labour:0.09, materials:0.06, equipment:0.04, subcontracted:0.04 },{ week:'W5', labour:0.10, materials:0.06, equipment:0.04, subcontracted:0.05 },{ week:'W6', labour:0.11, materials:0.07, equipment:0.04, subcontracted:0.05 },{ week:'W7', labour:0.10, materials:0.08, equipment:0.04, subcontracted:0.06 },{ week:'W8', labour:0.12, materials:0.06, equipment:0.04, subcontracted:0.04 },{ week:'W9', labour:0.09, materials:0.09, equipment:0.04, subcontracted:0.05 }],
+    'HVAC Installation':     [{ week:'W1', labour:0.10, materials:0.08, equipment:0.05, subcontracted:0.06 },{ week:'W2', labour:0.12, materials:0.10, equipment:0.06, subcontracted:0.08 },{ week:'W3', labour:0.14, materials:0.11, equipment:0.07, subcontracted:0.09 },{ week:'W4', labour:0.16, materials:0.13, equipment:0.08, subcontracted:0.10 },{ week:'W5', labour:0.18, materials:0.14, equipment:0.09, subcontracted:0.11 },{ week:'W6', labour:0.20, materials:0.16, equipment:0.09, subcontracted:0.14 },{ week:'W7', labour:0.22, materials:0.15, equipment:0.10, subcontracted:0.13 },{ week:'W8', labour:0.19, materials:0.17, equipment:0.09, subcontracted:0.15 },{ week:'W9', labour:0.21, materials:0.14, equipment:0.10, subcontracted:0.12 }],
+    'Exterior Cladding':     [{ week:'W1', labour:0.04, materials:0.06, equipment:0.02, subcontracted:0.03 },{ week:'W2', labour:0.05, materials:0.07, equipment:0.03, subcontracted:0.03 },{ week:'W3', labour:0.07, materials:0.09, equipment:0.03, subcontracted:0.04 },{ week:'W4', labour:0.08, materials:0.10, equipment:0.04, subcontracted:0.05 },{ week:'W5', labour:0.08, materials:0.11, equipment:0.04, subcontracted:0.05 },{ week:'W6', labour:0.09, materials:0.12, equipment:0.04, subcontracted:0.06 },{ week:'W7', labour:0.10, materials:0.11, equipment:0.05, subcontracted:0.07 },{ week:'W8', labour:0.08, materials:0.13, equipment:0.04, subcontracted:0.05 },{ week:'W9', labour:0.11, materials:0.10, equipment:0.05, subcontracted:0.06 }],
+    'Interior Partitions':   [{ week:'W1', labour:0.04, materials:0.03, equipment:0.02, subcontracted:0.02 },{ week:'W2', labour:0.05, materials:0.04, equipment:0.02, subcontracted:0.02 },{ week:'W3', labour:0.06, materials:0.04, equipment:0.02, subcontracted:0.03 },{ week:'W4', labour:0.07, materials:0.05, equipment:0.03, subcontracted:0.03 },{ week:'W5', labour:0.07, materials:0.05, equipment:0.03, subcontracted:0.04 },{ week:'W6', labour:0.08, materials:0.06, equipment:0.03, subcontracted:0.04 },{ week:'W7', labour:0.07, materials:0.07, equipment:0.03, subcontracted:0.05 },{ week:'W8', labour:0.09, materials:0.05, equipment:0.03, subcontracted:0.03 },{ week:'W9', labour:0.08, materials:0.08, equipment:0.04, subcontracted:0.04 }],
+    'Roofing Works':         [{ week:'W1', labour:0.06, materials:0.05, equipment:0.03, subcontracted:0.03 },{ week:'W2', labour:0.08, materials:0.06, equipment:0.04, subcontracted:0.04 },{ week:'W3', labour:0.09, materials:0.07, equipment:0.04, subcontracted:0.05 },{ week:'W4', labour:0.11, materials:0.08, equipment:0.05, subcontracted:0.06 },{ week:'W5', labour:0.12, materials:0.09, equipment:0.05, subcontracted:0.06 },{ week:'W6', labour:0.13, materials:0.10, equipment:0.05, subcontracted:0.07 },{ week:'W7', labour:0.14, materials:0.09, equipment:0.06, subcontracted:0.08 },{ week:'W8', labour:0.12, materials:0.11, equipment:0.05, subcontracted:0.06 },{ week:'W9', labour:0.15, materials:0.08, equipment:0.06, subcontracted:0.07 }],
+    'Flooring Installation': [{ week:'W1', labour:0.03, materials:0.04, equipment:0.01, subcontracted:0.01 },{ week:'W2', labour:0.04, materials:0.05, equipment:0.02, subcontracted:0.02 },{ week:'W3', labour:0.04, materials:0.06, equipment:0.02, subcontracted:0.02 },{ week:'W4', labour:0.05, materials:0.07, equipment:0.02, subcontracted:0.02 },{ week:'W5', labour:0.05, materials:0.08, equipment:0.02, subcontracted:0.02 },{ week:'W6', labour:0.06, materials:0.09, equipment:0.02, subcontracted:0.03 },{ week:'W7', labour:0.07, materials:0.08, equipment:0.03, subcontracted:0.04 },{ week:'W8', labour:0.05, materials:0.10, equipment:0.02, subcontracted:0.02 },{ week:'W9', labour:0.08, materials:0.07, equipment:0.03, subcontracted:0.03 }],
+    'Painting & Decoration': [{ week:'W1', labour:0.02, materials:0.01, equipment:0.01, subcontracted:0.01 },{ week:'W2', labour:0.02, materials:0.02, equipment:0.01, subcontracted:0.01 },{ week:'W3', labour:0.03, materials:0.02, equipment:0.01, subcontracted:0.01 },{ week:'W4', labour:0.03, materials:0.02, equipment:0.01, subcontracted:0.01 },{ week:'W5', labour:0.04, materials:0.02, equipment:0.01, subcontracted:0.01 },{ week:'W6', labour:0.04, materials:0.03, equipment:0.01, subcontracted:0.02 },{ week:'W7', labour:0.05, materials:0.02, equipment:0.01, subcontracted:0.01 },{ week:'W8', labour:0.03, materials:0.04, equipment:0.01, subcontracted:0.02 },{ week:'W9', labour:0.06, materials:0.02, equipment:0.02, subcontracted:0.01 }],
   }
 
   const economicTable = activities.map(activity => {
@@ -765,7 +769,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-muted-foreground">Actual</span>
-                    <span className="font-mono text-lg font-bold text-success">01/02/2024</span>
+                    <span className="font-mono text-lg font-bold text-foreground">01/02/2024</span>
                   </div>
                 </div>
               </div>
@@ -779,7 +783,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-muted-foreground">Estimated</span>
-                    <span className="font-mono text-lg font-bold text-success">01/15/2026</span>
+                    <span className="font-mono text-lg font-bold text-foreground">01/15/2026</span>
                   </div>
                 </div>
               </div>
@@ -794,7 +798,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
 
               <div className="glass-card rounded-lg p-4 border border-border/50">
                 <p className="text-xs text-muted-foreground mb-3 uppercase tracking-wide">Actual Cumulative Progress</p>
-                <p className="font-mono text-5xl font-bold text-success">68%</p>
+                <p className="font-mono text-5xl font-bold text-foreground">68%</p>
               </div>
             </div>
 
@@ -804,7 +808,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                 <p className="text-xs text-muted-foreground mb-3 uppercase tracking-wide">Avg. Weekly Progress (Last 4 weeks)</p>
                 <div className="space-y-3">
                   <p className="font-mono text-3xl font-bold text-foreground">2.4%</p>
-                  <p className="text-xs text-muted-foreground">Trend: <span className="text-success">+0.9% vs prior week</span></p>
+                  <p className="text-xs text-muted-foreground">Trend: +0.9% vs prior week</p>
                 </div>
               </div>
 
@@ -845,11 +849,11 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                   </thead>
                   <tbody>
                     {getSortedActivities().map((activity, idx) => {
+                      const isNotStarted = activity.status === 'Not Started'
                       const plannedPct = Math.round(parseFloat(activity.expected_completeness) * 100)
-                      const actualPct = activity.actual_completeness
-                      const delta = actualPct - plannedPct
-                      const progressColor = delta >= 0 ? 'text-[#16a34a]' : delta >= -5 ? 'text-[#d97706]' : 'text-[#dc2626]'
-                      const floatColor = activity.float_weeks === 0 ? 'text-[#dc2626]' : activity.float_weeks === 1 ? 'text-[#d97706]' : 'text-[#16a34a]'
+                      const displayActual = isNotStarted ? 0 : activity.executed_qty
+                      const displayActualPct = isNotStarted ? 0 : activity.actual_completeness
+                      const displayEarnedValue = isNotStarted ? 0 : activity.earnedValue
                       return (
                         <tr key={idx} className="border-b border-border/30 hover:bg-secondary/20">
                           <td className="py-3 text-foreground font-medium">{activity.name}</td>
@@ -864,11 +868,11 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                           </td>
                           <td className="py-3 text-right text-muted-foreground text-xs">{activity.metric}</td>
                           <td className="py-3 text-right text-foreground">{activity.total_planned_qty.toLocaleString()}</td>
-                          <td className="py-3 text-right text-foreground">{activity.executed_qty.toLocaleString()}</td>
+                          <td className="py-3 text-right text-foreground">{displayActual.toLocaleString()}</td>
                           <td className="py-3 text-right text-muted-foreground">{plannedPct}%</td>
-                          <td className={`py-3 text-right font-semibold ${progressColor}`}>{actualPct}%</td>
-                          <td className="py-3 text-right text-foreground">€{activity.earnedValue.toFixed(2)}M</td>
-                          <td className={`py-3 text-right font-semibold ${floatColor}`}>{activity.float_weeks}w</td>
+                          <td className="py-3 text-right text-foreground">{displayActualPct}%</td>
+                          <td className="py-3 text-right text-foreground">€{displayEarnedValue.toFixed(2)}M</td>
+                          <td className="py-3 text-right text-foreground">{activity.float_weeks}w</td>
                         </tr>
                       )
                     })}
@@ -926,11 +930,11 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
               </div>
               <div className="glass-card rounded-lg p-3 border border-border/50">
                 <p className="text-xs text-muted-foreground mb-2">Current Advance</p>
-                <p className="text-2xl font-bold text-success">+5 weeks</p>
+                <p className="text-2xl font-bold text-foreground">+5 weeks</p>
               </div>
               <div className="glass-card rounded-lg p-3 border border-border/50">
                 <p className="text-xs text-muted-foreground mb-2">Actual Accum. Progress</p>
-                <p className="text-2xl font-bold text-success">68%</p>
+                <p className="text-2xl font-bold text-foreground">68%</p>
               </div>
               <div className="glass-card rounded-lg p-3 border border-border/50">
                 <p className="text-xs text-muted-foreground mb-2">Required Weekly Advance</p>
@@ -938,7 +942,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
               </div>
               <div className="glass-card rounded-lg p-3 border border-border/50">
                 <p className="text-xs text-muted-foreground mb-2">Forecast Deadline</p>
-                <p className="text-2xl font-bold text-success">January 15, 2026</p>
+                <p className="text-2xl font-bold text-foreground">January 15, 2026</p>
               </div>
             </div>
 
@@ -992,11 +996,11 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                   </thead>
                   <tbody>
                     {getSortedActivities().map((activity, idx) => {
+                      const isNotStarted = activity.status === 'Not Started'
                       const plannedPct = Math.round(parseFloat(activity.expected_completeness) * 100)
-                      const actualPct = activity.actual_completeness
-                      const delta = actualPct - plannedPct
-                      const progressColor = delta >= 0 ? 'text-[#16a34a]' : delta >= -5 ? 'text-[#d97706]' : 'text-[#dc2626]'
-                      const floatColor = activity.float_weeks === 0 ? 'text-[#dc2626]' : activity.float_weeks === 1 ? 'text-[#d97706]' : 'text-[#16a34a]'
+                      const displayActual = isNotStarted ? 0 : activity.executed_qty
+                      const displayActualPct = isNotStarted ? 0 : activity.actual_completeness
+                      const displayEarnedValue = isNotStarted ? 0 : activity.earnedValue
                       return (
                         <tr key={idx} className="border-b border-border/30 hover:bg-secondary/20">
                           <td className="py-3 text-foreground font-medium">{activity.name}</td>
@@ -1011,11 +1015,11 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                           </td>
                           <td className="py-3 text-right text-muted-foreground text-xs">{activity.metric}</td>
                           <td className="py-3 text-right text-foreground">{activity.total_planned_qty.toLocaleString()}</td>
-                          <td className="py-3 text-right text-foreground">{activity.executed_qty.toLocaleString()}</td>
+                          <td className="py-3 text-right text-foreground">{displayActual.toLocaleString()}</td>
                           <td className="py-3 text-right text-muted-foreground">{plannedPct}%</td>
-                          <td className={`py-3 text-right font-semibold ${progressColor}`}>{actualPct}%</td>
-                          <td className="py-3 text-right text-foreground">€{activity.earnedValue.toFixed(2)}M</td>
-                          <td className={`py-3 text-right font-semibold ${floatColor}`}>{activity.float_weeks}w</td>
+                          <td className="py-3 text-right text-foreground">{displayActualPct}%</td>
+                          <td className="py-3 text-right text-foreground">€{displayEarnedValue.toFixed(2)}M</td>
+                          <td className="py-3 text-right text-foreground">{activity.float_weeks}w</td>
                         </tr>
                       )
                     })}
@@ -1034,7 +1038,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                   <span className="text-muted-foreground text-sm font-normal">$</span>
                   <p className="text-[11px] text-muted-foreground uppercase tracking-widest font-semibold">Avg Weekly Costs</p>
                 </div>
-                <p className="text-3xl font-bold text-success">€0.38M</p>
+                <p className="text-3xl font-bold text-foreground">€0.38M</p>
                 <p className="text-sm text-muted-foreground mt-2">Average cost per week to date</p>
               </div>
               <div className="glass-card rounded-lg p-5 border border-border/50">
@@ -1050,7 +1054,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                   <span className="text-muted-foreground text-sm font-normal">€</span>
                   <p className="text-[11px] text-muted-foreground uppercase tracking-widest font-semibold">Accumulated Production</p>
                 </div>
-                <p className="text-3xl font-bold text-success">€16.66M</p>
+                <p className="text-3xl font-bold text-foreground">€16.66M</p>
                 <p className="text-sm text-muted-foreground mt-2">68% of €24.5M contract value</p>
               </div>
             </div>
@@ -1058,7 +1062,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
             {/* Economic Overview bar */}
             <div className="glass-card rounded-lg p-4 border border-border/50 mb-6">
               <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-semibold mb-4">Economic Overview</p>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-4 divide-x-0 sm:divide-x divide-border/30">
+              <div className="grid grid-cols-2 sm:grid-cols-5 gap-x-6 gap-y-4 divide-x-0 sm:divide-x divide-border/30">
                 <div className="sm:pl-0">
                   <div className="flex items-center gap-1.5 mb-1.5">
                     <span className="text-xs text-muted-foreground">€</span>
@@ -1075,18 +1079,24 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                 </div>
                 <div className="sm:pl-6">
                   <div className="flex items-center gap-1.5 mb-1.5">
-                    <TrendingUp className="w-3 h-3 text-warning" />
+                    <TrendingUp className="w-3 h-3 text-muted-foreground" />
                     <span className="text-[11px] text-muted-foreground">Projected IC</span>
                   </div>
-                  <p className="text-xl font-bold text-warning">92.4%</p>
+                  <p className="text-xl font-bold text-foreground">92.4%</p>
                 </div>
                 <div className="sm:pl-6">
                   <div className="flex items-center gap-1.5 mb-1.5">
-                    <span className="text-xs text-warning">€</span>
-                    <span className="text-[11px] text-muted-foreground">Current IC</span>
+                    <TrendingUp className="w-3 h-3 text-muted-foreground" />
+                    <span className="text-[11px] text-muted-foreground">Adjusted IC</span>
                   </div>
-                  <p className="text-xl font-bold text-warning">90.0%</p>
-                  <p className="text-[11px] text-muted-foreground mt-0.5">Analytical IC: 84.2%</p>
+                  <p className="text-xl font-bold text-foreground">90.0%</p>
+                </div>
+                <div className="sm:pl-6">
+                  <div className="flex items-center gap-1.5 mb-1.5">
+                    <TrendingUp className="w-3 h-3 text-muted-foreground" />
+                    <span className="text-[11px] text-muted-foreground">Analytical IC</span>
+                  </div>
+                  <p className="text-xl font-bold text-foreground">84.2%</p>
                 </div>
               </div>
             </div>
@@ -1133,7 +1143,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                         Projected IC {economicSortBy === 'totalEstimated' && (economicSortDirection === 'asc' ? '↑' : '↓')}
                       </th>
                       <th className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleEconomicSort('totalBaseline')}>
-                        Current IC {economicSortBy === 'totalBaseline' && (economicSortDirection === 'asc' ? '↑' : '↓')}
+                        Adjusted IC {economicSortBy === 'totalBaseline' && (economicSortDirection === 'asc' ? '↑' : '↓')}
                       </th>
                       <th className="w-8" />
                     </tr>
@@ -1142,14 +1152,11 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                     {getSortedEconomicTable().map((row, idx) => {
                       const activity = activities.find(a => a.name === row.activity)
                       const economicValue = activity?.value ?? 0
-                      const icColor = (ic: number) =>
-                        ic < 85 ? 'text-[#16a34a]' : ic < 95 ? 'text-[#d97706]' : 'text-[#dc2626]'
                       return (
                         <EconomicTableRow
                           key={idx}
                           row={row}
                           economicValue={economicValue}
-                          icColor={icColor}
                           chartColors={chartColors}
                         />
                       );
@@ -1376,7 +1383,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                   <span className="text-muted-foreground text-sm font-normal">$</span>
                   <p className="text-[11px] text-muted-foreground uppercase tracking-widest font-semibold">Avg Weekly Costs</p>
                 </div>
-                <p className="text-4xl font-bold text-success">€0.38M</p>
+                <p className="text-4xl font-bold text-foreground">€0.38M</p>
                 <p className="text-sm text-muted-foreground mt-2">Average cost per week to date</p>
               </div>
               <div className="glass-card rounded-lg p-5 border border-border/50">
@@ -1392,7 +1399,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                   <span className="text-muted-foreground text-sm font-normal">€</span>
                   <p className="text-[11px] text-muted-foreground uppercase tracking-widest font-semibold">Accumulated Production</p>
                 </div>
-                <p className="text-4xl font-bold text-success">€16.66M</p>
+                <p className="text-4xl font-bold text-foreground">€16.66M</p>
                 <p className="text-sm text-muted-foreground mt-2">68% of €24.5M contract value</p>
               </div>
             </div>
@@ -1400,7 +1407,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
             {/* Economic Overview bar */}
             <div className="glass-card rounded-lg p-4 border border-border/50 mb-8">
               <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-semibold mb-4">Economic Overview</p>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-4 divide-x-0 sm:divide-x divide-border/30">
+              <div className="grid grid-cols-2 sm:grid-cols-5 gap-x-6 gap-y-4 divide-x-0 sm:divide-x divide-border/30">
                 <div className="sm:pl-0">
                   <div className="flex items-center gap-1.5 mb-1.5">
                     <span className="text-xs text-muted-foreground">€</span>
@@ -1417,18 +1424,24 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                 </div>
                 <div className="sm:pl-6">
                   <div className="flex items-center gap-1.5 mb-1.5">
-                    <TrendingUp className="w-3 h-3 text-warning" />
+                    <TrendingUp className="w-3 h-3 text-muted-foreground" />
                     <span className="text-[11px] text-muted-foreground">Projected IC</span>
                   </div>
-                  <p className="text-2xl font-bold text-warning">92.4%</p>
+                  <p className="text-2xl font-bold text-foreground">92.4%</p>
                 </div>
                 <div className="sm:pl-6">
                   <div className="flex items-center gap-1.5 mb-1.5">
-                    <span className="text-xs text-warning">€</span>
-                    <span className="text-[11px] text-muted-foreground">Current IC</span>
+                    <TrendingUp className="w-3 h-3 text-muted-foreground" />
+                    <span className="text-[11px] text-muted-foreground">Adjusted IC</span>
                   </div>
-                  <p className="text-2xl font-bold text-warning">90.0%</p>
-                  <p className="text-[11px] text-muted-foreground mt-0.5">Analytical IC: 84.2%</p>
+                  <p className="text-2xl font-bold text-foreground">90.0%</p>
+                </div>
+                <div className="sm:pl-6">
+                  <div className="flex items-center gap-1.5 mb-1.5">
+                    <TrendingUp className="w-3 h-3 text-muted-foreground" />
+                    <span className="text-[11px] text-muted-foreground">Analytical IC</span>
+                  </div>
+                  <p className="text-2xl font-bold text-foreground">84.2%</p>
                 </div>
               </div>
             </div>
@@ -1547,7 +1560,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                         Projected IC {economicSortBy === 'totalEstimated' && (economicSortDirection === 'asc' ? '↑' : '↓')}
                       </th>
                       <th className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleEconomicSort('totalBaseline')}>
-                        Current IC {economicSortBy === 'totalBaseline' && (economicSortDirection === 'asc' ? '↑' : '↓')}
+                        Adjusted IC {economicSortBy === 'totalBaseline' && (economicSortDirection === 'asc' ? '↑' : '↓')}
                       </th>
                       <th className="w-8" />
                     </tr>
@@ -1556,14 +1569,11 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                     {getSortedEconomicTable().map((row, idx) => {
                       const activity = activities.find(a => a.name === row.activity)
                       const economicValue = activity?.value ?? 0
-                      const icColor = (ic: number) =>
-                        ic < 85 ? 'text-[#16a34a]' : ic < 95 ? 'text-[#d97706]' : 'text-[#dc2626]'
                       return (
                         <EconomicTableRow
                           key={idx}
                           row={row}
                           economicValue={economicValue}
-                          icColor={icColor}
                           chartColors={chartColors}
                         />
                       );
@@ -1571,6 +1581,58 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                   </tbody>
                 </table>
               </div>
+            </div>
+
+            {/* Weekly Costs by Nature Chart */}
+            <div className="glass-card rounded-lg p-4 border border-border/50 mb-8">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-5">
+                <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide">Weekly Costs by Nature</h3>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <Select value={natureChartActivity} onValueChange={setNatureChartActivity}>
+                    <SelectTrigger className="w-52 bg-secondary border-border/50 h-8 text-xs">
+                      <SelectValue placeholder="Select activity" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {activities.map(a => (
+                        <SelectItem key={a.name} value={a.name}>{a.name}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <Select value={natureChartWeeks} onValueChange={(v) => setNatureChartWeeks(v as '5' | '10' | 'all')}>
+                    <SelectTrigger className="w-36 bg-secondary border-border/50 h-8 text-xs">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="5">Last 5 weeks</SelectItem>
+                      <SelectItem value="10">Last 10 weeks</SelectItem>
+                      <SelectItem value="all">All weeks</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              {(() => {
+                const allData = weeklyNatureCosts[natureChartActivity] ?? []
+                const limit = natureChartWeeks === 'all' ? allData.length : parseInt(natureChartWeeks)
+                const chartData = allData.slice(-limit)
+                return (
+                  <ResponsiveContainer width="100%" height={280}>
+                    <BarChart data={chartData} barCategoryGap="28%" barGap={2}>
+                      <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} vertical={false} />
+                      <XAxis dataKey="week" stroke={chartColors.axis} tick={{ fontSize: 11 }} />
+                      <YAxis stroke={chartColors.axis} tick={{ fontSize: 11 }} tickFormatter={(v) => `€${v.toFixed(2)}M`} width={60} />
+                      <Tooltip
+                        contentStyle={{ backgroundColor: chartColors.tooltipBg, border: chartColors.tooltipBorder, fontSize: 12 }}
+                        formatter={(value: number) => [`€${value.toFixed(3)}M`]}
+                      />
+                      <Legend wrapperStyle={{ fontSize: 12, paddingTop: 12 }} />
+                      <Bar dataKey="labour" name="Labour" fill="#64748b" radius={[2,2,0,0]} />
+                      <Bar dataKey="materials" name="Materials" fill="#38bdf8" radius={[2,2,0,0]} />
+                      <Bar dataKey="equipment" name="Equipment" fill="#a78bfa" radius={[2,2,0,0]} />
+                      <Bar dataKey="subcontracted" name="Subcontracted" fill="#f87171" radius={[2,2,0,0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                )
+              })()}
             </div>
 
           </>

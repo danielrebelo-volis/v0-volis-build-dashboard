@@ -41,8 +41,6 @@ export function OtherIndicators({
   dataQuality = 87,
 }: OtherIndicatorsProps) {
   const progressOnTrack = avgWeeklyProgress >= requiredWeeklyProgress
-  const costsOnTrack = avgWeeklyCosts <= requiredWeeklyCosts
-  const qualityColor = dataQuality >= 90 ? 'text-success' : dataQuality >= 70 ? 'text-warning' : 'text-destructive'
 
   return (
     <div className="mb-8">
@@ -54,7 +52,6 @@ export function OtherIndicators({
           label="Avg Weekly Progress"
           value={`${avgWeeklyProgress.toFixed(1)}%`}
           sub="Average per week to date"
-          valueColor={progressOnTrack ? 'text-success' : 'text-warning'}
         />
 
         <IndicatorCard
@@ -62,7 +59,6 @@ export function OtherIndicators({
           label="Required Weekly Progress"
           value={`${requiredWeeklyProgress.toFixed(1)}%`}
           sub={progressOnTrack ? 'Current pace sufficient' : 'Increase pace to meet deadline'}
-          valueColor={progressOnTrack ? 'text-foreground' : 'text-warning'}
         />
 
         <IndicatorCard
@@ -70,7 +66,6 @@ export function OtherIndicators({
           label="Avg Weekly Costs"
           value={`€${avgWeeklyCosts.toFixed(2)}M`}
           sub="Average cost per week to date"
-          valueColor={costsOnTrack ? 'text-success' : 'text-warning'}
         />
 
         <IndicatorCard
@@ -78,7 +73,6 @@ export function OtherIndicators({
           label="Required Weekly Costs"
           value={`€${requiredWeeklyCosts.toFixed(2)}M`}
           sub="To achieve projected IC"
-          valueColor="text-foreground"
         />
 
         <IndicatorCard
@@ -86,7 +80,6 @@ export function OtherIndicators({
           label="Data Quality"
           value={`${dataQuality}%`}
           sub={`${100 - dataQuality}% of reports missing`}
-          valueColor={qualityColor}
         />
 
       </div>

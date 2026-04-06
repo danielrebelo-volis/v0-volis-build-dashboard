@@ -765,7 +765,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-muted-foreground">Actual</span>
-                    <span className="font-mono text-lg font-bold text-success">01/02/2024</span>
+                    <span className="font-mono text-lg font-bold text-foreground">01/02/2024</span>
                   </div>
                 </div>
               </div>
@@ -779,7 +779,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-muted-foreground">Estimated</span>
-                    <span className="font-mono text-lg font-bold text-success">01/15/2026</span>
+                    <span className="font-mono text-lg font-bold text-foreground">01/15/2026</span>
                   </div>
                 </div>
               </div>
@@ -794,7 +794,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
 
               <div className="glass-card rounded-lg p-4 border border-border/50">
                 <p className="text-xs text-muted-foreground mb-3 uppercase tracking-wide">Actual Cumulative Progress</p>
-                <p className="font-mono text-5xl font-bold text-success">68%</p>
+                <p className="font-mono text-5xl font-bold text-foreground">68%</p>
               </div>
             </div>
 
@@ -804,7 +804,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                 <p className="text-xs text-muted-foreground mb-3 uppercase tracking-wide">Avg. Weekly Progress (Last 4 weeks)</p>
                 <div className="space-y-3">
                   <p className="font-mono text-3xl font-bold text-foreground">2.4%</p>
-                  <p className="text-xs text-muted-foreground">Trend: <span className="text-success">+0.9% vs prior week</span></p>
+                  <p className="text-xs text-muted-foreground">Trend: +0.9% vs prior week</p>
                 </div>
               </div>
 
@@ -845,11 +845,11 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                   </thead>
                   <tbody>
                     {getSortedActivities().map((activity, idx) => {
+                      const isNotStarted = activity.status === 'Not Started'
                       const plannedPct = Math.round(parseFloat(activity.expected_completeness) * 100)
-                      const actualPct = activity.actual_completeness
-                      const delta = actualPct - plannedPct
-                      const progressColor = delta >= 0 ? 'text-[#16a34a]' : delta >= -5 ? 'text-[#d97706]' : 'text-[#dc2626]'
-                      const floatColor = activity.float_weeks === 0 ? 'text-[#dc2626]' : activity.float_weeks === 1 ? 'text-[#d97706]' : 'text-[#16a34a]'
+                      const displayActual = isNotStarted ? 0 : activity.executed_qty
+                      const displayActualPct = isNotStarted ? 0 : activity.actual_completeness
+                      const displayEarnedValue = isNotStarted ? 0 : activity.earnedValue
                       return (
                         <tr key={idx} className="border-b border-border/30 hover:bg-secondary/20">
                           <td className="py-3 text-foreground font-medium">{activity.name}</td>
@@ -864,11 +864,11 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                           </td>
                           <td className="py-3 text-right text-muted-foreground text-xs">{activity.metric}</td>
                           <td className="py-3 text-right text-foreground">{activity.total_planned_qty.toLocaleString()}</td>
-                          <td className="py-3 text-right text-foreground">{activity.executed_qty.toLocaleString()}</td>
+                          <td className="py-3 text-right text-foreground">{displayActual.toLocaleString()}</td>
                           <td className="py-3 text-right text-muted-foreground">{plannedPct}%</td>
-                          <td className={`py-3 text-right font-semibold ${progressColor}`}>{actualPct}%</td>
-                          <td className="py-3 text-right text-foreground">€{activity.earnedValue.toFixed(2)}M</td>
-                          <td className={`py-3 text-right font-semibold ${floatColor}`}>{activity.float_weeks}w</td>
+                          <td className="py-3 text-right text-foreground">{displayActualPct}%</td>
+                          <td className="py-3 text-right text-foreground">€{displayEarnedValue.toFixed(2)}M</td>
+                          <td className="py-3 text-right text-foreground">{activity.float_weeks}w</td>
                         </tr>
                       )
                     })}
@@ -926,11 +926,11 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
               </div>
               <div className="glass-card rounded-lg p-3 border border-border/50">
                 <p className="text-xs text-muted-foreground mb-2">Current Advance</p>
-                <p className="text-2xl font-bold text-success">+5 weeks</p>
+                <p className="text-2xl font-bold text-foreground">+5 weeks</p>
               </div>
               <div className="glass-card rounded-lg p-3 border border-border/50">
                 <p className="text-xs text-muted-foreground mb-2">Actual Accum. Progress</p>
-                <p className="text-2xl font-bold text-success">68%</p>
+                <p className="text-2xl font-bold text-foreground">68%</p>
               </div>
               <div className="glass-card rounded-lg p-3 border border-border/50">
                 <p className="text-xs text-muted-foreground mb-2">Required Weekly Advance</p>
@@ -938,7 +938,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
               </div>
               <div className="glass-card rounded-lg p-3 border border-border/50">
                 <p className="text-xs text-muted-foreground mb-2">Forecast Deadline</p>
-                <p className="text-2xl font-bold text-success">January 15, 2026</p>
+                <p className="text-2xl font-bold text-foreground">January 15, 2026</p>
               </div>
             </div>
 
@@ -992,11 +992,11 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                   </thead>
                   <tbody>
                     {getSortedActivities().map((activity, idx) => {
+                      const isNotStarted = activity.status === 'Not Started'
                       const plannedPct = Math.round(parseFloat(activity.expected_completeness) * 100)
-                      const actualPct = activity.actual_completeness
-                      const delta = actualPct - plannedPct
-                      const progressColor = delta >= 0 ? 'text-[#16a34a]' : delta >= -5 ? 'text-[#d97706]' : 'text-[#dc2626]'
-                      const floatColor = activity.float_weeks === 0 ? 'text-[#dc2626]' : activity.float_weeks === 1 ? 'text-[#d97706]' : 'text-[#16a34a]'
+                      const displayActual = isNotStarted ? 0 : activity.executed_qty
+                      const displayActualPct = isNotStarted ? 0 : activity.actual_completeness
+                      const displayEarnedValue = isNotStarted ? 0 : activity.earnedValue
                       return (
                         <tr key={idx} className="border-b border-border/30 hover:bg-secondary/20">
                           <td className="py-3 text-foreground font-medium">{activity.name}</td>
@@ -1011,11 +1011,11 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                           </td>
                           <td className="py-3 text-right text-muted-foreground text-xs">{activity.metric}</td>
                           <td className="py-3 text-right text-foreground">{activity.total_planned_qty.toLocaleString()}</td>
-                          <td className="py-3 text-right text-foreground">{activity.executed_qty.toLocaleString()}</td>
+                          <td className="py-3 text-right text-foreground">{displayActual.toLocaleString()}</td>
                           <td className="py-3 text-right text-muted-foreground">{plannedPct}%</td>
-                          <td className={`py-3 text-right font-semibold ${progressColor}`}>{actualPct}%</td>
-                          <td className="py-3 text-right text-foreground">€{activity.earnedValue.toFixed(2)}M</td>
-                          <td className={`py-3 text-right font-semibold ${floatColor}`}>{activity.float_weeks}w</td>
+                          <td className="py-3 text-right text-foreground">{displayActualPct}%</td>
+                          <td className="py-3 text-right text-foreground">€{displayEarnedValue.toFixed(2)}M</td>
+                          <td className="py-3 text-right text-foreground">{activity.float_weeks}w</td>
                         </tr>
                       )
                     })}
@@ -1034,7 +1034,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                   <span className="text-muted-foreground text-sm font-normal">$</span>
                   <p className="text-[11px] text-muted-foreground uppercase tracking-widest font-semibold">Avg Weekly Costs</p>
                 </div>
-                <p className="text-3xl font-bold text-success">€0.38M</p>
+                <p className="text-3xl font-bold text-foreground">€0.38M</p>
                 <p className="text-sm text-muted-foreground mt-2">Average cost per week to date</p>
               </div>
               <div className="glass-card rounded-lg p-5 border border-border/50">
@@ -1050,7 +1050,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                   <span className="text-muted-foreground text-sm font-normal">€</span>
                   <p className="text-[11px] text-muted-foreground uppercase tracking-widest font-semibold">Accumulated Production</p>
                 </div>
-                <p className="text-3xl font-bold text-success">€16.66M</p>
+                <p className="text-3xl font-bold text-foreground">€16.66M</p>
                 <p className="text-sm text-muted-foreground mt-2">68% of €24.5M contract value</p>
               </div>
             </div>
@@ -1382,7 +1382,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                   <span className="text-muted-foreground text-sm font-normal">$</span>
                   <p className="text-[11px] text-muted-foreground uppercase tracking-widest font-semibold">Avg Weekly Costs</p>
                 </div>
-                <p className="text-4xl font-bold text-success">€0.38M</p>
+                <p className="text-4xl font-bold text-foreground">€0.38M</p>
                 <p className="text-sm text-muted-foreground mt-2">Average cost per week to date</p>
               </div>
               <div className="glass-card rounded-lg p-5 border border-border/50">
@@ -1398,7 +1398,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                   <span className="text-muted-foreground text-sm font-normal">€</span>
                   <p className="text-[11px] text-muted-foreground uppercase tracking-widest font-semibold">Accumulated Production</p>
                 </div>
-                <p className="text-4xl font-bold text-success">€16.66M</p>
+                <p className="text-4xl font-bold text-foreground">€16.66M</p>
                 <p className="text-sm text-muted-foreground mt-2">68% of €24.5M contract value</p>
               </div>
             </div>

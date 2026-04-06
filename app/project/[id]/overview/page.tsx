@@ -215,6 +215,8 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
   const [economicSortDirection, setEconomicSortDirection] = useState<'asc' | 'desc'>('desc')
   const [progressBaseline, setProgressBaseline] = useState('last')
   const [economicBaseline, setEconomicBaseline] = useState('last')
+  const [natureChartActivity, setNatureChartActivity] = useState('Site Preparation')
+  const [natureChartWeeks, setNatureChartWeeks] = useState<'5' | '10' | 'all'>('5')
 
   // Data Quality Tab State
   const [dailyReportViewBy, setDailyReportViewBy] = useState('7days')
@@ -315,20 +317,20 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
     { name: 'Painting & Decoration', value: 1.5, metric: 'm²', total_planned_qty: 1100, planned_qty: 200, executed_qty: 50, expected_completeness: (200 / 1100).toFixed(2), actual_completeness: 5, earnedValue: 0.075, status: 'Not Started', forecast_deadline: '15/07/2024', float_weeks: 3 },
   ]
 
-  const weeklyNatureCosts: Record<string, { week: string; labour: number; materials: number; subcontracted: number }[]> = {
-    'Site Preparation': [{ week: 'W6', labour: 0.08, materials: 0.05, subcontracted: 0.02 }, { week: 'W7', labour: 0.07, materials: 0.06, subcontracted: 0.03 }, { week: 'W8', labour: 0.09, materials: 0.04, subcontracted: 0.02 }, { week: 'W9', labour: 0.06, materials: 0.05, subcontracted: 0.01 }],
-    'Foundation Work': [{ week: 'W6', labour: 0.18, materials: 0.14, subcontracted: 0.07 }, { week: 'W7', labour: 0.20, materials: 0.13, subcontracted: 0.06 }, { week: 'W8', labour: 0.17, materials: 0.15, subcontracted: 0.08 }, { week: 'W9', labour: 0.19, materials: 0.12, subcontracted: 0.07 }],
-    'Structure Assembly': [{ week: 'W6', labour: 0.25, materials: 0.19, subcontracted: 0.10 }, { week: 'W7', labour: 0.22, materials: 0.21, subcontracted: 0.11 }, { week: 'W8', labour: 0.26, materials: 0.18, subcontracted: 0.09 }, { week: 'W9', labour: 0.24, materials: 0.20, subcontracted: 0.10 }],
-    'Mechanical Systems': [{ week: 'W6', labour: 0.10, materials: 0.08, subcontracted: 0.12 }, { week: 'W7', labour: 0.11, materials: 0.09, subcontracted: 0.13 }, { week: 'W8', labour: 0.09, materials: 0.10, subcontracted: 0.11 }, { week: 'W9', labour: 0.12, materials: 0.07, subcontracted: 0.14 }],
-    'Finishing Works': [{ week: 'W6', labour: 0.07, materials: 0.06, subcontracted: 0.04 }, { week: 'W7', labour: 0.08, materials: 0.05, subcontracted: 0.03 }, { week: 'W8', labour: 0.06, materials: 0.07, subcontracted: 0.05 }, { week: 'W9', labour: 0.09, materials: 0.04, subcontracted: 0.03 }],
-    'Electrical Installation': [{ week: 'W6', labour: 0.14, materials: 0.09, subcontracted: 0.08 }, { week: 'W7', labour: 0.13, materials: 0.10, subcontracted: 0.09 }, { week: 'W8', labour: 0.15, materials: 0.08, subcontracted: 0.07 }, { week: 'W9', labour: 0.12, materials: 0.11, subcontracted: 0.08 }],
-    'Plumbing Systems': [{ week: 'W6', labour: 0.11, materials: 0.07, subcontracted: 0.05 }, { week: 'W7', labour: 0.10, materials: 0.08, subcontracted: 0.06 }, { week: 'W8', labour: 0.12, materials: 0.06, subcontracted: 0.04 }, { week: 'W9', labour: 0.09, materials: 0.09, subcontracted: 0.05 }],
-    'HVAC Installation': [{ week: 'W6', labour: 0.20, materials: 0.16, subcontracted: 0.14 }, { week: 'W7', labour: 0.22, materials: 0.15, subcontracted: 0.13 }, { week: 'W8', labour: 0.19, materials: 0.17, subcontracted: 0.15 }, { week: 'W9', labour: 0.21, materials: 0.14, subcontracted: 0.12 }],
-    'Exterior Cladding': [{ week: 'W6', labour: 0.09, materials: 0.12, subcontracted: 0.06 }, { week: 'W7', labour: 0.10, materials: 0.11, subcontracted: 0.07 }, { week: 'W8', labour: 0.08, materials: 0.13, subcontracted: 0.05 }, { week: 'W9', labour: 0.11, materials: 0.10, subcontracted: 0.06 }],
-    'Interior Partitions': [{ week: 'W6', labour: 0.08, materials: 0.06, subcontracted: 0.04 }, { week: 'W7', labour: 0.07, materials: 0.07, subcontracted: 0.05 }, { week: 'W8', labour: 0.09, materials: 0.05, subcontracted: 0.03 }, { week: 'W9', labour: 0.08, materials: 0.08, subcontracted: 0.04 }],
-    'Roofing Works': [{ week: 'W6', labour: 0.13, materials: 0.10, subcontracted: 0.07 }, { week: 'W7', labour: 0.14, materials: 0.09, subcontracted: 0.08 }, { week: 'W8', labour: 0.12, materials: 0.11, subcontracted: 0.06 }, { week: 'W9', labour: 0.15, materials: 0.08, subcontracted: 0.07 }],
-    'Flooring Installation': [{ week: 'W6', labour: 0.06, materials: 0.09, subcontracted: 0.03 }, { week: 'W7', labour: 0.07, materials: 0.08, subcontracted: 0.04 }, { week: 'W8', labour: 0.05, materials: 0.10, subcontracted: 0.02 }, { week: 'W9', labour: 0.08, materials: 0.07, subcontracted: 0.03 }],
-    'Painting & Decoration': [{ week: 'W6', labour: 0.04, materials: 0.03, subcontracted: 0.02 }, { week: 'W7', labour: 0.05, materials: 0.02, subcontracted: 0.01 }, { week: 'W8', labour: 0.03, materials: 0.04, subcontracted: 0.02 }, { week: 'W9', labour: 0.06, materials: 0.02, subcontracted: 0.01 }],
+  const weeklyNatureCosts: Record<string, { week: string; labour: number; materials: number; equipment: number; subcontracted: number }[]> = {
+    'Site Preparation':      [{ week:'W1', labour:0.04, materials:0.03, equipment:0.03, subcontracted:0.01 },{ week:'W2', labour:0.05, materials:0.04, equipment:0.02, subcontracted:0.01 },{ week:'W3', labour:0.06, materials:0.04, equipment:0.03, subcontracted:0.01 },{ week:'W4', labour:0.07, materials:0.05, equipment:0.03, subcontracted:0.02 },{ week:'W5', labour:0.07, materials:0.05, equipment:0.04, subcontracted:0.02 },{ week:'W6', labour:0.08, materials:0.05, equipment:0.04, subcontracted:0.02 },{ week:'W7', labour:0.07, materials:0.06, equipment:0.03, subcontracted:0.03 },{ week:'W8', labour:0.09, materials:0.04, equipment:0.04, subcontracted:0.02 },{ week:'W9', labour:0.06, materials:0.05, equipment:0.03, subcontracted:0.01 }],
+    'Foundation Work':       [{ week:'W1', labour:0.09, materials:0.07, equipment:0.06, subcontracted:0.03 },{ week:'W2', labour:0.11, materials:0.09, equipment:0.07, subcontracted:0.04 },{ week:'W3', labour:0.13, materials:0.10, equipment:0.08, subcontracted:0.05 },{ week:'W4', labour:0.15, materials:0.12, equipment:0.09, subcontracted:0.06 },{ week:'W5', labour:0.16, materials:0.13, equipment:0.09, subcontracted:0.06 },{ week:'W6', labour:0.18, materials:0.14, equipment:0.10, subcontracted:0.07 },{ week:'W7', labour:0.20, materials:0.13, equipment:0.09, subcontracted:0.06 },{ week:'W8', labour:0.17, materials:0.15, equipment:0.10, subcontracted:0.08 },{ week:'W9', labour:0.19, materials:0.12, equipment:0.09, subcontracted:0.07 }],
+    'Structure Assembly':    [{ week:'W1', labour:0.12, materials:0.09, equipment:0.06, subcontracted:0.05 },{ week:'W2', labour:0.15, materials:0.12, equipment:0.07, subcontracted:0.06 },{ week:'W3', labour:0.18, materials:0.14, equipment:0.08, subcontracted:0.07 },{ week:'W4', labour:0.21, materials:0.16, equipment:0.09, subcontracted:0.09 },{ week:'W5', labour:0.23, materials:0.18, equipment:0.09, subcontracted:0.09 },{ week:'W6', labour:0.25, materials:0.19, equipment:0.10, subcontracted:0.10 },{ week:'W7', labour:0.22, materials:0.21, equipment:0.09, subcontracted:0.11 },{ week:'W8', labour:0.26, materials:0.18, equipment:0.10, subcontracted:0.09 },{ week:'W9', labour:0.24, materials:0.20, equipment:0.10, subcontracted:0.10 }],
+    'Mechanical Systems':    [{ week:'W1', labour:0.05, materials:0.04, equipment:0.03, subcontracted:0.06 },{ week:'W2', labour:0.06, materials:0.05, equipment:0.04, subcontracted:0.07 },{ week:'W3', labour:0.07, materials:0.06, equipment:0.04, subcontracted:0.08 },{ week:'W4', labour:0.08, materials:0.07, equipment:0.05, subcontracted:0.09 },{ week:'W5', labour:0.09, materials:0.07, equipment:0.05, subcontracted:0.10 },{ week:'W6', labour:0.10, materials:0.08, equipment:0.05, subcontracted:0.12 },{ week:'W7', labour:0.11, materials:0.09, equipment:0.06, subcontracted:0.13 },{ week:'W8', labour:0.09, materials:0.10, equipment:0.05, subcontracted:0.11 },{ week:'W9', labour:0.12, materials:0.07, equipment:0.06, subcontracted:0.14 }],
+    'Finishing Works':       [{ week:'W1', labour:0.03, materials:0.02, equipment:0.01, subcontracted:0.01 },{ week:'W2', labour:0.04, materials:0.03, equipment:0.02, subcontracted:0.02 },{ week:'W3', labour:0.05, materials:0.04, equipment:0.02, subcontracted:0.02 },{ week:'W4', labour:0.06, materials:0.05, equipment:0.02, subcontracted:0.03 },{ week:'W5', labour:0.06, materials:0.05, equipment:0.03, subcontracted:0.03 },{ week:'W6', labour:0.07, materials:0.06, equipment:0.03, subcontracted:0.04 },{ week:'W7', labour:0.08, materials:0.05, equipment:0.03, subcontracted:0.03 },{ week:'W8', labour:0.06, materials:0.07, equipment:0.03, subcontracted:0.05 },{ week:'W9', labour:0.09, materials:0.04, equipment:0.03, subcontracted:0.03 }],
+    'Electrical Installation':[{ week:'W1', labour:0.07, materials:0.04, equipment:0.03, subcontracted:0.04 },{ week:'W2', labour:0.08, materials:0.05, equipment:0.04, subcontracted:0.05 },{ week:'W3', labour:0.10, materials:0.06, equipment:0.04, subcontracted:0.06 },{ week:'W4', labour:0.11, materials:0.07, equipment:0.05, subcontracted:0.07 },{ week:'W5', labour:0.12, materials:0.08, equipment:0.05, subcontracted:0.07 },{ week:'W6', labour:0.14, materials:0.09, equipment:0.05, subcontracted:0.08 },{ week:'W7', labour:0.13, materials:0.10, equipment:0.06, subcontracted:0.09 },{ week:'W8', labour:0.15, materials:0.08, equipment:0.06, subcontracted:0.07 },{ week:'W9', labour:0.12, materials:0.11, equipment:0.05, subcontracted:0.08 }],
+    'Plumbing Systems':      [{ week:'W1', labour:0.05, materials:0.03, equipment:0.02, subcontracted:0.02 },{ week:'W2', labour:0.06, materials:0.04, equipment:0.03, subcontracted:0.03 },{ week:'W3', labour:0.07, materials:0.05, equipment:0.03, subcontracted:0.04 },{ week:'W4', labour:0.09, materials:0.06, equipment:0.04, subcontracted:0.04 },{ week:'W5', labour:0.10, materials:0.06, equipment:0.04, subcontracted:0.05 },{ week:'W6', labour:0.11, materials:0.07, equipment:0.04, subcontracted:0.05 },{ week:'W7', labour:0.10, materials:0.08, equipment:0.04, subcontracted:0.06 },{ week:'W8', labour:0.12, materials:0.06, equipment:0.04, subcontracted:0.04 },{ week:'W9', labour:0.09, materials:0.09, equipment:0.04, subcontracted:0.05 }],
+    'HVAC Installation':     [{ week:'W1', labour:0.10, materials:0.08, equipment:0.05, subcontracted:0.06 },{ week:'W2', labour:0.12, materials:0.10, equipment:0.06, subcontracted:0.08 },{ week:'W3', labour:0.14, materials:0.11, equipment:0.07, subcontracted:0.09 },{ week:'W4', labour:0.16, materials:0.13, equipment:0.08, subcontracted:0.10 },{ week:'W5', labour:0.18, materials:0.14, equipment:0.09, subcontracted:0.11 },{ week:'W6', labour:0.20, materials:0.16, equipment:0.09, subcontracted:0.14 },{ week:'W7', labour:0.22, materials:0.15, equipment:0.10, subcontracted:0.13 },{ week:'W8', labour:0.19, materials:0.17, equipment:0.09, subcontracted:0.15 },{ week:'W9', labour:0.21, materials:0.14, equipment:0.10, subcontracted:0.12 }],
+    'Exterior Cladding':     [{ week:'W1', labour:0.04, materials:0.06, equipment:0.02, subcontracted:0.03 },{ week:'W2', labour:0.05, materials:0.07, equipment:0.03, subcontracted:0.03 },{ week:'W3', labour:0.07, materials:0.09, equipment:0.03, subcontracted:0.04 },{ week:'W4', labour:0.08, materials:0.10, equipment:0.04, subcontracted:0.05 },{ week:'W5', labour:0.08, materials:0.11, equipment:0.04, subcontracted:0.05 },{ week:'W6', labour:0.09, materials:0.12, equipment:0.04, subcontracted:0.06 },{ week:'W7', labour:0.10, materials:0.11, equipment:0.05, subcontracted:0.07 },{ week:'W8', labour:0.08, materials:0.13, equipment:0.04, subcontracted:0.05 },{ week:'W9', labour:0.11, materials:0.10, equipment:0.05, subcontracted:0.06 }],
+    'Interior Partitions':   [{ week:'W1', labour:0.04, materials:0.03, equipment:0.02, subcontracted:0.02 },{ week:'W2', labour:0.05, materials:0.04, equipment:0.02, subcontracted:0.02 },{ week:'W3', labour:0.06, materials:0.04, equipment:0.02, subcontracted:0.03 },{ week:'W4', labour:0.07, materials:0.05, equipment:0.03, subcontracted:0.03 },{ week:'W5', labour:0.07, materials:0.05, equipment:0.03, subcontracted:0.04 },{ week:'W6', labour:0.08, materials:0.06, equipment:0.03, subcontracted:0.04 },{ week:'W7', labour:0.07, materials:0.07, equipment:0.03, subcontracted:0.05 },{ week:'W8', labour:0.09, materials:0.05, equipment:0.03, subcontracted:0.03 },{ week:'W9', labour:0.08, materials:0.08, equipment:0.04, subcontracted:0.04 }],
+    'Roofing Works':         [{ week:'W1', labour:0.06, materials:0.05, equipment:0.03, subcontracted:0.03 },{ week:'W2', labour:0.08, materials:0.06, equipment:0.04, subcontracted:0.04 },{ week:'W3', labour:0.09, materials:0.07, equipment:0.04, subcontracted:0.05 },{ week:'W4', labour:0.11, materials:0.08, equipment:0.05, subcontracted:0.06 },{ week:'W5', labour:0.12, materials:0.09, equipment:0.05, subcontracted:0.06 },{ week:'W6', labour:0.13, materials:0.10, equipment:0.05, subcontracted:0.07 },{ week:'W7', labour:0.14, materials:0.09, equipment:0.06, subcontracted:0.08 },{ week:'W8', labour:0.12, materials:0.11, equipment:0.05, subcontracted:0.06 },{ week:'W9', labour:0.15, materials:0.08, equipment:0.06, subcontracted:0.07 }],
+    'Flooring Installation': [{ week:'W1', labour:0.03, materials:0.04, equipment:0.01, subcontracted:0.01 },{ week:'W2', labour:0.04, materials:0.05, equipment:0.02, subcontracted:0.02 },{ week:'W3', labour:0.04, materials:0.06, equipment:0.02, subcontracted:0.02 },{ week:'W4', labour:0.05, materials:0.07, equipment:0.02, subcontracted:0.02 },{ week:'W5', labour:0.05, materials:0.08, equipment:0.02, subcontracted:0.02 },{ week:'W6', labour:0.06, materials:0.09, equipment:0.02, subcontracted:0.03 },{ week:'W7', labour:0.07, materials:0.08, equipment:0.03, subcontracted:0.04 },{ week:'W8', labour:0.05, materials:0.10, equipment:0.02, subcontracted:0.02 },{ week:'W9', labour:0.08, materials:0.07, equipment:0.03, subcontracted:0.03 }],
+    'Painting & Decoration': [{ week:'W1', labour:0.02, materials:0.01, equipment:0.01, subcontracted:0.01 },{ week:'W2', labour:0.02, materials:0.02, equipment:0.01, subcontracted:0.01 },{ week:'W3', labour:0.03, materials:0.02, equipment:0.01, subcontracted:0.01 },{ week:'W4', labour:0.03, materials:0.02, equipment:0.01, subcontracted:0.01 },{ week:'W5', labour:0.04, materials:0.02, equipment:0.01, subcontracted:0.01 },{ week:'W6', labour:0.04, materials:0.03, equipment:0.01, subcontracted:0.02 },{ week:'W7', labour:0.05, materials:0.02, equipment:0.01, subcontracted:0.01 },{ week:'W8', labour:0.03, materials:0.04, equipment:0.01, subcontracted:0.02 },{ week:'W9', labour:0.06, materials:0.02, equipment:0.02, subcontracted:0.01 }],
   }
 
   const economicTable = activities.map(activity => {
@@ -1579,6 +1581,58 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                   </tbody>
                 </table>
               </div>
+            </div>
+
+            {/* Weekly Costs by Nature Chart */}
+            <div className="glass-card rounded-lg p-4 border border-border/50 mb-8">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-5">
+                <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide">Weekly Costs by Nature</h3>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <Select value={natureChartActivity} onValueChange={setNatureChartActivity}>
+                    <SelectTrigger className="w-52 bg-secondary border-border/50 h-8 text-xs">
+                      <SelectValue placeholder="Select activity" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {activities.map(a => (
+                        <SelectItem key={a.name} value={a.name}>{a.name}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <Select value={natureChartWeeks} onValueChange={(v) => setNatureChartWeeks(v as '5' | '10' | 'all')}>
+                    <SelectTrigger className="w-36 bg-secondary border-border/50 h-8 text-xs">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="5">Last 5 weeks</SelectItem>
+                      <SelectItem value="10">Last 10 weeks</SelectItem>
+                      <SelectItem value="all">All weeks</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              {(() => {
+                const allData = weeklyNatureCosts[natureChartActivity] ?? []
+                const limit = natureChartWeeks === 'all' ? allData.length : parseInt(natureChartWeeks)
+                const chartData = allData.slice(-limit)
+                return (
+                  <ResponsiveContainer width="100%" height={280}>
+                    <BarChart data={chartData} barCategoryGap="28%" barGap={2}>
+                      <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} vertical={false} />
+                      <XAxis dataKey="week" stroke={chartColors.axis} tick={{ fontSize: 11 }} />
+                      <YAxis stroke={chartColors.axis} tick={{ fontSize: 11 }} tickFormatter={(v) => `€${v.toFixed(2)}M`} width={60} />
+                      <Tooltip
+                        contentStyle={{ backgroundColor: chartColors.tooltipBg, border: chartColors.tooltipBorder, fontSize: 12 }}
+                        formatter={(value: number) => [`€${value.toFixed(3)}M`]}
+                      />
+                      <Legend wrapperStyle={{ fontSize: 12, paddingTop: 12 }} />
+                      <Bar dataKey="labour" name="Labour" fill="#64748b" radius={[2,2,0,0]} />
+                      <Bar dataKey="materials" name="Materials" fill="#38bdf8" radius={[2,2,0,0]} />
+                      <Bar dataKey="equipment" name="Equipment" fill="#a78bfa" radius={[2,2,0,0]} />
+                      <Bar dataKey="subcontracted" name="Subcontracted" fill="#f87171" radius={[2,2,0,0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                )
+              })()}
             </div>
 
           </>

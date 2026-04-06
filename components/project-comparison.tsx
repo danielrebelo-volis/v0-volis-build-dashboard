@@ -269,8 +269,7 @@ function ProjectInfoCard({ project }: { project: ComparisonProject }) {
 
 // ─── Indicator Sections ───────────────────────────────────────────────────────
 
-function ScheduleSection({ project, maxWeek }: { project: ComparisonProject; maxWeek: number }) {
-  const prodPct = Math.round((project.accumulatedProduction / project.expectedProduction) * 100)
+function ScheduleSection({ project }: { project: ComparisonProject }) {
   return (
     <div className="glass-card rounded-lg p-4 space-y-0">
       <h4 className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/70 mb-1">Schedule</h4>
@@ -284,9 +283,12 @@ function ScheduleSection({ project, maxWeek }: { project: ComparisonProject; max
         sub={project.spi >= 1 ? 'Ahead of schedule' : 'Behind schedule'}
       />
       <StatRow
-        label="Accumulated Production"
+        label="Total Production"
         value={`€${project.accumulatedProduction.toFixed(1)}M`}
-        sub={`${prodPct}% of expected (€${project.expectedProduction.toFixed(1)}M)`}
+      />
+      <StatRow
+        label="Expected Production"
+        value={`€${project.expectedProduction.toFixed(1)}M`}
       />
     </div>
   )
@@ -592,7 +594,7 @@ function ComparisonSide({
 
       {/* Active category indicator sections */}
       <div className="space-y-4">
-        {activeCategories.includes('schedule') && <ScheduleSection project={selectedProject} maxWeek={maxWeek} />}
+        {activeCategories.includes('schedule') && <ScheduleSection project={selectedProject} />}
         {activeCategories.includes('cost') && <CostSection project={selectedProject} />}
         {activeCategories.includes('activity') && <ActivitySection project={selectedProject} />}
       </div>

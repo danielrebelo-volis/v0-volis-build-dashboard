@@ -1058,7 +1058,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
             {/* Economic Overview bar */}
             <div className="glass-card rounded-lg p-4 border border-border/50 mb-6">
               <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-semibold mb-4">Economic Overview</p>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-4 divide-x-0 sm:divide-x divide-border/30">
+              <div className="grid grid-cols-2 sm:grid-cols-5 gap-x-6 gap-y-4 divide-x-0 sm:divide-x divide-border/30">
                 <div className="sm:pl-0">
                   <div className="flex items-center gap-1.5 mb-1.5">
                     <span className="text-xs text-muted-foreground">€</span>
@@ -1075,18 +1075,24 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                 </div>
                 <div className="sm:pl-6">
                   <div className="flex items-center gap-1.5 mb-1.5">
-                    <TrendingUp className="w-3 h-3 text-warning" />
+                    <TrendingUp className="w-3 h-3 text-muted-foreground" />
                     <span className="text-[11px] text-muted-foreground">Projected IC</span>
                   </div>
-                  <p className="text-xl font-bold text-warning">92.4%</p>
+                  <p className="text-xl font-bold text-foreground">92.4%</p>
                 </div>
                 <div className="sm:pl-6">
                   <div className="flex items-center gap-1.5 mb-1.5">
-                    <span className="text-xs text-warning">€</span>
+                    <TrendingUp className="w-3 h-3 text-muted-foreground" />
                     <span className="text-[11px] text-muted-foreground">Current IC</span>
                   </div>
-                  <p className="text-xl font-bold text-warning">90.0%</p>
-                  <p className="text-[11px] text-muted-foreground mt-0.5">Analytical IC: 84.2%</p>
+                  <p className="text-xl font-bold text-foreground">90.0%</p>
+                </div>
+                <div className="sm:pl-6">
+                  <div className="flex items-center gap-1.5 mb-1.5">
+                    <TrendingUp className="w-3 h-3 text-muted-foreground" />
+                    <span className="text-[11px] text-muted-foreground">Analytical IC</span>
+                  </div>
+                  <p className="text-xl font-bold text-foreground">84.2%</p>
                 </div>
               </div>
             </div>
@@ -1400,7 +1406,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
             {/* Economic Overview bar */}
             <div className="glass-card rounded-lg p-4 border border-border/50 mb-8">
               <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-semibold mb-4">Economic Overview</p>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-4 divide-x-0 sm:divide-x divide-border/30">
+              <div className="grid grid-cols-2 sm:grid-cols-5 gap-x-6 gap-y-4 divide-x-0 sm:divide-x divide-border/30">
                 <div className="sm:pl-0">
                   <div className="flex items-center gap-1.5 mb-1.5">
                     <span className="text-xs text-muted-foreground">€</span>
@@ -1417,18 +1423,24 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                 </div>
                 <div className="sm:pl-6">
                   <div className="flex items-center gap-1.5 mb-1.5">
-                    <TrendingUp className="w-3 h-3 text-warning" />
+                    <TrendingUp className="w-3 h-3 text-muted-foreground" />
                     <span className="text-[11px] text-muted-foreground">Projected IC</span>
                   </div>
-                  <p className="text-2xl font-bold text-warning">92.4%</p>
+                  <p className="text-2xl font-bold text-foreground">92.4%</p>
                 </div>
                 <div className="sm:pl-6">
                   <div className="flex items-center gap-1.5 mb-1.5">
-                    <span className="text-xs text-warning">€</span>
+                    <TrendingUp className="w-3 h-3 text-muted-foreground" />
                     <span className="text-[11px] text-muted-foreground">Current IC</span>
                   </div>
-                  <p className="text-2xl font-bold text-warning">90.0%</p>
-                  <p className="text-[11px] text-muted-foreground mt-0.5">Analytical IC: 84.2%</p>
+                  <p className="text-2xl font-bold text-foreground">90.0%</p>
+                </div>
+                <div className="sm:pl-6">
+                  <div className="flex items-center gap-1.5 mb-1.5">
+                    <TrendingUp className="w-3 h-3 text-muted-foreground" />
+                    <span className="text-[11px] text-muted-foreground">Analytical IC</span>
+                  </div>
+                  <p className="text-2xl font-bold text-foreground">84.2%</p>
                 </div>
               </div>
             </div>

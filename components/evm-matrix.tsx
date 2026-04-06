@@ -369,8 +369,6 @@ export function EVMMatrix({
           const isHovered = hoveredProject?.id === project.id
           const color = categoryColors[project.category]
           const size = getBubbleSize(project.budgetValue)
-          const Icon = categoryIcons[project.category]
-          const iconSize = Math.max(10, Math.round(size * 0.42))
 
           return (
             <div
@@ -428,7 +426,7 @@ export function EVMMatrix({
               {/* Bubble */}
               <Link href={`/project/${project.id}`}>
                 <div
-                  className="relative rounded-full border-2 transition-all duration-300 flex items-center justify-center"
+                  className="relative rounded-full border-2 transition-all duration-300"
                   style={{
                     width: size,
                     height: size,
@@ -436,9 +434,7 @@ export function EVMMatrix({
                     borderColor: isHovered ? "white" : `${color}cc`,
                     boxShadow: `0 0 ${isHovered ? 20 : 8}px ${color}80`,
                   }}
-                >
-                  <Icon size={iconSize} color="white" style={{ pointerEvents: "none", opacity: 0.92, flexShrink: 0 }} strokeWidth={1.8} />
-                </div>
+                />
               </Link>
 
               {/* Hover tooltip */}

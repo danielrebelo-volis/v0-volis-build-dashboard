@@ -296,9 +296,9 @@ function CostSection({ project }: { project: ComparisonProject }) {
   return (
     <div className="glass-card rounded-lg p-4 space-y-0">
       <h4 className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/70 mb-1">Cost</h4>
-      <StatRow label="CI Planned" value={`${project.ciPlanned}%`} />
-      <StatRow label="CI Adjusted" value={`${project.ciAdjusted}%`} />
-      <StatRow label="CI Analytical" value={`${project.ciAnalytical}%`} />
+      <StatRow label="Planned IC" value={`${project.ciPlanned}%`} />
+      <StatRow label="Adjusted IC" value={`${project.ciAdjusted}%`} />
+      <StatRow label="Analytical IC" value={`${project.ciAnalytical}%`} />
       <StatRow
         label="Budget Variance"
         value={`${project.budgetVariance > 0 ? '+' : ''}€${project.budgetVariance.toFixed(1)}M`}
@@ -377,7 +377,7 @@ function SCurves({ project, maxWeek }: { project: ComparisonProject; maxWeek: nu
   const [costType, setCostType] = useState('all')
 
   const base = sCurveDataByProject[project.id] ?? sCurveDataByProject['PRJ-001']
-  const WEEKS = ['W1','W2','W3','W4','W5','W6','W7','W8','W9']
+  const WEEKS = ['W1', 'W2', 'W3', 'W4', 'W5', 'W6', 'W7', 'W8', 'W9']
   const sliceIdx = maxWeek // 1-based, W1=1..W9=9
   const slicedProgress = base.progress.slice(0, sliceIdx)
   const slicedCost = base.cost.slice(0, sliceIdx)
@@ -385,17 +385,17 @@ function SCurves({ project, maxWeek }: { project: ComparisonProject; maxWeek: nu
   const actualColor = '#00b894'
   const filtered = (progressActivity !== 'all' || progressWorkfront !== 'all' || progressOwner !== 'all')
     ? slicedProgress.map(d => {
-        const f = 0.82 + (progressActivity.charCodeAt(progressActivity.length - 1) % 10) * 0.018
-        return { ...d, actualSolid: d.actualSolid != null ? +(d.actualSolid * f).toFixed(1) : null, actualDashed: d.actualDashed != null ? +(d.actualDashed * f).toFixed(1) : null, estimated: +(d.estimated * (f + 0.05)).toFixed(1) }
-      })
+      const f = 0.82 + (progressActivity.charCodeAt(progressActivity.length - 1) % 10) * 0.018
+      return { ...d, actualSolid: d.actualSolid != null ? +(d.actualSolid * f).toFixed(1) : null, actualDashed: d.actualDashed != null ? +(d.actualDashed * f).toFixed(1) : null, estimated: +(d.estimated * (f + 0.05)).toFixed(1) }
+    })
     : slicedProgress
 
   const ctMul = costTypeMultipliers[costType] ?? 1
   const costFiltered = (costActivity !== 'all' || costWorkfront !== 'all' || costType !== 'all')
     ? slicedCost.map(d => {
-        const scale = ctMul * (costActivity !== 'all' ? 0.88 : 1) * (costWorkfront !== 'all' ? 0.93 : 1)
-        return { ...d, planned: +(d.planned * scale).toFixed(2), estimated: +(d.estimated * scale).toFixed(2), actualSolid: d.actualSolid != null ? +(d.actualSolid * scale).toFixed(2) : null, actualDashed: d.actualDashed != null ? +(d.actualDashed * scale).toFixed(2) : null }
-      })
+      const scale = ctMul * (costActivity !== 'all' ? 0.88 : 1) * (costWorkfront !== 'all' ? 0.93 : 1)
+      return { ...d, planned: +(d.planned * scale).toFixed(2), estimated: +(d.estimated * scale).toFixed(2), actualSolid: d.actualSolid != null ? +(d.actualSolid * scale).toFixed(2) : null, actualDashed: d.actualDashed != null ? +(d.actualDashed * scale).toFixed(2) : null }
+    })
     : slicedCost
 
   const baselineColor = colors.isDark ? '#00c8ff' : '#6C5CE7'
@@ -698,7 +698,7 @@ export function ProjectComparison() {
           <div className="flex items-center gap-2">
             <span className="text-xs text-muted-foreground">Up to</span>
             <div className="flex items-center rounded-md border border-border/40 bg-background p-0.5 text-xs font-medium">
-              {[1,2,3,4,5,6,7,8,9].map(w => (
+              {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(w => (
                 <button key={w} onClick={() => setMaxWeek(w)}
                   className={`w-7 h-6 rounded flex items-center justify-center transition-all ${maxWeek === w ? 'bg-foreground text-background' : 'text-muted-foreground hover:text-foreground'}`}>
                   W{w}

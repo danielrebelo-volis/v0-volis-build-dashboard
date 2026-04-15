@@ -184,6 +184,9 @@
 }
 
 /* Custom grid columns */
+.grid-cols-14 {
+  grid-template-columns: repeat(14, minmax(0, 1fr));
+}
 .grid-cols-15 {
   grid-template-columns: repeat(15, minmax(0, 1fr));
 }

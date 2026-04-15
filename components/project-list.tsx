@@ -1,7 +1,7 @@
 "use client"
 
 import { ExternalLink } from "lucide-react"
-import { Button } from "@/components/ui/button"
+
 import Link from "next/link"
 
 interface Project {
@@ -38,13 +38,12 @@ const COLUMNS = [
   { label: "Adjusted IC",     span: "col-span-1", align: "right" },
   { label: "Analytical IC",   span: "col-span-1", align: "right" },
   { label: "Projected IC",    span: "col-span-1", align: "right" },
-  { label: "",                span: "col-span-1", align: "right" },
 ]
 
 function ProjectRow({ name, id, location, deadline, plannedProgress, actualProgress, contractValue, accumulatedProduction, totalBudget, currentCosts, targetIC, adjustedIC, analyticalIC, projectedIC }: Project) {
   return (
     <Link href={`/project/${id}`}>
-      <div className="group grid grid-cols-15 items-center gap-3 py-2.5 px-3 hover:bg-secondary/30 transition-colors rounded-lg cursor-pointer">
+      <div className="group grid grid-cols-14 items-center gap-3 py-2.5 px-3 hover:bg-secondary/30 transition-colors rounded-lg cursor-pointer">
 
         {/* Project name */}
         <div className="col-span-2 flex items-center gap-2 min-w-0">
@@ -117,8 +116,6 @@ function ProjectRow({ name, id, location, deadline, plannedProgress, actualProgr
           <span className="text-xs font-mono text-foreground">{projectedIC}%</span>
         </div>
 
-        {/* Spacer for grid alignment */}
-        <div className="col-span-1" />
       </div>
     </Link>
   )
@@ -139,15 +136,12 @@ export function ProjectList() {
 
   return (
     <div className="glass-card rounded-lg p-4">
-      <div className="flex items-center justify-between mb-3">
+      <div className="mb-3">
         <h2 className="text-sm font-semibold text-foreground">Recent Projects</h2>
-        <Button variant="ghost" size="sm" className="text-xs text-muted-foreground hover:text-foreground">
-          View All
-        </Button>
       </div>
 
       {/* Header row */}
-      <div className="grid grid-cols-15 gap-3 px-3 pb-2 border-b border-border/30">
+      <div className="grid grid-cols-14 gap-3 px-3 pb-2 border-b border-border/30">
         {COLUMNS.map(({ label, span, align }, i) => (
           <div key={`${label}-${i}`} className={`${span} text-xs font-semibold uppercase tracking-wider text-muted-foreground/60 ${align === "left" ? "" : "text-right"}`}>
             {label}

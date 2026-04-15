@@ -40,10 +40,12 @@ type ActivityId = 'A001' | 'A002' | 'A003' | 'A004' | 'A005'
 
 interface DailyRecord {
   day: string
-  plannedProgress: number   // cumulative expected in unit
-  actualProgress: number    // cumulative actual in unit
-  plannedCost: number       // cumulative expected cost k€
-  actualCost: number        // cumulative actual cost k€
+  plannedProgress: number    // cumulative planned (original baseline) in unit
+  baselineProgress: number   // cumulative current baseline in unit
+  actualProgress: number     // cumulative actual in unit
+  plannedCost: number        // cumulative planned cost k€
+  baselineCost: number       // cumulative current baseline cost k€
+  actualCost: number         // cumulative actual cost k€
 }
 
 interface ResourceRecord {
@@ -68,13 +70,13 @@ const ACTIVITY_DATA: Record<ActivityId, ActivityData> = {
     totalExpected: 100,
     totalActual: 80,
     curve: [
-      { day: 'Day 1', plannedProgress: 10, actualProgress: 8,  plannedCost: 4.2,  actualCost: 4.8 },
-      { day: 'Day 2', plannedProgress: 22, actualProgress: 18, plannedCost: 9.1,  actualCost: 10.3 },
-      { day: 'Day 3', plannedProgress: 38, actualProgress: 30, plannedCost: 15.6, actualCost: 17.9 },
-      { day: 'Day 4', plannedProgress: 58, actualProgress: 48, plannedCost: 23.8, actualCost: 27.4 },
-      { day: 'Day 5', plannedProgress: 75, actualProgress: 62, plannedCost: 30.7, actualCost: 35.2 },
-      { day: 'Day 6', plannedProgress: 90, actualProgress: 72, plannedCost: 36.9, actualCost: 42.1 },
-      { day: 'Day 7', plannedProgress: 100, actualProgress: 80, plannedCost: 41.0, actualCost: 46.6 },
+      { day: 'Day 1', plannedProgress: 10, baselineProgress: 11, actualProgress: 8,  plannedCost: 4.2,  baselineCost: 4.5,  actualCost: 4.8 },
+      { day: 'Day 2', plannedProgress: 22, baselineProgress: 24, actualProgress: 18, plannedCost: 9.1,  baselineCost: 9.8,  actualCost: 10.3 },
+      { day: 'Day 3', plannedProgress: 38, baselineProgress: 40, actualProgress: 30, plannedCost: 15.6, baselineCost: 16.8, actualCost: 17.9 },
+      { day: 'Day 4', plannedProgress: 58, baselineProgress: 61, actualProgress: 48, plannedCost: 23.8, baselineCost: 25.5, actualCost: 27.4 },
+      { day: 'Day 5', plannedProgress: 75, baselineProgress: 78, actualProgress: 62, plannedCost: 30.7, baselineCost: 33.0, actualCost: 35.2 },
+      { day: 'Day 6', plannedProgress: 90, baselineProgress: 93, actualProgress: 72, plannedCost: 36.9, baselineCost: 39.5, actualCost: 42.1 },
+      { day: 'Day 7', plannedProgress: 100, baselineProgress: 100, actualProgress: 80, plannedCost: 41.0, baselineCost: 44.0, actualCost: 46.6 },
     ],
     resources: [
       { category: 'Labour',    role: 'Carpenter',           expected: 2, actual: 1, unit: 'workers' },
@@ -90,12 +92,12 @@ const ACTIVITY_DATA: Record<ActivityId, ActivityData> = {
     totalExpected: 45,
     totalActual: 38,
     curve: [
-      { day: 'Day 1', plannedProgress: 5,  actualProgress: 4,  plannedCost: 8.0,  actualCost: 9.1 },
-      { day: 'Day 2', plannedProgress: 12, actualProgress: 10, plannedCost: 19.2, actualCost: 22.0 },
-      { day: 'Day 3', plannedProgress: 22, actualProgress: 18, plannedCost: 35.2, actualCost: 40.4 },
-      { day: 'Day 4', plannedProgress: 33, actualProgress: 27, plannedCost: 52.8, actualCost: 61.4 },
-      { day: 'Day 5', plannedProgress: 40, actualProgress: 33, plannedCost: 64.0, actualCost: 74.5 },
-      { day: 'Day 6', plannedProgress: 45, actualProgress: 38, plannedCost: 72.0, actualCost: 84.2 },
+      { day: 'Day 1', plannedProgress: 5,  baselineProgress: 5,  actualProgress: 4,  plannedCost: 8.0,  baselineCost: 8.5,  actualCost: 9.1 },
+      { day: 'Day 2', plannedProgress: 12, baselineProgress: 13, actualProgress: 10, plannedCost: 19.2, baselineCost: 20.5, actualCost: 22.0 },
+      { day: 'Day 3', plannedProgress: 22, baselineProgress: 23, actualProgress: 18, plannedCost: 35.2, baselineCost: 37.5, actualCost: 40.4 },
+      { day: 'Day 4', plannedProgress: 33, baselineProgress: 35, actualProgress: 27, plannedCost: 52.8, baselineCost: 56.0, actualCost: 61.4 },
+      { day: 'Day 5', plannedProgress: 40, baselineProgress: 42, actualProgress: 33, plannedCost: 64.0, baselineCost: 68.0, actualCost: 74.5 },
+      { day: 'Day 6', plannedProgress: 45, baselineProgress: 45, actualProgress: 38, plannedCost: 72.0, baselineCost: 77.0, actualCost: 84.2 },
     ],
     resources: [
       { category: 'Labour',    role: 'Steel Fixer',      expected: 4, actual: 3, unit: 'workers' },
@@ -111,12 +113,12 @@ const ACTIVITY_DATA: Record<ActivityId, ActivityData> = {
     totalExpected: 320,
     totalActual: 295,
     curve: [
-      { day: 'Day 1', plannedProgress: 40,  actualProgress: 38,  plannedCost: 6.4,  actualCost: 6.9 },
-      { day: 'Day 2', plannedProgress: 90,  actualProgress: 85,  plannedCost: 14.4, actualCost: 15.6 },
-      { day: 'Day 3', plannedProgress: 150, actualProgress: 140, plannedCost: 24.0, actualCost: 26.1 },
-      { day: 'Day 4', plannedProgress: 220, actualProgress: 200, plannedCost: 35.2, actualCost: 38.2 },
-      { day: 'Day 5', plannedProgress: 280, actualProgress: 255, plannedCost: 44.8, actualCost: 48.7 },
-      { day: 'Day 6', plannedProgress: 320, actualProgress: 295, plannedCost: 51.2, actualCost: 55.8 },
+      { day: 'Day 1', plannedProgress: 40,  baselineProgress: 42,  actualProgress: 38,  plannedCost: 6.4,  baselineCost: 6.7,  actualCost: 6.9 },
+      { day: 'Day 2', plannedProgress: 90,  baselineProgress: 94,  actualProgress: 85,  plannedCost: 14.4, baselineCost: 15.0, actualCost: 15.6 },
+      { day: 'Day 3', plannedProgress: 150, baselineProgress: 156, actualProgress: 140, plannedCost: 24.0, baselineCost: 25.0, actualCost: 26.1 },
+      { day: 'Day 4', plannedProgress: 220, baselineProgress: 228, actualProgress: 200, plannedCost: 35.2, baselineCost: 36.6, actualCost: 38.2 },
+      { day: 'Day 5', plannedProgress: 280, baselineProgress: 290, actualProgress: 255, plannedCost: 44.8, baselineCost: 46.5, actualCost: 48.7 },
+      { day: 'Day 6', plannedProgress: 320, baselineProgress: 320, actualProgress: 295, plannedCost: 51.2, baselineCost: 53.2, actualCost: 55.8 },
     ],
     resources: [
       { category: 'Labour',    role: 'Facade Installer', expected: 6, actual: 6, unit: 'workers' },
@@ -132,12 +134,12 @@ const ACTIVITY_DATA: Record<ActivityId, ActivityData> = {
     totalExpected: 850,
     totalActual: 710,
     curve: [
-      { day: 'Day 1', plannedProgress: 100, actualProgress: 80,  plannedCost: 3.2, actualCost: 3.7 },
-      { day: 'Day 2', plannedProgress: 240, actualProgress: 190, plannedCost: 7.7, actualCost: 8.9 },
-      { day: 'Day 3', plannedProgress: 420, actualProgress: 340, plannedCost: 13.4, actualCost: 15.5 },
-      { day: 'Day 4', plannedProgress: 600, actualProgress: 490, plannedCost: 19.2, actualCost: 22.1 },
-      { day: 'Day 5', plannedProgress: 750, actualProgress: 620, plannedCost: 24.0, actualCost: 27.6 },
-      { day: 'Day 6', plannedProgress: 850, actualProgress: 710, plannedCost: 27.2, actualCost: 31.2 },
+      { day: 'Day 1', plannedProgress: 100, baselineProgress: 105, actualProgress: 80,  plannedCost: 3.2,  baselineCost: 3.5,  actualCost: 3.7 },
+      { day: 'Day 2', plannedProgress: 240, baselineProgress: 250, actualProgress: 190, plannedCost: 7.7,  baselineCost: 8.2,  actualCost: 8.9 },
+      { day: 'Day 3', plannedProgress: 420, baselineProgress: 440, actualProgress: 340, plannedCost: 13.4, baselineCost: 14.3, actualCost: 15.5 },
+      { day: 'Day 4', plannedProgress: 600, baselineProgress: 625, actualProgress: 490, plannedCost: 19.2, baselineCost: 20.4, actualCost: 22.1 },
+      { day: 'Day 5', plannedProgress: 750, baselineProgress: 780, actualProgress: 620, plannedCost: 24.0, baselineCost: 25.5, actualCost: 27.6 },
+      { day: 'Day 6', plannedProgress: 850, baselineProgress: 850, actualProgress: 710, plannedCost: 27.2, baselineCost: 29.0, actualCost: 31.2 },
     ],
     resources: [
       { category: 'Labour',    role: 'Electrician',      expected: 4, actual: 3, unit: 'workers' },
@@ -153,12 +155,12 @@ const ACTIVITY_DATA: Record<ActivityId, ActivityData> = {
     totalExpected: 620,
     totalActual: 590,
     curve: [
-      { day: 'Day 1', plannedProgress: 80,  actualProgress: 78,  plannedCost: 2.8, actualCost: 3.1 },
-      { day: 'Day 2', plannedProgress: 180, actualProgress: 172, plannedCost: 6.3, actualCost: 7.0 },
-      { day: 'Day 3', plannedProgress: 310, actualProgress: 295, plannedCost: 10.9, actualCost: 12.1 },
-      { day: 'Day 4', plannedProgress: 450, actualProgress: 430, plannedCost: 15.8, actualCost: 17.4 },
-      { day: 'Day 5', plannedProgress: 560, actualProgress: 535, plannedCost: 19.6, actualCost: 21.6 },
-      { day: 'Day 6', plannedProgress: 620, actualProgress: 590, plannedCost: 21.7, actualCost: 23.9 },
+      { day: 'Day 1', plannedProgress: 80,  baselineProgress: 82,  actualProgress: 78,  plannedCost: 2.8,  baselineCost: 2.9,  actualCost: 3.1 },
+      { day: 'Day 2', plannedProgress: 180, baselineProgress: 185, actualProgress: 172, plannedCost: 6.3,  baselineCost: 6.6,  actualCost: 7.0 },
+      { day: 'Day 3', plannedProgress: 310, baselineProgress: 318, actualProgress: 295, plannedCost: 10.9, baselineCost: 11.4, actualCost: 12.1 },
+      { day: 'Day 4', plannedProgress: 450, baselineProgress: 460, actualProgress: 430, plannedCost: 15.8, baselineCost: 16.5, actualCost: 17.4 },
+      { day: 'Day 5', plannedProgress: 560, baselineProgress: 572, actualProgress: 535, plannedCost: 19.6, baselineCost: 20.5, actualCost: 21.6 },
+      { day: 'Day 6', plannedProgress: 620, baselineProgress: 620, actualProgress: 590, plannedCost: 21.7, baselineCost: 22.7, actualCost: 23.9 },
     ],
     resources: [
       { category: 'Labour',    role: 'Plumber',          expected: 3, actual: 3, unit: 'workers' },
@@ -234,24 +236,40 @@ function ResourceTable({ resources }: { resources: ResourceRecord[] }) {
   )
 }
 
-function ActivitySCurve({ data, unit }: { data: DailyRecord[]; unit: string }) {
+function ProgressSCurve({ data, unit }: { data: DailyRecord[]; unit: string }) {
   const colors = useChartColors()
-
   return (
-    <ResponsiveContainer width="100%" height={260}>
-      <LineChart data={data} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
+    <ResponsiveContainer width="100%" height={220}>
+      <LineChart data={data} margin={{ top: 5, right: 16, left: 0, bottom: 5 }}>
         <CartesianGrid strokeDasharray="3 3" stroke={colors.grid} />
         <XAxis dataKey="day" stroke={colors.axis} tick={{ fontSize: 11 }} />
         <YAxis
-          yAxisId="progress"
           stroke={colors.axis}
           tick={{ fontSize: 11 }}
-          tickFormatter={(v) => `${v} ${unit}`}
-          width={64}
+          tickFormatter={(v) => `${v}`}
+          width={52}
         />
+        <Tooltip
+          contentStyle={{ backgroundColor: colors.tooltipBg, border: colors.tooltipBorder, fontSize: 12 }}
+          formatter={(value: number, name: string) => [`${value} ${unit}`, name]}
+        />
+        <Legend wrapperStyle={{ paddingTop: 8, fontSize: 11 }} iconType="line" />
+        <Line type="monotone" dataKey="plannedProgress"  name="Planned"           stroke="#9CA3AF" strokeWidth={2} strokeDasharray="6 3" dot={false} />
+        <Line type="monotone" dataKey="baselineProgress" name="Current Baseline"  stroke={colors.isDark ? '#60a5fa' : '#3B82F6'} strokeWidth={2} dot={false} />
+        <Line type="monotone" dataKey="actualProgress"   name="Actual"            stroke={colors.isDark ? '#34d399' : '#10B981'} strokeWidth={2} dot={{ r: 3 }} />
+      </LineChart>
+    </ResponsiveContainer>
+  )
+}
+
+function CostSCurve({ data }: { data: DailyRecord[] }) {
+  const colors = useChartColors()
+  return (
+    <ResponsiveContainer width="100%" height={220}>
+      <LineChart data={data} margin={{ top: 5, right: 16, left: 0, bottom: 5 }}>
+        <CartesianGrid strokeDasharray="3 3" stroke={colors.grid} />
+        <XAxis dataKey="day" stroke={colors.axis} tick={{ fontSize: 11 }} />
         <YAxis
-          yAxisId="cost"
-          orientation="right"
           stroke={colors.axis}
           tick={{ fontSize: 11 }}
           tickFormatter={(v) => `€${v}k`}
@@ -259,15 +277,12 @@ function ActivitySCurve({ data, unit }: { data: DailyRecord[]; unit: string }) {
         />
         <Tooltip
           contentStyle={{ backgroundColor: colors.tooltipBg, border: colors.tooltipBorder, fontSize: 12 }}
-          formatter={(value: number, name: string) =>
-            name.includes('Cost') ? [`€${value}k`, name] : [`${value} ${unit}`, name]
-          }
+          formatter={(value: number, name: string) => [`€${value}k`, name]}
         />
-        <Legend wrapperStyle={{ paddingTop: 10, fontSize: 12 }} iconType="line" />
-        <Line yAxisId="progress" type="monotone" dataKey="plannedProgress" name="Expected Progress" stroke="#9CA3AF" strokeWidth={2} dot={false} />
-        <Line yAxisId="progress" type="monotone" dataKey="actualProgress"  name="Actual Progress"  stroke={colors.isDark ? '#00ff88' : '#00b894'} strokeWidth={2} dot={{ r: 3 }} />
-        <Line yAxisId="cost"     type="monotone" dataKey="plannedCost"     name="Expected Cost"    stroke={colors.isDark ? '#00c8ff' : '#6C5CE7'} strokeWidth={2} dot={false} strokeDasharray="5 3" />
-        <Line yAxisId="cost"     type="monotone" dataKey="actualCost"      name="Actual Cost"      stroke="#ff6b6b"                               strokeWidth={2} dot={{ r: 3 }} />
+        <Legend wrapperStyle={{ paddingTop: 8, fontSize: 11 }} iconType="line" />
+        <Line type="monotone" dataKey="plannedCost"  name="Planned"           stroke="#9CA3AF" strokeWidth={2} strokeDasharray="6 3" dot={false} />
+        <Line type="monotone" dataKey="baselineCost" name="Current Baseline"  stroke={colors.isDark ? '#c084fc' : '#8B5CF6'} strokeWidth={2} dot={false} />
+        <Line type="monotone" dataKey="actualCost"   name="Actual"            stroke="#F87171" strokeWidth={2} dot={{ r: 3 }} />
       </LineChart>
     </ResponsiveContainer>
   )
@@ -441,27 +456,42 @@ export function ActivityDrillDownSection() {
         </div>
       </div>
 
-      {/* ── Row 3: S-Curve + KPI card ─────────────────────────────────────── */}
-      <div className="flex gap-4">
-        {/* S-Curve — 3/4 width */}
-        <div className="glass-card rounded-lg p-4 flex-[3] min-w-0">
-          <div className="mb-3">
-            <h3 className="text-sm font-semibold text-foreground">Activity S-Curve</h3>
-            <p className="text-xs text-muted-foreground mt-0.5">
-              {activityMeta.label} — cumulative progress &amp; cost over period
-            </p>
+      {/* ── Row 3: Two stacked S-Curves (3/4) + KPI card (1/4) ───────────── */}
+      <div className="flex gap-4 items-stretch">
+
+        {/* Charts column — 3/4 width */}
+        <div className="flex-[3] min-w-0 flex flex-col gap-4">
+          {/* Progress S-Curve */}
+          <div className="glass-card rounded-lg p-4">
+            <div className="mb-2">
+              <h3 className="text-sm font-semibold text-foreground">Progress S-Curve</h3>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                {activityMeta.label} — cumulative progress ({activityMeta.unit})
+              </p>
+            </div>
+            <ProgressSCurve data={activity.curve} unit={activityMeta.unit} />
           </div>
-          <ActivitySCurve data={activity.curve} unit={activityMeta.unit} />
+
+          {/* Cost S-Curve */}
+          <div className="glass-card rounded-lg p-4">
+            <div className="mb-2">
+              <h3 className="text-sm font-semibold text-foreground">Cost S-Curve</h3>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                {activityMeta.label} — cumulative cost (k€)
+              </p>
+            </div>
+            <CostSCurve data={activity.curve} />
+          </div>
         </div>
 
-        {/* KPI card — 1/4 width */}
-        <div className="glass-card rounded-lg p-4 flex-[1] min-w-[180px] flex flex-col justify-between">
-          <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground/70 mb-2">
+        {/* KPI card — 1/4 width, full height */}
+        <div className="glass-card rounded-lg p-4 flex-[1] min-w-[180px] flex flex-col">
+          <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground/70 mb-4">
             KPIs
           </h3>
-          <div className="flex-1">
+          <div className="flex-1 flex flex-col justify-around">
             <KPICard
-              label="Accumulated Progress"
+              label="Accum. Progress"
               expected={`${expectedPct}%`}
               actual={`${progressPct}%`}
             />
@@ -472,13 +502,13 @@ export function ActivityDrillDownSection() {
               unit={activityMeta.unit}
             />
             <KPICard
-              label="Expected Cost"
+              label="Planned Cost"
               expected={`€${lastCost.plannedCost}k`}
               actual={`€${lastCost.actualCost}k`}
             />
             <KPICard
               label="Cost Variance"
-              expected="0%"
+              expected="0.0%"
               actual={`+${(((lastCost.actualCost - lastCost.plannedCost) / lastCost.plannedCost) * 100).toFixed(1)}%`}
             />
           </div>

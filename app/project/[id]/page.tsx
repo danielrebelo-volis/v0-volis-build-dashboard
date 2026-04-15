@@ -5,6 +5,7 @@ import { ProjectKPISection } from '@/components/project-kpi-section'
 import { ProjectDetailsSection } from '@/components/project-details-section'
 import { SProgressCurve, SCostCurve } from '@/components/s-curve-chart'
 import { OtherIndicators } from '@/components/other-indicators'
+import { ActivityDrillDownSection } from '@/components/activity-drill-down-section'
 import { ArrowLeft, TrendingDown, Calendar, Download, Euro } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
@@ -173,6 +174,9 @@ export default function ProjectDeepDive({ params }: { params: { id: string } }) 
             <SCostCurve />
           </div>
         </div>
+
+        {/* Activity Drill-Down Section */}
+        <ActivityDrillDownSection />
 
         {/* Other Indicators Section */}
         <OtherIndicators

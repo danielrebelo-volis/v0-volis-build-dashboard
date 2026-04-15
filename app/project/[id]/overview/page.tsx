@@ -1,7 +1,9 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { DashboardHeader } from '@/components/dashboard-header'
+import { ActivityDrillDownSection } from '@/components/activity-drill-down-section'
 import { ArrowLeft, Download, TrendingUp, ChevronDown, GanttChartSquare } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { GanttChartDialog } from '@/components/gantt-chart-dialog'
@@ -202,8 +204,9 @@ function EconomicTableRow({
 
 export default function ProjectOverview({ params }: { params: { id: string } }) {
   const chartColors = useChartColors()
+  const searchParams = useSearchParams()
   const [ganttOpen, setGanttOpen] = useState(false)
-  const [activeTab, setActiveTab] = useState('overview')
+  const [activeTab, setActiveTab] = useState(() => searchParams.get('tab') ?? 'overview')
   const [selectedActivity, setSelectedActivity] = useState('all')
   const [selectedWorkfront, setSelectedWorkfront] = useState('all')
   const [selectedOwner, setSelectedOwner] = useState('all')
@@ -683,16 +686,22 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
 
         {/* Tab Navigation */}
         <div className="flex gap-8 border-b border-border/50 mb-8">
-          {['overview', 'progress', 'economic', 'data-quality'].map((tab) => (
+          {[
+            { id: 'overview', label: 'Overview' },
+            { id: 'progress', label: 'Progress' },
+            { id: 'economic', label: 'Economic' },
+            { id: 'data-quality', label: 'Data Quality' },
+            { id: 'activity-drill-down', label: 'Activity Drill-Down' },
+          ].map(({ id, label }) => (
             <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={`pb-4 px-2 font-semibold text-sm transition-all ${activeTab === tab
+              key={id}
+              onClick={() => setActiveTab(id)}
+              className={`pb-4 px-2 font-semibold text-sm transition-all ${activeTab === id
                 ? 'text-foreground border-b-2 border-foreground'
                 : 'text-muted-foreground hover:text-foreground'
                 }`}
             >
-              {tab.charAt(0).toUpperCase() + tab.slice(1)}
+              {label}
             </button>
           ))}
         </div>
@@ -1636,6 +1645,11 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
             </div>
 
           </>
+        )}
+
+        {/* Activity Drill-Down Tab */}
+        {activeTab === 'activity-drill-down' && (
+          <ActivityDrillDownSection />
         )}
       </main>
     </div>

@@ -8,12 +8,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Button } from '@/components/ui/button'
-import { Calendar } from '@/components/ui/calendar'
-import { CalendarIcon, TrendingUp, TrendingDown, Minus } from 'lucide-react'
-import { format, addDays } from 'date-fns'
-import type { DateRange } from 'react-day-picker'
+import { TrendingUp, TrendingDown, Minus } from 'lucide-react'
 import {
   LineChart,
   Line,
@@ -320,11 +316,8 @@ function KPICard({
 
 export function ActivityDrillDownSection() {
   const [selectedActivity, setSelectedActivity] = useState<ActivityId>('A001')
-  const [dateRange, setDateRange] = useState<DateRange | undefined>({
-    from: new Date(2025, 3, 1),
-    to: addDays(new Date(2025, 3, 1), 6),
-  })
-  const [calOpen, setCalOpen] = useState(false)
+  const [dateFrom, setDateFrom] = useState('2026-03-01')
+  const [dateTo, setDateTo] = useState('2026-03-07')
 
   const activity = ACTIVITY_DATA[selectedActivity]
   const activityMeta = ACTIVITIES.find((a) => a.id === selectedActivity)!
@@ -363,44 +356,31 @@ export function ActivityDrillDownSection() {
             </Select>
           </div>
 
-          {/* Date range picker */}
+          {/* Date range — From */}
           <div className="flex flex-col gap-1.5">
             <label className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/60">
-              Period
+              From
             </label>
-            <Popover open={calOpen} onOpenChange={setCalOpen}>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className="h-9 min-w-[220px] justify-start gap-2 text-sm font-normal bg-secondary border-border/50"
-                >
-                  <CalendarIcon className="w-4 h-4 text-muted-foreground" />
-                  {dateRange?.from ? (
-                    dateRange.to ? (
-                      <>
-                        {format(dateRange.from, 'dd MMM yyyy')} – {format(dateRange.to, 'dd MMM yyyy')}
-                      </>
-                    ) : (
-                      format(dateRange.from, 'dd MMM yyyy')
-                    )
-                  ) : (
-                    <span className="text-muted-foreground">Select period</span>
-                  )}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
-                <Calendar
-                  mode="range"
-                  selected={dateRange}
-                  onSelect={(range) => {
-                    setDateRange(range)
-                    if (range?.from && range?.to) setCalOpen(false)
-                  }}
-                  numberOfMonths={2}
-                  initialFocus
-                />
-              </PopoverContent>
-            </Popover>
+            <input
+              type="date"
+              value={dateFrom}
+              onChange={(e) => setDateFrom(e.target.value)}
+              className="h-9 rounded-md border border-border/50 bg-secondary px-3 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-foreground/30"
+            />
+          </div>
+
+          {/* Date range — To */}
+          <div className="flex flex-col gap-1.5">
+            <label className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/60">
+              To
+            </label>
+            <input
+              type="date"
+              value={dateTo}
+              min={dateFrom}
+              onChange={(e) => setDateTo(e.target.value)}
+              className="h-9 rounded-md border border-border/50 bg-secondary px-3 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-foreground/30"
+            />
           </div>
         </div>
       </div>

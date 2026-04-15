@@ -6,6 +6,7 @@ import { ProjectDetailsSection } from '@/components/project-details-section'
 import { SProgressCurve, SCostCurve } from '@/components/s-curve-chart'
 import { OtherIndicators } from '@/components/other-indicators'
 import { ArrowLeft, TrendingDown, Calendar, Download, Euro } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 
 export default function ProjectDeepDive({ params }: { params: { id: string } }) {

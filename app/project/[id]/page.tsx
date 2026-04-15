@@ -1,18 +1,14 @@
 'use client'
 
-import { useState } from 'react'
 import { DashboardHeader } from '@/components/dashboard-header'
 import { ProjectKPISection } from '@/components/project-kpi-section'
 import { ProjectDetailsSection } from '@/components/project-details-section'
 import { SProgressCurve, SCostCurve } from '@/components/s-curve-chart'
-import { ActivityDrillDown } from '@/components/activity-drill-down'
 import { OtherIndicators } from '@/components/other-indicators'
-import { ArrowLeft, Zap, TrendingDown, Calendar, Download, Euro } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { ArrowLeft, TrendingDown, Calendar, Download, Euro } from 'lucide-react'
 import Link from 'next/link'
 
 export default function ProjectDeepDive({ params }: { params: { id: string } }) {
-  const [drillDownOpen, setDrillDownOpen] = useState(false)
 
   // Mock project data - in a real app, this would come from a database
   const projectData = {
@@ -168,16 +164,8 @@ export default function ProjectDeepDive({ params }: { params: { id: string } }) 
 
         {/* S-Curves Section */}
         <div className="mb-8">
-          <div className="flex items-center justify-between mb-4">
+          <div className="mb-4">
             <h2 className="text-lg font-semibold text-foreground">Project S-Curves</h2>
-            <Button
-              onClick={() => setDrillDownOpen(true)}
-              className="gap-2 bg-cyan text-background hover:bg-cyan/90"
-            >
-              <Zap className="w-4 h-4" />
-              <span className="hidden sm:inline">Activity Drill-Down</span>
-              <span className="sm:hidden">Drill-Down</span>
-            </Button>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <SProgressCurve />
@@ -219,11 +207,7 @@ export default function ProjectDeepDive({ params }: { params: { id: string } }) 
           </div>
         </div>
 
-        {/* Activity Drill-Down Modal */}
-        <ActivityDrillDown
-          isOpen={drillDownOpen}
-          onClose={() => setDrillDownOpen(false)}
-        />
+
       </main>
     </div>
   )

@@ -66,8 +66,8 @@ const ACTIVITY_DATA: Record<ActivityId, ActivityData> = {
     totalExpected: 100,
     totalActual: 80,
     curve: [
-      { day: 'Day 1', plannedProgress: 10, baselineProgress: 11, actualProgress: 8,  plannedCost: 4.2,  baselineCost: 4.5,  actualCost: 4.8 },
-      { day: 'Day 2', plannedProgress: 22, baselineProgress: 24, actualProgress: 18, plannedCost: 9.1,  baselineCost: 9.8,  actualCost: 10.3 },
+      { day: 'Day 1', plannedProgress: 10, baselineProgress: 11, actualProgress: 8, plannedCost: 4.2, baselineCost: 4.5, actualCost: 4.8 },
+      { day: 'Day 2', plannedProgress: 22, baselineProgress: 24, actualProgress: 18, plannedCost: 9.1, baselineCost: 9.8, actualCost: 10.3 },
       { day: 'Day 3', plannedProgress: 38, baselineProgress: 40, actualProgress: 30, plannedCost: 15.6, baselineCost: 16.8, actualCost: 17.9 },
       { day: 'Day 4', plannedProgress: 58, baselineProgress: 61, actualProgress: 48, plannedCost: 23.8, baselineCost: 25.5, actualCost: 27.4 },
       { day: 'Day 5', plannedProgress: 75, baselineProgress: 78, actualProgress: 62, plannedCost: 30.7, baselineCost: 33.0, actualCost: 35.2 },
@@ -75,12 +75,12 @@ const ACTIVITY_DATA: Record<ActivityId, ActivityData> = {
       { day: 'Day 7', plannedProgress: 100, baselineProgress: 100, actualProgress: 80, plannedCost: 41.0, baselineCost: 44.0, actualCost: 46.6 },
     ],
     resources: [
-      { category: 'Labour',    role: 'Carpenter',           expected: 2, actual: 1, unit: 'workers' },
-      { category: 'Labour',    role: 'Concrete Specialist', expected: 3, actual: 3, unit: 'workers' },
-      { category: 'Equipment', role: 'Concrete Pump',       expected: 1, actual: 1, unit: 'units' },
-      { category: 'Equipment', role: 'Vibrator',            expected: 2, actual: 1, unit: 'units' },
-      { category: 'Materials', role: 'Concrete C30',        expected: 100, actual: 80, unit: 'm³' },
-      { category: 'Materials', role: 'Rebar',               expected: 8500, actual: 8200, unit: 'kg' },
+      { category: 'Labour', role: 'Carpenter', expected: 2, actual: 1, unit: 'workers' },
+      { category: 'Labour', role: 'Concrete Specialist', expected: 3, actual: 3, unit: 'workers' },
+      { category: 'Equipment', role: 'Concrete Pump', expected: 1, actual: 1, unit: 'units' },
+      { category: 'Equipment', role: 'Hilux', expected: 2, actual: 1, unit: 'units' },
+      { category: 'Materials', role: 'Concrete C30', expected: 100, actual: 80, unit: 'm³' },
+      { category: 'Materials', role: 'Rebar', expected: 8500, actual: 8200, unit: 'kg' },
     ],
   },
   A002: {
@@ -88,7 +88,7 @@ const ACTIVITY_DATA: Record<ActivityId, ActivityData> = {
     totalExpected: 45,
     totalActual: 38,
     curve: [
-      { day: 'Day 1', plannedProgress: 5,  baselineProgress: 5,  actualProgress: 4,  plannedCost: 8.0,  baselineCost: 8.5,  actualCost: 9.1 },
+      { day: 'Day 1', plannedProgress: 5, baselineProgress: 5, actualProgress: 4, plannedCost: 8.0, baselineCost: 8.5, actualCost: 9.1 },
       { day: 'Day 2', plannedProgress: 12, baselineProgress: 13, actualProgress: 10, plannedCost: 19.2, baselineCost: 20.5, actualCost: 22.0 },
       { day: 'Day 3', plannedProgress: 22, baselineProgress: 23, actualProgress: 18, plannedCost: 35.2, baselineCost: 37.5, actualCost: 40.4 },
       { day: 'Day 4', plannedProgress: 33, baselineProgress: 35, actualProgress: 27, plannedCost: 52.8, baselineCost: 56.0, actualCost: 61.4 },
@@ -96,12 +96,12 @@ const ACTIVITY_DATA: Record<ActivityId, ActivityData> = {
       { day: 'Day 6', plannedProgress: 45, baselineProgress: 45, actualProgress: 38, plannedCost: 72.0, baselineCost: 77.0, actualCost: 84.2 },
     ],
     resources: [
-      { category: 'Labour',    role: 'Steel Fixer',      expected: 4, actual: 3, unit: 'workers' },
-      { category: 'Labour',    role: 'Crane Operator',   expected: 1, actual: 1, unit: 'workers' },
-      { category: 'Equipment', role: 'Tower Crane',      expected: 1, actual: 1, unit: 'units' },
-      { category: 'Equipment', role: 'Welding Machine',  expected: 3, actual: 2, unit: 'units' },
-      { category: 'Materials', role: 'Steel S355',       expected: 45000, actual: 38000, unit: 'kg' },
-      { category: 'Materials', role: 'Bolts M24',        expected: 1200, actual: 980, unit: 'units' },
+      { category: 'Labour', role: 'Steel Fixer', expected: 4, actual: 3, unit: 'workers' },
+      { category: 'Labour', role: 'Crane Operator', expected: 1, actual: 1, unit: 'workers' },
+      { category: 'Equipment', role: 'Tower Crane', expected: 1, actual: 1, unit: 'units' },
+      { category: 'Equipment', role: 'Welding Machine', expected: 3, actual: 2, unit: 'units' },
+      { category: 'Materials', role: 'Steel S355', expected: 45000, actual: 38000, unit: 'kg' },
+      { category: 'Materials', role: 'Bolts M24', expected: 1200, actual: 980, unit: 'units' },
     ],
   },
   A003: {
@@ -109,20 +109,20 @@ const ACTIVITY_DATA: Record<ActivityId, ActivityData> = {
     totalExpected: 320,
     totalActual: 295,
     curve: [
-      { day: 'Day 1', plannedProgress: 40,  baselineProgress: 42,  actualProgress: 38,  plannedCost: 6.4,  baselineCost: 6.7,  actualCost: 6.9 },
-      { day: 'Day 2', plannedProgress: 90,  baselineProgress: 94,  actualProgress: 85,  plannedCost: 14.4, baselineCost: 15.0, actualCost: 15.6 },
+      { day: 'Day 1', plannedProgress: 40, baselineProgress: 42, actualProgress: 38, plannedCost: 6.4, baselineCost: 6.7, actualCost: 6.9 },
+      { day: 'Day 2', plannedProgress: 90, baselineProgress: 94, actualProgress: 85, plannedCost: 14.4, baselineCost: 15.0, actualCost: 15.6 },
       { day: 'Day 3', plannedProgress: 150, baselineProgress: 156, actualProgress: 140, plannedCost: 24.0, baselineCost: 25.0, actualCost: 26.1 },
       { day: 'Day 4', plannedProgress: 220, baselineProgress: 228, actualProgress: 200, plannedCost: 35.2, baselineCost: 36.6, actualCost: 38.2 },
       { day: 'Day 5', plannedProgress: 280, baselineProgress: 290, actualProgress: 255, plannedCost: 44.8, baselineCost: 46.5, actualCost: 48.7 },
       { day: 'Day 6', plannedProgress: 320, baselineProgress: 320, actualProgress: 295, plannedCost: 51.2, baselineCost: 53.2, actualCost: 55.8 },
     ],
     resources: [
-      { category: 'Labour',    role: 'Facade Installer', expected: 6, actual: 6, unit: 'workers' },
-      { category: 'Labour',    role: 'Helper',           expected: 3, actual: 2, unit: 'workers' },
-      { category: 'Equipment', role: 'Scaffold',         expected: 1, actual: 1, unit: 'sets' },
+      { category: 'Labour', role: 'Facade Installer', expected: 6, actual: 6, unit: 'workers' },
+      { category: 'Labour', role: 'Helper', expected: 3, actual: 2, unit: 'workers' },
+      { category: 'Equipment', role: 'Scaffold', expected: 1, actual: 1, unit: 'sets' },
       { category: 'Equipment', role: 'Lifting Platform', expected: 2, actual: 2, unit: 'units' },
-      { category: 'Materials', role: 'Cladding Panels',  expected: 320, actual: 295, unit: 'm²' },
-      { category: 'Materials', role: 'Fixings Kit',      expected: 650, actual: 600, unit: 'units' },
+      { category: 'Materials', role: 'Cladding Panels', expected: 320, actual: 295, unit: 'm²' },
+      { category: 'Materials', role: 'Fixings Kit', expected: 650, actual: 600, unit: 'units' },
     ],
   },
   A004: {
@@ -130,20 +130,20 @@ const ACTIVITY_DATA: Record<ActivityId, ActivityData> = {
     totalExpected: 850,
     totalActual: 710,
     curve: [
-      { day: 'Day 1', plannedProgress: 100, baselineProgress: 105, actualProgress: 80,  plannedCost: 3.2,  baselineCost: 3.5,  actualCost: 3.7 },
-      { day: 'Day 2', plannedProgress: 240, baselineProgress: 250, actualProgress: 190, plannedCost: 7.7,  baselineCost: 8.2,  actualCost: 8.9 },
+      { day: 'Day 1', plannedProgress: 100, baselineProgress: 105, actualProgress: 80, plannedCost: 3.2, baselineCost: 3.5, actualCost: 3.7 },
+      { day: 'Day 2', plannedProgress: 240, baselineProgress: 250, actualProgress: 190, plannedCost: 7.7, baselineCost: 8.2, actualCost: 8.9 },
       { day: 'Day 3', plannedProgress: 420, baselineProgress: 440, actualProgress: 340, plannedCost: 13.4, baselineCost: 14.3, actualCost: 15.5 },
       { day: 'Day 4', plannedProgress: 600, baselineProgress: 625, actualProgress: 490, plannedCost: 19.2, baselineCost: 20.4, actualCost: 22.1 },
       { day: 'Day 5', plannedProgress: 750, baselineProgress: 780, actualProgress: 620, plannedCost: 24.0, baselineCost: 25.5, actualCost: 27.6 },
       { day: 'Day 6', plannedProgress: 850, baselineProgress: 850, actualProgress: 710, plannedCost: 27.2, baselineCost: 29.0, actualCost: 31.2 },
     ],
     resources: [
-      { category: 'Labour',    role: 'Electrician',      expected: 4, actual: 3, unit: 'workers' },
-      { category: 'Labour',    role: 'Apprentice',       expected: 2, actual: 2, unit: 'workers' },
-      { category: 'Equipment', role: 'Cable Puller',     expected: 1, actual: 1, unit: 'units' },
-      { category: 'Equipment', role: 'Conduit Bender',   expected: 2, actual: 1, unit: 'units' },
-      { category: 'Materials', role: 'Cable 3×2.5mm²',   expected: 850, actual: 710, unit: 'ml' },
-      { category: 'Materials', role: 'Conduit 25mm',     expected: 850, actual: 710, unit: 'ml' },
+      { category: 'Labour', role: 'Electrician', expected: 4, actual: 3, unit: 'workers' },
+      { category: 'Labour', role: 'Apprentice', expected: 2, actual: 2, unit: 'workers' },
+      { category: 'Equipment', role: 'Cable Puller', expected: 1, actual: 1, unit: 'units' },
+      { category: 'Equipment', role: 'Conduit Bender', expected: 2, actual: 1, unit: 'units' },
+      { category: 'Materials', role: 'Cable 3×2.5mm²', expected: 850, actual: 710, unit: 'ml' },
+      { category: 'Materials', role: 'Conduit 25mm', expected: 850, actual: 710, unit: 'ml' },
     ],
   },
   A005: {
@@ -151,20 +151,20 @@ const ACTIVITY_DATA: Record<ActivityId, ActivityData> = {
     totalExpected: 620,
     totalActual: 590,
     curve: [
-      { day: 'Day 1', plannedProgress: 80,  baselineProgress: 82,  actualProgress: 78,  plannedCost: 2.8,  baselineCost: 2.9,  actualCost: 3.1 },
-      { day: 'Day 2', plannedProgress: 180, baselineProgress: 185, actualProgress: 172, plannedCost: 6.3,  baselineCost: 6.6,  actualCost: 7.0 },
+      { day: 'Day 1', plannedProgress: 80, baselineProgress: 82, actualProgress: 78, plannedCost: 2.8, baselineCost: 2.9, actualCost: 3.1 },
+      { day: 'Day 2', plannedProgress: 180, baselineProgress: 185, actualProgress: 172, plannedCost: 6.3, baselineCost: 6.6, actualCost: 7.0 },
       { day: 'Day 3', plannedProgress: 310, baselineProgress: 318, actualProgress: 295, plannedCost: 10.9, baselineCost: 11.4, actualCost: 12.1 },
       { day: 'Day 4', plannedProgress: 450, baselineProgress: 460, actualProgress: 430, plannedCost: 15.8, baselineCost: 16.5, actualCost: 17.4 },
       { day: 'Day 5', plannedProgress: 560, baselineProgress: 572, actualProgress: 535, plannedCost: 19.6, baselineCost: 20.5, actualCost: 21.6 },
       { day: 'Day 6', plannedProgress: 620, baselineProgress: 620, actualProgress: 590, plannedCost: 21.7, baselineCost: 22.7, actualCost: 23.9 },
     ],
     resources: [
-      { category: 'Labour',    role: 'Plumber',          expected: 3, actual: 3, unit: 'workers' },
-      { category: 'Labour',    role: 'Helper',           expected: 2, actual: 2, unit: 'workers' },
-      { category: 'Equipment', role: 'Pipe Bender',      expected: 1, actual: 1, unit: 'units' },
-      { category: 'Equipment', role: 'Pressure Tester',  expected: 1, actual: 1, unit: 'units' },
+      { category: 'Labour', role: 'Plumber', expected: 3, actual: 3, unit: 'workers' },
+      { category: 'Labour', role: 'Helper', expected: 2, actual: 2, unit: 'workers' },
+      { category: 'Equipment', role: 'Pipe Bender', expected: 1, actual: 1, unit: 'units' },
+      { category: 'Equipment', role: 'Pressure Tester', expected: 1, actual: 1, unit: 'units' },
       { category: 'Materials', role: 'Copper Pipe 28mm', expected: 620, actual: 590, unit: 'ml' },
-      { category: 'Materials', role: 'Fittings',         expected: 310, actual: 295, unit: 'units' },
+      { category: 'Materials', role: 'Fittings', expected: 310, actual: 295, unit: 'units' },
     ],
   },
 }
@@ -250,9 +250,9 @@ function ProgressSCurve({ data, unit }: { data: DailyRecord[]; unit: string }) {
           formatter={(value: number, name: string) => [`${value} ${unit}`, name]}
         />
         <Legend wrapperStyle={{ paddingTop: 8, fontSize: 11 }} iconType="line" />
-        <Line type="monotone" dataKey="plannedProgress"  name="Planned"           stroke="#9CA3AF" strokeWidth={2} strokeDasharray="6 3" dot={false} />
-        <Line type="monotone" dataKey="baselineProgress" name="Current Baseline"  stroke={colors.isDark ? '#60a5fa' : '#3B82F6'} strokeWidth={2} dot={false} />
-        <Line type="monotone" dataKey="actualProgress"   name="Actual"            stroke={colors.isDark ? '#34d399' : '#10B981'} strokeWidth={2} dot={{ r: 3 }} />
+        <Line type="monotone" dataKey="plannedProgress" name="Planned" stroke="#9CA3AF" strokeWidth={2} strokeDasharray="6 3" dot={false} />
+        <Line type="monotone" dataKey="baselineProgress" name="Current Baseline" stroke={colors.isDark ? '#60a5fa' : '#3B82F6'} strokeWidth={2} dot={false} />
+        <Line type="monotone" dataKey="actualProgress" name="Actual" stroke={colors.isDark ? '#34d399' : '#10B981'} strokeWidth={2} dot={{ r: 3 }} />
       </LineChart>
     </ResponsiveContainer>
   )
@@ -276,9 +276,9 @@ function CostSCurve({ data }: { data: DailyRecord[] }) {
           formatter={(value: number, name: string) => [`€${value}k`, name]}
         />
         <Legend wrapperStyle={{ paddingTop: 8, fontSize: 11 }} iconType="line" />
-        <Line type="monotone" dataKey="plannedCost"  name="Planned"           stroke="#9CA3AF" strokeWidth={2} strokeDasharray="6 3" dot={false} />
-        <Line type="monotone" dataKey="baselineCost" name="Current Baseline"  stroke={colors.isDark ? '#c084fc' : '#8B5CF6'} strokeWidth={2} dot={false} />
-        <Line type="monotone" dataKey="actualCost"   name="Actual"            stroke="#F87171" strokeWidth={2} dot={{ r: 3 }} />
+        <Line type="monotone" dataKey="plannedCost" name="Planned" stroke="#9CA3AF" strokeWidth={2} strokeDasharray="6 3" dot={false} />
+        <Line type="monotone" dataKey="baselineCost" name="Current Baseline" stroke={colors.isDark ? '#c084fc' : '#8B5CF6'} strokeWidth={2} dot={false} />
+        <Line type="monotone" dataKey="actualCost" name="Actual" stroke="#F87171" strokeWidth={2} dot={{ r: 3 }} />
       </LineChart>
     </ResponsiveContainer>
   )

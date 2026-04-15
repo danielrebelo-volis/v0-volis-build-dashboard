@@ -75,8 +75,8 @@ const ACTIVITY_DATA: Record<ActivityId, ActivityData> = {
       { day: 'Day 7', plannedProgress: 100, baselineProgress: 100, actualProgress: 80, plannedCost: 41.0, baselineCost: 44.0, actualCost: 46.6 },
     ],
     resources: [
-      { category: 'Labour', role: 'Carpenter', expected: 2, actual: 1, unit: 'workers' },
-      { category: 'Labour', role: 'Concrete Specialist', expected: 3, actual: 3, unit: 'workers' },
+      { category: 'Labour', role: 'Carpenter', expected: 16, actual: 8, unit: 'h' },
+      { category: 'Labour', role: 'Concrete Specialist', expected: 24, actual: 22, unit: 'h' },
       { category: 'Equipment', role: 'Concrete Pump', expected: 1, actual: 1, unit: 'units' },
       { category: 'Equipment', role: 'Hilux', expected: 2, actual: 1, unit: 'units' },
       { category: 'Materials', role: 'Concrete C30', expected: 100, actual: 80, unit: 'm³' },
@@ -96,8 +96,8 @@ const ACTIVITY_DATA: Record<ActivityId, ActivityData> = {
       { day: 'Day 6', plannedProgress: 45, baselineProgress: 45, actualProgress: 38, plannedCost: 72.0, baselineCost: 77.0, actualCost: 84.2 },
     ],
     resources: [
-      { category: 'Labour', role: 'Steel Fixer', expected: 4, actual: 3, unit: 'workers' },
-      { category: 'Labour', role: 'Crane Operator', expected: 1, actual: 1, unit: 'workers' },
+      { category: 'Labour', role: 'Steel Fixer', expected: 32, actual: 24, unit: 'h' },
+      { category: 'Labour', role: 'Crane Operator', expected: 8, actual: 8, unit: 'h' },
       { category: 'Equipment', role: 'Tower Crane', expected: 1, actual: 1, unit: 'units' },
       { category: 'Equipment', role: 'Welding Machine', expected: 3, actual: 2, unit: 'units' },
       { category: 'Materials', role: 'Steel S355', expected: 45000, actual: 38000, unit: 'kg' },
@@ -117,8 +117,8 @@ const ACTIVITY_DATA: Record<ActivityId, ActivityData> = {
       { day: 'Day 6', plannedProgress: 320, baselineProgress: 320, actualProgress: 295, plannedCost: 51.2, baselineCost: 53.2, actualCost: 55.8 },
     ],
     resources: [
-      { category: 'Labour', role: 'Facade Installer', expected: 6, actual: 6, unit: 'workers' },
-      { category: 'Labour', role: 'Helper', expected: 3, actual: 2, unit: 'workers' },
+      { category: 'Labour', role: 'Facade Installer', expected: 48, actual: 46, unit: 'h' },
+      { category: 'Labour', role: 'Helper', expected: 24, actual: 16, unit: 'h' },
       { category: 'Equipment', role: 'Scaffold', expected: 1, actual: 1, unit: 'sets' },
       { category: 'Equipment', role: 'Lifting Platform', expected: 2, actual: 2, unit: 'units' },
       { category: 'Materials', role: 'Cladding Panels', expected: 320, actual: 295, unit: 'm²' },
@@ -138,8 +138,8 @@ const ACTIVITY_DATA: Record<ActivityId, ActivityData> = {
       { day: 'Day 6', plannedProgress: 850, baselineProgress: 850, actualProgress: 710, plannedCost: 27.2, baselineCost: 29.0, actualCost: 31.2 },
     ],
     resources: [
-      { category: 'Labour', role: 'Electrician', expected: 4, actual: 3, unit: 'workers' },
-      { category: 'Labour', role: 'Apprentice', expected: 2, actual: 2, unit: 'workers' },
+      { category: 'Labour', role: 'Electrician', expected: 32, actual: 24, unit: 'h' },
+      { category: 'Labour', role: 'Apprentice', expected: 16, actual: 16, unit: 'h' },
       { category: 'Equipment', role: 'Cable Puller', expected: 1, actual: 1, unit: 'units' },
       { category: 'Equipment', role: 'Conduit Bender', expected: 2, actual: 1, unit: 'units' },
       { category: 'Materials', role: 'Cable 3×2.5mm²', expected: 850, actual: 710, unit: 'ml' },
@@ -159,8 +159,8 @@ const ACTIVITY_DATA: Record<ActivityId, ActivityData> = {
       { day: 'Day 6', plannedProgress: 620, baselineProgress: 620, actualProgress: 590, plannedCost: 21.7, baselineCost: 22.7, actualCost: 23.9 },
     ],
     resources: [
-      { category: 'Labour', role: 'Plumber', expected: 3, actual: 3, unit: 'workers' },
-      { category: 'Labour', role: 'Helper', expected: 2, actual: 2, unit: 'workers' },
+      { category: 'Labour', role: 'Plumber', expected: 24, actual: 22, unit: 'h' },
+      { category: 'Labour', role: 'Helper', expected: 16, actual: 14, unit: 'h' },
       { category: 'Equipment', role: 'Pipe Bender', expected: 1, actual: 1, unit: 'units' },
       { category: 'Equipment', role: 'Pressure Tester', expected: 1, actual: 1, unit: 'units' },
       { category: 'Materials', role: 'Copper Pipe 28mm', expected: 620, actual: 590, unit: 'ml' },
@@ -202,7 +202,7 @@ function ResourceTable({ resources }: { resources: ResourceRecord[] }) {
             <table className="w-full">
               <thead>
                 <tr>
-                  <th className="text-left text-[10px] text-muted-foreground font-medium pb-1.5 pr-2">Role</th>
+                  <th className="text-left text-[10px] text-muted-foreground font-medium pb-1.5 pr-2">Resource</th>
                   <th className="text-right text-[10px] text-muted-foreground font-medium pb-1.5 pr-2">Expected</th>
                   <th className="text-right text-[10px] text-muted-foreground font-medium pb-1.5 pr-2">Actual</th>
                   <th className="text-right text-[10px] text-muted-foreground font-medium pb-1.5">Delta</th>

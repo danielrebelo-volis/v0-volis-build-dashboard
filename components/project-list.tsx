@@ -51,9 +51,9 @@ function ProjectRow({ name, id, location, deadline, plannedProgress, actualProgr
           <div className="min-w-0">
             <div className="flex items-center gap-1.5">
               <span className="text-sm font-medium text-foreground truncate">{name}</span>
-              <ExternalLink className="w-3 h-3 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
+              <ExternalLink className="w-3.5 h-3.5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
             </div>
-            <span className="text-[11px] text-muted-foreground">{id}</span>
+            <span className="text-xs text-muted-foreground">{id}</span>
           </div>
         </div>
 
@@ -64,57 +64,57 @@ function ProjectRow({ name, id, location, deadline, plannedProgress, actualProgr
 
         {/* Deadline */}
         <div className="col-span-1 text-right">
-          <span className="text-[11px] font-mono text-muted-foreground">{deadline}</span>
+          <span className="text-xs font-mono text-muted-foreground">{deadline}</span>
         </div>
 
         {/* Planned Progress */}
         <div className="col-span-1 text-right">
-          <span className="text-[11px] font-mono text-muted-foreground">{plannedProgress}%</span>
+          <span className="text-xs font-mono text-muted-foreground">{plannedProgress}%</span>
         </div>
 
         {/* Actual Progress */}
         <div className="col-span-1 text-right">
-          <span className="text-[11px] font-mono text-foreground">{actualProgress}%</span>
+          <span className="text-xs font-mono text-foreground">{actualProgress}%</span>
         </div>
 
         {/* Contract Value */}
         <div className="col-span-1 text-right">
-          <span className="text-[11px] font-mono text-foreground font-medium">{contractValue.toFixed(1)} M€</span>
+          <span className="text-xs font-mono text-foreground font-medium">{contractValue.toFixed(1)} M€</span>
         </div>
 
         {/* Accumulated Production */}
         <div className="col-span-1 text-right">
-          <span className="text-[11px] font-mono text-foreground">{accumulatedProduction.toFixed(1)} M€</span>
+          <span className="text-xs font-mono text-foreground">{accumulatedProduction.toFixed(1)} M€</span>
         </div>
 
         {/* Total Budget */}
         <div className="col-span-1 text-right">
-          <span className="text-[11px] font-mono text-foreground">{totalBudget.toFixed(1)} M€</span>
+          <span className="text-xs font-mono text-foreground">{totalBudget.toFixed(1)} M€</span>
         </div>
 
         {/* Current Costs */}
         <div className="col-span-1 text-right">
-          <span className="text-[11px] font-mono text-foreground">{currentCosts.toFixed(1)} M€</span>
+          <span className="text-xs font-mono text-foreground">{currentCosts.toFixed(1)} M€</span>
         </div>
 
         {/* Target IC */}
         <div className="col-span-1 text-right">
-          <span className="text-[11px] font-mono text-muted-foreground">{targetIC}%</span>
+          <span className="text-xs font-mono text-muted-foreground">{targetIC}%</span>
         </div>
 
         {/* Adjusted IC */}
         <div className="col-span-1 text-right">
-          <span className="text-[11px] font-mono text-foreground">{adjustedIC}%</span>
+          <span className="text-xs font-mono text-foreground">{adjustedIC}%</span>
         </div>
 
         {/* Analytical IC */}
         <div className="col-span-1 text-right">
-          <span className="text-[11px] font-mono text-foreground">{analyticalIC}%</span>
+          <span className="text-xs font-mono text-foreground">{analyticalIC}%</span>
         </div>
 
         {/* Projected IC */}
         <div className="col-span-1 text-right">
-          <span className="text-[11px] font-mono text-foreground">{projectedIC}%</span>
+          <span className="text-xs font-mono text-foreground">{projectedIC}%</span>
         </div>
 
         {/* Spacer for grid alignment */}
@@ -149,7 +149,7 @@ export function ProjectList() {
       {/* Header row */}
       <div className="grid grid-cols-15 gap-3 px-3 pb-2 border-b border-border/30">
         {COLUMNS.map(({ label, span, align }, i) => (
-          <div key={`${label}-${i}`} className={`${span} text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/60 ${align === "left" ? "" : "text-right"}`}>
+          <div key={`${label}-${i}`} className={`${span} text-xs font-semibold uppercase tracking-wider text-muted-foreground/60 ${align === "left" ? "" : "text-right"}`}>
             {label}
           </div>
         ))}

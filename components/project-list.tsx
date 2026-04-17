@@ -28,10 +28,10 @@ interface Project {
 const COLUMNS = [
   { label: "Project", span: "col-span-2", align: "left" },
   { label: "Deadline", span: "col-span-1", align: "right" },
-  { label: "Planned Prog.", span: "col-span-1", align: "right" },
-  { label: "Actual Prog.", span: "col-span-1", align: "right" },
+  { label: "Planned Progress", span: "col-span-1", align: "right" },
+  { label: "Actual Progress", span: "col-span-1", align: "right" },
   { label: "Contract Value", span: "col-span-1", align: "right" },
-  { label: "Accum. Prod.", span: "col-span-1", align: "right" },
+  { label: "Accumulated Production", span: "col-span-1", align: "right" },
   { label: "Total Budget", span: "col-span-1", align: "right" },
   { label: "Expected Costs", span: "col-span-1", align: "right" },
   { label: "Current Costs", span: "col-span-1", align: "right" },

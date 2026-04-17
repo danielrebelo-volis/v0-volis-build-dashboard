@@ -33,7 +33,7 @@ const COLUMNS = [
   { label: "Contract Value", span: "col-span-1", align: "right" },
   { label: "Accumulated Production", span: "col-span-1", align: "right" },
   { label: "Total Budget", span: "col-span-1", align: "right" },
-  { label: "Expected Costs", span: "col-span-1", align: "right" },
+  { label: "Exp. Current Costs", span: "col-span-1", align: "right" },
   { label: "Current Costs", span: "col-span-1", align: "right" },
   { label: "Target IC", span: "col-span-1", align: "right" },
   { label: "Adjusted IC", span: "col-span-1", align: "right" },

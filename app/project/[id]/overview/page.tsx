@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { DashboardHeader } from '@/components/dashboard-header'
 import { ActivityDrillDownSection } from '@/components/activity-drill-down-section'
+import { ResourcesSection } from '@/components/resources-section'
 import { ArrowLeft, Download, TrendingUp, ChevronDown, GanttChartSquare } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { GanttChartDialog } from '@/components/gantt-chart-dialog'
@@ -618,6 +619,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
             { id: 'progress', label: 'Progress' },
             { id: 'economic', label: 'Economic' },
             { id: 'activity-drill-down', label: 'Activity Drill-Down' },
+            { id: 'resources', label: 'Resources' },
             { id: 'data-quality', label: 'Data Quality' },
           ].map(({ id, label }) => (
             <button
@@ -1577,6 +1579,11 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
         {/* Activity Drill-Down Tab */}
         {activeTab === 'activity-drill-down' && (
           <ActivityDrillDownSection />
+        )}
+
+        {/* Resources Tab */}
+        {activeTab === 'resources' && (
+          <ResourcesSection />
         )}
       </main>
     </div>

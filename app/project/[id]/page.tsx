@@ -93,17 +93,9 @@ export default function ProjectDeepDive({ params }: { params: { id: string } }) 
             <div>
               <div className="flex items-center gap-2 mb-1.5">
                 <TrendingDown className="w-3.5 h-3.5 text-muted-foreground" />
-                <p className="text-xs text-muted-foreground">Commercial IC</p>
+                <p className="text-xs text-muted-foreground">Target IC</p>
               </div>
-              <p className="text-2xl font-bold text-foreground">80.0%</p>
-            </div>
-            {/* Projected IC */}
-            <div>
-              <div className="flex items-center gap-2 mb-1.5">
-                <TrendingDown className="w-3.5 h-3.5 text-muted-foreground" />
-                <p className="text-xs text-muted-foreground">Projected IC</p>
-              </div>
-              <p className="text-2xl font-bold text-foreground">92.4%</p>
+              <p className="text-2xl font-bold text-foreground">82.0%</p>
             </div>
             {/* Adjusted IC */}
             <div>
@@ -120,6 +112,14 @@ export default function ProjectDeepDive({ params }: { params: { id: string } }) 
                 <p className="text-xs text-muted-foreground">Analytical IC</p>
               </div>
               <p className="text-2xl font-bold text-foreground">84.2%</p>
+            </div>
+            {/* Projected IC */}
+            <div>
+              <div className="flex items-center gap-2 mb-1.5">
+                <TrendingDown className="w-3.5 h-3.5 text-muted-foreground" />
+                <p className="text-xs text-muted-foreground">Projected IC</p>
+              </div>
+              <p className="text-2xl font-bold text-foreground">92.4%</p>
             </div>
           </div>
         </div>

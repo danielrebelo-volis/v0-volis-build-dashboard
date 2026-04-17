@@ -1016,6 +1016,13 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                 <div className="sm:pl-6">
                   <div className="flex items-center gap-1.5 mb-1.5">
                     <TrendingUp className="w-3 h-3 text-muted-foreground" />
+                    <span className="text-[11px] text-muted-foreground">Adjusted IC</span>
+                  </div>
+                  <p className="text-xl font-bold text-foreground">90.0%</p>
+                </div>
+                <div className="sm:pl-6">
+                  <div className="flex items-center gap-1.5 mb-1.5">
+                    <TrendingUp className="w-3 h-3 text-muted-foreground" />
                     <span className="text-[11px] text-muted-foreground">Analytical IC</span>
                   </div>
                   <p className="text-xl font-bold text-foreground">84.2%</p>
@@ -1026,13 +1033,6 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                     <span className="text-[11px] text-muted-foreground">Projected IC</span>
                   </div>
                   <p className="text-xl font-bold text-foreground">92.4%</p>
-                </div>
-                <div className="sm:pl-6">
-                  <div className="flex items-center gap-1.5 mb-1.5">
-                    <TrendingUp className="w-3 h-3 text-muted-foreground" />
-                    <span className="text-[11px] text-muted-foreground">Adjusted IC</span>
-                  </div>
-                  <p className="text-xl font-bold text-foreground">90.0%</p>
                 </div>
               </div>
             </div>

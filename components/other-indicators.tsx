@@ -48,7 +48,7 @@ export function OtherIndicators({
   return (
     <div className="mb-8">
       <h2 className="text-lg font-semibold text-foreground mb-4">Other Indicators</h2>
-      <div className="grid grid-cols-2 lg:grid-cols-6 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
 
         <IndicatorCard
           icon={TrendingUp}

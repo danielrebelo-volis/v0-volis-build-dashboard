@@ -125,79 +125,6 @@ function EconomicTableRow({
       <td className="py-3 text-right text-foreground">{row.projectedIC}%</td>
       <td className="py-3 text-right text-foreground">{row.currentIC}%</td>
 
-      {/* Three-dot — click to toggle */}
-      <td ref={ref} className="py-3 text-right relative">
-        <button
-          onClick={() => setOpen(v => !v)}
-          className={`p-1 rounded transition-colors ${open ? 'bg-secondary/60 text-foreground' : 'hover:bg-secondary/40 text-muted-foreground'}`}
-          aria-label="Weekly cost breakdown"
-        >
-          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-            <circle cx="4" cy="10" r="1.5" /><circle cx="10" cy="10" r="1.5" /><circle cx="16" cy="10" r="1.5" />
-          </svg>
-        </button>
-
-        {open && (
-          <div className="absolute right-0 bottom-full mb-2 z-50 bg-background border border-border/50 rounded-lg shadow-xl p-4"
-            style={{ width: chartW + paddingLeft + 8 }}>
-            <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-3">
-              Weekly Costs by Nature — Last 4 Weeks
-            </p>
-
-            {/* SVG bar chart — fixed size, no ResizeObserver issues */}
-            <svg width={chartW} height={chartH} className="overflow-visible">
-              {/* Y grid lines */}
-              {[0, 0.25, 0.5, 0.75, 1].map(t => {
-                const y = innerH - t * innerH
-                return (
-                  <g key={t}>
-                    <line x1={paddingLeft} y1={y} x2={chartW} y2={y}
-                      stroke={chartColors.grid} strokeWidth={0.5} strokeDasharray="3 3" />
-                    <text x={paddingLeft - 4} y={y + 3} textAnchor="end"
-                      fontSize={8} fill={chartColors.axis}>
-                      {(t * maxVal).toFixed(2)}
-                    </text>
-                  </g>
-                )
-              })}
-
-              {/* Bars */}
-              {DEMO_WEEKLY_COSTS.map((week, wi) => {
-                const groupX = paddingLeft + wi * (innerW / DEMO_WEEKLY_COSTS.length) + (innerW / DEMO_WEEKLY_COSTS.length - (barW + barGap) * 3) / 2
-                return (
-                  <g key={week.week}>
-                    {COST_NATURE_COLORS.map((nat, ni) => {
-                      const val = week[nat.key as keyof typeof week] as number
-                      const bh = (val / maxVal) * innerH
-                      const bx = groupX + ni * (barW + barGap)
-                      const by = innerH - bh
-                      return (
-                        <rect key={nat.key} x={bx} y={by} width={barW} height={bh}
-                          fill={nat.color} rx={2} opacity={0.9} />
-                      )
-                    })}
-                    {/* X label */}
-                    <text x={groupX + ((barW + barGap) * 3) / 2 - barGap} y={innerH + 14}
-                      textAnchor="middle" fontSize={9} fill={chartColors.axis}>
-                      {week.week}
-                    </text>
-                  </g>
-                )
-              })}
-            </svg>
-
-            {/* Legend */}
-            <div className="flex items-center gap-3 mt-2">
-              {COST_NATURE_COLORS.map(l => (
-                <div key={l.key} className="flex items-center gap-1">
-                  <div className="w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: l.color }} />
-                  <span className="text-[10px] text-muted-foreground">{l.label}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-      </td>
     </tr>
   )
 }
@@ -1082,16 +1009,9 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                 <div className="sm:pl-6">
                   <div className="flex items-center gap-1.5 mb-1.5">
                     <TrendingUp className="w-3 h-3 text-muted-foreground" />
-                    <span className="text-[11px] text-muted-foreground">Commercial IC</span>
+                    <span className="text-[11px] text-muted-foreground">Target IC</span>
                   </div>
                   <p className="text-xl font-bold text-foreground">80.0%</p>
-                </div>
-                <div className="sm:pl-6">
-                  <div className="flex items-center gap-1.5 mb-1.5">
-                    <TrendingUp className="w-3 h-3 text-muted-foreground" />
-                    <span className="text-[11px] text-muted-foreground">Projected IC</span>
-                  </div>
-                  <p className="text-xl font-bold text-foreground">92.4%</p>
                 </div>
                 <div className="sm:pl-6">
                   <div className="flex items-center gap-1.5 mb-1.5">
@@ -1106,6 +1026,13 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                     <span className="text-[11px] text-muted-foreground">Analytical IC</span>
                   </div>
                   <p className="text-xl font-bold text-foreground">84.2%</p>
+                </div>
+                <div className="sm:pl-6">
+                  <div className="flex items-center gap-1.5 mb-1.5">
+                    <TrendingUp className="w-3 h-3 text-muted-foreground" />
+                    <span className="text-[11px] text-muted-foreground">Projected IC</span>
+                  </div>
+                  <p className="text-xl font-bold text-foreground">92.4%</p>
                 </div>
               </div>
             </div>
@@ -1427,16 +1354,9 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                 <div className="sm:pl-6">
                   <div className="flex items-center gap-1.5 mb-1.5">
                     <TrendingUp className="w-3 h-3 text-muted-foreground" />
-                    <span className="text-[11px] text-muted-foreground">Commercial IC</span>
+                    <span className="text-[11px] text-muted-foreground">Target IC</span>
                   </div>
                   <p className="text-2xl font-bold text-foreground">80.0%</p>
-                </div>
-                <div className="sm:pl-6">
-                  <div className="flex items-center gap-1.5 mb-1.5">
-                    <TrendingUp className="w-3 h-3 text-muted-foreground" />
-                    <span className="text-[11px] text-muted-foreground">Projected IC</span>
-                  </div>
-                  <p className="text-2xl font-bold text-foreground">92.4%</p>
                 </div>
                 <div className="sm:pl-6">
                   <div className="flex items-center gap-1.5 mb-1.5">
@@ -1451,6 +1371,13 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                     <span className="text-[11px] text-muted-foreground">Analytical IC</span>
                   </div>
                   <p className="text-2xl font-bold text-foreground">84.2%</p>
+                </div>
+                <div className="sm:pl-6">
+                  <div className="flex items-center gap-1.5 mb-1.5">
+                    <TrendingUp className="w-3 h-3 text-muted-foreground" />
+                    <span className="text-[11px] text-muted-foreground">Projected IC</span>
+                  </div>
+                  <p className="text-2xl font-bold text-foreground">92.4%</p>
                 </div>
               </div>
             </div>

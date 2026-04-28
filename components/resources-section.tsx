@@ -176,22 +176,16 @@ export function ResourcesSection() {
                   const pct = row.planned > 0 && activity.status !== 'Not Started'
                     ? Math.round((row.used / row.planned) * 100)
                     : 0
-                  const under = row.planned > 0 && row.used < row.planned
-                  const pctColor = pct === 0
-                    ? 'text-muted-foreground'
-                    : pct >= 100
-                      ? 'text-[#16a34a]'
-                      : 'text-yellow-400'
                   return (
                     <tr key={row.label} className="border-b border-border/20 last:border-0">
                       <td className="py-3 pr-4 text-xs font-medium text-foreground">
                         {row.label}
                         <span className="ml-1 text-[10px] text-muted-foreground font-normal">({row.unit})</span>
                       </td>
-                      <td className={`py-3 px-4 text-right text-sm font-semibold ${pctColor}`}>
+                      <td className="py-3 px-4 text-right text-sm font-semibold text-foreground">
                         {activity.status === 'Not Started' ? '—' : `${pct}%`}
                       </td>
-                      <td className={`py-3 px-4 text-right text-sm font-semibold ${under ? 'text-destructive' : 'text-[#16a34a]'}`}>
+                      <td className="py-3 px-4 text-right text-sm font-semibold text-foreground">
                         {activity.status === 'Not Started' ? '—' : row.used}
                       </td>
                       <td className="py-3 pl-4 text-right text-sm font-semibold text-foreground">

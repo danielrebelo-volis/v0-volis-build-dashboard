@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Users, Wrench, AlertTriangle, Clock, TrendingDown } from 'lucide-react'
+import { Users, Wrench, Clock, TrendingDown } from 'lucide-react'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
 import { useChartColors } from '@/hooks/use-chart-colors'
 
@@ -107,9 +107,6 @@ export function ResourcesSection() {
   const allocatedWorkforce = ACTIVITY_RESOURCES.filter(a => a.status !== 'Not Started').reduce((s, a) => s + a.workforce.actual, 0)
   const allocatedEquipment  = EQUIPMENT_LIST.length
 
-  const missingWorkforce = ACTIVITY_RESOURCES.filter(a => a.status !== 'Not Started' && a.workforce.actual < a.workforce.expected).length
-  const missingEquipment  = ACTIVITY_RESOURCES.filter(a => a.status !== 'Not Started' && a.equipment.actual < a.equipment.expected).length
-
   const totalOperational = EQUIPMENT_LIST.reduce((s, e) => s + e.operationalHours, 0)
   const totalDowntime     = EQUIPMENT_LIST.reduce((s, e) => s + e.downtimeHours, 0)
   const totalHours        = totalOperational + totalDowntime
@@ -148,32 +145,6 @@ export function ResourcesSection() {
               <div className="text-2xl font-bold text-foreground">{allocatedEquipment}</div>
               <div className="text-xs text-muted-foreground mt-0.5">Equipment Units</div>
             </div>
-          </div>
-        </div>
-      </div>
-
-      {/* ── Delays caused by lack of Resources ──────────────────────────────── */}
-      <div className="glass-card rounded-lg p-5 border border-border/50">
-        <div className="flex items-center gap-2 mb-4">
-          <AlertTriangle className="w-4 h-4 text-destructive" />
-          <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide">Delays Caused by Lack of Resources</h3>
-        </div>
-        <div className="grid grid-cols-2 gap-4">
-          <div className="flex flex-col gap-1.5 bg-destructive/8 border border-destructive/20 rounded-lg p-4">
-            <div className="flex items-center gap-2">
-              <Users className="w-4 h-4 text-destructive" />
-              <span className="text-xs text-muted-foreground uppercase tracking-wide font-medium">Missing Workforce</span>
-            </div>
-            <div className="text-3xl font-bold text-destructive leading-none mt-1">{missingWorkforce}</div>
-            <div className="text-xs text-muted-foreground">activities reported with missing workforce</div>
-          </div>
-          <div className="flex flex-col gap-1.5 bg-destructive/8 border border-destructive/20 rounded-lg p-4">
-            <div className="flex items-center gap-2">
-              <Wrench className="w-4 h-4 text-destructive" />
-              <span className="text-xs text-muted-foreground uppercase tracking-wide font-medium">Missing Equipment</span>
-            </div>
-            <div className="text-3xl font-bold text-destructive leading-none mt-1">{missingEquipment}</div>
-            <div className="text-xs text-muted-foreground">activities reported with missing equipment</div>
           </div>
         </div>
       </div>

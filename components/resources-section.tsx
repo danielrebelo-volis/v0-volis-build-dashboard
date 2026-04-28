@@ -27,32 +27,32 @@ type Equipment = {
 // ─── Demo Data ─────────────────────────────────────────────────────────────────
 
 const ACTIVITY_RESOURCES: ActivityResourceRow[] = [
-  { name: 'Site Preparation',      status: 'On Time',     workforce: { expected: 12, actual: 11 }, materials: { expected: 80, actual: 75 },  equipment: { expected: 4, actual: 4 } },
-  { name: 'Foundation Work',       status: 'Delayed',     workforce: { expected: 18, actual: 14 }, materials: { expected: 120, actual: 98 }, equipment: { expected: 6, actual: 5 } },
-  { name: 'Structure Assembly',    status: 'Delayed',     workforce: { expected: 22, actual: 18 }, materials: { expected: 200, actual: 185 },equipment: { expected: 8, actual: 7 } },
-  { name: 'Mechanical Systems',    status: 'Not Started', workforce: { expected: 8,  actual: 0  }, materials: { expected: 50, actual: 0 },   equipment: { expected: 3, actual: 0 } },
-  { name: 'Finishing Works',       status: 'Not Started', workforce: { expected: 10, actual: 0  }, materials: { expected: 40, actual: 0 },   equipment: { expected: 2, actual: 0 } },
-  { name: 'Electrical Installation', status: 'On Time',   workforce: { expected: 14, actual: 14 }, materials: { expected: 90, actual: 88 },  equipment: { expected: 3, actual: 3 } },
-  { name: 'Plumbing Systems',      status: 'On Time',     workforce: { expected: 10, actual: 10 }, materials: { expected: 60, actual: 57 },  equipment: { expected: 2, actual: 2 } },
-  { name: 'HVAC Installation',     status: 'Delayed',     workforce: { expected: 16, actual: 11 }, materials: { expected: 110, actual: 90 }, equipment: { expected: 5, actual: 4 } },
-  { name: 'Exterior Cladding',     status: 'On Time',     workforce: { expected: 8,  actual: 8  }, materials: { expected: 70, actual: 68 },  equipment: { expected: 2, actual: 2 } },
-  { name: 'Interior Partitions',   status: 'On Time',     workforce: { expected: 9,  actual: 9  }, materials: { expected: 55, actual: 53 },  equipment: { expected: 2, actual: 2 } },
-  { name: 'Roofing Works',         status: 'On Time',     workforce: { expected: 12, actual: 12 }, materials: { expected: 95, actual: 92 },  equipment: { expected: 4, actual: 4 } },
-  { name: 'Flooring Installation', status: 'Delayed',     workforce: { expected: 7,  actual: 4  }, materials: { expected: 45, actual: 30 },  equipment: { expected: 1, actual: 1 } },
-  { name: 'Painting & Decoration', status: 'Not Started', workforce: { expected: 6,  actual: 0  }, materials: { expected: 30, actual: 0 },   equipment: { expected: 1, actual: 0 } },
+  { name: 'Site Preparation', status: 'On Time', workforce: { expected: 12, actual: 11 }, materials: { expected: 80, actual: 75 }, equipment: { expected: 4, actual: 4 } },
+  { name: 'Foundation Work', status: 'Delayed', workforce: { expected: 18, actual: 14 }, materials: { expected: 120, actual: 98 }, equipment: { expected: 6, actual: 5 } },
+  { name: 'Structure Assembly', status: 'Delayed', workforce: { expected: 22, actual: 18 }, materials: { expected: 200, actual: 185 }, equipment: { expected: 8, actual: 7 } },
+  { name: 'Mechanical Systems', status: 'Not Started', workforce: { expected: 8, actual: 0 }, materials: { expected: 50, actual: 0 }, equipment: { expected: 3, actual: 0 } },
+  { name: 'Finishing Works', status: 'Not Started', workforce: { expected: 10, actual: 0 }, materials: { expected: 40, actual: 0 }, equipment: { expected: 2, actual: 0 } },
+  { name: 'Electrical Installation', status: 'On Time', workforce: { expected: 14, actual: 14 }, materials: { expected: 90, actual: 88 }, equipment: { expected: 3, actual: 3 } },
+  { name: 'Plumbing Systems', status: 'On Time', workforce: { expected: 10, actual: 10 }, materials: { expected: 60, actual: 57 }, equipment: { expected: 2, actual: 2 } },
+  { name: 'HVAC Installation', status: 'Delayed', workforce: { expected: 16, actual: 11 }, materials: { expected: 110, actual: 90 }, equipment: { expected: 5, actual: 4 } },
+  { name: 'Exterior Cladding', status: 'On Time', workforce: { expected: 8, actual: 8 }, materials: { expected: 70, actual: 68 }, equipment: { expected: 2, actual: 2 } },
+  { name: 'Interior Partitions', status: 'On Time', workforce: { expected: 9, actual: 9 }, materials: { expected: 55, actual: 53 }, equipment: { expected: 2, actual: 2 } },
+  { name: 'Roofing Works', status: 'On Time', workforce: { expected: 12, actual: 12 }, materials: { expected: 95, actual: 92 }, equipment: { expected: 4, actual: 4 } },
+  { name: 'Flooring Installation', status: 'Delayed', workforce: { expected: 7, actual: 4 }, materials: { expected: 45, actual: 30 }, equipment: { expected: 1, actual: 1 } },
+  { name: 'Painting & Decoration', status: 'Not Started', workforce: { expected: 6, actual: 0 }, materials: { expected: 30, actual: 0 }, equipment: { expected: 1, actual: 0 } },
 ]
 
 const EQUIPMENT_LIST: Equipment[] = [
-  { id: 'EQ-001', name: 'Tower Crane #1',      type: 'Crane',       operationalHours: 148, downtimeHours: 20, downtimeCause: 'Mechanical failure' },
-  { id: 'EQ-002', name: 'Tower Crane #2',      type: 'Crane',       operationalHours: 155, downtimeHours: 13, downtimeCause: 'Scheduled maintenance' },
-  { id: 'EQ-003', name: 'Excavator A',         type: 'Excavator',   operationalHours: 130, downtimeHours: 38, downtimeCause: 'Hydraulic repair' },
-  { id: 'EQ-004', name: 'Excavator B',         type: 'Excavator',   operationalHours: 142, downtimeHours: 26, downtimeCause: 'Operator unavailable' },
-  { id: 'EQ-005', name: 'Concrete Pump',       type: 'Pump',        operationalHours: 112, downtimeHours: 56, downtimeCause: 'Pipe blockage' },
-  { id: 'EQ-006', name: 'Forklift #1',         type: 'Forklift',    operationalHours: 160, downtimeHours: 8,  downtimeCause: 'Battery replacement' },
-  { id: 'EQ-007', name: 'Forklift #2',         type: 'Forklift',    operationalHours: 152, downtimeHours: 16, downtimeCause: 'Tyre change' },
-  { id: 'EQ-008', name: 'Compactor',           type: 'Compactor',   operationalHours: 118, downtimeHours: 50, downtimeCause: 'Engine overhaul' },
-  { id: 'EQ-009', name: 'Welding Unit #1',     type: 'Welding',     operationalHours: 168, downtimeHours: 0,  downtimeCause: '—' },
-  { id: 'EQ-010', name: 'Mobile Generator',    type: 'Generator',   operationalHours: 145, downtimeHours: 23, downtimeCause: 'Fuel system issue' },
+  { id: 'EQ-001', name: 'Tower Crane #1', type: 'Crane', operationalHours: 148, downtimeHours: 20, downtimeCause: 'Mechanical failure' },
+  { id: 'EQ-002', name: 'Tower Crane #2', type: 'Crane', operationalHours: 155, downtimeHours: 13, downtimeCause: 'Scheduled maintenance' },
+  { id: 'EQ-003', name: 'Excavator A', type: 'Excavator', operationalHours: 130, downtimeHours: 38, downtimeCause: 'Hydraulic repair' },
+  { id: 'EQ-004', name: 'Excavator B', type: 'Excavator', operationalHours: 142, downtimeHours: 26, downtimeCause: 'Operator unavailable' },
+  { id: 'EQ-005', name: 'Concrete Pump', type: 'Pump', operationalHours: 112, downtimeHours: 56, downtimeCause: 'Pipe blockage' },
+  { id: 'EQ-006', name: 'Forklift #1', type: 'Forklift', operationalHours: 160, downtimeHours: 8, downtimeCause: 'Battery replacement' },
+  { id: 'EQ-007', name: 'Forklift #2', type: 'Forklift', operationalHours: 152, downtimeHours: 16, downtimeCause: 'Tyre change' },
+  { id: 'EQ-008', name: 'Compactor', type: 'Compactor', operationalHours: 118, downtimeHours: 50, downtimeCause: 'Engine overhaul' },
+  { id: 'EQ-009', name: 'Welding Unit #1', type: 'Welding', operationalHours: 168, downtimeHours: 0, downtimeCause: '—' },
+  { id: 'EQ-010', name: 'Mobile Generator', type: 'Generator', operationalHours: 145, downtimeHours: 23, downtimeCause: 'Fuel system issue' },
 ]
 
 const WEEKLY_EQUIPMENT_UTILISATION = [
@@ -76,19 +76,19 @@ export function ResourcesSection() {
 
   // Summary stats
   const allocatedWorkforce = ACTIVITY_RESOURCES.filter(a => a.status !== 'Not Started').reduce((s, a) => s + a.workforce.actual, 0)
-  const allocatedEquipment  = EQUIPMENT_LIST.length
+  const allocatedEquipment = EQUIPMENT_LIST.length
 
   const totalOperational = EQUIPMENT_LIST.reduce((s, e) => s + e.operationalHours, 0)
-  const totalDowntime     = EQUIPMENT_LIST.reduce((s, e) => s + e.downtimeHours, 0)
-  const totalHours        = totalOperational + totalDowntime
-  const utilisationPct    = Math.round((totalOperational / totalHours) * 100)
+  const totalDowntime = EQUIPMENT_LIST.reduce((s, e) => s + e.downtimeHours, 0)
+  const totalHours = totalOperational + totalDowntime
+  const utilisationPct = Math.round((totalOperational / totalHours) * 100)
 
   const equipmentTypes = ['all', ...Array.from(new Set(EQUIPMENT_LIST.map(e => e.type)))]
   const filteredEquipment = equipmentFilter === 'all' ? EQUIPMENT_LIST : EQUIPMENT_LIST.filter(e => e.type === equipmentFilter)
 
   const pieData = [
     { name: 'Operational', value: totalOperational },
-    { name: 'Downtime',    value: totalDowntime },
+    { name: 'Downtime', value: totalDowntime },
   ]
   const PIE_COLORS = ['#16a34a', '#ef4444']
 
@@ -97,14 +97,14 @@ export function ResourcesSection() {
 
       {/* ── Allocated Resources ─────────────────────────────────────────────── */}
       <div className="glass-card rounded-lg p-5 border border-border/50">
-        <h3 className="text-sm font-semibold text-foreground mb-4 uppercase tracking-wide">Allocated Resources</h3>
+        <h3 className="text-sm font-semibold text-foreground mb-4 uppercase tracking-wide">Required Resources this week (via WWP)</h3>
         <div className="grid grid-cols-2 gap-4">
           <div className="flex items-center gap-4 bg-secondary/40 rounded-lg p-4">
             <div className="p-2.5 rounded-lg bg-accent/20">
               <Users className="w-5 h-5 text-accent" />
             </div>
             <div>
-              <div className="text-2xl font-bold text-foreground">{allocatedWorkforce}</div>
+              <div className="text-2xl font-bold text-foreground">25</div>
               <div className="text-xs text-muted-foreground mt-0.5">Members of Workforce</div>
             </div>
           </div>
@@ -113,8 +113,8 @@ export function ResourcesSection() {
               <Wrench className="w-5 h-5 text-accent" />
             </div>
             <div>
-              <div className="text-2xl font-bold text-foreground">{allocatedEquipment}</div>
-              <div className="text-xs text-muted-foreground mt-0.5">Equipment Units</div>
+              <div className="text-2xl font-bold text-foreground">15</div>
+              <div className="text-xs text-muted-foreground mt-0.5">Equipments</div>
             </div>
           </div>
         </div>
@@ -129,7 +129,7 @@ export function ResourcesSection() {
         <div className="flex flex-wrap gap-2 mb-5">
           {ACTIVITY_RESOURCES.map((a) => {
             const isSelected = selectedActivity === a.name
-            const isComplete   = a.status !== 'Not Started' && a.workforce.actual >= a.workforce.expected
+            const isComplete = a.status !== 'Not Started' && a.workforce.actual >= a.workforce.expected
             const isNotStarted = a.status === 'Not Started'
             const dotColor = isComplete
               ? 'bg-[#16a34a]'
@@ -140,11 +140,10 @@ export function ResourcesSection() {
               <button
                 key={a.name}
                 onClick={() => setSelectedActivity(a.name)}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border transition-colors cursor-pointer ${
-                  isSelected
-                    ? 'bg-accent text-accent-foreground border-accent'
-                    : 'bg-secondary/50 text-muted-foreground border-border/50 hover:bg-secondary hover:text-foreground'
-                }`}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border transition-colors cursor-pointer ${isSelected
+                  ? 'bg-accent text-accent-foreground border-accent'
+                  : 'bg-secondary/50 text-muted-foreground border-border/50 hover:bg-secondary hover:text-foreground'
+                  }`}
               >
                 <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${dotColor}`} />
                 {a.name}
@@ -253,7 +252,7 @@ export function ResourcesSection() {
                 />
                 <Legend wrapperStyle={{ fontSize: 11, paddingTop: 8 }} />
                 <Bar dataKey="operational" name="Operational" stackId="a" fill="#16a34a" radius={[0, 0, 0, 0]} />
-                <Bar dataKey="downtime"    name="Downtime"    stackId="a" fill="#ef4444" radius={[2, 2, 0, 0]} />
+                <Bar dataKey="downtime" name="Downtime" stackId="a" fill="#ef4444" radius={[2, 2, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>

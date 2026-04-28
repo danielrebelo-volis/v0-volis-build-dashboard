@@ -129,10 +129,13 @@ export function ResourcesSection() {
         <div className="flex flex-wrap gap-2 mb-5">
           {ACTIVITY_RESOURCES.map((a) => {
             const isSelected = selectedActivity === a.name
-            const statusDot =
-              a.status === 'On Time'     ? 'bg-[#16a34a]' :
-              a.status === 'Delayed'     ? 'bg-destructive' :
-                                           'bg-muted-foreground/40'
+            const isComplete   = a.status !== 'Not Started' && a.workforce.actual >= a.workforce.expected
+            const isNotStarted = a.status === 'Not Started'
+            const dotColor = isComplete
+              ? 'bg-[#16a34a]'
+              : isNotStarted
+                ? 'bg-muted-foreground/40'
+                : 'bg-yellow-400'
             return (
               <button
                 key={a.name}
@@ -143,7 +146,7 @@ export function ResourcesSection() {
                     : 'bg-secondary/50 text-muted-foreground border-border/50 hover:bg-secondary hover:text-foreground'
                 }`}
               >
-                <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${statusDot}`} />
+                <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${dotColor}`} />
                 {a.name}
               </button>
             )
@@ -163,18 +166,30 @@ export function ResourcesSection() {
               <thead>
                 <tr className="border-b border-border/50">
                   <th className="text-left text-xs text-muted-foreground font-semibold py-2 pr-4">Resource</th>
+                  <th className="text-right text-xs text-muted-foreground font-semibold py-2 px-4">Progress</th>
                   <th className="text-right text-xs text-muted-foreground font-semibold py-2 px-4">Used</th>
                   <th className="text-right text-xs text-muted-foreground font-semibold py-2 pl-4">Total Planned</th>
                 </tr>
               </thead>
               <tbody>
                 {rows.map((row) => {
+                  const pct = row.planned > 0 && activity.status !== 'Not Started'
+                    ? Math.round((row.used / row.planned) * 100)
+                    : 0
                   const under = row.planned > 0 && row.used < row.planned
+                  const pctColor = pct === 0
+                    ? 'text-muted-foreground'
+                    : pct >= 100
+                      ? 'text-[#16a34a]'
+                      : 'text-yellow-400'
                   return (
                     <tr key={row.label} className="border-b border-border/20 last:border-0">
                       <td className="py-3 pr-4 text-xs font-medium text-foreground">
                         {row.label}
                         <span className="ml-1 text-[10px] text-muted-foreground font-normal">({row.unit})</span>
+                      </td>
+                      <td className={`py-3 px-4 text-right text-sm font-semibold ${pctColor}`}>
+                        {activity.status === 'Not Started' ? '—' : `${pct}%`}
                       </td>
                       <td className={`py-3 px-4 text-right text-sm font-semibold ${under ? 'text-destructive' : 'text-[#16a34a]'}`}>
                         {activity.status === 'Not Started' ? '—' : row.used}

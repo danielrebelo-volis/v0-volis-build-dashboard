@@ -104,7 +104,7 @@ export function ResourcesSection() {
               <Users className="w-5 h-5 text-accent" />
             </div>
             <div>
-              <div className="text-2xl font-bold text-foreground">{allocatedWorkforce}</div>
+              <div className="text-2xl font-bold text-foreground">25</div>
               <div className="text-xs text-muted-foreground mt-0.5">Members of Workforce</div>
             </div>
           </div>
@@ -113,8 +113,8 @@ export function ResourcesSection() {
               <Wrench className="w-5 h-5 text-accent" />
             </div>
             <div>
-              <div className="text-2xl font-bold text-foreground">{allocatedEquipment}</div>
-              <div className="text-xs text-muted-foreground mt-0.5">Equipment Units</div>
+              <div className="text-2xl font-bold text-foreground">15</div>
+              <div className="text-xs text-muted-foreground mt-0.5">Equipments</div>
             </div>
           </div>
         </div>

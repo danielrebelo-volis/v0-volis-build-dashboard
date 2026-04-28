@@ -7,11 +7,9 @@ import { useChartColors } from '@/hooks/use-chart-colors'
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 
-type ActivityStatus = 'Not Started' | 'On Time' | 'Delayed'
-
 type ActivityResourceRow = {
   name: string
-  status: ActivityStatus
+  status: 'Not Started' | 'On Time' | 'Delayed'
   workforce: { expected: number; actual: number }
   materials: { expected: number; actual: number }
   equipment: { expected: number; actual: number }
@@ -69,39 +67,12 @@ const WEEKLY_EQUIPMENT_UTILISATION = [
   { week: 'W9', operational: 900, downtime: 100 },
 ]
 
-// ─── Sub-components ────────────────────────────────────────────────────────────
-
-const STATUS_STYLE: Record<ActivityStatus, string> = {
-  'Not Started': 'bg-muted/30 text-muted-foreground',
-  'On Time':     'bg-[#16a34a]/15 text-[#16a34a]',
-  'Delayed':     'bg-destructive/15 text-destructive',
-}
-
-function ResourceUsageBar({ expected, actual, unit }: { expected: number; actual: number; unit: string }) {
-  if (expected === 0) return <span className="text-xs text-muted-foreground">—</span>
-  const pct = Math.min((actual / expected) * 100, 100)
-  const over = actual > expected
-  return (
-    <div className="flex flex-col gap-0.5 min-w-[80px]">
-      <div className="flex justify-between text-[10px] text-muted-foreground">
-        <span>{actual}{unit}</span>
-        <span className="opacity-60">/{expected}{unit}</span>
-      </div>
-      <div className="h-1.5 w-full rounded-full bg-secondary overflow-hidden">
-        <div
-          className={`h-full rounded-full transition-all ${over ? 'bg-destructive' : pct >= 85 ? 'bg-[#16a34a]' : 'bg-accent'}`}
-          style={{ width: `${pct}%` }}
-        />
-      </div>
-    </div>
-  )
-}
-
 // ─── Main Component ─────────────────────────────────────────────────────────────
 
 export function ResourcesSection() {
   const chartColors = useChartColors()
   const [equipmentFilter, setEquipmentFilter] = useState<string>('all')
+  const [selectedActivity, setSelectedActivity] = useState<string>(ACTIVITY_RESOURCES[0].name)
 
   // Summary stats
   const allocatedWorkforce = ACTIVITY_RESOURCES.filter(a => a.status !== 'Not Started').reduce((s, a) => s + a.workforce.actual, 0)
@@ -149,43 +120,61 @@ export function ResourcesSection() {
         </div>
       </div>
 
-      {/* ── Activity Resource Usage Table ───────────────────────────────────── */}
+      {/* ── Activity Resource Usage ──────────────────────────────────────────── */}
       <div className="glass-card rounded-lg p-5 border border-border/50">
-        <h3 className="text-sm font-semibold text-foreground mb-4 uppercase tracking-wide">Activity Resource Usage</h3>
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm min-w-[760px]">
-            <thead>
-              <tr className="border-b border-border/50">
-                <th className="text-left text-xs text-muted-foreground font-semibold py-2 pr-4 min-w-[160px]">Activity</th>
-                <th className="text-center text-xs text-muted-foreground font-semibold py-2 px-3 min-w-[90px]">Status</th>
-                <th className="text-left text-xs text-muted-foreground font-semibold py-2 px-3 min-w-[110px]">Workforce (pax)</th>
-                <th className="text-left text-xs text-muted-foreground font-semibold py-2 px-3 min-w-[110px]">Materials (t)</th>
-                <th className="text-left text-xs text-muted-foreground font-semibold py-2 px-3 min-w-[110px]">Equipment (units)</th>
-              </tr>
-            </thead>
-            <tbody>
-              {ACTIVITY_RESOURCES.map((row) => (
-                <tr key={row.name} className="border-b border-border/20 hover:bg-secondary/20">
-                  <td className="py-2.5 pr-4 text-foreground font-medium text-xs">{row.name}</td>
-                  <td className="py-2.5 px-3 text-center">
-                    <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${STATUS_STYLE[row.status]}`}>
-                      {row.status}
-                    </span>
-                  </td>
-                  <td className="py-2.5 px-3">
-                    <ResourceUsageBar expected={row.workforce.expected} actual={row.workforce.actual} unit="" />
-                  </td>
-                  <td className="py-2.5 px-3">
-                    <ResourceUsageBar expected={row.materials.expected} actual={row.materials.actual} unit="" />
-                  </td>
-                  <td className="py-2.5 px-3">
-                    <ResourceUsageBar expected={row.equipment.expected} actual={row.equipment.actual} unit="" />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        {/* Header with dropdown */}
+        <div className="flex items-center justify-between flex-wrap gap-3 mb-5">
+          <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide">Activity Resource Usage</h3>
+          <select
+            value={selectedActivity}
+            onChange={(e) => setSelectedActivity(e.target.value)}
+            className="appearance-none pl-2.5 pr-7 py-1 text-xs font-medium rounded-md border border-border/50 bg-secondary text-foreground cursor-pointer focus:outline-none focus:ring-1 focus:ring-accent max-w-[220px]"
+          >
+            {ACTIVITY_RESOURCES.map((a) => (
+              <option key={a.name} value={a.name}>{a.name}</option>
+            ))}
+          </select>
         </div>
+
+        {/* Resource table for selected activity */}
+        {(() => {
+          const activity = ACTIVITY_RESOURCES.find((a) => a.name === selectedActivity)!
+          const rows = [
+            { label: 'Workforce', unit: 'pax', used: activity.workforce.actual, planned: activity.workforce.expected },
+            { label: 'Equipment', unit: 'units', used: activity.equipment.actual, planned: activity.equipment.expected },
+            { label: 'Materials', unit: 't', used: activity.materials.actual, planned: activity.materials.expected },
+          ]
+          return (
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-border/50">
+                  <th className="text-left text-xs text-muted-foreground font-semibold py-2 pr-4">Resource</th>
+                  <th className="text-right text-xs text-muted-foreground font-semibold py-2 px-4">Used</th>
+                  <th className="text-right text-xs text-muted-foreground font-semibold py-2 pl-4">Total Planned</th>
+                </tr>
+              </thead>
+              <tbody>
+                {rows.map((row) => {
+                  const under = row.planned > 0 && row.used < row.planned
+                  return (
+                    <tr key={row.label} className="border-b border-border/20 last:border-0">
+                      <td className="py-3 pr-4 text-xs font-medium text-foreground">
+                        {row.label}
+                        <span className="ml-1 text-[10px] text-muted-foreground font-normal">({row.unit})</span>
+                      </td>
+                      <td className={`py-3 px-4 text-right text-sm font-semibold ${under ? 'text-destructive' : 'text-[#16a34a]'}`}>
+                        {activity.status === 'Not Started' ? '—' : row.used}
+                      </td>
+                      <td className="py-3 pl-4 text-right text-sm font-semibold text-foreground">
+                        {row.planned}
+                      </td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          )
+        })()}
       </div>
 
       {/* ── Equipment Analysis ──────────────────────────────────────────────── */}

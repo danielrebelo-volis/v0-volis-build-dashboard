@@ -97,7 +97,7 @@ export function ResourcesSection() {
 
       {/* ── Allocated Resources ─────────────────────────────────────────────── */}
       <div className="glass-card rounded-lg p-5 border border-border/50">
-        <h3 className="text-sm font-semibold text-foreground mb-4 uppercase tracking-wide">Required Resources via WWP</h3>
+        <h3 className="text-sm font-semibold text-foreground mb-4 uppercase tracking-wide">Required Resources this week (via WWP)</h3>
         <div className="grid grid-cols-2 gap-4">
           <div className="flex items-center gap-4 bg-secondary/40 rounded-lg p-4">
             <div className="p-2.5 rounded-lg bg-accent/20">
@@ -141,8 +141,8 @@ export function ResourcesSection() {
                 key={a.name}
                 onClick={() => setSelectedActivity(a.name)}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border transition-colors cursor-pointer ${isSelected
-                    ? 'bg-accent text-accent-foreground border-accent'
-                    : 'bg-secondary/50 text-muted-foreground border-border/50 hover:bg-secondary hover:text-foreground'
+                  ? 'bg-accent text-accent-foreground border-accent'
+                  : 'bg-secondary/50 text-muted-foreground border-border/50 hover:bg-secondary hover:text-foreground'
                   }`}
               >
                 <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${dotColor}`} />

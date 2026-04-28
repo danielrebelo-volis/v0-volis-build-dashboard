@@ -1,17 +1,15 @@
 'use client'
 
 import { useState } from 'react'
-import { Users, Wrench, AlertTriangle, Clock, TrendingDown } from 'lucide-react'
+import { Users, Wrench, Clock, TrendingDown } from 'lucide-react'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
 import { useChartColors } from '@/hooks/use-chart-colors'
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 
-type ActivityStatus = 'Not Started' | 'On Time' | 'Delayed'
-
 type ActivityResourceRow = {
   name: string
-  status: ActivityStatus
+  status: 'Not Started' | 'On Time' | 'Delayed'
   workforce: { expected: number; actual: number }
   materials: { expected: number; actual: number }
   equipment: { expected: number; actual: number }
@@ -69,46 +67,16 @@ const WEEKLY_EQUIPMENT_UTILISATION = [
   { week: 'W9', operational: 900, downtime: 100 },
 ]
 
-// ─── Sub-components ────────────────────────────────────────────────────────────
-
-const STATUS_STYLE: Record<ActivityStatus, string> = {
-  'Not Started': 'bg-muted/30 text-muted-foreground',
-  'On Time':     'bg-[#16a34a]/15 text-[#16a34a]',
-  'Delayed':     'bg-destructive/15 text-destructive',
-}
-
-function ResourceUsageBar({ expected, actual, unit }: { expected: number; actual: number; unit: string }) {
-  if (expected === 0) return <span className="text-xs text-muted-foreground">—</span>
-  const pct = Math.min((actual / expected) * 100, 100)
-  const over = actual > expected
-  return (
-    <div className="flex flex-col gap-0.5 min-w-[80px]">
-      <div className="flex justify-between text-[10px] text-muted-foreground">
-        <span>{actual}{unit}</span>
-        <span className="opacity-60">/{expected}{unit}</span>
-      </div>
-      <div className="h-1.5 w-full rounded-full bg-secondary overflow-hidden">
-        <div
-          className={`h-full rounded-full transition-all ${over ? 'bg-destructive' : pct >= 85 ? 'bg-[#16a34a]' : 'bg-accent'}`}
-          style={{ width: `${pct}%` }}
-        />
-      </div>
-    </div>
-  )
-}
-
 // ─── Main Component ─────────────────────────────────────────────────────────────
 
 export function ResourcesSection() {
   const chartColors = useChartColors()
   const [equipmentFilter, setEquipmentFilter] = useState<string>('all')
+  const [selectedActivity, setSelectedActivity] = useState<string>(ACTIVITY_RESOURCES[0].name)
 
   // Summary stats
   const allocatedWorkforce = ACTIVITY_RESOURCES.filter(a => a.status !== 'Not Started').reduce((s, a) => s + a.workforce.actual, 0)
   const allocatedEquipment  = EQUIPMENT_LIST.length
-
-  const missingWorkforce = ACTIVITY_RESOURCES.filter(a => a.status !== 'Not Started' && a.workforce.actual < a.workforce.expected).length
-  const missingEquipment  = ACTIVITY_RESOURCES.filter(a => a.status !== 'Not Started' && a.equipment.actual < a.equipment.expected).length
 
   const totalOperational = EQUIPMENT_LIST.reduce((s, e) => s + e.operationalHours, 0)
   const totalDowntime     = EQUIPMENT_LIST.reduce((s, e) => s + e.downtimeHours, 0)
@@ -152,69 +120,84 @@ export function ResourcesSection() {
         </div>
       </div>
 
-      {/* ── Delays caused by lack of Resources ──────────────────────────────── */}
+      {/* ── Activity Resource Usage ──────────────────────────────────────────── */}
       <div className="glass-card rounded-lg p-5 border border-border/50">
-        <div className="flex items-center gap-2 mb-4">
-          <AlertTriangle className="w-4 h-4 text-destructive" />
-          <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide">Delays Caused by Lack of Resources</h3>
-        </div>
-        <div className="grid grid-cols-2 gap-4">
-          <div className="flex flex-col gap-1.5 bg-destructive/8 border border-destructive/20 rounded-lg p-4">
-            <div className="flex items-center gap-2">
-              <Users className="w-4 h-4 text-destructive" />
-              <span className="text-xs text-muted-foreground uppercase tracking-wide font-medium">Missing Workforce</span>
-            </div>
-            <div className="text-3xl font-bold text-destructive leading-none mt-1">{missingWorkforce}</div>
-            <div className="text-xs text-muted-foreground">activities reported with missing workforce</div>
-          </div>
-          <div className="flex flex-col gap-1.5 bg-destructive/8 border border-destructive/20 rounded-lg p-4">
-            <div className="flex items-center gap-2">
-              <Wrench className="w-4 h-4 text-destructive" />
-              <span className="text-xs text-muted-foreground uppercase tracking-wide font-medium">Missing Equipment</span>
-            </div>
-            <div className="text-3xl font-bold text-destructive leading-none mt-1">{missingEquipment}</div>
-            <div className="text-xs text-muted-foreground">activities reported with missing equipment</div>
-          </div>
-        </div>
-      </div>
+        {/* Header */}
+        <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide mb-4">Activity Resource Usage</h3>
 
-      {/* ── Activity Resource Usage Table ───────────────────────────────────── */}
-      <div className="glass-card rounded-lg p-5 border border-border/50">
-        <h3 className="text-sm font-semibold text-foreground mb-4 uppercase tracking-wide">Activity Resource Usage</h3>
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm min-w-[760px]">
-            <thead>
-              <tr className="border-b border-border/50">
-                <th className="text-left text-xs text-muted-foreground font-semibold py-2 pr-4 min-w-[160px]">Activity</th>
-                <th className="text-center text-xs text-muted-foreground font-semibold py-2 px-3 min-w-[90px]">Status</th>
-                <th className="text-left text-xs text-muted-foreground font-semibold py-2 px-3 min-w-[110px]">Workforce (pax)</th>
-                <th className="text-left text-xs text-muted-foreground font-semibold py-2 px-3 min-w-[110px]">Materials (t)</th>
-                <th className="text-left text-xs text-muted-foreground font-semibold py-2 px-3 min-w-[110px]">Equipment (units)</th>
-              </tr>
-            </thead>
-            <tbody>
-              {ACTIVITY_RESOURCES.map((row) => (
-                <tr key={row.name} className="border-b border-border/20 hover:bg-secondary/20">
-                  <td className="py-2.5 pr-4 text-foreground font-medium text-xs">{row.name}</td>
-                  <td className="py-2.5 px-3 text-center">
-                    <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${STATUS_STYLE[row.status]}`}>
-                      {row.status}
-                    </span>
-                  </td>
-                  <td className="py-2.5 px-3">
-                    <ResourceUsageBar expected={row.workforce.expected} actual={row.workforce.actual} unit="" />
-                  </td>
-                  <td className="py-2.5 px-3">
-                    <ResourceUsageBar expected={row.materials.expected} actual={row.materials.actual} unit="" />
-                  </td>
-                  <td className="py-2.5 px-3">
-                    <ResourceUsageBar expected={row.equipment.expected} actual={row.equipment.actual} unit="" />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        {/* Activity selector */}
+        <div className="flex flex-wrap gap-2 mb-5">
+          {ACTIVITY_RESOURCES.map((a) => {
+            const isSelected = selectedActivity === a.name
+            const isComplete   = a.status !== 'Not Started' && a.workforce.actual >= a.workforce.expected
+            const isNotStarted = a.status === 'Not Started'
+            const dotColor = isComplete
+              ? 'bg-[#16a34a]'
+              : isNotStarted
+                ? 'bg-muted-foreground/40'
+                : 'bg-yellow-400'
+            return (
+              <button
+                key={a.name}
+                onClick={() => setSelectedActivity(a.name)}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border transition-colors cursor-pointer ${
+                  isSelected
+                    ? 'bg-accent text-accent-foreground border-accent'
+                    : 'bg-secondary/50 text-muted-foreground border-border/50 hover:bg-secondary hover:text-foreground'
+                }`}
+              >
+                <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${dotColor}`} />
+                {a.name}
+              </button>
+            )
+          })}
         </div>
+
+        {/* Resource table for selected activity */}
+        {(() => {
+          const activity = ACTIVITY_RESOURCES.find((a) => a.name === selectedActivity)!
+          const rows = [
+            { label: 'Workforce', unit: 'pax', used: activity.workforce.actual, planned: activity.workforce.expected },
+            { label: 'Equipment', unit: 'units', used: activity.equipment.actual, planned: activity.equipment.expected },
+            { label: 'Materials', unit: 't', used: activity.materials.actual, planned: activity.materials.expected },
+          ]
+          return (
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-border/50">
+                  <th className="text-left text-xs text-muted-foreground font-semibold py-2 pr-4">Resource</th>
+                  <th className="text-right text-xs text-muted-foreground font-semibold py-2 px-4">Progress</th>
+                  <th className="text-right text-xs text-muted-foreground font-semibold py-2 px-4">Used</th>
+                  <th className="text-right text-xs text-muted-foreground font-semibold py-2 pl-4">Total Planned</th>
+                </tr>
+              </thead>
+              <tbody>
+                {rows.map((row) => {
+                  const pct = row.planned > 0 && activity.status !== 'Not Started'
+                    ? Math.round((row.used / row.planned) * 100)
+                    : 0
+                  return (
+                    <tr key={row.label} className="border-b border-border/20 last:border-0">
+                      <td className="py-3 pr-4 text-xs font-medium text-foreground">
+                        {row.label}
+                        <span className="ml-1 text-[10px] text-muted-foreground font-normal">({row.unit})</span>
+                      </td>
+                      <td className="py-3 px-4 text-right text-sm font-semibold text-foreground">
+                        {activity.status === 'Not Started' ? '—' : `${pct}%`}
+                      </td>
+                      <td className="py-3 px-4 text-right text-sm font-semibold text-foreground">
+                        {activity.status === 'Not Started' ? '—' : row.used}
+                      </td>
+                      <td className="py-3 pl-4 text-right text-sm font-semibold text-foreground">
+                        {row.planned}
+                      </td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          )
+        })()}
       </div>
 
       {/* ── Equipment Analysis ──────────────────────────────────────────────── */}

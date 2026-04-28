@@ -122,18 +122,32 @@ export function ResourcesSection() {
 
       {/* ── Activity Resource Usage ──────────────────────────────────────────── */}
       <div className="glass-card rounded-lg p-5 border border-border/50">
-        {/* Header with dropdown */}
-        <div className="flex items-center justify-between flex-wrap gap-3 mb-5">
-          <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide">Activity Resource Usage</h3>
-          <select
-            value={selectedActivity}
-            onChange={(e) => setSelectedActivity(e.target.value)}
-            className="appearance-none pl-2.5 pr-7 py-1 text-xs font-medium rounded-md border border-border/50 bg-secondary text-foreground cursor-pointer focus:outline-none focus:ring-1 focus:ring-accent max-w-[220px]"
-          >
-            {ACTIVITY_RESOURCES.map((a) => (
-              <option key={a.name} value={a.name}>{a.name}</option>
-            ))}
-          </select>
+        {/* Header */}
+        <h3 className="text-sm font-semibold text-foreground uppercase tracking-wide mb-4">Activity Resource Usage</h3>
+
+        {/* Activity selector */}
+        <div className="flex flex-wrap gap-2 mb-5">
+          {ACTIVITY_RESOURCES.map((a) => {
+            const isSelected = selectedActivity === a.name
+            const statusDot =
+              a.status === 'On Time'     ? 'bg-[#16a34a]' :
+              a.status === 'Delayed'     ? 'bg-destructive' :
+                                           'bg-muted-foreground/40'
+            return (
+              <button
+                key={a.name}
+                onClick={() => setSelectedActivity(a.name)}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border transition-colors cursor-pointer ${
+                  isSelected
+                    ? 'bg-accent text-accent-foreground border-accent'
+                    : 'bg-secondary/50 text-muted-foreground border-border/50 hover:bg-secondary hover:text-foreground'
+                }`}
+              >
+                <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${statusDot}`} />
+                {a.name}
+              </button>
+            )
+          })}
         </div>
 
         {/* Resource table for selected activity */}

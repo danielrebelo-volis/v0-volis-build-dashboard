@@ -81,7 +81,7 @@ export default function Dashboard() {
           </div>
 
           {/* EVM Matrix - Central Focus */}
-          <div className="col-span-12 lg:col-span-7 flex flex-col gap-4">
+          <div className="col-span-12 lg:col-span-7">
             <div className="glass-card rounded-lg relative flex flex-col" style={{ height: 'calc(100svh - 14rem)' }}>
 
               {/* Card header — title + view toggle on the left, filters on the right */}
@@ -172,8 +172,15 @@ export default function Dashboard() {
               </div>
             
             </div>
+          </div>
 
-            {/* Typology Legend Card - Below Matrix */}
+          {/* Uptrends/Downtrends Section */}
+          <div className="col-span-12 lg:col-span-3 self-stretch flex flex-col">
+            <TrendsSection />
+          </div>
+
+          {/* Typology Filter - Full Width */}
+          <div className="col-span-12">
             {(() => {
               const categoryColors: Record<string, string> = {
                 "Road Infrastructure":      "#166534",
@@ -239,11 +246,6 @@ export default function Dashboard() {
                 </div>
               )
             })()}
-          </div>
-
-          {/* Uptrends/Downtrends Section */}
-          <div className="col-span-12 lg:col-span-3 self-stretch flex flex-col">
-            <TrendsSection />
           </div>
 
           {/* Project List - Full Width */}

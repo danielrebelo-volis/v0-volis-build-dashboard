@@ -32,7 +32,7 @@ function TrendColumn({ projects, direction }: TrendColumnProps) {
         <span className={`text-[9px] font-bold uppercase tracking-widest ${colorClass}`}>{label}</span>
       </div>
       {/* Rows */}
-      <div className="flex flex-col gap-2 pt-1">
+      <div className="flex flex-col justify-around flex-1 min-h-0 pt-1">
         {projects.map((project) => {
           const barWidth = (project.delta / maxDelta) * 100
           return (
@@ -68,7 +68,7 @@ function Segment({ label, uptrends, downtrends, defaultOpen = false }: SegmentPr
   const [open, setOpen] = useState(defaultOpen)
 
   return (
-    <div className={`border border-border/25 rounded-lg overflow-hidden flex flex-col`}>
+    <div className={`border border-border/25 rounded-lg overflow-hidden flex flex-col flex-1 min-h-0`}>
       {/* Collapsed header — always visible */}
       <button
         onClick={() => setOpen((v) => !v)}
@@ -82,7 +82,7 @@ function Segment({ label, uptrends, downtrends, defaultOpen = false }: SegmentPr
 
       {/* Expandable content — grows to fill available height when open */}
       {open && (
-        <div className="px-3 pb-3 pt-1 flex gap-2 border-t border-border/15">
+        <div className="px-3 pb-3 pt-1 flex gap-2 border-t border-border/15 flex-1 min-h-0">
           <TrendColumn projects={uptrends} direction="up" />
           <div className="w-px bg-border/20 shrink-0 mx-0.5" />
           <TrendColumn projects={downtrends} direction="down" />
@@ -109,7 +109,7 @@ export function TrendsSection() {
         </div>
       </div>
 
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-3 flex-1 min-h-0">
         <Segment
           label="Progress"
           uptrends={[

@@ -204,9 +204,9 @@ function ResourceTable({ resources }: { resources: ResourceRecord[] }) {
               <thead>
                 <tr>
                   <th className="text-left text-[10px] text-muted-foreground font-medium pb-1.5 pr-2">Resource</th>
-                  <th className="text-right text-[10px] text-muted-foreground font-medium pb-1.5 pr-2">Expected</th>
+                  <th className="text-right text-[10px] text-muted-foreground font-medium pb-1.5 pr-2">Projected</th>
                   <th className="text-right text-[10px] text-muted-foreground font-medium pb-1.5 pr-2">Actual</th>
-                  <th className="text-right text-[10px] text-muted-foreground font-medium pb-1.5">Delta</th>
+                  <th className="text-right text-[10px] text-muted-foreground font-medium pb-1.5">Variation</th>
                 </tr>
               </thead>
               <tbody>

@@ -309,7 +309,7 @@ function KPICard({
       <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/70">{label}</p>
       <div className="flex items-end justify-between gap-2">
         <div>
-          <p className="text-[10px] text-muted-foreground mb-0.5">Expected</p>
+          <p className="text-[10px] text-muted-foreground mb-0.5">Projected</p>
           <p className="text-sm font-bold font-mono text-foreground">{expected}{unit ? ` ${unit}` : ''}</p>
         </div>
         <div className="text-right">

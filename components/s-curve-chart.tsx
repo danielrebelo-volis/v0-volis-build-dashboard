@@ -1,6 +1,6 @@
 'use client'
 
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Label } from 'recharts'
 import { useChartColors } from '@/hooks/use-chart-colors'
 
 const progressData = [
@@ -25,17 +25,24 @@ export function SProgressCurve() {
         <p className="text-xs text-muted-foreground mt-1">Commercial vs. Forecast vs. Actual completion</p>
       </div>
       <ResponsiveContainer width="100%" height={250}>
-        <LineChart data={progressData} margin={{ top: 5, right: 30, left: 0, bottom: 5 }}>
+        <LineChart data={progressData} margin={{ top: 5, right: 30, left: 20, bottom: 24 }}>
           <CartesianGrid strokeDasharray="3 3" stroke={colors.grid} />
           <XAxis
             dataKey="week"
             stroke={colors.axis}
-            tick={{ fontSize: 12 }}
-          />
+            tick={{ fontSize: 11 }}
+            tickFormatter={(v) => `W${v}`}
+          >
+            <Label value="Weeks" offset={-8} position="insideBottom" style={{ fontSize: 11, fill: colors.axis }} />
+          </XAxis>
           <YAxis
             stroke={colors.axis}
-            tick={{ fontSize: 12 }}
-          />
+            tick={{ fontSize: 11 }}
+            tickFormatter={(v) => `${v}%`}
+            domain={[0, 100]}
+          >
+            <Label value="% Completion" angle={-90} position="insideLeft" offset={-10} style={{ fontSize: 11, fill: colors.axis }} />
+          </YAxis>
           <Tooltip contentStyle={{ backgroundColor: colors.tooltipBg, border: colors.tooltipBorder }} />
           <Legend
             wrapperStyle={{ paddingTop: '12px' }}
@@ -113,18 +120,23 @@ export function SCostCurve() {
         <p className="text-xs text-muted-foreground mt-1">Commercial vs. Actual expenditure</p>
       </div>
       <ResponsiveContainer width="100%" height={250}>
-        <LineChart data={costData} margin={{ top: 5, right: 30, left: 0, bottom: 5 }}>
+        <LineChart data={costData} margin={{ top: 5, right: 30, left: 20, bottom: 24 }}>
           <CartesianGrid strokeDasharray="3 3" stroke={colors.grid} />
           <XAxis
             dataKey="week"
             stroke={colors.axis}
-            tick={{ fontSize: 12 }}
-          />
+            tick={{ fontSize: 11 }}
+            tickFormatter={(v) => `W${v}`}
+          >
+            <Label value="Weeks" offset={-8} position="insideBottom" style={{ fontSize: 11, fill: colors.axis }} />
+          </XAxis>
           <YAxis
             stroke={colors.axis}
-            tick={{ fontSize: 12 }}
-            tickFormatter={(value) => `€${value.toFixed(1)}M`}
-          />
+            tick={{ fontSize: 11 }}
+            tickFormatter={(value) => `€${value.toFixed(0)}M`}
+          >
+            <Label value="Cost (M€)" angle={-90} position="insideLeft" offset={-10} style={{ fontSize: 11, fill: colors.axis }} />
+          </YAxis>
           <Tooltip contentStyle={{ backgroundColor: colors.tooltipBg, border: colors.tooltipBorder }} formatter={(value: number) => `€${value.toFixed(1)}M`} />
           <Legend
             wrapperStyle={{ paddingTop: '12px' }}

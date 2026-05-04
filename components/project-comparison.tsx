@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { ChevronDown, MapPin, User, Calendar, Banknote, Activity, Sparkles, Loader2, Plus } from 'lucide-react'
-import { ComposedChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts'
+import { ComposedChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Label } from 'recharts'
 import { useChartColors } from '@/hooks/use-chart-colors'
 
 // ─── Data Model ────────────────────────────────────────────────────────────────
@@ -420,11 +420,15 @@ function SCurves({ project, maxWeek }: { project: ComparisonProject; maxWeek: nu
           <FilterSelect value={progressOwner} onChange={setProgressOwner} options={OWNERS} />
         </div>
         <div className="h-44 glass-card rounded-lg p-2">
-          <ResponsiveContainer width="100%" height="100%">
-            <ComposedChart data={filtered}>
-              <CartesianGrid strokeDasharray="3 3" stroke={colors.grid} />
-              <XAxis dataKey="week" tick={{ fontSize: 10, fill: colors.tickFill }} />
-              <YAxis tick={{ fontSize: 10, fill: colors.tickFill }} />
+<ResponsiveContainer width="100%" height="100%">
+  <ComposedChart data={filtered} margin={{ top: 5, right: 16, left: 16, bottom: 20 }}>
+  <CartesianGrid strokeDasharray="3 3" stroke={colors.grid} />
+  <XAxis dataKey="week" tick={{ fontSize: 10, fill: colors.tickFill }}>
+    <Label value="Weeks" offset={-6} position="insideBottom" style={{ fontSize: 10, fill: colors.tickFill }} />
+  </XAxis>
+  <YAxis tick={{ fontSize: 10, fill: colors.tickFill }} tickFormatter={(v) => `${v}%`} domain={[0, 100]} width={42}>
+    <Label value="% Completion" angle={-90} position="insideLeft" offset={-8} style={{ fontSize: 10, fill: colors.tickFill }} />
+  </YAxis>
               <Tooltip contentStyle={{ backgroundColor: colors.tooltipBg, border: colors.tooltipBorder }} />
               <Legend wrapperStyle={{ paddingTop: 8 }} iconType="line" payload={legendProgress} />
               <Line type="monotone" dataKey="planned" stroke="#999" strokeWidth={2} dot={false} name="Commercial" />
@@ -445,10 +449,14 @@ function SCurves({ project, maxWeek }: { project: ComparisonProject; maxWeek: nu
         </div>
         <div className="h-44 glass-card rounded-lg p-2">
           <ResponsiveContainer width="100%" height="100%">
-            <ComposedChart data={costFiltered}>
-              <CartesianGrid strokeDasharray="3 3" stroke={colors.grid} />
-              <XAxis dataKey="week" tick={{ fontSize: 10, fill: colors.tickFill }} />
-              <YAxis tick={{ fontSize: 10, fill: colors.tickFill }} tickFormatter={v => `€${v}M`} />
+  <ComposedChart data={costFiltered} margin={{ top: 5, right: 16, left: 16, bottom: 20 }}>
+  <CartesianGrid strokeDasharray="3 3" stroke={colors.grid} />
+  <XAxis dataKey="week" tick={{ fontSize: 10, fill: colors.tickFill }}>
+    <Label value="Weeks" offset={-6} position="insideBottom" style={{ fontSize: 10, fill: colors.tickFill }} />
+  </XAxis>
+  <YAxis tick={{ fontSize: 10, fill: colors.tickFill }} tickFormatter={v => `€${v}M`} width={42}>
+    <Label value="Cost (M€)" angle={-90} position="insideLeft" offset={-8} style={{ fontSize: 10, fill: colors.tickFill }} />
+  </YAxis>
               <Tooltip contentStyle={{ backgroundColor: colors.tooltipBg, border: colors.tooltipBorder }} formatter={(v: number) => `€${v.toFixed(1)}M`} />
               <Legend wrapperStyle={{ paddingTop: 8 }} iconType="line" payload={legendCost} />
               <Line type="monotone" dataKey="planned" stroke="#999" strokeWidth={2} dot={false} name="Commercial" />

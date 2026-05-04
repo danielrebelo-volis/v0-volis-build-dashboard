@@ -19,6 +19,7 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
+  Label,
 } from 'recharts'
 import { useChartColors } from '@/hooks/use-chart-colors'
 
@@ -236,15 +237,19 @@ function ProgressSCurve({ data, unit }: { data: DailyRecord[]; unit: string }) {
   const colors = useChartColors()
   return (
     <ResponsiveContainer width="100%" height={220}>
-      <LineChart data={data} margin={{ top: 5, right: 16, left: 0, bottom: 5 }}>
+      <LineChart data={data} margin={{ top: 5, right: 16, left: 20, bottom: 24 }}>
         <CartesianGrid strokeDasharray="3 3" stroke={colors.grid} />
-        <XAxis dataKey="day" stroke={colors.axis} tick={{ fontSize: 11 }} />
+        <XAxis dataKey="day" stroke={colors.axis} tick={{ fontSize: 11 }}>
+          <Label value="Days" offset={-8} position="insideBottom" style={{ fontSize: 11, fill: colors.axis }} />
+        </XAxis>
         <YAxis
           stroke={colors.axis}
           tick={{ fontSize: 11 }}
-          tickFormatter={(v) => `${v}`}
-          width={52}
-        />
+          tickFormatter={(v) => `${v} ${unit}`}
+          width={60}
+        >
+          <Label value={unit} angle={-90} position="insideLeft" offset={-10} style={{ fontSize: 11, fill: colors.axis }} />
+        </YAxis>
         <Tooltip
           contentStyle={{ backgroundColor: colors.tooltipBg, border: colors.tooltipBorder, fontSize: 12 }}
           formatter={(value: number, name: string) => [`${value} ${unit}`, name]}
@@ -262,15 +267,19 @@ function CostSCurve({ data }: { data: DailyRecord[] }) {
   const colors = useChartColors()
   return (
     <ResponsiveContainer width="100%" height={220}>
-      <LineChart data={data} margin={{ top: 5, right: 16, left: 0, bottom: 5 }}>
+      <LineChart data={data} margin={{ top: 5, right: 16, left: 20, bottom: 24 }}>
         <CartesianGrid strokeDasharray="3 3" stroke={colors.grid} />
-        <XAxis dataKey="day" stroke={colors.axis} tick={{ fontSize: 11 }} />
+        <XAxis dataKey="day" stroke={colors.axis} tick={{ fontSize: 11 }}>
+          <Label value="Days" offset={-8} position="insideBottom" style={{ fontSize: 11, fill: colors.axis }} />
+        </XAxis>
         <YAxis
           stroke={colors.axis}
           tick={{ fontSize: 11 }}
           tickFormatter={(v) => `€${v}k`}
-          width={52}
-        />
+          width={60}
+        >
+          <Label value="Cost (k€)" angle={-90} position="insideLeft" offset={-10} style={{ fontSize: 11, fill: colors.axis }} />
+        </YAxis>
         <Tooltip
           contentStyle={{ backgroundColor: colors.tooltipBg, border: colors.tooltipBorder, fontSize: 12 }}
           formatter={(value: number, name: string) => [`€${value}k`, name]}

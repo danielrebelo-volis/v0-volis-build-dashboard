@@ -780,18 +780,21 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                     <tr className="border-b border-border/50">
                       <th className="text-left text-xs text-muted-foreground font-semibold py-2 min-w-[140px]">Activity</th>
                       <th className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleSort('value')}>
-                        Econ. Value (€M) {sortBy === 'value' && (sortDirection === 'asc' ? '↑' : '↓')}
+                        Planned Activity Total Cost (€M) {sortBy === 'value' && (sortDirection === 'asc' ? '↑' : '↓')}
                       </th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Projected Activity Total Cost (€M)</th>
                       <th className="text-left text-xs text-muted-foreground font-semibold py-2">Status</th>
                       <th className="text-left text-xs text-muted-foreground font-semibold py-2">Metric</th>
-                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Total Planned</th>
-                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Total Actual</th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Total Quantity Planned</th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Accumulated Quantity</th>
                       <th className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleSort('plannedProgress')}>
                         Planned % {sortBy === 'plannedProgress' && (sortDirection === 'asc' ? '↑' : '↓')}
                       </th>
                       <th className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleSort('actualProgress')}>
                         Actual % {sortBy === 'actualProgress' && (sortDirection === 'asc' ? '↑' : '↓')}
                       </th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Planned Final IC</th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Projected Final IC</th>
                       <th className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleSort('accumulatedProduction')}>
                         Accum. Prod. (€M) {sortBy === 'accumulatedProduction' && (sortDirection === 'asc' ? '↑' : '↓')}
                       </th>
@@ -805,10 +808,15 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                       const displayActual = isNotStarted ? 0 : activity.executed_qty
                       const displayActualPct = isNotStarted ? 0 : activity.actual_completeness
                       const displayEarnedValue = isNotStarted ? 0 : activity.earnedValue
+                      const plannedActivityTotalCost = activity.value
+                      const projectedActivityTotalCost = activity.value * 1.06
+                      const plannedFinalIC = 81 + (idx % 5)
+                      const projectedFinalIC = plannedFinalIC + 5 + (idx % 8)
                       return (
                         <tr key={idx} className="border-b border-border/30 hover:bg-secondary/20">
                           <td className="py-3 text-foreground font-medium">{activity.name}</td>
-                          <td className="py-3 text-right text-foreground">€{activity.value.toFixed(1)}M</td>
+                          <td className="py-3 text-right text-foreground">€{plannedActivityTotalCost.toFixed(2)}M</td>
+                          <td className="py-3 text-right text-foreground">€{projectedActivityTotalCost.toFixed(2)}M</td>
                           <td className="py-3 text-right">
                             <span className={`text-xs px-2 py-0.5 rounded-full ${activity.status === 'Finished' ? 'bg-[#16a34a]/15 text-[#16a34a]' :
                               activity.status === 'Ongoing' ? 'bg-accent/20 text-accent' :
@@ -822,6 +830,8 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                           <td className="py-3 text-right text-foreground">{displayActual.toLocaleString()}</td>
                           <td className="py-3 text-right text-muted-foreground">{plannedPct}%</td>
                           <td className="py-3 text-right text-foreground">{displayActualPct}%</td>
+                          <td className="py-3 text-right text-foreground">{plannedFinalIC}%</td>
+                          <td className="py-3 text-right text-foreground">{projectedFinalIC}%</td>
                           <td className="py-3 text-right text-foreground">€{displayEarnedValue.toFixed(2)}M</td>
                           <td className="py-3 text-right text-foreground">{activity.float_weeks}w</td>
                         </tr>
@@ -956,10 +966,15 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                       const displayActual = isNotStarted ? 0 : activity.executed_qty
                       const displayActualPct = isNotStarted ? 0 : activity.actual_completeness
                       const displayEarnedValue = isNotStarted ? 0 : activity.earnedValue
+                      const plannedActivityTotalCost = activity.value
+                      const projectedActivityTotalCost = activity.value * 1.06
+                      const plannedFinalIC = 81 + (idx % 5)
+                      const projectedFinalIC = plannedFinalIC + 5 + (idx % 8)
                       return (
                         <tr key={idx} className="border-b border-border/30 hover:bg-secondary/20">
                           <td className="py-3 text-foreground font-medium">{activity.name}</td>
-                          <td className="py-3 text-right text-foreground">€{activity.value.toFixed(1)}M</td>
+                          <td className="py-3 text-right text-foreground">€{plannedActivityTotalCost.toFixed(2)}M</td>
+                          <td className="py-3 text-right text-foreground">€{projectedActivityTotalCost.toFixed(2)}M</td>
                           <td className="py-3 text-right">
                             <span className={`text-xs px-2 py-0.5 rounded-full ${activity.status === 'Finished' ? 'bg-[#16a34a]/15 text-[#16a34a]' :
                               activity.status === 'Ongoing' ? 'bg-accent/20 text-accent' :
@@ -973,6 +988,8 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                           <td className="py-3 text-right text-foreground">{displayActual.toLocaleString()}</td>
                           <td className="py-3 text-right text-muted-foreground">{plannedPct}%</td>
                           <td className="py-3 text-right text-foreground">{displayActualPct}%</td>
+                          <td className="py-3 text-right text-foreground">{plannedFinalIC}%</td>
+                          <td className="py-3 text-right text-foreground">{projectedFinalIC}%</td>
                           <td className="py-3 text-right text-foreground">€{displayEarnedValue.toFixed(2)}M</td>
                           <td className="py-3 text-right text-foreground">{activity.float_weeks}w</td>
                         </tr>

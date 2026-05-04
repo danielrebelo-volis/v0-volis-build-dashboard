@@ -14,6 +14,7 @@ interface ComparisonProject {
   typology: string
   pm: string
   deadline: string
+  projectedDeadline: string
   contractValue: number   // M€
   status: 'ongoing' | 'finished'
   // Schedule
@@ -44,7 +45,7 @@ interface ComparisonProject {
 const projects: ComparisonProject[] = [
   {
     id: 'PRJ-001', name: 'Metro Tower', location: 'Lisbon, Portugal',
-    typology: 'Urban Infrastructure', pm: 'Ana Ferreira', deadline: '2025-03-10', contractValue: 50, status: 'ongoing',
+    typology: 'Urban Infrastructure', pm: 'Ana Ferreira', deadline: '2025-03-10', projectedDeadline: 'Feb 2026', contractValue: 50, status: 'ongoing',
     delayDays: -14, spi: 1.15, accumulatedProduction: 24.1, expectedProduction: 30.1,
     ciPlanned: 82, ciAdjusted: 90, ciAnalytical: 84, budgetVariance: -4.2, cpi: 1.09,
     ppc: 92, tmr: 87,
@@ -53,7 +54,7 @@ const projects: ComparisonProject[] = [
   },
   {
     id: 'PRJ-002', name: 'Harbor Bridge', location: 'Porto, Portugal',
-    typology: 'Road Infrastructure', pm: 'Carlos Mendes', deadline: '2025-03-30', contractValue: 60, status: 'ongoing',
+    typology: 'Road Infrastructure', pm: 'Carlos Mendes', deadline: '2025-03-30', projectedDeadline: 'Jun 2026', contractValue: 60, status: 'ongoing',
     delayDays: 20, spi: 0.88, accumulatedProduction: 31.5, expectedProduction: 39.4,
     ciPlanned: 78, ciAdjusted: 97, ciAnalytical: 91, budgetVariance: 7.2, cpi: 0.89,
     ppc: 65, tmr: 58,
@@ -62,7 +63,7 @@ const projects: ComparisonProject[] = [
   },
   {
     id: 'PRJ-003', name: 'Skyline Plaza', location: 'Madrid, Spain',
-    typology: 'Civil Construction', pm: 'Sofia Ramos', deadline: '2025-03-25', contractValue: 47.5, status: 'ongoing',
+    typology: 'Civil Construction', pm: 'Sofia Ramos', deadline: '2025-03-25', projectedDeadline: 'Jun 2025', contractValue: 47.5, status: 'ongoing',
     delayDays: 32, spi: 0.85, accumulatedProduction: 28.7, expectedProduction: 35.9,
     ciPlanned: 88, ciAdjusted: 94, ciAnalytical: 88, budgetVariance: 4.5, cpi: 0.92,
     ppc: 78, tmr: 71,
@@ -71,7 +72,7 @@ const projects: ComparisonProject[] = [
   },
   {
     id: 'PRJ-004', name: 'Industrial Park', location: 'Setúbal, Portugal',
-    typology: 'Industrial', pm: 'Miguel Costa', deadline: '2025-03-20', contractValue: 40, status: 'ongoing',
+    typology: 'Industrial', pm: 'Miguel Costa', deadline: '2025-03-20', projectedDeadline: 'Nov 2026', contractValue: 40, status: 'ongoing',
     delayDays: -30, spi: 1.08, accumulatedProduction: 18.5, expectedProduction: 23.1,
     ciPlanned: 75, ciAdjusted: 70, ciAnalytical: 65, budgetVariance: -1.8, cpi: 1.05,
     ppc: 88, tmr: 83,
@@ -249,12 +250,12 @@ function ProjectInfoCard({ project }: { project: ComparisonProject }) {
         </div>
         <div className="flex items-center gap-2">
           <Calendar className="w-3 h-3 text-muted-foreground shrink-0" />
-          <span className="text-[11px] text-muted-foreground">Deadline</span>
+          <span className="text-[11px] text-muted-foreground">Contract Deadline</span>
           <span className="text-[11px] font-medium text-foreground ml-auto">{project.deadline}</span>
         </div>
         <div className="flex items-center gap-2">
           <Banknote className="w-3 h-3 text-muted-foreground shrink-0" />
-          <span className="text-[11px] text-muted-foreground">Contract</span>
+          <span className="text-[11px] text-muted-foreground">Contract Value</span>
           <span className="text-[11px] font-medium text-foreground ml-auto">€{project.contractValue}M</span>
         </div>
         <div className="flex items-center gap-2 col-span-2">

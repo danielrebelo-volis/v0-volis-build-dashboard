@@ -45,12 +45,12 @@ export function MetricsSidebar() {
     <div className="flex flex-col gap-3 h-full">
 
       {/* Portfolio Overview */}
-      <div className="glass-card rounded-xl px-4 pt-3 pb-1 flex flex-col flex-1">
+      <div className="glass-card rounded-xl px-4 pt-3 pb-1 flex flex-col">
         <div className="flex items-center gap-2 mb-1">
           <div className="w-1 h-4 rounded-full bg-accent shrink-0" />
           <h3 className="text-[9px] font-bold text-muted-foreground uppercase tracking-[0.15em]">Portfolio Overview</h3>
         </div>
-        <div className="flex-1 flex flex-col justify-around">
+        <div className="flex flex-col">
           <KpiBlock
             label="Active Projects"
             value="24"
@@ -81,12 +81,12 @@ export function MetricsSidebar() {
       </div>
 
       {/* Performance Overview */}
-      <div className="glass-card rounded-xl px-4 pt-3 pb-1 flex flex-col flex-1">
+      <div className="glass-card rounded-xl px-4 pt-3 pb-1 flex flex-col">
         <div className="flex items-center gap-2 mb-1">
           <div className="w-1 h-4 rounded-full bg-accent shrink-0" />
           <h3 className="text-[9px] font-bold text-muted-foreground uppercase tracking-[0.15em]">Performance Overview</h3>
         </div>
-        <div className="flex-1 flex flex-col justify-around">
+        <div className="flex flex-col">
           <KpiBlock
             label="Average Projected IC"
             value="78%"

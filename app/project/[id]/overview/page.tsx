@@ -712,7 +712,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
             {/* Row 1: Timeline Dates */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
               <div className="glass-card rounded-lg p-4 border border-border/50">
-                <p className="text-xs text-muted-foreground mb-3 uppercase tracking-wide">Start Date</p>
+                <p className="text-xs text-muted-foreground mb-3 uppercase tracking-wide">Contract Start Date</p>
                 <div className="space-y-2">
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-muted-foreground">Planned</span>
@@ -726,14 +726,14 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
               </div>
 
               <div className="glass-card rounded-lg p-4 border border-border/50">
-                <p className="text-xs text-muted-foreground mb-3 uppercase tracking-wide">End Date</p>
+                <p className="text-xs text-muted-foreground mb-3 uppercase tracking-wide">Contract End Date</p>
                 <div className="space-y-2">
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-muted-foreground">Planned</span>
                     <span className="font-mono text-lg font-bold text-foreground">03/01/2026</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-muted-foreground">Estimated</span>
+                    <span className="text-sm text-muted-foreground">Projected</span>
                     <span className="font-mono text-lg font-bold text-foreground">01/15/2026</span>
                   </div>
                 </div>

@@ -94,7 +94,7 @@ function Segment({ label, uptrends, downtrends, defaultOpen = false }: SegmentPr
 
 export function TrendsSection() {
   return (
-    <div className="glass-card rounded-xl px-4 pt-3 pb-4 flex flex-col">
+    <div className="glass-card rounded-xl px-4 pt-3 pb-4 flex flex-col h-full">
 
       {/* Header */}
       <div className="flex items-start justify-between mb-4">

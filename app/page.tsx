@@ -74,7 +74,7 @@ export default function Dashboard() {
         </div>
 
         {/* Main Grid Layout — upper section sized to viewport height */}
-        <div className="grid grid-cols-12 gap-6">
+        <div className="grid grid-cols-12 gap-6 items-start">
           {/* Metrics Sidebar */}
           <div className="col-span-12 lg:col-span-2">
             <MetricsSidebar />
@@ -242,7 +242,7 @@ export default function Dashboard() {
           </div>
 
           {/* Uptrends/Downtrends Section */}
-          <div className="col-span-12 lg:col-span-3">
+          <div className="col-span-12 lg:col-span-3 self-stretch flex flex-col">
             <TrendsSection />
           </div>
 

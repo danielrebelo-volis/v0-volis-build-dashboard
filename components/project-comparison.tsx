@@ -81,7 +81,7 @@ const projects: ComparisonProject[] = [
   },
   {
     id: 'PRJ-005', name: 'Riverside Homes', location: 'Maputo, Mozambique',
-    typology: 'Hydraulic Infrastructure', pm: 'Laura Nunes', deadline: '2025-04-05', contractValue: 45, status: 'ongoing',
+    typology: 'Hydraulic Infrastructure', pm: 'Laura Nunes', deadline: '2025-04-05', projectedDeadline: 'Apr 2026', contractValue: 45, status: 'ongoing',
     delayDays: 28, spi: 0.92, accumulatedProduction: 15.2, expectedProduction: 19.0,
     ciPlanned: 80, ciAdjusted: 78, ciAnalytical: 72, budgetVariance: 3.5, cpi: 0.96,
     ppc: 71, tmr: 64,
@@ -252,6 +252,11 @@ function ProjectInfoCard({ project }: { project: ComparisonProject }) {
           <Calendar className="w-3 h-3 text-muted-foreground shrink-0" />
           <span className="text-[11px] text-muted-foreground">Contract Deadline</span>
           <span className="text-[11px] font-medium text-foreground ml-auto">{project.deadline}</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <Calendar className="w-3 h-3 text-muted-foreground shrink-0" />
+          <span className="text-[11px] text-muted-foreground">Projected Deadline</span>
+          <span className="text-[11px] font-medium text-foreground ml-auto">{project.projectedDeadline}</span>
         </div>
         <div className="flex items-center gap-2">
           <Banknote className="w-3 h-3 text-muted-foreground shrink-0" />

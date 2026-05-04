@@ -76,7 +76,7 @@ export default function Dashboard() {
         {/* Main Grid Layout — upper section sized to viewport height */}
         <div className="grid grid-cols-12 gap-6">
           {/* Metrics Sidebar */}
-          <div className="col-span-12 lg:col-span-2" style={{ height: 'calc(100svh - 14rem)' }}>
+          <div className="col-span-12 lg:col-span-2 overflow-hidden" style={{ height: 'calc(100svh - 14rem)' }}>
             <MetricsSidebar />
           </div>
 
@@ -242,7 +242,7 @@ export default function Dashboard() {
           </div>
 
           {/* Uptrends/Downtrends Section */}
-          <div className="col-span-12 lg:col-span-3" style={{ height: 'calc(100svh - 14rem)' }}>
+          <div className="col-span-12 lg:col-span-3 overflow-hidden" style={{ height: 'calc(100svh - 14rem)' }}>
             <TrendsSection />
           </div>
 

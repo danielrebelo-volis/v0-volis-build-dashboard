@@ -16,7 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import Link from 'next/link'
-import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts'
+import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell, Label } from 'recharts'
 import { useChartColors } from '@/hooks/use-chart-colors'
 
 // ─── Baseline Filter ──────────────────────────────────────────────────────────
@@ -682,10 +682,14 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                 <BaselineFilter value={progressBaseline} onChange={setProgressBaseline} />
               </div>
               <ResponsiveContainer width="100%" height={300}>
-                <LineChart data={getFilteredProgressData()}>
+                <LineChart data={getFilteredProgressData()} margin={{ top: 5, right: 20, left: 20, bottom: 24 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} />
-                  <XAxis dataKey="week" stroke={chartColors.axis} />
-                  <YAxis stroke={chartColors.axis} />
+                  <XAxis dataKey="week" stroke={chartColors.axis} tickFormatter={(v) => `W${v}`}>
+                    <Label value="Weeks" offset={-8} position="insideBottom" style={{ fontSize: 11, fill: chartColors.axis }} />
+                  </XAxis>
+                  <YAxis stroke={chartColors.axis} tickFormatter={(v) => `${v}%`} domain={[0, 100]}>
+                    <Label value="% Completion" angle={-90} position="insideLeft" offset={-10} style={{ fontSize: 11, fill: chartColors.axis }} />
+                  </YAxis>
                   <Tooltip contentStyle={{ backgroundColor: chartColors.tooltipBg, border: chartColors.tooltipBorder }} />
                   <Legend />
                   <Line type="monotone" dataKey="planned" stroke="#999999" name="Commercial" strokeWidth={2} dot={false} />
@@ -891,10 +895,14 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                 <BaselineFilter value={progressBaseline} onChange={setProgressBaseline} />
               </div>
               <ResponsiveContainer width="100%" height={300}>
-                <LineChart data={progressData}>
+                <LineChart data={progressData} margin={{ top: 5, right: 20, left: 20, bottom: 24 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} />
-                  <XAxis dataKey="week" stroke={chartColors.axis} />
-                  <YAxis stroke={chartColors.axis} />
+                  <XAxis dataKey="week" stroke={chartColors.axis} tickFormatter={(v) => `W${v}`}>
+                    <Label value="Weeks" offset={-8} position="insideBottom" style={{ fontSize: 11, fill: chartColors.axis }} />
+                  </XAxis>
+                  <YAxis stroke={chartColors.axis} tickFormatter={(v) => `${v}%`} domain={[0, 100]}>
+                    <Label value="% Completion" angle={-90} position="insideLeft" offset={-10} style={{ fontSize: 11, fill: chartColors.axis }} />
+                  </YAxis>
                   <Tooltip contentStyle={{ backgroundColor: chartColors.tooltipBg, border: chartColors.tooltipBorder }} />
                   <Legend />
                   <Line type="monotone" dataKey="planned" stroke="#999999" name="Commercial" strokeWidth={2} dot={false} />
@@ -1046,10 +1054,14 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                 <BaselineFilter value={economicBaseline} onChange={setEconomicBaseline} />
               </div>
               <ResponsiveContainer width="100%" height={300}>
-                <LineChart data={costData}>
+                <LineChart data={costData} margin={{ top: 5, right: 20, left: 20, bottom: 24 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} />
-                  <XAxis dataKey="week" stroke={chartColors.axis} />
-                  <YAxis stroke={chartColors.axis} tickFormatter={(v) => `€${v.toFixed(1)}M`} />
+                  <XAxis dataKey="week" stroke={chartColors.axis} tickFormatter={(v) => `W${v}`}>
+                    <Label value="Weeks" offset={-8} position="insideBottom" style={{ fontSize: 11, fill: chartColors.axis }} />
+                  </XAxis>
+                  <YAxis stroke={chartColors.axis} tickFormatter={(v) => `€${v.toFixed(1)}M`}>
+                    <Label value="Cost (M€)" angle={-90} position="insideLeft" offset={-10} style={{ fontSize: 11, fill: chartColors.axis }} />
+                  </YAxis>
                   <Tooltip contentStyle={{ backgroundColor: chartColors.tooltipBg, border: chartColors.tooltipBorder }} formatter={(v: number) => `€${v.toFixed(1)}M`} />
                   <Legend />
                   <Line type="monotone" dataKey="baseline" stroke="#999999" name="Commercial" strokeWidth={2} dot={false} />
@@ -1431,10 +1443,14 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                   <BaselineFilter value={economicBaseline} onChange={setEconomicBaseline} />
                 </div>
                 <ResponsiveContainer width="100%" height={350}>
-                  <LineChart data={getFilteredCostData()}>
+                  <LineChart data={getFilteredCostData()} margin={{ top: 5, right: 20, left: 20, bottom: 24 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} />
-                    <XAxis dataKey="week" stroke={chartColors.axis} />
-                    <YAxis stroke={chartColors.axis} tickFormatter={(v) => `€${v.toFixed(1)}M`} />
+                    <XAxis dataKey="week" stroke={chartColors.axis} tickFormatter={(v) => `W${v}`}>
+                      <Label value="Weeks" offset={-8} position="insideBottom" style={{ fontSize: 11, fill: chartColors.axis }} />
+                    </XAxis>
+                    <YAxis stroke={chartColors.axis} tickFormatter={(v) => `€${v.toFixed(1)}M`}>
+                      <Label value="Cost (M€)" angle={-90} position="insideLeft" offset={-10} style={{ fontSize: 11, fill: chartColors.axis }} />
+                    </YAxis>
                     <Tooltip contentStyle={{ backgroundColor: chartColors.tooltipBg, border: chartColors.tooltipBorder }} formatter={(v: number) => `€${v.toFixed(1)}M`} />
                     <Legend />
                     <Line type="monotone" dataKey="baseline" stroke="#999999" name="Commercial" strokeWidth={2} dot={false} />

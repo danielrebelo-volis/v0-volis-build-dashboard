@@ -25,14 +25,14 @@ function TrendColumn({ projects, direction }: TrendColumnProps) {
   const maxDelta = Math.max(...projects.map((p) => p.delta))
 
   return (
-    <div className="flex-1 min-w-0 flex flex-col min-h-0">
+    <div className="flex-1 min-w-0 flex flex-col">
       {/* Column header */}
       <div className={`flex items-center gap-1 px-2 py-1 rounded-md border shrink-0 ${bgHighlight} ${borderColor}`}>
         <Icon className={`w-3 h-3 ${colorClass} shrink-0`} />
         <span className={`text-[9px] font-bold uppercase tracking-widest ${colorClass}`}>{label}</span>
       </div>
       {/* Rows */}
-      <div className="flex flex-col justify-around flex-1 min-h-0 pt-1">
+      <div className="flex flex-col gap-2 pt-1">
         {projects.map((project) => {
           const barWidth = (project.delta / maxDelta) * 100
           return (
@@ -68,7 +68,7 @@ function Segment({ label, uptrends, downtrends, defaultOpen = false }: SegmentPr
   const [open, setOpen] = useState(defaultOpen)
 
   return (
-    <div className={`border border-border/25 rounded-lg overflow-hidden flex flex-col flex-1 min-h-0 ${open ? "" : "shrink-0"}`}>
+    <div className={`border border-border/25 rounded-lg overflow-hidden flex flex-col`}>
       {/* Collapsed header — always visible */}
       <button
         onClick={() => setOpen((v) => !v)}
@@ -82,7 +82,7 @@ function Segment({ label, uptrends, downtrends, defaultOpen = false }: SegmentPr
 
       {/* Expandable content — grows to fill available height when open */}
       {open && (
-        <div className="px-3 pb-3 pt-1 flex gap-2 border-t border-border/15 flex-1 min-h-0">
+        <div className="px-3 pb-3 pt-1 flex gap-2 border-t border-border/15">
           <TrendColumn projects={uptrends} direction="up" />
           <div className="w-px bg-border/20 shrink-0 mx-0.5" />
           <TrendColumn projects={downtrends} direction="down" />
@@ -94,7 +94,7 @@ function Segment({ label, uptrends, downtrends, defaultOpen = false }: SegmentPr
 
 export function TrendsSection() {
   return (
-    <div className="glass-card rounded-xl px-4 pt-3 pb-4 flex flex-col h-full overflow-y-auto">
+    <div className="glass-card rounded-xl px-4 pt-3 pb-4 flex flex-col">
 
       {/* Header */}
       <div className="flex items-start justify-between mb-4">
@@ -109,7 +109,7 @@ export function TrendsSection() {
         </div>
       </div>
 
-      <div className="flex flex-col gap-3 flex-1 min-h-0">
+      <div className="flex flex-col gap-3">
         <Segment
           label="Progress"
           uptrends={[

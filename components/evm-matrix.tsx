@@ -169,17 +169,11 @@ export function EVMMatrix({
             <div className="text-[10px] text-muted-foreground">{project.id} · {project.category}</div>
           </div>
         </div>
-        <div className="space-y-2">
+        <div className="space-y-1">
           <div className="flex justify-between items-center">
             <span className="text-[11px] text-muted-foreground">Adj. Industrial Cost</span>
             <span className={`text-[12px] font-bold font-mono ${project.industrialCost > 100 ? "text-red-400" : "text-emerald-400"}`}>
               {project.industrialCost.toFixed(1)}%
-            </span>
-          </div>
-          <div className="flex justify-between items-center">
-            <span className="text-[11px] text-muted-foreground">Analytical IC</span>
-            <span className="text-[12px] font-bold font-mono text-blue-400">
-              {project.analyticalIndustrialCost.toFixed(1)}%
             </span>
           </div>
           <div className="h-px bg-white/8 my-1" />
@@ -190,7 +184,7 @@ export function EVMMatrix({
             </span>
           </div>
           <div className="flex justify-between items-center">
-            <span className="text-[11px] text-muted-foreground">Budget</span>
+            <span className="text-[11px] text-muted-foreground">Production</span>
             <span className="text-[12px] font-semibold font-mono text-foreground">{project.budget}</span>
           </div>
           <div className="flex justify-between items-center">

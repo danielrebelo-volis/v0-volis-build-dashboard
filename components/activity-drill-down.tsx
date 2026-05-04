@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Label } from 'recharts'
 import { X, Euro, TrendingUp, TrendingDown, AlertTriangle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useChartColors } from '@/hooks/use-chart-colors'
@@ -68,17 +68,24 @@ function ActivitySCurve({ activityNumber }: { activityNumber: number }) {
         <p className="text-xs text-muted-foreground mt-1">Planned vs. Actual completion</p>
       </div>
       <ResponsiveContainer width="100%" height={200}>
-        <LineChart data={data} margin={{ top: 5, right: 30, left: 0, bottom: 5 }}>
+        <LineChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 24 }}>
           <CartesianGrid strokeDasharray="3 3" stroke={colors.grid} />
-          <XAxis 
-            dataKey="week" 
+          <XAxis
+            dataKey="week"
             stroke={colors.axisLight}
             tick={{ fontSize: 11 }}
-          />
-          <YAxis 
+            tickFormatter={(v) => `W${v}`}
+          >
+            <Label value="Weeks" offset={-8} position="insideBottom" style={{ fontSize: 11, fill: colors.axisLight }} />
+          </XAxis>
+          <YAxis
             stroke={colors.axisLight}
             tick={{ fontSize: 11 }}
-          />
+            tickFormatter={(v) => `${v}%`}
+            domain={[0, 100]}
+          >
+            <Label value="% Completion" angle={-90} position="insideLeft" offset={-10} style={{ fontSize: 11, fill: colors.axisLight }} />
+          </YAxis>
           <Tooltip content={<CustomTooltip />} />
           <Line 
             type="monotone" 

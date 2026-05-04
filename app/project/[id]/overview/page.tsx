@@ -16,7 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import Link from 'next/link'
-import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell } from 'recharts'
+import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell, Label } from 'recharts'
 import { useChartColors } from '@/hooks/use-chart-colors'
 
 // ─── Baseline Filter ──────────────────────────────────────────────────────────
@@ -52,8 +52,11 @@ type EconRow = {
   status: string
   completeness: number
   currentCost: number
+  plannedActivityTotalCost: number
+  projectedActivityTotalCost: number
+  plannedFinalIC: number
   commercialIC: number
-  projectedIC: number
+  projectedFinalIC: number
   currentIC: number
   weeklyCosts: { week: string; labour: number; materials: number; subcontracted: number }[]
 }
@@ -74,11 +77,9 @@ const COST_NATURE_COLORS = [
 
 function EconomicTableRow({
   row,
-  economicValue,
   chartColors,
 }: {
   row: EconRow
-  economicValue: number
   chartColors: ReturnType<typeof useChartColors>
 }) {
   const [open, setOpen] = useState(false)
@@ -113,7 +114,8 @@ function EconomicTableRow({
   return (
     <tr className="border-b border-border/30 hover:bg-secondary/20">
       <td className="py-3 text-foreground font-medium">{row.activity}</td>
-      <td className="py-3 text-right text-foreground">€{economicValue.toFixed(1)}M</td>
+      <td className="py-3 text-right text-foreground">€{row.plannedActivityTotalCost.toFixed(2)}M</td>
+      <td className="py-3 text-right text-foreground">€{row.projectedActivityTotalCost.toFixed(2)}M</td>
       <td className="py-3 text-right">
         <span className={`text-xs px-2 py-0.5 rounded-full ${row.status === 'Finished' ? 'bg-[#16a34a]/15 text-[#16a34a]' :
           row.status === 'Ongoing' ? 'bg-accent/20 text-accent' :
@@ -122,8 +124,9 @@ function EconomicTableRow({
       </td>
       <td className="py-3 text-right text-foreground">{displayCompleteness}%</td>
       <td className="py-3 text-right text-foreground">€{displayCost.toFixed(2)}M</td>
+      <td className="py-3 text-right text-foreground">{row.plannedFinalIC}%</td>
       <td className="py-3 text-right text-foreground">{row.commercialIC}%</td>
-      <td className="py-3 text-right text-foreground">{row.projectedIC}%</td>
+      <td className="py-3 text-right text-foreground">{row.projectedFinalIC}%</td>
       <td className="py-3 text-right text-foreground">{row.currentIC}%</td>
 
     </tr>
@@ -266,15 +269,21 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
 
   const economicTable = activities.map(activity => {
     const commercialIC = 80 + Math.random() * 5
-    const projectedIC = commercialIC + 5 + Math.random() * 8
+    const projectedFinalIC = commercialIC + 5 + Math.random() * 8
     const currentIC = commercialIC + 3 + Math.random() * 6
+    const plannedFinalIC = commercialIC - 2 + Math.random() * 3
+    const plannedActivityTotalCost = parseFloat((activity.value * 1.0).toFixed(2))
+    const projectedActivityTotalCost = parseFloat((activity.value * (1 + 0.05 + Math.random() * 0.08)).toFixed(2))
     return {
       activity: activity.name,
       status: activity.status,
       completeness: activity.actual_completeness,
       currentCost: activity.value * (activity.actual_completeness / 100) * 1.08,
+      plannedActivityTotalCost,
+      projectedActivityTotalCost,
+      plannedFinalIC: parseFloat(plannedFinalIC.toFixed(1)),
       commercialIC: parseFloat(commercialIC.toFixed(1)),
-      projectedIC: parseFloat(projectedIC.toFixed(1)),
+      projectedFinalIC: parseFloat(projectedFinalIC.toFixed(1)),
       currentIC: parseFloat(currentIC.toFixed(1)),
       weeklyCosts: weeklyNatureCosts[activity.name] ?? [],
     }
@@ -589,16 +598,16 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
           </div>
           <div className="flex items-center gap-2">
             <Button
-              variant="outline"
-              className="gap-2 bg-foreground text-background hover:bg-foreground/90"
-              onClick={() => setGanttOpen(true)}
+          variant="outline"
+          className="gap-2 border border-border text-foreground bg-background hover:bg-secondary"
+          onClick={() => setGanttOpen(true)}
             >
               <GanttChartSquare className="w-4 h-4" />
               Gantt Chart
             </Button>
             <Button
               disabled
-              className="gap-2 bg-foreground text-background hover:bg-foreground/90 disabled:opacity-40 disabled:cursor-not-allowed"
+              className="gap-2 border border-border text-foreground bg-background hover:bg-secondary disabled:opacity-40 disabled:cursor-not-allowed"
             >
               <Download className="w-4 h-4" />
               Download Report
@@ -682,10 +691,14 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                 <BaselineFilter value={progressBaseline} onChange={setProgressBaseline} />
               </div>
               <ResponsiveContainer width="100%" height={300}>
-                <LineChart data={getFilteredProgressData()}>
+                <LineChart data={getFilteredProgressData()} margin={{ top: 5, right: 20, left: 20, bottom: 24 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} />
-                  <XAxis dataKey="week" stroke={chartColors.axis} />
-                  <YAxis stroke={chartColors.axis} />
+                  <XAxis dataKey="week" stroke={chartColors.axis} tickFormatter={(v) => `W${v}`}>
+                    <Label value="Weeks" offset={-8} position="insideBottom" style={{ fontSize: 11, fill: chartColors.axis }} />
+                  </XAxis>
+                  <YAxis stroke={chartColors.axis} tickFormatter={(v) => `${v}%`} domain={[0, 100]}>
+                    <Label value="% Completion" angle={-90} position="insideLeft" offset={-10} style={{ fontSize: 11, fill: chartColors.axis }} />
+                  </YAxis>
                   <Tooltip contentStyle={{ backgroundColor: chartColors.tooltipBg, border: chartColors.tooltipBorder }} />
                   <Legend />
                   <Line type="monotone" dataKey="planned" stroke="#999999" name="Commercial" strokeWidth={2} dot={false} />
@@ -699,7 +712,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
             {/* Row 1: Timeline Dates */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
               <div className="glass-card rounded-lg p-4 border border-border/50">
-                <p className="text-xs text-muted-foreground mb-3 uppercase tracking-wide">Start Date</p>
+                <p className="text-xs text-muted-foreground mb-3 uppercase tracking-wide">Contract Start Date</p>
                 <div className="space-y-2">
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-muted-foreground">Planned</span>
@@ -713,14 +726,14 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
               </div>
 
               <div className="glass-card rounded-lg p-4 border border-border/50">
-                <p className="text-xs text-muted-foreground mb-3 uppercase tracking-wide">End Date</p>
+                <p className="text-xs text-muted-foreground mb-3 uppercase tracking-wide">Contract End Date</p>
                 <div className="space-y-2">
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-muted-foreground">Planned</span>
                     <span className="font-mono text-lg font-bold text-foreground">03/01/2026</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-muted-foreground">Estimated</span>
+                    <span className="text-sm text-muted-foreground">Projected</span>
                     <span className="font-mono text-lg font-bold text-foreground">01/15/2026</span>
                   </div>
                 </div>
@@ -767,18 +780,21 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                     <tr className="border-b border-border/50">
                       <th className="text-left text-xs text-muted-foreground font-semibold py-2 min-w-[140px]">Activity</th>
                       <th className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleSort('value')}>
-                        Econ. Value (€M) {sortBy === 'value' && (sortDirection === 'asc' ? '↑' : '↓')}
+                        Planned Activity Total Cost (€M) {sortBy === 'value' && (sortDirection === 'asc' ? '↑' : '↓')}
                       </th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Projected Activity Total Cost (€M)</th>
                       <th className="text-left text-xs text-muted-foreground font-semibold py-2">Status</th>
                       <th className="text-left text-xs text-muted-foreground font-semibold py-2">Metric</th>
-                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Total Planned</th>
-                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Total Actual</th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Total Quantity Planned</th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Accumulated Quantity</th>
                       <th className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleSort('plannedProgress')}>
                         Planned % {sortBy === 'plannedProgress' && (sortDirection === 'asc' ? '↑' : '↓')}
                       </th>
                       <th className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleSort('actualProgress')}>
                         Actual % {sortBy === 'actualProgress' && (sortDirection === 'asc' ? '↑' : '↓')}
                       </th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Planned Final IC</th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Projected Final IC</th>
                       <th className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleSort('accumulatedProduction')}>
                         Accum. Prod. (€M) {sortBy === 'accumulatedProduction' && (sortDirection === 'asc' ? '↑' : '↓')}
                       </th>
@@ -792,10 +808,15 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                       const displayActual = isNotStarted ? 0 : activity.executed_qty
                       const displayActualPct = isNotStarted ? 0 : activity.actual_completeness
                       const displayEarnedValue = isNotStarted ? 0 : activity.earnedValue
+                      const plannedActivityTotalCost = activity.value
+                      const projectedActivityTotalCost = activity.value * 1.06
+                      const plannedFinalIC = 81 + (idx % 5)
+                      const projectedFinalIC = plannedFinalIC + 5 + (idx % 8)
                       return (
                         <tr key={idx} className="border-b border-border/30 hover:bg-secondary/20">
                           <td className="py-3 text-foreground font-medium">{activity.name}</td>
-                          <td className="py-3 text-right text-foreground">€{activity.value.toFixed(1)}M</td>
+                          <td className="py-3 text-right text-foreground">€{plannedActivityTotalCost.toFixed(2)}M</td>
+                          <td className="py-3 text-right text-foreground">€{projectedActivityTotalCost.toFixed(2)}M</td>
                           <td className="py-3 text-right">
                             <span className={`text-xs px-2 py-0.5 rounded-full ${activity.status === 'Finished' ? 'bg-[#16a34a]/15 text-[#16a34a]' :
                               activity.status === 'Ongoing' ? 'bg-accent/20 text-accent' :
@@ -809,6 +830,8 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                           <td className="py-3 text-right text-foreground">{displayActual.toLocaleString()}</td>
                           <td className="py-3 text-right text-muted-foreground">{plannedPct}%</td>
                           <td className="py-3 text-right text-foreground">{displayActualPct}%</td>
+                          <td className="py-3 text-right text-foreground">{plannedFinalIC}%</td>
+                          <td className="py-3 text-right text-foreground">{projectedFinalIC}%</td>
                           <td className="py-3 text-right text-foreground">€{displayEarnedValue.toFixed(2)}M</td>
                           <td className="py-3 text-right text-foreground">{activity.float_weeks}w</td>
                         </tr>
@@ -891,10 +914,14 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                 <BaselineFilter value={progressBaseline} onChange={setProgressBaseline} />
               </div>
               <ResponsiveContainer width="100%" height={300}>
-                <LineChart data={progressData}>
+                <LineChart data={progressData} margin={{ top: 5, right: 20, left: 20, bottom: 24 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} />
-                  <XAxis dataKey="week" stroke={chartColors.axis} />
-                  <YAxis stroke={chartColors.axis} />
+                  <XAxis dataKey="week" stroke={chartColors.axis} tickFormatter={(v) => `W${v}`}>
+                    <Label value="Weeks" offset={-8} position="insideBottom" style={{ fontSize: 11, fill: chartColors.axis }} />
+                  </XAxis>
+                  <YAxis stroke={chartColors.axis} tickFormatter={(v) => `${v}%`} domain={[0, 100]}>
+                    <Label value="% Completion" angle={-90} position="insideLeft" offset={-10} style={{ fontSize: 11, fill: chartColors.axis }} />
+                  </YAxis>
                   <Tooltip contentStyle={{ backgroundColor: chartColors.tooltipBg, border: chartColors.tooltipBorder }} />
                   <Legend />
                   <Line type="monotone" dataKey="planned" stroke="#999999" name="Commercial" strokeWidth={2} dot={false} />
@@ -914,18 +941,21 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                     <tr className="border-b border-border/50">
                       <th className="text-left text-xs text-muted-foreground font-semibold py-2 min-w-[140px]">Activity</th>
                       <th className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleSort('value')}>
-                        Econ. Value (€M) {sortBy === 'value' && (sortDirection === 'asc' ? '↑' : '↓')}
+                        Planned Activity Total Cost (€M) {sortBy === 'value' && (sortDirection === 'asc' ? '↑' : '↓')}
                       </th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Projected Activity Total Cost (€M)</th>
                       <th className="text-right text-xs text-muted-foreground font-semibold py-2">Status</th>
                       <th className="text-right text-xs text-muted-foreground font-semibold py-2">Metric</th>
-                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Total Planned</th>
-                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Total Actual</th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Total Quantity Planned</th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Accumulated Quantity</th>
                       <th className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleSort('plannedProgress')}>
                         Planned % {sortBy === 'plannedProgress' && (sortDirection === 'asc' ? '↑' : '↓')}
                       </th>
                       <th className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleSort('actualProgress')}>
                         Actual % {sortBy === 'actualProgress' && (sortDirection === 'asc' ? '↑' : '↓')}
                       </th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Planned Final IC</th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Projected Final IC</th>
                       <th className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleSort('accumulatedProduction')}>
                         Accum. Prod. (€M) {sortBy === 'accumulatedProduction' && (sortDirection === 'asc' ? '↑' : '↓')}
                       </th>
@@ -939,10 +969,15 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                       const displayActual = isNotStarted ? 0 : activity.executed_qty
                       const displayActualPct = isNotStarted ? 0 : activity.actual_completeness
                       const displayEarnedValue = isNotStarted ? 0 : activity.earnedValue
+                      const plannedActivityTotalCost = activity.value
+                      const projectedActivityTotalCost = activity.value * 1.06
+                      const plannedFinalIC = 81 + (idx % 5)
+                      const projectedFinalIC = plannedFinalIC + 5 + (idx % 8)
                       return (
                         <tr key={idx} className="border-b border-border/30 hover:bg-secondary/20">
                           <td className="py-3 text-foreground font-medium">{activity.name}</td>
-                          <td className="py-3 text-right text-foreground">€{activity.value.toFixed(1)}M</td>
+                          <td className="py-3 text-right text-foreground">€{plannedActivityTotalCost.toFixed(2)}M</td>
+                          <td className="py-3 text-right text-foreground">€{projectedActivityTotalCost.toFixed(2)}M</td>
                           <td className="py-3 text-right">
                             <span className={`text-xs px-2 py-0.5 rounded-full ${activity.status === 'Finished' ? 'bg-[#16a34a]/15 text-[#16a34a]' :
                               activity.status === 'Ongoing' ? 'bg-accent/20 text-accent' :
@@ -956,6 +991,8 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                           <td className="py-3 text-right text-foreground">{displayActual.toLocaleString()}</td>
                           <td className="py-3 text-right text-muted-foreground">{plannedPct}%</td>
                           <td className="py-3 text-right text-foreground">{displayActualPct}%</td>
+                          <td className="py-3 text-right text-foreground">{plannedFinalIC}%</td>
+                          <td className="py-3 text-right text-foreground">{projectedFinalIC}%</td>
                           <td className="py-3 text-right text-foreground">€{displayEarnedValue.toFixed(2)}M</td>
                           <td className="py-3 text-right text-foreground">{activity.float_weeks}w</td>
                         </tr>
@@ -1032,7 +1069,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                 <div className="sm:pl-6">
                   <div className="flex items-center gap-1.5 mb-1.5">
                     <TrendingUp className="w-3 h-3 text-muted-foreground" />
-                    <span className="text-[11px] text-muted-foreground">Projected IC</span>
+                    <span className="text-[11px] text-muted-foreground">Projected Final IC</span>
                   </div>
                   <p className="text-xl font-bold text-foreground">92.4%</p>
                 </div>
@@ -1046,10 +1083,14 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                 <BaselineFilter value={economicBaseline} onChange={setEconomicBaseline} />
               </div>
               <ResponsiveContainer width="100%" height={300}>
-                <LineChart data={costData}>
+                <LineChart data={costData} margin={{ top: 5, right: 20, left: 20, bottom: 24 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} />
-                  <XAxis dataKey="week" stroke={chartColors.axis} />
-                  <YAxis stroke={chartColors.axis} tickFormatter={(v) => `€${v.toFixed(1)}M`} />
+                  <XAxis dataKey="week" stroke={chartColors.axis} tickFormatter={(v) => `W${v}`}>
+                    <Label value="Weeks" offset={-8} position="insideBottom" style={{ fontSize: 11, fill: chartColors.axis }} />
+                  </XAxis>
+                  <YAxis stroke={chartColors.axis} tickFormatter={(v) => `€${v.toFixed(1)}M`}>
+                    <Label value="Cost (M€)" angle={-90} position="insideLeft" offset={-10} style={{ fontSize: 11, fill: chartColors.axis }} />
+                  </YAxis>
                   <Tooltip contentStyle={{ backgroundColor: chartColors.tooltipBg, border: chartColors.tooltipBorder }} formatter={(v: number) => `€${v.toFixed(1)}M`} />
                   <Legend />
                   <Line type="monotone" dataKey="baseline" stroke="#999999" name="Commercial" strokeWidth={2} dot={false} />
@@ -1069,16 +1110,18 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                     <tr className="border-b border-border/50">
                       <th className="text-left text-xs text-muted-foreground font-semibold py-2 min-w-[140px]">Activity</th>
                       <th className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleEconomicSort('actualCost')}>
-                        Econ. Value (€M) {economicSortBy === 'actualCost' && (economicSortDirection === 'asc' ? '↑' : '↓')}
+                        Planned Activity Total Cost (€M) {economicSortBy === 'actualCost' && (economicSortDirection === 'asc' ? '↑' : '↓')}
                       </th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Projected Activity Total Cost (€M)</th>
                       <th className="text-right text-xs text-muted-foreground font-semibold py-2">Status</th>
                       <th className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleEconomicSort('baselineCost')}>
                         Current Progress {economicSortBy === 'baselineCost' && (economicSortDirection === 'asc' ? '↑' : '↓')}
                       </th>
                       <th className="text-right text-xs text-muted-foreground font-semibold py-2">Current Cost (€M)</th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Planned Final IC</th>
                       <th className="text-right text-xs text-muted-foreground font-semibold py-2">Commercial IC</th>
                       <th className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleEconomicSort('totalEstimated')}>
-                        Projected IC {economicSortBy === 'totalEstimated' && (economicSortDirection === 'asc' ? '↑' : '↓')}
+                        Projected Final IC {economicSortBy === 'totalEstimated' && (economicSortDirection === 'asc' ? '↑' : '↓')}
                       </th>
                       <th className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleEconomicSort('totalBaseline')}>
                         Adjusted IC {economicSortBy === 'totalBaseline' && (economicSortDirection === 'asc' ? '↑' : '↓')}
@@ -1087,18 +1130,13 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                     </tr>
                   </thead>
                   <tbody>
-                    {getSortedEconomicTable().map((row, idx) => {
-                      const activity = activities.find(a => a.name === row.activity)
-                      const economicValue = activity?.value ?? 0
-                      return (
-                        <EconomicTableRow
-                          key={idx}
-                          row={row}
-                          economicValue={economicValue}
-                          chartColors={chartColors}
-                        />
-                      );
-                    })}
+                    {getSortedEconomicTable().map((row, idx) => (
+                      <EconomicTableRow
+                        key={idx}
+                        row={row}
+                        chartColors={chartColors}
+                      />
+                    ))}
                   </tbody>
                 </table>
               </div>
@@ -1349,7 +1387,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                 <div className="sm:pl-0">
                   <div className="flex items-center gap-1.5 mb-1.5">
                     <span className="text-xs text-muted-foreground">€</span>
-                    <span className="text-[11px] text-muted-foreground">Project Budget</span>
+                    <span className="text-[11px] text-muted-foreground">Contract Value</span>
                   </div>
                   <p className="text-2xl font-bold text-foreground">€24.5M</p>
                 </div>
@@ -1377,7 +1415,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                 <div className="sm:pl-6">
                   <div className="flex items-center gap-1.5 mb-1.5">
                     <TrendingUp className="w-3 h-3 text-muted-foreground" />
-                    <span className="text-[11px] text-muted-foreground">Projected IC</span>
+                    <span className="text-[11px] text-muted-foreground">Projected Final IC</span>
                   </div>
                   <p className="text-2xl font-bold text-foreground">92.4%</p>
                 </div>
@@ -1431,10 +1469,14 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                   <BaselineFilter value={economicBaseline} onChange={setEconomicBaseline} />
                 </div>
                 <ResponsiveContainer width="100%" height={350}>
-                  <LineChart data={getFilteredCostData()}>
+                  <LineChart data={getFilteredCostData()} margin={{ top: 5, right: 20, left: 20, bottom: 24 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} />
-                    <XAxis dataKey="week" stroke={chartColors.axis} />
-                    <YAxis stroke={chartColors.axis} tickFormatter={(v) => `€${v.toFixed(1)}M`} />
+                    <XAxis dataKey="week" stroke={chartColors.axis} tickFormatter={(v) => `W${v}`}>
+                      <Label value="Weeks" offset={-8} position="insideBottom" style={{ fontSize: 11, fill: chartColors.axis }} />
+                    </XAxis>
+                    <YAxis stroke={chartColors.axis} tickFormatter={(v) => `€${v.toFixed(1)}M`}>
+                      <Label value="Cost (M€)" angle={-90} position="insideLeft" offset={-10} style={{ fontSize: 11, fill: chartColors.axis }} />
+                    </YAxis>
                     <Tooltip contentStyle={{ backgroundColor: chartColors.tooltipBg, border: chartColors.tooltipBorder }} formatter={(v: number) => `€${v.toFixed(1)}M`} />
                     <Legend />
                     <Line type="monotone" dataKey="baseline" stroke="#999999" name="Commercial" strokeWidth={2} dot={false} />
@@ -1486,16 +1528,18 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                     <tr className="border-b border-border/50">
                       <th className="text-left text-xs text-muted-foreground font-semibold py-2 min-w-[140px]">Activity</th>
                       <th className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleEconomicSort('actualCost')}>
-                        Econ. Value (€M) {economicSortBy === 'actualCost' && (economicSortDirection === 'asc' ? '↑' : '↓')}
+                        Planned Activity Total Cost (€M) {economicSortBy === 'actualCost' && (economicSortDirection === 'asc' ? '↑' : '↓')}
                       </th>
-                      <th className="text-left text-xs text-muted-foreground font-semibold py-2">Status</th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Projected Activity Total Cost (€M)</th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Status</th>
                       <th className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleEconomicSort('baselineCost')}>
                         Current Progress {economicSortBy === 'baselineCost' && (economicSortDirection === 'asc' ? '↑' : '↓')}
                       </th>
                       <th className="text-right text-xs text-muted-foreground font-semibold py-2">Current Cost (€M)</th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Planned Final IC</th>
                       <th className="text-right text-xs text-muted-foreground font-semibold py-2">Commercial IC</th>
                       <th className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleEconomicSort('totalEstimated')}>
-                        Projected IC {economicSortBy === 'totalEstimated' && (economicSortDirection === 'asc' ? '↑' : '↓')}
+                        Projected Final IC {economicSortBy === 'totalEstimated' && (economicSortDirection === 'asc' ? '↑' : '↓')}
                       </th>
                       <th className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleEconomicSort('totalBaseline')}>
                         Adjusted IC {economicSortBy === 'totalBaseline' && (economicSortDirection === 'asc' ? '↑' : '↓')}
@@ -1504,18 +1548,13 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                     </tr>
                   </thead>
                   <tbody>
-                    {getSortedEconomicTable().map((row, idx) => {
-                      const activity = activities.find(a => a.name === row.activity)
-                      const economicValue = activity?.value ?? 0
-                      return (
-                        <EconomicTableRow
-                          key={idx}
-                          row={row}
-                          economicValue={economicValue}
-                          chartColors={chartColors}
-                        />
-                      );
-                    })}
+                    {getSortedEconomicTable().map((row, idx) => (
+                      <EconomicTableRow
+                        key={idx}
+                        row={row}
+                        chartColors={chartColors}
+                      />
+                    ))}
                   </tbody>
                 </table>
               </div>

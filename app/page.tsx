@@ -30,7 +30,9 @@ export default function Dashboard() {
       return next
     })
   }
-  const [selectedWeek, setSelectedWeek] = useState<number | null>(null)
+  const TIMEFRAMES = ["Last 4 Weeks", "Last 6 Months", "Last Year"] as const
+  type Timeframe = typeof TIMEFRAMES[number]
+  const [selectedTimeframe, setSelectedTimeframe] = useState<Timeframe | null>(null)
   const [selectedRegion, setSelectedRegion] = useState<Region | null>(null)
   const [mapView, setMapView] = useState(false)
   const [filterType, setFilterType] = useState<'typology' | null>(null)
@@ -74,9 +76,9 @@ export default function Dashboard() {
         </div>
 
         {/* Main Grid Layout — upper section sized to viewport height */}
-        <div className="grid grid-cols-12 gap-6">
+        <div className="grid grid-cols-12 gap-6 items-start">
           {/* Metrics Sidebar */}
-          <div className="col-span-12 lg:col-span-2" style={{ height: 'calc(100svh - 14rem)' }}>
+          <div className="col-span-12 lg:col-span-2">
             <MetricsSidebar />
           </div>
 
@@ -114,23 +116,23 @@ export default function Dashboard() {
                     ))}
                   </div>
 
-                  {/* Week dropdown */}
+                  {/* Timeframe dropdown */}
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <button className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-md border border-border/40 bg-background/60 backdrop-blur text-xs font-medium text-muted-foreground hover:text-foreground transition-all">
-                        <span>{selectedWeek ? `Week ${selectedWeek}` : "Week"}</span>
+                        <span>{selectedTimeframe ?? "Timeframe"}</span>
                         <ChevronDown className="w-3 h-3" />
                       </button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="w-28">
-                      <DropdownMenuItem onClick={() => setSelectedWeek(null)} className="flex items-center justify-between text-xs">
+                    <DropdownMenuContent align="end" className="w-36">
+                      <DropdownMenuItem onClick={() => setSelectedTimeframe(null)} className="flex items-center justify-between text-xs">
                         <span>All</span>
-                        {selectedWeek === null && <Check className="w-3 h-3 text-accent" />}
+                        {selectedTimeframe === null && <Check className="w-3 h-3 text-accent" />}
                       </DropdownMenuItem>
-                      {[1, 2, 3, 4].map((w) => (
-                        <DropdownMenuItem key={w} onClick={() => setSelectedWeek(selectedWeek === w ? null : w)} className="flex items-center justify-between text-xs">
-                          <span>Week {w}</span>
-                          {selectedWeek === w && <Check className="w-3 h-3 text-accent" />}
+                      {TIMEFRAMES.map((t) => (
+                        <DropdownMenuItem key={t} onClick={() => setSelectedTimeframe(selectedTimeframe === t ? null : t)} className="flex items-center justify-between text-xs">
+                          <span>{t}</span>
+                          {selectedTimeframe === t && <Check className="w-3 h-3 text-accent" />}
                         </DropdownMenuItem>
                       ))}
                     </DropdownMenuContent>
@@ -165,7 +167,7 @@ export default function Dashboard() {
                 <EVMMatrix
                   view={mapView ? "map" : "matrix"}
                   selectedStatuses={statuses}
-                  selectedWeek={selectedWeek}
+                  selectedWeek={null}
                   selectedRegion={selectedRegion}
                   selectedCategory={filterValue as any ?? "all"}
                 />
@@ -203,10 +205,10 @@ export default function Dashboard() {
               }
               const categories = ["all", "Road Infrastructure", "Railway Infrastructure", "Hydraulic Infrastructure", "Port Infrastructure", "Airport Infrastructure", "Urban Infrastructure", "Civil Construction", "Mining", "Oil&Gas", "Power (Energy)", "Other Works"] as const
               return (
-                <div className="glass-card rounded-md px-3 py-2 border border-border/30 backdrop-blur-sm">
+                <div className="glass-card rounded-md px-3 py-4 border border-border/30 backdrop-blur-sm">
                   <div className="flex items-center gap-2">
                     <span className="text-[9px] font-semibold text-muted-foreground tracking-wide uppercase shrink-0">Typology</span>
-                    <div className="flex items-center gap-2 flex-wrap max-w-full">
+                    <div className="flex items-center gap-5 flex-wrap max-w-full">
                       {categories.map((cat) => {
                         const isActive = filterType === 'typology' && filterValue === cat || (cat === 'all' && !filterType)
                         const color = cat !== "all" ? categoryColors[cat] : undefined
@@ -242,7 +244,7 @@ export default function Dashboard() {
           </div>
 
           {/* Uptrends/Downtrends Section */}
-          <div className="col-span-12 lg:col-span-3" style={{ height: 'calc(100svh - 14rem)' }}>
+          <div className="col-span-12 lg:col-span-3 self-stretch flex flex-col">
             <TrendsSection />
           </div>
 

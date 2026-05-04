@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { ChevronDown, MapPin, User, Calendar, Banknote, Activity, Sparkles, Loader2, Plus } from 'lucide-react'
-import { ComposedChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts'
+import { ComposedChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Label } from 'recharts'
 import { useChartColors } from '@/hooks/use-chart-colors'
 
 // ─── Data Model ────────────────────────────────────────────────────────────────
@@ -14,6 +14,7 @@ interface ComparisonProject {
   typology: string
   pm: string
   deadline: string
+  projectedDeadline: string
   contractValue: number   // M€
   status: 'ongoing' | 'finished'
   // Schedule
@@ -44,7 +45,7 @@ interface ComparisonProject {
 const projects: ComparisonProject[] = [
   {
     id: 'PRJ-001', name: 'Metro Tower', location: 'Lisbon, Portugal',
-    typology: 'Urban Infrastructure', pm: 'Ana Ferreira', deadline: '2025-03-10', contractValue: 50, status: 'ongoing',
+    typology: 'Urban Infrastructure', pm: 'Ana Ferreira', deadline: '2025-03-10', projectedDeadline: 'Feb 2026', contractValue: 50, status: 'ongoing',
     delayDays: -14, spi: 1.15, accumulatedProduction: 24.1, expectedProduction: 30.1,
     ciPlanned: 82, ciAdjusted: 90, ciAnalytical: 84, budgetVariance: -4.2, cpi: 1.09,
     ppc: 92, tmr: 87,
@@ -53,7 +54,7 @@ const projects: ComparisonProject[] = [
   },
   {
     id: 'PRJ-002', name: 'Harbor Bridge', location: 'Porto, Portugal',
-    typology: 'Road Infrastructure', pm: 'Carlos Mendes', deadline: '2025-03-30', contractValue: 60, status: 'ongoing',
+    typology: 'Road Infrastructure', pm: 'Carlos Mendes', deadline: '2025-03-30', projectedDeadline: 'Jun 2026', contractValue: 60, status: 'ongoing',
     delayDays: 20, spi: 0.88, accumulatedProduction: 31.5, expectedProduction: 39.4,
     ciPlanned: 78, ciAdjusted: 97, ciAnalytical: 91, budgetVariance: 7.2, cpi: 0.89,
     ppc: 65, tmr: 58,
@@ -62,7 +63,7 @@ const projects: ComparisonProject[] = [
   },
   {
     id: 'PRJ-003', name: 'Skyline Plaza', location: 'Madrid, Spain',
-    typology: 'Civil Construction', pm: 'Sofia Ramos', deadline: '2025-03-25', contractValue: 47.5, status: 'ongoing',
+    typology: 'Civil Construction', pm: 'Sofia Ramos', deadline: '2025-03-25', projectedDeadline: 'Jun 2025', contractValue: 47.5, status: 'ongoing',
     delayDays: 32, spi: 0.85, accumulatedProduction: 28.7, expectedProduction: 35.9,
     ciPlanned: 88, ciAdjusted: 94, ciAnalytical: 88, budgetVariance: 4.5, cpi: 0.92,
     ppc: 78, tmr: 71,
@@ -71,7 +72,7 @@ const projects: ComparisonProject[] = [
   },
   {
     id: 'PRJ-004', name: 'Industrial Park', location: 'Setúbal, Portugal',
-    typology: 'Industrial', pm: 'Miguel Costa', deadline: '2025-03-20', contractValue: 40, status: 'ongoing',
+    typology: 'Industrial', pm: 'Miguel Costa', deadline: '2025-03-20', projectedDeadline: 'Nov 2026', contractValue: 40, status: 'ongoing',
     delayDays: -30, spi: 1.08, accumulatedProduction: 18.5, expectedProduction: 23.1,
     ciPlanned: 75, ciAdjusted: 70, ciAnalytical: 65, budgetVariance: -1.8, cpi: 1.05,
     ppc: 88, tmr: 83,
@@ -80,7 +81,7 @@ const projects: ComparisonProject[] = [
   },
   {
     id: 'PRJ-005', name: 'Riverside Homes', location: 'Maputo, Mozambique',
-    typology: 'Hydraulic Infrastructure', pm: 'Laura Nunes', deadline: '2025-04-05', contractValue: 45, status: 'ongoing',
+    typology: 'Hydraulic Infrastructure', pm: 'Laura Nunes', deadline: '2025-04-05', projectedDeadline: 'Apr 2026', contractValue: 45, status: 'ongoing',
     delayDays: 28, spi: 0.92, accumulatedProduction: 15.2, expectedProduction: 19.0,
     ciPlanned: 80, ciAdjusted: 78, ciAnalytical: 72, budgetVariance: 3.5, cpi: 0.96,
     ppc: 71, tmr: 64,
@@ -249,12 +250,17 @@ function ProjectInfoCard({ project }: { project: ComparisonProject }) {
         </div>
         <div className="flex items-center gap-2">
           <Calendar className="w-3 h-3 text-muted-foreground shrink-0" />
-          <span className="text-[11px] text-muted-foreground">Deadline</span>
+          <span className="text-[11px] text-muted-foreground">Contract Deadline</span>
           <span className="text-[11px] font-medium text-foreground ml-auto">{project.deadline}</span>
         </div>
         <div className="flex items-center gap-2">
+          <Calendar className="w-3 h-3 text-muted-foreground shrink-0" />
+          <span className="text-[11px] text-muted-foreground">Projected Deadline</span>
+          <span className="text-[11px] font-medium text-foreground ml-auto">{project.projectedDeadline}</span>
+        </div>
+        <div className="flex items-center gap-2">
           <Banknote className="w-3 h-3 text-muted-foreground shrink-0" />
-          <span className="text-[11px] text-muted-foreground">Contract</span>
+          <span className="text-[11px] text-muted-foreground">Contract Value</span>
           <span className="text-[11px] font-medium text-foreground ml-auto">€{project.contractValue}M</span>
         </div>
         <div className="flex items-center gap-2 col-span-2">
@@ -414,11 +420,15 @@ function SCurves({ project, maxWeek }: { project: ComparisonProject; maxWeek: nu
           <FilterSelect value={progressOwner} onChange={setProgressOwner} options={OWNERS} />
         </div>
         <div className="h-44 glass-card rounded-lg p-2">
-          <ResponsiveContainer width="100%" height="100%">
-            <ComposedChart data={filtered}>
-              <CartesianGrid strokeDasharray="3 3" stroke={colors.grid} />
-              <XAxis dataKey="week" tick={{ fontSize: 10, fill: colors.tickFill }} />
-              <YAxis tick={{ fontSize: 10, fill: colors.tickFill }} />
+<ResponsiveContainer width="100%" height="100%">
+  <ComposedChart data={filtered} margin={{ top: 5, right: 16, left: 16, bottom: 20 }}>
+  <CartesianGrid strokeDasharray="3 3" stroke={colors.grid} />
+  <XAxis dataKey="week" tick={{ fontSize: 10, fill: colors.tickFill }}>
+    <Label value="Weeks" offset={-6} position="insideBottom" style={{ fontSize: 10, fill: colors.tickFill }} />
+  </XAxis>
+  <YAxis tick={{ fontSize: 10, fill: colors.tickFill }} tickFormatter={(v) => `${v}%`} domain={[0, 100]} width={42}>
+    <Label value="% Completion" angle={-90} position="insideLeft" offset={-8} style={{ fontSize: 10, fill: colors.tickFill }} />
+  </YAxis>
               <Tooltip contentStyle={{ backgroundColor: colors.tooltipBg, border: colors.tooltipBorder }} />
               <Legend wrapperStyle={{ paddingTop: 8 }} iconType="line" payload={legendProgress} />
               <Line type="monotone" dataKey="planned" stroke="#999" strokeWidth={2} dot={false} name="Commercial" />
@@ -439,10 +449,14 @@ function SCurves({ project, maxWeek }: { project: ComparisonProject; maxWeek: nu
         </div>
         <div className="h-44 glass-card rounded-lg p-2">
           <ResponsiveContainer width="100%" height="100%">
-            <ComposedChart data={costFiltered}>
-              <CartesianGrid strokeDasharray="3 3" stroke={colors.grid} />
-              <XAxis dataKey="week" tick={{ fontSize: 10, fill: colors.tickFill }} />
-              <YAxis tick={{ fontSize: 10, fill: colors.tickFill }} tickFormatter={v => `€${v}M`} />
+  <ComposedChart data={costFiltered} margin={{ top: 5, right: 16, left: 16, bottom: 20 }}>
+  <CartesianGrid strokeDasharray="3 3" stroke={colors.grid} />
+  <XAxis dataKey="week" tick={{ fontSize: 10, fill: colors.tickFill }}>
+    <Label value="Weeks" offset={-6} position="insideBottom" style={{ fontSize: 10, fill: colors.tickFill }} />
+  </XAxis>
+  <YAxis tick={{ fontSize: 10, fill: colors.tickFill }} tickFormatter={v => `€${v}M`} width={42}>
+    <Label value="Cost (M€)" angle={-90} position="insideLeft" offset={-8} style={{ fontSize: 10, fill: colors.tickFill }} />
+  </YAxis>
               <Tooltip contentStyle={{ backgroundColor: colors.tooltipBg, border: colors.tooltipBorder }} formatter={(v: number) => `€${v.toFixed(1)}M`} />
               <Legend wrapperStyle={{ paddingTop: 8 }} iconType="line" payload={legendCost} />
               <Line type="monotone" dataKey="planned" stroke="#999" strokeWidth={2} dot={false} name="Commercial" />

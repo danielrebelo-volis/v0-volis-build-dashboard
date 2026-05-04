@@ -19,6 +19,7 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
+  Label,
 } from 'recharts'
 import { useChartColors } from '@/hooks/use-chart-colors'
 
@@ -203,9 +204,9 @@ function ResourceTable({ resources }: { resources: ResourceRecord[] }) {
               <thead>
                 <tr>
                   <th className="text-left text-[10px] text-muted-foreground font-medium pb-1.5 pr-2">Resource</th>
-                  <th className="text-right text-[10px] text-muted-foreground font-medium pb-1.5 pr-2">Expected</th>
+                  <th className="text-right text-[10px] text-muted-foreground font-medium pb-1.5 pr-2">Projected</th>
                   <th className="text-right text-[10px] text-muted-foreground font-medium pb-1.5 pr-2">Actual</th>
-                  <th className="text-right text-[10px] text-muted-foreground font-medium pb-1.5">Delta</th>
+                  <th className="text-right text-[10px] text-muted-foreground font-medium pb-1.5">Variation</th>
                 </tr>
               </thead>
               <tbody>
@@ -236,15 +237,19 @@ function ProgressSCurve({ data, unit }: { data: DailyRecord[]; unit: string }) {
   const colors = useChartColors()
   return (
     <ResponsiveContainer width="100%" height={220}>
-      <LineChart data={data} margin={{ top: 5, right: 16, left: 0, bottom: 5 }}>
+      <LineChart data={data} margin={{ top: 5, right: 16, left: 20, bottom: 24 }}>
         <CartesianGrid strokeDasharray="3 3" stroke={colors.grid} />
-        <XAxis dataKey="day" stroke={colors.axis} tick={{ fontSize: 11 }} />
+        <XAxis dataKey="day" stroke={colors.axis} tick={{ fontSize: 11 }}>
+          <Label value="Days" offset={-8} position="insideBottom" style={{ fontSize: 11, fill: colors.axis }} />
+        </XAxis>
         <YAxis
           stroke={colors.axis}
           tick={{ fontSize: 11 }}
-          tickFormatter={(v) => `${v}`}
-          width={52}
-        />
+          tickFormatter={(v) => `${v} ${unit}`}
+          width={60}
+        >
+          <Label value={unit} angle={-90} position="insideLeft" offset={-10} style={{ fontSize: 11, fill: colors.axis }} />
+        </YAxis>
         <Tooltip
           contentStyle={{ backgroundColor: colors.tooltipBg, border: colors.tooltipBorder, fontSize: 12 }}
           formatter={(value: number, name: string) => [`${value} ${unit}`, name]}
@@ -262,15 +267,19 @@ function CostSCurve({ data }: { data: DailyRecord[] }) {
   const colors = useChartColors()
   return (
     <ResponsiveContainer width="100%" height={220}>
-      <LineChart data={data} margin={{ top: 5, right: 16, left: 0, bottom: 5 }}>
+      <LineChart data={data} margin={{ top: 5, right: 16, left: 20, bottom: 24 }}>
         <CartesianGrid strokeDasharray="3 3" stroke={colors.grid} />
-        <XAxis dataKey="day" stroke={colors.axis} tick={{ fontSize: 11 }} />
+        <XAxis dataKey="day" stroke={colors.axis} tick={{ fontSize: 11 }}>
+          <Label value="Days" offset={-8} position="insideBottom" style={{ fontSize: 11, fill: colors.axis }} />
+        </XAxis>
         <YAxis
           stroke={colors.axis}
           tick={{ fontSize: 11 }}
           tickFormatter={(v) => `€${v}k`}
-          width={52}
-        />
+          width={60}
+        >
+          <Label value="Cost (k€)" angle={-90} position="insideLeft" offset={-10} style={{ fontSize: 11, fill: colors.axis }} />
+        </YAxis>
         <Tooltip
           contentStyle={{ backgroundColor: colors.tooltipBg, border: colors.tooltipBorder, fontSize: 12 }}
           formatter={(value: number, name: string) => [`€${value}k`, name]}
@@ -300,7 +309,7 @@ function KPICard({
       <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/70">{label}</p>
       <div className="flex items-end justify-between gap-2">
         <div>
-          <p className="text-[10px] text-muted-foreground mb-0.5">Expected</p>
+          <p className="text-[10px] text-muted-foreground mb-0.5">Projected</p>
           <p className="text-sm font-bold font-mono text-foreground">{expected}{unit ? ` ${unit}` : ''}</p>
         </div>
         <div className="text-right">
@@ -402,7 +411,7 @@ export function ActivityDrillDownSection() {
               </thead>
               <tbody>
                 <tr className="border-t border-border/20">
-                  <td className="text-xs text-muted-foreground py-1.5 pr-2">Expected</td>
+                  <td className="text-xs text-muted-foreground py-1.5 pr-2">Projected</td>
                   <td className="text-xs font-mono text-foreground text-right py-1.5 whitespace-nowrap">
                     {activity.totalExpected} <span className="text-[10px]">{activityMeta.unit}</span>
                   </td>
@@ -414,7 +423,7 @@ export function ActivityDrillDownSection() {
                   </td>
                 </tr>
                 <tr className="border-t border-border/20">
-                  <td className="text-xs text-muted-foreground py-1.5 pr-2">Delta</td>
+                  <td className="text-xs text-muted-foreground py-1.5 pr-2">Variation</td>
                   <td className="text-right py-1.5">
                     <Delta expected={activity.totalExpected} actual={activity.totalActual} />
                   </td>

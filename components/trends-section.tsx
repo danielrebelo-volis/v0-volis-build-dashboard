@@ -25,7 +25,7 @@ function TrendColumn({ projects, direction }: TrendColumnProps) {
   const maxDelta = Math.max(...projects.map((p) => p.delta))
 
   return (
-    <div className="flex-1 min-w-0 flex flex-col min-h-0">
+    <div className="flex-1 min-w-0 flex flex-col">
       {/* Column header */}
       <div className={`flex items-center gap-1 px-2 py-1 rounded-md border shrink-0 ${bgHighlight} ${borderColor}`}>
         <Icon className={`w-3 h-3 ${colorClass} shrink-0`} />
@@ -68,7 +68,7 @@ function Segment({ label, uptrends, downtrends, defaultOpen = false }: SegmentPr
   const [open, setOpen] = useState(defaultOpen)
 
   return (
-    <div className={`border border-border/25 rounded-lg overflow-hidden flex flex-col flex-1 min-h-0 ${open ? "" : "shrink-0"}`}>
+    <div className={`border border-border/25 rounded-lg overflow-hidden flex flex-col flex-1 min-h-0`}>
       {/* Collapsed header — always visible */}
       <button
         onClick={() => setOpen((v) => !v)}
@@ -94,7 +94,7 @@ function Segment({ label, uptrends, downtrends, defaultOpen = false }: SegmentPr
 
 export function TrendsSection() {
   return (
-    <div className="glass-card rounded-xl px-4 pt-3 pb-4 flex flex-col h-full overflow-y-auto">
+    <div className="glass-card rounded-xl px-4 pt-3 pb-4 flex flex-col h-full">
 
       {/* Header */}
       <div className="flex items-start justify-between mb-4">

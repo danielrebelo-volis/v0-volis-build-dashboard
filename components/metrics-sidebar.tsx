@@ -45,12 +45,12 @@ export function MetricsSidebar() {
     <div className="flex flex-col gap-3 h-full">
 
       {/* Portfolio Overview */}
-      <div className="glass-card rounded-xl px-4 pt-3 pb-1 flex flex-col flex-1">
+      <div className="glass-card rounded-xl px-4 pt-3 pb-1 flex flex-col">
         <div className="flex items-center gap-2 mb-1">
           <div className="w-1 h-4 rounded-full bg-accent shrink-0" />
           <h3 className="text-[9px] font-bold text-muted-foreground uppercase tracking-[0.15em]">Portfolio Overview</h3>
         </div>
-        <div className="flex-1 flex flex-col justify-around">
+        <div className="flex flex-col">
           <KpiBlock
             label="Active Projects"
             value="24"
@@ -67,13 +67,13 @@ export function MetricsSidebar() {
             fill={40}
           />
           <KpiBlock
-            label="Yearly Production to Date"
+            label="Annual Production to Date"
             value="€1.41B"
             fill={94}
           />
           <KpiBlock
-            label="Projected Yearly Production"
-            value="1.50B"
+            label="Annual Production Forecast"
+            value="€1.50B"
             sub="Still not achieved"
             fill={86}
           />
@@ -81,24 +81,29 @@ export function MetricsSidebar() {
       </div>
 
       {/* Performance Overview */}
-      <div className="glass-card rounded-xl px-4 pt-3 pb-1 flex flex-col flex-1">
+      <div className="glass-card rounded-xl px-4 pt-3 pb-1 flex flex-col">
         <div className="flex items-center gap-2 mb-1">
           <div className="w-1 h-4 rounded-full bg-accent shrink-0" />
           <h3 className="text-[9px] font-bold text-muted-foreground uppercase tracking-[0.15em]">Performance Overview</h3>
         </div>
-        <div className="flex-1 flex flex-col justify-around">
+        <div className="flex flex-col">
           <KpiBlock
-            label="Avg Adjusted IC"
-            value="68%"
+            label="Average Projected IC"
+            value="78%"
             fill={68}
           />
           <KpiBlock
-            label="Avg Analytical IC"
-            value="63%"
+            label="Average Annual IC"
+            value="81%"
             fill={63}
           />
           <KpiBlock
-            label="Avg Project Delay"
+            label="Average Projected IC"
+            value="85%"
+            fill={63}
+          />
+          <KpiBlock
+            label="Average Project Delay"
             value="21 days"
           />
         </div>

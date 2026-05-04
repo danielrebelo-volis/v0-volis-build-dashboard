@@ -589,16 +589,16 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
           </div>
           <div className="flex items-center gap-2">
             <Button
-              variant="outline"
-              className="gap-2 bg-foreground text-background hover:bg-foreground/90"
-              onClick={() => setGanttOpen(true)}
+          variant="outline"
+          className="gap-2 border border-border text-foreground bg-background hover:bg-secondary"
+          onClick={() => setGanttOpen(true)}
             >
               <GanttChartSquare className="w-4 h-4" />
               Gantt Chart
             </Button>
             <Button
               disabled
-              className="gap-2 bg-foreground text-background hover:bg-foreground/90 disabled:opacity-40 disabled:cursor-not-allowed"
+              className="gap-2 border border-border text-foreground bg-background hover:bg-secondary disabled:opacity-40 disabled:cursor-not-allowed"
             >
               <Download className="w-4 h-4" />
               Download Report

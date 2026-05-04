@@ -81,15 +81,15 @@ export default function ProjectDeepDive({ params }: { params: { id: string } }) 
         <div className="mb-6 glass-card rounded-lg p-6">
           <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-5">Economic Overview</h3>
           <div className="grid grid-cols-2 lg:grid-cols-5 gap-6">
-            {/* Project Budget */}
+            {/* Contract Value */}
             <div>
               <div className="flex items-center gap-2 mb-1.5">
                 <Euro className="w-3.5 h-3.5 text-muted-foreground" />
-                <p className="text-xs text-muted-foreground">Project Budget</p>
+                <p className="text-xs text-muted-foreground">Contract Value</p>
               </div>
               <p className="text-2xl font-bold text-foreground">€24.5M</p>
             </div>
-            {/* Commercial IC */}
+            {/* Target IC */}
             <div>
               <div className="flex items-center gap-2 mb-1.5">
                 <TrendingDown className="w-3.5 h-3.5 text-muted-foreground" />
@@ -105,19 +105,19 @@ export default function ProjectDeepDive({ params }: { params: { id: string } }) 
               </div>
               <p className="text-2xl font-bold text-foreground">90.0%</p>
             </div>
-            {/* Analytical IC */}
-            <div>
-              <div className="flex items-center gap-2 mb-1.5">
-                <TrendingDown className="w-3.5 h-3.5 text-muted-foreground" />
-                <p className="text-xs text-muted-foreground">Analytical IC</p>
-              </div>
-              <p className="text-2xl font-bold text-foreground">84.2%</p>
-            </div>
             {/* Projected IC */}
             <div>
               <div className="flex items-center gap-2 mb-1.5">
                 <TrendingDown className="w-3.5 h-3.5 text-muted-foreground" />
                 <p className="text-xs text-muted-foreground">Projected IC</p>
+              </div>
+              <p className="text-2xl font-bold text-foreground">84.2%</p>
+            </div>
+            {/* Projected Final IC */}
+            <div>
+              <div className="flex items-center gap-2 mb-1.5">
+                <TrendingDown className="w-3.5 h-3.5 text-muted-foreground" />
+                <p className="text-xs text-muted-foreground">Projected Final IC</p>
               </div>
               <p className="text-2xl font-bold text-foreground">92.4%</p>
             </div>

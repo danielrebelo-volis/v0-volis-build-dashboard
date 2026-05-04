@@ -411,7 +411,7 @@ export function ActivityDrillDownSection() {
               </thead>
               <tbody>
                 <tr className="border-t border-border/20">
-                  <td className="text-xs text-muted-foreground py-1.5 pr-2">Expected</td>
+                  <td className="text-xs text-muted-foreground py-1.5 pr-2">Projected</td>
                   <td className="text-xs font-mono text-foreground text-right py-1.5 whitespace-nowrap">
                     {activity.totalExpected} <span className="text-[10px]">{activityMeta.unit}</span>
                   </td>
@@ -423,7 +423,7 @@ export function ActivityDrillDownSection() {
                   </td>
                 </tr>
                 <tr className="border-t border-border/20">
-                  <td className="text-xs text-muted-foreground py-1.5 pr-2">Delta</td>
+                  <td className="text-xs text-muted-foreground py-1.5 pr-2">Variation</td>
                   <td className="text-right py-1.5">
                     <Delta expected={activity.totalExpected} actual={activity.totalActual} />
                   </td>

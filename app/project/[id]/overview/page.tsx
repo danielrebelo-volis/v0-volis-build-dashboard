@@ -767,12 +767,12 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                     <tr className="border-b border-border/50">
                       <th className="text-left text-xs text-muted-foreground font-semibold py-2 min-w-[140px]">Activity</th>
                       <th className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleSort('value')}>
-                        Econ. Value (€M) {sortBy === 'value' && (sortDirection === 'asc' ? '↑' : '↓')}
+                        Activity Total Production (€M) {sortBy === 'value' && (sortDirection === 'asc' ? '↑' : '↓')}
                       </th>
                       <th className="text-left text-xs text-muted-foreground font-semibold py-2">Status</th>
                       <th className="text-left text-xs text-muted-foreground font-semibold py-2">Metric</th>
-                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Total Planned</th>
-                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Total Actual</th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Total Quantity Planned</th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Accumulated Quantity</th>
                       <th className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleSort('plannedProgress')}>
                         Planned % {sortBy === 'plannedProgress' && (sortDirection === 'asc' ? '↑' : '↓')}
                       </th>
@@ -914,12 +914,12 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                     <tr className="border-b border-border/50">
                       <th className="text-left text-xs text-muted-foreground font-semibold py-2 min-w-[140px]">Activity</th>
                       <th className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleSort('value')}>
-                        Econ. Value (€M) {sortBy === 'value' && (sortDirection === 'asc' ? '↑' : '↓')}
+                        Activity Total Production (€M) {sortBy === 'value' && (sortDirection === 'asc' ? '↑' : '↓')}
                       </th>
                       <th className="text-right text-xs text-muted-foreground font-semibold py-2">Status</th>
                       <th className="text-right text-xs text-muted-foreground font-semibold py-2">Metric</th>
-                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Total Planned</th>
-                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Total Actual</th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Total Quantity Planned</th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Accumulated Quantity</th>
                       <th className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleSort('plannedProgress')}>
                         Planned % {sortBy === 'plannedProgress' && (sortDirection === 'asc' ? '↑' : '↓')}
                       </th>
@@ -1349,7 +1349,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                 <div className="sm:pl-0">
                   <div className="flex items-center gap-1.5 mb-1.5">
                     <span className="text-xs text-muted-foreground">€</span>
-                    <span className="text-[11px] text-muted-foreground">Project Budget</span>
+                    <span className="text-[11px] text-muted-foreground">Contra</span>
                   </div>
                   <p className="text-2xl font-bold text-foreground">€24.5M</p>
                 </div>

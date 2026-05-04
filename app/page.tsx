@@ -203,10 +203,10 @@ export default function Dashboard() {
               }
               const categories = ["all", "Road Infrastructure", "Railway Infrastructure", "Hydraulic Infrastructure", "Port Infrastructure", "Airport Infrastructure", "Urban Infrastructure", "Civil Construction", "Mining", "Oil&Gas", "Power (Energy)", "Other Works"] as const
               return (
-                <div className="glass-card rounded-md px-3 py-2 border border-border/30 backdrop-blur-sm">
+                <div className="glass-card rounded-md px-3 py-4 border border-border/30 backdrop-blur-sm">
                   <div className="flex items-center gap-2">
                     <span className="text-[9px] font-semibold text-muted-foreground tracking-wide uppercase shrink-0">Typology</span>
-                    <div className="flex items-center gap-2 flex-wrap max-w-full">
+                    <div className="flex items-center gap-5 flex-wrap max-w-full">
                       {categories.map((cat) => {
                         const isActive = filterType === 'typology' && filterValue === cat || (cat === 'all' && !filterType)
                         const color = cat !== "all" ? categoryColors[cat] : undefined

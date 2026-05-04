@@ -52,8 +52,11 @@ type EconRow = {
   status: string
   completeness: number
   currentCost: number
+  plannedActivityTotalCost: number
+  projectedActivityTotalCost: number
+  plannedFinalIC: number
   commercialIC: number
-  projectedIC: number
+  projectedFinalIC: number
   currentIC: number
   weeklyCosts: { week: string; labour: number; materials: number; subcontracted: number }[]
 }
@@ -74,11 +77,9 @@ const COST_NATURE_COLORS = [
 
 function EconomicTableRow({
   row,
-  economicValue,
   chartColors,
 }: {
   row: EconRow
-  economicValue: number
   chartColors: ReturnType<typeof useChartColors>
 }) {
   const [open, setOpen] = useState(false)
@@ -113,7 +114,8 @@ function EconomicTableRow({
   return (
     <tr className="border-b border-border/30 hover:bg-secondary/20">
       <td className="py-3 text-foreground font-medium">{row.activity}</td>
-      <td className="py-3 text-right text-foreground">€{economicValue.toFixed(1)}M</td>
+      <td className="py-3 text-right text-foreground">€{row.plannedActivityTotalCost.toFixed(2)}M</td>
+      <td className="py-3 text-right text-foreground">€{row.projectedActivityTotalCost.toFixed(2)}M</td>
       <td className="py-3 text-right">
         <span className={`text-xs px-2 py-0.5 rounded-full ${row.status === 'Finished' ? 'bg-[#16a34a]/15 text-[#16a34a]' :
           row.status === 'Ongoing' ? 'bg-accent/20 text-accent' :
@@ -122,8 +124,9 @@ function EconomicTableRow({
       </td>
       <td className="py-3 text-right text-foreground">{displayCompleteness}%</td>
       <td className="py-3 text-right text-foreground">€{displayCost.toFixed(2)}M</td>
+      <td className="py-3 text-right text-foreground">{row.plannedFinalIC}%</td>
       <td className="py-3 text-right text-foreground">{row.commercialIC}%</td>
-      <td className="py-3 text-right text-foreground">{row.projectedIC}%</td>
+      <td className="py-3 text-right text-foreground">{row.projectedFinalIC}%</td>
       <td className="py-3 text-right text-foreground">{row.currentIC}%</td>
 
     </tr>
@@ -266,15 +269,21 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
 
   const economicTable = activities.map(activity => {
     const commercialIC = 80 + Math.random() * 5
-    const projectedIC = commercialIC + 5 + Math.random() * 8
+    const projectedFinalIC = commercialIC + 5 + Math.random() * 8
     const currentIC = commercialIC + 3 + Math.random() * 6
+    const plannedFinalIC = commercialIC - 2 + Math.random() * 3
+    const plannedActivityTotalCost = parseFloat((activity.value * 1.0).toFixed(2))
+    const projectedActivityTotalCost = parseFloat((activity.value * (1 + 0.05 + Math.random() * 0.08)).toFixed(2))
     return {
       activity: activity.name,
       status: activity.status,
       completeness: activity.actual_completeness,
       currentCost: activity.value * (activity.actual_completeness / 100) * 1.08,
+      plannedActivityTotalCost,
+      projectedActivityTotalCost,
+      plannedFinalIC: parseFloat(plannedFinalIC.toFixed(1)),
       commercialIC: parseFloat(commercialIC.toFixed(1)),
-      projectedIC: parseFloat(projectedIC.toFixed(1)),
+      projectedFinalIC: parseFloat(projectedFinalIC.toFixed(1)),
       currentIC: parseFloat(currentIC.toFixed(1)),
       weeklyCosts: weeklyNatureCosts[activity.name] ?? [],
     }
@@ -1032,7 +1041,7 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                 <div className="sm:pl-6">
                   <div className="flex items-center gap-1.5 mb-1.5">
                     <TrendingUp className="w-3 h-3 text-muted-foreground" />
-                    <span className="text-[11px] text-muted-foreground">Projected IC</span>
+                    <span className="text-[11px] text-muted-foreground">Projected Final IC</span>
                   </div>
                   <p className="text-xl font-bold text-foreground">92.4%</p>
                 </div>
@@ -1069,16 +1078,18 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                     <tr className="border-b border-border/50">
                       <th className="text-left text-xs text-muted-foreground font-semibold py-2 min-w-[140px]">Activity</th>
                       <th className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleEconomicSort('actualCost')}>
-                        Econ. Value (€M) {economicSortBy === 'actualCost' && (economicSortDirection === 'asc' ? '↑' : '↓')}
+                        Planned Activity Total Cost (€M) {economicSortBy === 'actualCost' && (economicSortDirection === 'asc' ? '↑' : '↓')}
                       </th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Projected Activity Total Cost (€M)</th>
                       <th className="text-right text-xs text-muted-foreground font-semibold py-2">Status</th>
                       <th className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleEconomicSort('baselineCost')}>
                         Current Progress {economicSortBy === 'baselineCost' && (economicSortDirection === 'asc' ? '↑' : '↓')}
                       </th>
                       <th className="text-right text-xs text-muted-foreground font-semibold py-2">Current Cost (€M)</th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Planned Final IC</th>
                       <th className="text-right text-xs text-muted-foreground font-semibold py-2">Commercial IC</th>
                       <th className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleEconomicSort('totalEstimated')}>
-                        Projected IC {economicSortBy === 'totalEstimated' && (economicSortDirection === 'asc' ? '↑' : '↓')}
+                        Projected Final IC {economicSortBy === 'totalEstimated' && (economicSortDirection === 'asc' ? '↑' : '↓')}
                       </th>
                       <th className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleEconomicSort('totalBaseline')}>
                         Adjusted IC {economicSortBy === 'totalBaseline' && (economicSortDirection === 'asc' ? '↑' : '↓')}
@@ -1087,18 +1098,13 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                     </tr>
                   </thead>
                   <tbody>
-                    {getSortedEconomicTable().map((row, idx) => {
-                      const activity = activities.find(a => a.name === row.activity)
-                      const economicValue = activity?.value ?? 0
-                      return (
-                        <EconomicTableRow
-                          key={idx}
-                          row={row}
-                          economicValue={economicValue}
-                          chartColors={chartColors}
-                        />
-                      );
-                    })}
+                    {getSortedEconomicTable().map((row, idx) => (
+                      <EconomicTableRow
+                        key={idx}
+                        row={row}
+                        chartColors={chartColors}
+                      />
+                    ))}
                   </tbody>
                 </table>
               </div>
@@ -1486,16 +1492,18 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                     <tr className="border-b border-border/50">
                       <th className="text-left text-xs text-muted-foreground font-semibold py-2 min-w-[140px]">Activity</th>
                       <th className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleEconomicSort('actualCost')}>
-                        Econ. Value (€M) {economicSortBy === 'actualCost' && (economicSortDirection === 'asc' ? '↑' : '↓')}
+                        Planned Activity Total Cost (€M) {economicSortBy === 'actualCost' && (economicSortDirection === 'asc' ? '↑' : '↓')}
                       </th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Projected Activity Total Cost (€M)</th>
                       <th className="text-left text-xs text-muted-foreground font-semibold py-2">Status</th>
                       <th className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleEconomicSort('baselineCost')}>
                         Current Progress {economicSortBy === 'baselineCost' && (economicSortDirection === 'asc' ? '↑' : '↓')}
                       </th>
                       <th className="text-right text-xs text-muted-foreground font-semibold py-2">Current Cost (€M)</th>
+                      <th className="text-right text-xs text-muted-foreground font-semibold py-2">Planned Final IC</th>
                       <th className="text-right text-xs text-muted-foreground font-semibold py-2">Commercial IC</th>
                       <th className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleEconomicSort('totalEstimated')}>
-                        Projected IC {economicSortBy === 'totalEstimated' && (economicSortDirection === 'asc' ? '↑' : '↓')}
+                        Projected Final IC {economicSortBy === 'totalEstimated' && (economicSortDirection === 'asc' ? '↑' : '↓')}
                       </th>
                       <th className="text-right text-xs text-muted-foreground font-semibold py-2 cursor-pointer hover:text-foreground transition-colors" onClick={() => handleEconomicSort('totalBaseline')}>
                         Adjusted IC {economicSortBy === 'totalBaseline' && (economicSortDirection === 'asc' ? '↑' : '↓')}
@@ -1504,18 +1512,13 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
                     </tr>
                   </thead>
                   <tbody>
-                    {getSortedEconomicTable().map((row, idx) => {
-                      const activity = activities.find(a => a.name === row.activity)
-                      const economicValue = activity?.value ?? 0
-                      return (
-                        <EconomicTableRow
-                          key={idx}
-                          row={row}
-                          economicValue={economicValue}
-                          chartColors={chartColors}
-                        />
-                      );
-                    })}
+                    {getSortedEconomicTable().map((row, idx) => (
+                      <EconomicTableRow
+                        key={idx}
+                        row={row}
+                        chartColors={chartColors}
+                      />
+                    ))}
                   </tbody>
                 </table>
               </div>

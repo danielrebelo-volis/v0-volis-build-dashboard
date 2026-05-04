@@ -88,17 +88,22 @@ export function MetricsSidebar() {
         </div>
         <div className="flex-1 flex flex-col justify-around">
           <KpiBlock
-            label="Avg Adjusted IC"
-            value="68%"
+            label="Average Projected IC"
+            value="78%"
             fill={68}
           />
           <KpiBlock
-            label="Avg Analytical IC"
-            value="63%"
+            label="Average Annual IC"
+            value="81%"
             fill={63}
           />
           <KpiBlock
-            label="Avg Project Delay"
+            label="Average Projected IC"
+            value="85%"
+            fill={63}
+          />
+          <KpiBlock
+            label="Average Project Delay"
             value="21 days"
           />
         </div>

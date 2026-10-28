@@ -5,9 +5,6 @@ import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { cn } from '@/lib/utils'
 
-export const PROJECTED_COST_TOOLTIP =
-  "Projected cost is estimated proportionally to the activity's progress (e.g. 25% progress = 25% of the activity's budgeted cost)."
-
 export const POSITIVE_TEXT = 'text-emerald-600 dark:text-emerald-400'
 
 export function DeltaBadge({

@@ -1,8 +1,8 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import { useSearchParams } from 'next/navigation'
 import { DashboardHeader } from '@/components/dashboard-header'
+import { PROJECT_TABS, type ProjectTab } from '@/lib/project-tabs'
 import { ActivityDrillDownSection } from '@/components/activity-drill-down-section'
 import { ResourcesSection } from '@/components/resources-section'
 import { ArrowLeft, Download, TrendingUp, ChevronDown, GanttChartSquare } from 'lucide-react'
@@ -133,11 +133,9 @@ function EconomicTableRow({
   )
 }
 
-export default function ProjectOverview({ params }: { params: { id: string } }) {
+export function ProjectDashboard({ projectId, activeTab }: { projectId: string; activeTab: ProjectTab }) {
   const chartColors = useChartColors()
-  const searchParams = useSearchParams()
   const [ganttOpen, setGanttOpen] = useState(false)
-  const [activeTab, setActiveTab] = useState(() => searchParams.get('tab') ?? 'overview')
   const [selectedActivity, setSelectedActivity] = useState('all')
   const [selectedWorkfront, setSelectedWorkfront] = useState('all')
   const [selectedOwner, setSelectedOwner] = useState('all')
@@ -622,27 +620,22 @@ export default function ProjectOverview({ params }: { params: { id: string } }) 
         />
 
         {/* Tab Navigation */}
-        <div className="flex gap-8 border-b border-border/50 mb-8">
-          {[
-            { id: 'overview', label: 'Overview' },
-            { id: 'progress', label: 'Progress' },
-            { id: 'economic', label: 'Economic' },
-            { id: 'activity-drill-down', label: 'Activity Drill-Down' },
-            { id: 'resources', label: 'Resources' },
-            { id: 'data-quality', label: 'Data Quality' },
-          ].map(({ id, label }) => (
-            <button
+        <nav aria-label="Project sections" className="flex gap-8 border-b border-border/50 mb-8">
+          {PROJECT_TABS.map(({ id, label }) => (
+            <Link
               key={id}
-              onClick={() => setActiveTab(id)}
+              href={`/project/${projectId}/${id}`}
+              scroll={false}
+              aria-current={activeTab === id ? 'page' : undefined}
               className={`pb-4 px-2 font-semibold text-sm transition-all ${activeTab === id
                 ? 'text-foreground border-b-2 border-foreground'
                 : 'text-muted-foreground hover:text-foreground'
                 }`}
             >
               {label}
-            </button>
+            </Link>
           ))}
-        </div>
+        </nav>
 
         {/* Progress Tab */}
         {activeTab === 'progress' && (

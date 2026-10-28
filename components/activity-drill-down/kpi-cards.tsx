@@ -11,9 +11,9 @@ import {
   formatQty,
   signed,
 } from '@/lib/activity-drill-down-data'
-import { DeltaBadge, InfoTip, PROJECTED_COST_TOOLTIP } from './shared'
+import { DeltaBadge } from './shared'
 
-const pctOf = (actual: number, projected: number) => (projected > 0 ? (actual / projected) * 100 : null)
+const pctOf = (actual: number, planned: number) => (planned > 0 ? (actual / planned) * 100 : null)
 
 function CardHeader({ icon: Icon, title, badge }: { icon: LucideIcon; title: string; badge?: React.ReactNode }) {
   return (
@@ -27,13 +27,10 @@ function CardHeader({ icon: Icon, title, badge }: { icon: LucideIcon; title: str
   )
 }
 
-function Figure({ label, value, info }: { label: string; value: string; info?: boolean }) {
+function Figure({ label, value }: { label: string; value: string }) {
   return (
     <div className="min-w-0">
-      <p className="flex items-center gap-1 text-[10px] uppercase tracking-wide text-muted-foreground">
-        {label}
-        {info && <InfoTip text={PROJECTED_COST_TOOLTIP} label="How projected cost is calculated" />}
-      </p>
+      <p className="text-[10px] uppercase tracking-wide text-muted-foreground">{label}</p>
       <p className="truncate text-xl font-bold font-mono text-foreground">{value}</p>
     </div>
   )
@@ -65,16 +62,16 @@ function ProgressCard({
       />
       <div className="grid grid-cols-2 gap-3">
         <Figure label="Actual" value={format(figures.actual)} />
-        <Figure label="Projected" value={format(figures.projected)} />
+        <Figure label="Planned" value={format(figures.projected)} />
       </div>
       <div className="flex flex-col gap-1.5">
-        <Progress value={Math.min(pct ?? 0, 100)} className="h-1.5" aria-label={`${title}: actual vs projected`} />
+        <Progress value={Math.min(pct ?? 0, 100)} className="h-1.5" aria-label={`${title}: actual vs planned`} />
         <p className="text-xs text-muted-foreground">
-          {pct === null ? 'Nothing projected in this period' : `${pct.toFixed(1)}% of projected`}
+          {pct === null ? 'Nothing planned in this period' : `${pct.toFixed(1)}% of planned`}
         </p>
       </div>
       <p className="border-t border-border/40 pt-2 text-[11px] text-muted-foreground">
-        Cumulative to date: {format(figures.cumActual)} actual / {format(figures.cumProjected)} projected
+        Cumulative to date: {format(figures.cumActual)} actual / {format(figures.cumProjected)} planned
       </p>
     </div>
   )
@@ -93,22 +90,14 @@ function ResourceCard({
   usageLabel: string
   summary: CategorySummary
 }) {
-  const diff = summary.actual - summary.projected
-  const variancePct = summary.projected > 0 ? (diff / summary.projected) * 100 : null
-
   return (
     <div className="glass-card flex flex-col gap-3 rounded-lg p-4">
-      <CardHeader
-        icon={icon}
-        title={title}
-        badge={<DeltaBadge diff={diff} pct={variancePct} formatted={signed(diff, formatEur(diff))} higherIsBetter={false} />}
-      />
+      <CardHeader icon={icon} title={title} />
       <div>
         <p className="text-2xl font-bold font-mono text-foreground">{usage}</p>
         <p className="text-xs text-muted-foreground">{usageLabel}</p>
       </div>
-      <div className="grid grid-cols-2 gap-3 border-t border-border/40 pt-3">
-        <Figure label="Projected cost" value={formatEur(summary.projected)} info />
+      <div className="border-t border-border/40 pt-3">
         <Figure label="Actual cost" value={formatEur(summary.actual)} />
       </div>
     </div>

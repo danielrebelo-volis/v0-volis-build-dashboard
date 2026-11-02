@@ -1,8 +1,9 @@
 'use client'
 
 import { useMemo, useState } from 'react'
-import { Clock, Gauge, Hourglass, HardHat, Package } from 'lucide-react'
-import type { LucideIcon } from 'lucide-react'
+import { Clock, Gauge, Hourglass } from 'lucide-react'
+import { WorkforceView } from '@/components/resources/workforce-view'
+import { MaterialsView } from '@/components/resources/materials-view'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 import { useChartColors } from '@/hooks/use-chart-colors'
 import { PROJECT_END, PROJECT_START, clampRange, dateToIndex, formatPct, formatQty, getTodayIso } from '@/lib/activity-drill-down-data'
@@ -86,22 +87,6 @@ function EquipmentView({ from, to }: { from: number; to: number }) {
   )
 }
 
-// ─── Placeholder for upcoming resource types ───────────────────────────────────
-
-function ComingSoon({ icon: Icon, label }: { icon: LucideIcon; label: string }) {
-  return (
-    <div className="glass-card flex flex-col items-center justify-center gap-2 rounded-lg px-6 py-16 text-center">
-      <div className="rounded-full bg-secondary p-3">
-        <Icon className="h-5 w-5 text-muted-foreground" aria-hidden="true" />
-      </div>
-      <h3 className="text-sm font-semibold text-foreground">Coming soon</h3>
-      <p className="max-w-sm text-xs text-muted-foreground">
-        {label} KPIs and the {label.toLowerCase()} breakdown table will be available in a future release.
-      </p>
-    </div>
-  )
-}
-
 // ─── Main Component ─────────────────────────────────────────────────────────────
 
 export function ResourcesSection() {
@@ -110,6 +95,7 @@ export function ResourcesSection() {
   const [dateFrom, setDateFrom] = useState(PROJECT_START)
   const [dateTo, setDateTo] = useState(today)
   const { from, to } = clampRange(dateFrom, dateTo)
+  const loggedTo = Math.max(from, Math.min(to, dateToIndex(today)))
 
   return (
     <section className="mb-8">
@@ -149,9 +135,9 @@ export function ResourcesSection() {
         </div>
       </div>
 
-      {resourceType === 'equipment' && <EquipmentView from={from} to={Math.max(from, Math.min(to, dateToIndex(today)))} />}
-      {resourceType === 'workforce' && <ComingSoon icon={HardHat} label="Workforce" />}
-      {resourceType === 'materials' && <ComingSoon icon={Package} label="Materials" />}
+      {resourceType === 'equipment' && <EquipmentView from={from} to={loggedTo} />}
+      {resourceType === 'workforce' && <WorkforceView from={from} to={loggedTo} />}
+      {resourceType === 'materials' && <MaterialsView from={from} to={loggedTo} />}
     </section>
   )
 }

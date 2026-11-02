@@ -11,18 +11,61 @@ import {
   formatQty,
   signed,
 } from '@/lib/activity-drill-down-data'
-import { DeltaBadge } from './shared'
+import { DeltaBadge, InfoTip } from './shared'
 
 const pctOf = (actual: number, planned: number) => (planned > 0 ? (actual / planned) * 100 : null)
 
-function CardHeader({ icon: Icon, title, badge }: { icon: LucideIcon; title: string; badge?: React.ReactNode }) {
+function CardHeader({
+  icon: Icon,
+  title,
+  badge,
+  info,
+}: {
+  icon: LucideIcon
+  title: string
+  badge?: React.ReactNode
+  info?: string
+}) {
   return (
     <div className="flex items-start justify-between gap-2">
       <div className="flex items-center gap-1.5">
         <Icon className="h-3.5 w-3.5 text-muted-foreground" aria-hidden="true" />
         <h3 className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">{title}</h3>
+        {info && <InfoTip text={info} label={`About ${title}`} />}
       </div>
       {badge}
+    </div>
+  )
+}
+
+export function StatCard({
+  icon,
+  title,
+  info,
+  value,
+  caption,
+  progress,
+  footer,
+}: {
+  icon: LucideIcon
+  title: string
+  info?: string
+  value: string
+  caption: string
+  progress?: number | null
+  footer?: React.ReactNode
+}) {
+  return (
+    <div className="glass-card flex flex-col gap-3 rounded-lg p-4">
+      <CardHeader icon={icon} title={title} info={info} />
+      <div>
+        <p className="text-2xl font-bold font-mono text-foreground">{value}</p>
+        <p className="text-xs text-muted-foreground">{caption}</p>
+      </div>
+      {progress !== undefined && (
+        <Progress value={Math.min(progress ?? 0, 100)} className="h-1.5" aria-label={title} />
+      )}
+      {footer && <p className="mt-auto border-t border-border/40 pt-2 text-[11px] text-muted-foreground">{footer}</p>}
     </div>
   )
 }
